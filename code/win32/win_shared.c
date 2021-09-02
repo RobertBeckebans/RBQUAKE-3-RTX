@@ -38,15 +38,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 Sys_Milliseconds
 ================
 */
-int			sys_timeBase;
-int Sys_Milliseconds (void)
+int sys_timeBase;
+int Sys_Milliseconds( void )
 {
-	int			sys_curtime;
-	static qboolean	initialized = qfalse;
+	int             sys_curtime;
+	static qboolean initialized = qfalse;
 
-	if (!initialized) {
+	if( !initialized )
+	{
 		sys_timeBase = timeGetTime();
-		initialized = qtrue;
+		initialized  = qtrue;
 	}
 	sys_curtime = timeGetTime() - sys_timeBase;
 
@@ -58,17 +59,17 @@ int Sys_Milliseconds (void)
 Sys_SnapVector
 ================
 */
-long fastftol( float f ) {
-	return (long)f;
-}
-
-void Sys_SnapVector( float *v )
+long fastftol( float f )
 {
-	v[0] = rint(v[0]);
-	v[1] = rint(v[1]);
-	v[2] = rint(v[2]);
+	return ( long )f;
 }
 
+void Sys_SnapVector( float* v )
+{
+	v[ 0 ] = rint( v[ 0 ] );
+	v[ 1 ] = rint( v[ 1 ] );
+	v[ 2 ] = rint( v[ 2 ] );
+}
 
 /*
 **
@@ -98,16 +99,15 @@ int Sys_GetProcessorId( void )
 
 //============================================
 
-char *Sys_GetCurrentUser( void )
+char* Sys_GetCurrentUser( void )
 {
-	static char s_userName[1024];
+	static char   s_userName[ 1024 ];
 	unsigned long size = sizeof( s_userName );
 
-
-	if ( !GetUserName( s_userName, &size ) )
+	if( !GetUserName( s_userName, &size ) )
 		strcpy( s_userName, "player" );
 
-	if ( !s_userName[0] )
+	if( !s_userName[ 0 ] )
 	{
 		strcpy( s_userName, "player" );
 	}
@@ -115,12 +115,12 @@ char *Sys_GetCurrentUser( void )
 	return s_userName;
 }
 
-char	*Sys_DefaultHomePath(void) {
+char* Sys_DefaultHomePath( void )
+{
 	return NULL;
 }
 
-char *Sys_DefaultInstallPath(void)
+char* Sys_DefaultInstallPath( void )
 {
 	return Sys_Cwd();
 }
-

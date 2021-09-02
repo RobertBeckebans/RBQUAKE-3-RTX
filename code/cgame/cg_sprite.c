@@ -4,13 +4,13 @@
 #include "cg_local.h"
 
 polyVert_t spriteVerts[] = {
-	{   0.0,-1.0, -1.0,  0.0, 0.0, 1, 1, 1 , 1},
-	{   0.0,1.0,  -1.0,  1.0, 0.0, 1, 1, 1 , 1},
-	{   0.0,-1.0,  1.0,  0.0, 1.0, 1, 1, 1 , 1},
+	{ 0.0, -1.0, -1.0, 0.0, 0.0, 1, 1, 1, 1 },
+	{ 0.0, 1.0, -1.0, 1.0, 0.0, 1, 1, 1, 1 },
+	{ 0.0, -1.0, 1.0, 0.0, 1.0, 1, 1, 1, 1 },
 
-	{   0.0,-1.0, 1.0,   0.0, 1.0, 1, 1, 1 , 1},
-	{   0.0,1.0, -1.0,   1.0, 0.0, 1, 1, 1 , 1},
-	{   0.0,1.0,  1.0,   1.0, 1.0, 1, 1, 1 , 1},
+	{ 0.0, -1.0, 1.0, 0.0, 1.0, 1, 1, 1, 1 },
+	{ 0.0, 1.0, -1.0, 1.0, 0.0, 1, 1, 1, 1 },
+	{ 0.0, 1.0, 1.0, 1.0, 1.0, 1, 1, 1, 1 },
 };
 
 /*
@@ -18,10 +18,11 @@ polyVert_t spriteVerts[] = {
 CG_InitSmokePuffSprite
 ===============
 */
-void CG_InitSmokePuffSprite(void) {
+void CG_InitSmokePuffSprite( void )
+{
 	qhandle_t shader;
-	shader = trap_R_RegisterShader("smokePuff");
-	cgs.media.smokePuffModel = trap_R_RegisterCustomModel("_smokePuffMesh", shader, &spriteVerts, 6);
+	shader                   = trap_R_RegisterShader( "smokePuff" );
+	cgs.media.smokePuffModel = trap_R_RegisterCustomModel( "_smokePuffMesh", shader, &spriteVerts, 6 );
 }
 
 /*
@@ -29,10 +30,11 @@ void CG_InitSmokePuffSprite(void) {
 CG_InitPlasmaSprite
 ===============
 */
-void CG_InitPlasmaSprite(void) {
+void CG_InitPlasmaSprite( void )
+{
 	qhandle_t shader;
-	shader = trap_R_RegisterShader("sprites/plasma1");	
-	cgs.media.plasmaBallModel =  trap_R_RegisterCustomModel("_plasmaSpriteMesh", shader, &spriteVerts, 6);
+	shader                    = trap_R_RegisterShader( "sprites/plasma1" );
+	cgs.media.plasmaBallModel = trap_R_RegisterCustomModel( "_plasmaSpriteMesh", shader, &spriteVerts, 6 );
 }
 
 /*
@@ -40,7 +42,8 @@ void CG_InitPlasmaSprite(void) {
 CG_InitSprites
 ===============
 */
-void CG_InitSprites(void) {
+void CG_InitSprites( void )
+{
 	CG_InitPlasmaSprite();
 	CG_InitSmokePuffSprite();
 }
@@ -50,20 +53,21 @@ void CG_InitSprites(void) {
 CG_SpawnSprite
 =================
 */
-void CG_SpawnSprite(vec3_t origin, float scale, qhandle_t model) {
-	refEntity_t	 ent;
+void CG_SpawnSprite( vec3_t origin, float scale, qhandle_t model )
+{
+	refEntity_t ent;
 
-	memset(&ent, 0, sizeof(refEntity_t));
-	VectorCopy(origin, ent.origin);
-	VectorCopy(origin, ent.oldorigin);
+	memset( &ent, 0, sizeof( refEntity_t ) );
+	VectorCopy( origin, ent.origin );
+	VectorCopy( origin, ent.oldorigin );
 
 	ent.reType = RT_MODEL;
 	ent.hModel = model;
-	ent.scale = scale;	
+	ent.scale  = scale;
 
-	AnglesToAxis(cg.refdefViewAngles, ent.axis);
+	AnglesToAxis( cg.refdefViewAngles, ent.axis );
 
-	trap_R_AddRefEntityToScene(&ent);
+	trap_R_AddRefEntityToScene( &ent );
 }
 
 /*
@@ -71,12 +75,13 @@ void CG_SpawnSprite(vec3_t origin, float scale, qhandle_t model) {
 CG_SpawnSprite
 =================
 */
-void CG_SpawnSpriteEx(refEntity_t *ent, vec3_t origin, float scale, qhandle_t model) {
-	VectorCopy(origin, ent->origin);
-	VectorCopy(origin, ent->oldorigin);
+void CG_SpawnSpriteEx( refEntity_t* ent, vec3_t origin, float scale, qhandle_t model )
+{
+	VectorCopy( origin, ent->origin );
+	VectorCopy( origin, ent->oldorigin );
 
 	ent->reType = RT_MODEL;
 	ent->hModel = model;
-	ent->scale = scale;
-	AnglesToAxis(cg.refdefViewAngles, ent->axis);	
+	ent->scale  = scale;
+	AnglesToAxis( cg.refdefViewAngles, ent->axis );
 }

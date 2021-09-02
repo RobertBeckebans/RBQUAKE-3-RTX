@@ -20,20 +20,20 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ===========================================================================
 */
 
-#define AAS_MAX_BBOXES						5
-#define AAS_MAX_VERTEXES					512000
-#define AAS_MAX_PLANES						65536
-#define AAS_MAX_EDGES						512000
-#define AAS_MAX_EDGEINDEXSIZE				512000
-#define AAS_MAX_FACES						512000
-#define AAS_MAX_FACEINDEXSIZE				512000
-#define AAS_MAX_AREAS						65536
-#define AAS_MAX_AREASETTINGS				65536
-#define AAS_MAX_REACHABILITYSIZE			65536
-#define AAS_MAX_NODES						256000
-#define AAS_MAX_PORTALS						65536
-#define AAS_MAX_PORTALINDEXSIZE				65536
-#define AAS_MAX_CLUSTERS					65536
+#define AAS_MAX_BBOXES           5
+#define AAS_MAX_VERTEXES         512000
+#define AAS_MAX_PLANES           65536
+#define AAS_MAX_EDGES            512000
+#define AAS_MAX_EDGEINDEXSIZE    512000
+#define AAS_MAX_FACES            512000
+#define AAS_MAX_FACEINDEXSIZE    512000
+#define AAS_MAX_AREAS            65536
+#define AAS_MAX_AREASETTINGS     65536
+#define AAS_MAX_REACHABILITYSIZE 65536
+#define AAS_MAX_NODES            256000
+#define AAS_MAX_PORTALS          65536
+#define AAS_MAX_PORTALINDEXSIZE  65536
+#define AAS_MAX_CLUSTERS         65536
 
 #define BSPCINCLUDE
 #include "../game/be_aas.h"
@@ -98,10 +98,10 @@ extern bspc_aas_t aasworld;
 extern aas_t aasworld;
 
 //stores the AAS file from the temporary AAS
-void AAS_StoreFile(char *filename);
+void AAS_StoreFile( char* filename );
 //returns a number of the given plane
-qboolean AAS_FindPlane(vec3_t normal, float dist, int *planenum);
+qboolean AAS_FindPlane( vec3_t normal, float dist, int* planenum );
 //allocates the maximum AAS memory for storage
-void AAS_AllocMaxAAS(void);
+void AAS_AllocMaxAAS( void );
 //frees the maximum AAS memory for storage
-void AAS_FreeMaxAAS(void);
+void AAS_FreeMaxAAS( void );

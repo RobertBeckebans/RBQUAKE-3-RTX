@@ -43,26 +43,23 @@ void QGL_Shutdown( void )
 {
 	ri.Printf( PRINT_ALL, "...shutting down QGL\n" );
 
-	if ( glw_state.hinstOpenGL )
+	if( glw_state.hinstOpenGL )
 	{
 		ri.Printf( PRINT_ALL, "...unloading OpenGL DLL\n" );
 		FreeLibrary( glw_state.hinstOpenGL );
 	}
 
 	glw_state.hinstOpenGL = NULL;
-
 }
 
 #define GR_NUM_BOARDS 0x0f
 
-void QGL_EnableLogging(qboolean enable)
+void QGL_EnableLogging( qboolean enable )
 {
-
 }
 
-
-#	pragma warning (disable : 4113 4133 4047 )
-#	define GPA( a ) GetProcAddress( glw_state.hinstOpenGL, a )
+#pragma warning( disable : 4113 4133 4047 )
+#define GPA( a ) GetProcAddress( glw_state.hinstOpenGL, a )
 
 /*
 ** QGL_Init
@@ -73,10 +70,10 @@ void QGL_EnableLogging(qboolean enable)
 ** operating systems we need to do the right thing, whatever that
 ** might be.
 */
-qboolean QGL_Init( const char *dllname )
+qboolean QGL_Init( const char* dllname )
 {
-	char systemDir[1024];
-	char libName[1024];
+	char systemDir[ 1024 ];
+	char libName[ 1024 ];
 
 	GetSystemDirectory( systemDir, sizeof( systemDir ) );
 
@@ -84,8 +81,7 @@ qboolean QGL_Init( const char *dllname )
 
 	ri.Printf( PRINT_ALL, "...initializing QGL\n" );
 
-
-	if ( dllname[0] != '!' )
+	if( dllname[ 0 ] != '!' )
 	{
 		Com_sprintf( libName, sizeof( libName ), "%s\\%s", systemDir, dllname );
 	}
@@ -96,7 +92,7 @@ qboolean QGL_Init( const char *dllname )
 
 	ri.Printf( PRINT_ALL, "...calling LoadLibrary( '%s.dll' ): ", libName );
 
-	if ( ( glw_state.hinstOpenGL = LoadLibrary( dllname ) ) == 0 )
+	if( ( glw_state.hinstOpenGL = LoadLibrary( dllname ) ) == 0 )
 	{
 		ri.Printf( PRINT_ALL, "failed\n" );
 		return qfalse;
@@ -109,8 +105,4 @@ qboolean QGL_Init( const char *dllname )
 	return qtrue;
 }
 
-
-#pragma warning (default : 4113 4133 4047 )
-
-
-
+#pragma warning( default : 4113 4133 4047 )

@@ -39,31 +39,30 @@ pointers will be bound.
 
 namespace nv_helpers_dx12
 {
-
 //--------------------------------------------------------------------------------------------------
 //
 // Add a set of heap range descriptors as a parameter of the root signature.
 void RootSignatureGenerator::AddHeapRangesParameter(
-    const std::vector<D3D12_DESCRIPTOR_RANGE>& ranges)
+	const std::vector< D3D12_DESCRIPTOR_RANGE >& ranges )
 {
-  m_ranges.push_back(ranges);
+	m_ranges.push_back( ranges );
 
-  // A set of ranges on the heap is a descriptor table parameter
-  D3D12_ROOT_PARAMETER param = {};
-  param.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-  param.DescriptorTable.NumDescriptorRanges = static_cast<UINT>(ranges.size());
-  // The range pointer is kept null here, and will be resolved when generating the root signature
-  // (see explanation of m_rangeLocations below)
-  param.DescriptorTable.pDescriptorRanges = nullptr;
+	// A set of ranges on the heap is a descriptor table parameter
+	D3D12_ROOT_PARAMETER param                = {};
+	param.ParameterType                       = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	param.DescriptorTable.NumDescriptorRanges = static_cast< UINT >( ranges.size() );
+	// The range pointer is kept null here, and will be resolved when generating the root signature
+	// (see explanation of m_rangeLocations below)
+	param.DescriptorTable.pDescriptorRanges = nullptr;
 
-  // All parameters (heap ranges and root parameters) are added to the same parameter list to
-  // preserve order
-  m_parameters.push_back(param);
+	// All parameters (heap ranges and root parameters) are added to the same parameter list to
+	// preserve order
+	m_parameters.push_back( param );
 
-  // The descriptor table descriptor ranges require a pointer to the descriptor ranges. Since new
-  // ranges can be dynamically added in the vector, we separately store the index of the range set.
-  // The actual address will be solved when generating the actual root signature
-  m_rangeLocations.push_back(static_cast<UINT>(m_ranges.size() - 1));
+	// The descriptor table descriptor ranges require a pointer to the descriptor ranges. Since new
+	// ranges can be dynamically added in the vector, we separately store the index of the range set.
+	// The actual address will be solved when generating the actual root signature
+	m_rangeLocations.push_back( static_cast< UINT >( m_ranges.size() - 1 ) );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,27 +86,27 @@ void RootSignatureGenerator::AddHeapRangesParameter(
 // this case the index in the heap is the one directly following the last
 // parameter range (or 0 if it's the first)
 void RootSignatureGenerator::AddHeapRangesParameter(
-    std::vector<std::tuple<UINT, /* BaseShaderRegister, */ UINT, /* NumDescriptors */ UINT,
-                           /* RegisterSpace */ D3D12_DESCRIPTOR_RANGE_TYPE,
-                           /* RangeType */ UINT /* OffsetInDescriptorsFromTableStart */>>
-        ranges)
+	std::vector< std::tuple< UINT, /* BaseShaderRegister, */ UINT, /* NumDescriptors */ UINT,
+		/* RegisterSpace */ D3D12_DESCRIPTOR_RANGE_TYPE,
+		/* RangeType */ UINT /* OffsetInDescriptorsFromTableStart */ > >
+		ranges )
 {
-  // Build and store the set of descriptors for the ranges
-  std::vector<D3D12_DESCRIPTOR_RANGE> rangeStorage;
-  for (const auto& input : ranges)
-  {
-    D3D12_DESCRIPTOR_RANGE r = {};
-    r.BaseShaderRegister = std::get<RSC_BASE_SHADER_REGISTER>(input);
-    r.NumDescriptors = std::get<RSC_NUM_DESCRIPTORS>(input);
-    r.RegisterSpace = std::get<RSC_REGISTER_SPACE>(input);
-    r.RangeType = std::get<RSC_RANGE_TYPE>(input);
-    r.OffsetInDescriptorsFromTableStart =
-        std::get<RSC_OFFSET_IN_DESCRIPTORS_FROM_TABLE_START>(input);
-    rangeStorage.push_back(r);
-  }
+	// Build and store the set of descriptors for the ranges
+	std::vector< D3D12_DESCRIPTOR_RANGE > rangeStorage;
+	for( const auto& input: ranges )
+	{
+		D3D12_DESCRIPTOR_RANGE r = {};
+		r.BaseShaderRegister     = std::get< RSC_BASE_SHADER_REGISTER >( input );
+		r.NumDescriptors         = std::get< RSC_NUM_DESCRIPTORS >( input );
+		r.RegisterSpace          = std::get< RSC_REGISTER_SPACE >( input );
+		r.RangeType              = std::get< RSC_RANGE_TYPE >( input );
+		r.OffsetInDescriptorsFromTableStart =
+			std::get< RSC_OFFSET_IN_DESCRIPTORS_FROM_TABLE_START >( input );
+		rangeStorage.push_back( r );
+	}
 
-  // Add those ranges to the heap parameters
-  AddHeapRangesParameter(rangeStorage);
+	// Add those ranges to the heap parameters
+	AddHeapRangesParameter( rangeStorage );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -119,77 +118,75 @@ void RootSignatureGenerator::AddHeapRangesParameter(
 // accessible via register(t1, space0).
 // In case of a root constant, the last parameter indicates how many successive 32-bit constants
 // will be bound.
-void RootSignatureGenerator::AddRootParameter(D3D12_ROOT_PARAMETER_TYPE type,
-                                              UINT shaderRegister /*= 0*/,
-                                              UINT registerSpace /*= 0*/,
-                                              UINT numRootConstants /*= 1*/)
+void RootSignatureGenerator::AddRootParameter( D3D12_ROOT_PARAMETER_TYPE type,
+	UINT                                                                 shaderRegister /*= 0*/,
+	UINT                                                                 registerSpace /*= 0*/,
+	UINT                                                                 numRootConstants /*= 1*/ )
 {
-  D3D12_ROOT_PARAMETER param = {};
-  param.ParameterType = type;
-  // The descriptor is an union, so specific values need to be set in case the parameter is a
-  // constant instead of a buffer.
-  if (type == D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS)
-  {
-    param.Constants.Num32BitValues = numRootConstants;
-    param.Constants.RegisterSpace = registerSpace;
-    param.Constants.ShaderRegister = shaderRegister;
-  }
-  else
-  {
-    param.Descriptor.RegisterSpace = registerSpace;
-    param.Descriptor.ShaderRegister = shaderRegister;
-  }
+	D3D12_ROOT_PARAMETER param = {};
+	param.ParameterType        = type;
+	// The descriptor is an union, so specific values need to be set in case the parameter is a
+	// constant instead of a buffer.
+	if( type == D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS )
+	{
+		param.Constants.Num32BitValues = numRootConstants;
+		param.Constants.RegisterSpace  = registerSpace;
+		param.Constants.ShaderRegister = shaderRegister;
+	}
+	else
+	{
+		param.Descriptor.RegisterSpace  = registerSpace;
+		param.Descriptor.ShaderRegister = shaderRegister;
+	}
 
-  // We default the visibility to all shaders
-  param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	// We default the visibility to all shaders
+	param.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-  // Add the root parameter to the set of parameters,
-  m_parameters.push_back(param);
-  // and indicate that there will be no range
-  // location to indicate since this parameter is not part of the heap
-  m_rangeLocations.push_back(~0u);
+	// Add the root parameter to the set of parameters,
+	m_parameters.push_back( param );
+	// and indicate that there will be no range
+	// location to indicate since this parameter is not part of the heap
+	m_rangeLocations.push_back( ~0u );
 }
 
 //--------------------------------------------------------------------------------------------------
 //
 // Create the root signature from the set of parameters, in the order of the addition calls
-ID3D12RootSignature* RootSignatureGenerator::Generate(ID3D12Device* device, bool isLocal)
+ID3D12RootSignature* RootSignatureGenerator::Generate( ID3D12Device* device, bool isLocal )
 {
-  // Go through all the parameters, and set the actual addresses of the heap range descriptors based
-  // on their indices in the range set array
-  for (size_t i = 0; i < m_parameters.size(); i++)
-  {
-    if (m_parameters[i].ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE)
-    {
-      m_parameters[i].DescriptorTable.pDescriptorRanges = m_ranges[m_rangeLocations[i]].data();
-    }
-  }
-  // Specify the root signature with its set of parameters
-  D3D12_ROOT_SIGNATURE_DESC rootDesc = {};
-  rootDesc.NumParameters = static_cast<UINT>(m_parameters.size());
-  rootDesc.pParameters = m_parameters.data();
-  // Set the flags of the signature. By default root signatures are global, for example for vertex
-  // and pixel shaders. For raytracing shaders the root signatures are local.
-  rootDesc.Flags =
-      isLocal ? D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE : D3D12_ROOT_SIGNATURE_FLAG_NONE;
+	// Go through all the parameters, and set the actual addresses of the heap range descriptors based
+	// on their indices in the range set array
+	for( size_t i = 0; i < m_parameters.size(); i++ )
+	{
+		if( m_parameters[ i ].ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE )
+		{
+			m_parameters[ i ].DescriptorTable.pDescriptorRanges = m_ranges[ m_rangeLocations[ i ] ].data();
+		}
+	}
+	// Specify the root signature with its set of parameters
+	D3D12_ROOT_SIGNATURE_DESC rootDesc = {};
+	rootDesc.NumParameters             = static_cast< UINT >( m_parameters.size() );
+	rootDesc.pParameters               = m_parameters.data();
+	// Set the flags of the signature. By default root signatures are global, for example for vertex
+	// and pixel shaders. For raytracing shaders the root signatures are local.
+	rootDesc.Flags =
+		isLocal ? D3D12_ROOT_SIGNATURE_FLAG_LOCAL_ROOT_SIGNATURE : D3D12_ROOT_SIGNATURE_FLAG_NONE;
 
-  // Create the root signature from its descriptor
-  ID3DBlob* pSigBlob;
-  ID3DBlob* pErrorBlob;
-  HRESULT hr = D3D12SerializeRootSignature(&rootDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &pSigBlob,
-                                           &pErrorBlob);
-  if (FAILED(hr))
-  {
-    throw std::logic_error("Cannot serialize root signature");
-  }
-  ID3D12RootSignature* pRootSig;
-  hr = device->CreateRootSignature(0, pSigBlob->GetBufferPointer(), pSigBlob->GetBufferSize(),
-                                   IID_PPV_ARGS(&pRootSig));
-  if (FAILED(hr))
-  {
-    throw std::logic_error("Cannot create root signature");
-  }
-  return pRootSig;
+	// Create the root signature from its descriptor
+	ID3DBlob* pSigBlob;
+	ID3DBlob* pErrorBlob;
+	HRESULT   hr = D3D12SerializeRootSignature( &rootDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &pSigBlob, &pErrorBlob );
+	if( FAILED( hr ) )
+	{
+		throw std::logic_error( "Cannot serialize root signature" );
+	}
+	ID3D12RootSignature* pRootSig;
+	hr = device->CreateRootSignature( 0, pSigBlob->GetBufferPointer(), pSigBlob->GetBufferSize(), IID_PPV_ARGS( &pRootSig ) );
+	if( FAILED( hr ) )
+	{
+		throw std::logic_error( "Cannot create root signature" );
+	}
+	return pRootSig;
 }
 
 } // namespace nv_helpers_dx12

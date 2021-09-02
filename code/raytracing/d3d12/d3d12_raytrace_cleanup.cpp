@@ -8,15 +8,16 @@
 #include "nv_helpers_dx12/TopLevelASGenerator.h"
 #include "nv_helpers_dx12/ShaderBindingTableGenerator.h"
 
-extern ComPtr<ID3D12Resource> m_vertexBuffer;
-extern bool raytracingDataInit;
+extern ComPtr< ID3D12Resource > m_vertexBuffer;
+extern bool                     raytracingDataInit;
 
 /*
 ============================
 RE_ShutdownRaytracingMap
 ============================
 */
-void RE_ShutdownRaytracingMap(void) {
+void RE_ShutdownRaytracingMap( void )
+{
 	r_finishDXRInit = 0;
 
 	GL_WaitForPreviousFrame();
@@ -33,24 +34,28 @@ void RE_ShutdownRaytracingMap(void) {
 	sceneVertexes.clear();
 
 	// Let's delete all of our acceleration structures.
-	for(int i = 0; i < dxrMeshList.size(); i++)
+	for( int i = 0; i < dxrMeshList.size(); i++ )
 	{
-		if (dxrMeshList[i]->buffers.pInstanceDesc.Get() != NULL) {
-			dxrMeshList[i]->buffers.pInstanceDesc->Release();
+		if( dxrMeshList[ i ]->buffers.pInstanceDesc.Get() != NULL )
+		{
+			dxrMeshList[ i ]->buffers.pInstanceDesc->Release();
 		}
 
-		if (dxrMeshList[i]->buffers.pResult.Get() != NULL) {
-			dxrMeshList[i]->buffers.pResult->Release();
+		if( dxrMeshList[ i ]->buffers.pResult.Get() != NULL )
+		{
+			dxrMeshList[ i ]->buffers.pResult->Release();
 		}
 
-		if (dxrMeshList[i]->buffers.pScratch.Get() != NULL) {
-			dxrMeshList[i]->buffers.pScratch->Release();
+		if( dxrMeshList[ i ]->buffers.pScratch.Get() != NULL )
+		{
+			dxrMeshList[ i ]->buffers.pScratch->Release();
 		}
 	}
 
 	dxrMeshList.clear();
 
-	if (m_vertexBuffer.Get() != NULL) {
+	if( m_vertexBuffer.Get() != NULL )
+	{
 		m_vertexBuffer->Release();
 	}
 }

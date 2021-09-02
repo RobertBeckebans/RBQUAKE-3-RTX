@@ -25,17 +25,17 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //#endif //BOTLIB
 
 #ifdef BOTLIB
-#include "q_shared.h"
-#include "qfiles.h"
-#include "botlib.h"
-#include "l_log.h"
-#include "l_libvar.h"
-#include "l_memory.h"
-//#include "l_utils.h"
-#include "be_interface.h"
+	#include "q_shared.h"
+	#include "qfiles.h"
+	#include "botlib.h"
+	#include "l_log.h"
+	#include "l_libvar.h"
+	#include "l_memory.h"
+	//#include "l_utils.h"
+	#include "be_interface.h"
 #else //BOTLIB
-#include "qbsp.h"
-#include "l_mem.h"
+	#include "qbsp.h"
+	#include "l_mem.h"
 #endif //BOTLIB
 
 #ifdef BOTLIB
@@ -45,30 +45,34 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // Returns:					-
 // Changes Globals:		-
 //========================================================================
-void Vector2Angles(vec3_t value1, vec3_t angles)
+void Vector2Angles( vec3_t value1, vec3_t angles )
 {
-	float	forward;
-	float	yaw, pitch;
-	
-	if (value1[1] == 0 && value1[0] == 0)
+	float forward;
+	float yaw, pitch;
+
+	if( value1[ 1 ] == 0 && value1[ 0 ] == 0 )
 	{
 		yaw = 0;
-		if (value1[2] > 0) pitch = 90;
-		else pitch = 270;
+		if( value1[ 2 ] > 0 )
+			pitch = 90;
+		else
+			pitch = 270;
 	} //end if
 	else
 	{
-		yaw = (int) (atan2(value1[1], value1[0]) * 180 / M_PI);
-		if (yaw < 0) yaw += 360;
+		yaw = ( int )( atan2( value1[ 1 ], value1[ 0 ] ) * 180 / M_PI );
+		if( yaw < 0 )
+			yaw += 360;
 
-		forward = sqrt (value1[0]*value1[0] + value1[1]*value1[1]);
-		pitch = (int) (atan2(value1[2], forward) * 180 / M_PI);
-		if (pitch < 0) pitch += 360;
+		forward = sqrt( value1[ 0 ] * value1[ 0 ] + value1[ 1 ] * value1[ 1 ] );
+		pitch   = ( int )( atan2( value1[ 2 ], forward ) * 180 / M_PI );
+		if( pitch < 0 )
+			pitch += 360;
 	} //end else
 
-	angles[PITCH] = -pitch;
-	angles[YAW] = yaw;
-	angles[ROLL] = 0;
+	angles[ PITCH ] = -pitch;
+	angles[ YAW ]   = yaw;
+	angles[ ROLL ]  = 0;
 } //end of the function Vector2Angles
 #endif //BOTLIB
 //===========================================================================
@@ -77,11 +81,12 @@ void Vector2Angles(vec3_t value1, vec3_t angles)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ConvertPath(char *path)
+void ConvertPath( char* path )
 {
-	while(*path)
+	while( *path )
 	{
-		if (*path == '/' || *path == '\\') *path = PATHSEPERATOR_CHAR;
+		if( *path == '/' || *path == '\\' )
+			*path = PATHSEPERATOR_CHAR;
 		path++;
 	} //end while
 } //end of the function ConvertPath
@@ -91,14 +96,14 @@ void ConvertPath(char *path)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AppendPathSeperator(char *path, int length)
+void AppendPathSeperator( char* path, int length )
 {
-	int pathlen = strlen(path);
+	int pathlen = strlen( path );
 
-	if (strlen(path) && length-pathlen > 1 && path[pathlen-1] != '/' && path[pathlen-1] != '\\')
+	if( strlen( path ) && length - pathlen > 1 && path[ pathlen - 1 ] != '/' && path[ pathlen - 1 ] != '\\' )
 	{
-		path[pathlen] = PATHSEPERATOR_CHAR;
-		path[pathlen+1] = '\0';
+		path[ pathlen ]     = PATHSEPERATOR_CHAR;
+		path[ pathlen + 1 ] = '\0';
 	} //end if
 } //end of the function AppenPathSeperator
 
@@ -243,17 +248,17 @@ qboolean FindQuakeFile2(char *basedir, char *gamedir, char *filename, foundfile_
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-#ifdef BOTLIB
+	#ifdef BOTLIB
 qboolean FindQuakeFile(char *filename, foundfile_t *file)
 {
 	return FindQuakeFile2(LibVarGetString("basedir"),
 				LibVarGetString("gamedir"), filename, file);
 } //end of the function FindQuakeFile
-#else //BOTLIB
+	#else //BOTLIB
 qboolean FindQuakeFile(char *basedir, char *gamedir, char *filename, foundfile_t *file)
 {
 	return FindQuakeFile2(basedir, gamedir, filename, file);
 } //end of the function FindQuakeFile
-#endif //BOTLIB
+	#endif //BOTLIB
 
 #endif

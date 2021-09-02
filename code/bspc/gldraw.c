@@ -30,55 +30,54 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // can't use the glvertex3fv functions, because the vec3_t fields
 // could be either floats or doubles, depending on DOUBLEVEC_T
 
-qboolean	drawflag;
-vec3_t	draw_mins, draw_maxs;
+qboolean drawflag;
+vec3_t   draw_mins, draw_maxs;
 
+#define WIN_SIZE 512
 
-#define	WIN_SIZE	512
-
-void InitWindow (void)
+void InitWindow( void )
 {
-    auxInitDisplayMode (AUX_SINGLE | AUX_RGB);
-    auxInitPosition (0, 0, WIN_SIZE, WIN_SIZE);
-    auxInitWindow ("qcsg");
+	auxInitDisplayMode( AUX_SINGLE | AUX_RGB );
+	auxInitPosition( 0, 0, WIN_SIZE, WIN_SIZE );
+	auxInitWindow( "qcsg" );
 }
 
-void Draw_ClearWindow (void)
+void Draw_ClearWindow( void )
 {
-	static int	init;
-	int		w, h, g;
-	vec_t	mx, my;
+	static int init;
+	int        w, h, g;
+	vec_t      mx, my;
 
-	if (!drawflag)
+	if( !drawflag )
 		return;
 
-	if (!init)
+	if( !init )
 	{
 		init = true;
-		InitWindow ();
+		InitWindow();
 	}
 
-	glClearColor (1,0.8,0.8,0);
-	glClear (GL_COLOR_BUFFER_BIT);
+	glClearColor( 1, 0.8, 0.8, 0 );
+	glClear( GL_COLOR_BUFFER_BIT );
 
-	w = (draw_maxs[0] - draw_mins[0]);
-	h = (draw_maxs[1] - draw_mins[1]);
+	w = ( draw_maxs[ 0 ] - draw_mins[ 0 ] );
+	h = ( draw_maxs[ 1 ] - draw_mins[ 1 ] );
 
-	mx = draw_mins[0] + w/2;
-	my = draw_mins[1] + h/2;
+	mx = draw_mins[ 0 ] + w / 2;
+	my = draw_mins[ 1 ] + h / 2;
 
 	g = w > h ? w : h;
 
-	glLoadIdentity ();
-    gluPerspective (90,  1,  2,  16384);
-	gluLookAt (mx, my, draw_maxs[2] + g/2, mx , my, draw_maxs[2], 0, 1, 0);
+	glLoadIdentity();
+	gluPerspective( 90, 1, 2, 16384 );
+	gluLookAt( mx, my, draw_maxs[ 2 ] + g / 2, mx, my, draw_maxs[ 2 ], 0, 1, 0 );
 
-	glColor3f (0,0,0);
-//	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-	glPolygonMode (GL_FRONT_AND_BACK, GL_FILL);
-	glDisable (GL_DEPTH_TEST);
-	glEnable (GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor3f( 0, 0, 0 );
+	//	glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+	glDisable( GL_DEPTH_TEST );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
 #if 0
 	glColor4f (1,0,0,0.5);
@@ -92,141 +91,139 @@ void Draw_ClearWindow (void)
 	glEnd ();
 #endif
 
-	glFlush ();
-
+	glFlush();
 }
 
-void Draw_SetRed (void)
+void Draw_SetRed( void )
 {
-	if (!drawflag)
+	if( !drawflag )
 		return;
 
-	glColor3f (1,0,0);
+	glColor3f( 1, 0, 0 );
 }
 
-void Draw_SetGrey (void)
+void Draw_SetGrey( void )
 {
-	if (!drawflag)
+	if( !drawflag )
 		return;
 
-	glColor3f (0.5,0.5,0.5);
+	glColor3f( 0.5, 0.5, 0.5 );
 }
 
-void Draw_SetBlack (void)
+void Draw_SetBlack( void )
 {
-	if (!drawflag)
+	if( !drawflag )
 		return;
 
-	glColor3f (0,0,0);
+	glColor3f( 0, 0, 0 );
 }
 
-void DrawWinding (winding_t *w)
+void DrawWinding( winding_t* w )
 {
-	int		i;
+	int i;
 
-	if (!drawflag)
+	if( !drawflag )
 		return;
 
-	glColor4f (0,0,0,0.5);
-	glBegin (GL_LINE_LOOP);
-	for (i=0 ; i<w->numpoints ; i++)
-		glVertex3f (w->p[i][0],w->p[i][1],w->p[i][2] );
-	glEnd ();
+	glColor4f( 0, 0, 0, 0.5 );
+	glBegin( GL_LINE_LOOP );
+	for( i = 0; i < w->numpoints; i++ )
+		glVertex3f( w->p[ i ][ 0 ], w->p[ i ][ 1 ], w->p[ i ][ 2 ] );
+	glEnd();
 
-	glColor4f (0,1,0,0.3);
-	glBegin (GL_POLYGON);
-	for (i=0 ; i<w->numpoints ; i++)
-		glVertex3f (w->p[i][0],w->p[i][1],w->p[i][2] );
-	glEnd ();
+	glColor4f( 0, 1, 0, 0.3 );
+	glBegin( GL_POLYGON );
+	for( i = 0; i < w->numpoints; i++ )
+		glVertex3f( w->p[ i ][ 0 ], w->p[ i ][ 1 ], w->p[ i ][ 2 ] );
+	glEnd();
 
-	glFlush ();
+	glFlush();
 }
 
-void DrawAuxWinding (winding_t *w)
+void DrawAuxWinding( winding_t* w )
 {
-	int		i;
+	int i;
 
-	if (!drawflag)
+	if( !drawflag )
 		return;
 
-	glColor4f (0,0,0,0.5);
-	glBegin (GL_LINE_LOOP);
-	for (i=0 ; i<w->numpoints ; i++)
-		glVertex3f (w->p[i][0],w->p[i][1],w->p[i][2] );
-	glEnd ();
+	glColor4f( 0, 0, 0, 0.5 );
+	glBegin( GL_LINE_LOOP );
+	for( i = 0; i < w->numpoints; i++ )
+		glVertex3f( w->p[ i ][ 0 ], w->p[ i ][ 1 ], w->p[ i ][ 2 ] );
+	glEnd();
 
-	glColor4f (1,0,0,0.3);
-	glBegin (GL_POLYGON);
-	for (i=0 ; i<w->numpoints ; i++)
-		glVertex3f (w->p[i][0],w->p[i][1],w->p[i][2] );
-	glEnd ();
+	glColor4f( 1, 0, 0, 0.3 );
+	glBegin( GL_POLYGON );
+	for( i = 0; i < w->numpoints; i++ )
+		glVertex3f( w->p[ i ][ 0 ], w->p[ i ][ 1 ], w->p[ i ][ 2 ] );
+	glEnd();
 
-	glFlush ();
+	glFlush();
 }
 
 //============================================================
 
-#define	GLSERV_PORT	25001
+#define GLSERV_PORT 25001
 
-qboolean	wins_init;
-int			draw_socket;
+qboolean wins_init;
+int      draw_socket;
 
-void GLS_BeginScene (void)
+void GLS_BeginScene( void )
 {
-	WSADATA	winsockdata;
-	WORD	wVersionRequested; 
-	struct sockaddr_in	address;
-	int		r;
+	WSADATA            winsockdata;
+	WORD               wVersionRequested;
+	struct sockaddr_in address;
+	int                r;
 
-	if (!wins_init)
+	if( !wins_init )
 	{
 		wins_init = true;
 
-		wVersionRequested = MAKEWORD(1, 1); 
+		wVersionRequested = MAKEWORD( 1, 1 );
 
-		r = WSAStartup (MAKEWORD(1, 1), &winsockdata);
+		r = WSAStartup( MAKEWORD( 1, 1 ), &winsockdata );
 
-		if (r)
-			Error ("Winsock initialization failed.");
-
+		if( r )
+			Error( "Winsock initialization failed." );
 	}
 
 	// connect a socket to the server
 
-	draw_socket = socket (PF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (draw_socket == -1)
-		Error ("draw_socket failed");
+	draw_socket = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
+	if( draw_socket == -1 )
+		Error( "draw_socket failed" );
 
-	address.sin_family = AF_INET;
-	address.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-	address.sin_port = GLSERV_PORT;
-	r = connect (draw_socket, (struct sockaddr *)&address, sizeof(address));
-	if (r == -1)
+	address.sin_family      = AF_INET;
+	address.sin_addr.s_addr = htonl( INADDR_LOOPBACK );
+	address.sin_port        = GLSERV_PORT;
+	r                       = connect( draw_socket, ( struct sockaddr* )&address, sizeof( address ) );
+	if( r == -1 )
 	{
-		closesocket (draw_socket);
+		closesocket( draw_socket );
 		draw_socket = 0;
 	}
 }
 
-void GLS_Winding (winding_t *w, int code)
+void GLS_Winding( winding_t* w, int code )
 {
-	byte	buf[1024];
-	int		i, j;
+	byte buf[ 1024 ];
+	int  i, j;
 
-	if (!draw_socket)
+	if( !draw_socket )
 		return;
 
-	((int *)buf)[0] = w->numpoints;
-	((int *)buf)[1] = code;
-	for (i=0 ; i<w->numpoints ; i++)
-		for (j=0 ; j<3 ; j++)
-			((float *)buf)[2+i*3+j] = w->p[i][j];
+	( ( int* )buf )[ 0 ] = w->numpoints;
+	( ( int* )buf )[ 1 ] = code;
+	for( i = 0; i < w->numpoints; i++ )
+		for( j = 0; j < 3; j++ )
+			( ( float* )buf )[ 2 + i * 3 + j ] = w->p[ i ][ j ];
 
-	send (draw_socket, buf, w->numpoints*12+8, 0);
+	send( draw_socket, buf, w->numpoints * 12 + 8, 0 );
 }
 
-void GLS_EndScene (void)
+void GLS_EndScene( void )
 {
-	closesocket (draw_socket);
+	closesocket( draw_socket );
 	draw_socket = 0;
 }

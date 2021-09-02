@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "glw_win.h"
 #include "win_local.h"
 
-static unsigned short s_oldHardwareGamma[3][256];
+static unsigned short s_oldHardwareGamma[ 3 ][ 256 ];
 
 /*
 ** WG_CheckHardwareGamma
@@ -37,7 +37,6 @@ static unsigned short s_oldHardwareGamma[3][256];
 */
 void WG_CheckHardwareGamma( void )
 {
-	
 }
 
 /*
@@ -72,8 +71,8 @@ void mapGammaMax( void ) {
 **
 ** This routine should only be called if glConfig.deviceSupportsGamma is TRUE
 */
-void GLimp_SetGamma( unsigned char red[256], unsigned char green[256], unsigned char blue[256] ) {
-	
+void GLimp_SetGamma( unsigned char red[ 256 ], unsigned char green[ 256 ], unsigned char blue[ 256 ] )
+{
 }
 
 /*
@@ -81,6 +80,4 @@ void GLimp_SetGamma( unsigned char red[256], unsigned char green[256], unsigned 
 */
 void WG_RestoreGamma( void )
 {
-
 }
-
