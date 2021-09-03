@@ -1,0 +1,11 @@
+*.exe
+*.dll
+
+baseq3/q3config.cfg
+baseq3/q3key
+baseq3/default.cfg
+baseq3/*.pk3
+
+premake/.vs/
+premake/obj/
+
