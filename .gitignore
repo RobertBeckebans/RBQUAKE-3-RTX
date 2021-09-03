@@ -1,5 +1,10 @@
 *.exe
 *.dll
+*.vcxproj*
+*.sln
+*.pdb
+*.exp
+*.lib
 
 baseq3/q3config.cfg
 baseq3/q3key
@@ -8,4 +13,8 @@ baseq3/*.pk3
 
 premake/.vs/
 premake/obj/
+
+code/games/q3a/cgame/obj/
+code/games/q3a/game/obj/
+code/games/q3a/q3_ui/obj/
 
