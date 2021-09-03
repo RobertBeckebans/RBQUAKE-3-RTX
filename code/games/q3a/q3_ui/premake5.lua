@@ -28,6 +28,8 @@ project "q3a-ui"
 		
 		-- ignore TA stuff
 		-- "../ui/ui_local.h",
+		"../ui/ui_shared.h",
+		"../ui/ui_shared.c",
 	}
 	includedirs
 	{

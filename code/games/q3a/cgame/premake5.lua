@@ -33,6 +33,7 @@ project "q3a-cgame"
 		"cg_scoreboard.c",
 		"cg_servercmds.c",
 		"cg_snapshot.c",
+		"cg_sprite.c",
 		"cg_syscalls.c",
 		"cg_view.c",
 		"cg_weapons.c",
@@ -42,6 +43,10 @@ project "q3a-cgame"
 		"../game/bg_*.c",
 		"../game/bg_*.cpp",
 		"../game/bg_*.h",
+	}
+	excludes
+	{
+		"cg_particles.c",
 	}
 	includedirs
 	{

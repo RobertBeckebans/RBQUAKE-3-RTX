@@ -132,12 +132,6 @@ newoption
 
 newoption
 {
-	trigger = "bullet",
-	description = "Compile with Bullet physics game code support"
-}
-
-newoption
-{
 	trigger = "acebot",
 	description = "Compile with AceBot game code support"
 }
@@ -202,12 +196,12 @@ project "RBQuake3"
 		"../code/engine/qcommon/files.c",
 		"../code/engine/qcommon/huffman.c",
 		"../code/engine/qcommon/md4.c",
-		"../code/engine/qcommon/md5.c",
+		--"../code/engine/qcommon/md5.c",
 		"../code/engine/qcommon/msg.c",
 		"../code/engine/qcommon/vm.c",
 		"../code/engine/qcommon/net_*.c",
 		"../code/engine/qcommon/unzip.c",
-		"../code/engine/qcommon/parse.c",  -- by Tremulous to avoid botlib dependency
+		--"../code/engine/qcommon/parse.c",  -- by Tremulous to avoid botlib dependency
 
 		"../code/engine/qcommon/cm_load.c",
 		"../code/engine/qcommon/cm_patch.c",
@@ -356,7 +350,7 @@ project "RBQuake3"
 		--"STANDALONE",
 		"REF_HARD_LINKED",
 		--"GLEW_STATIC",
-		"BUILD_FREETYPE",
+		--"BUILD_FREETYPE",
 		--"FT2_BUILD_LIBRARY",
 		--"USE_CODEC_VORBIS",
 		--"USE_VOIP",
@@ -373,6 +367,7 @@ project "RBQuake3"
 		"../code/engine/server/sv_rankings.c",
 		"../code/engine/renderer/tr_animation_mdm.c",
 		"../code/engine/renderer/tr_model_mdm.c",
+		"../code/libs/jpeg/jcapistd.c",
 	}
 	
 	--
@@ -420,26 +415,6 @@ project "RBQuake3"
 			"../code/shared/botlib/*.c", "../code/shared/botlib/*.h",
 		}
 	
-	configuration "bullet"
-		defines
-		{
-			"USE_BULLET"
-		}
-		includedirs
-		{
-			"../code/libs/bullet"
-		}
-		files
-		{
-			"../code/qcommon/cm_bullet.cpp",
-		
-			"../code/libs/bullet/*.h",
-			"../code/libs/bullet/LinearMath/**.cpp", "../code/libs/bullet/LinearMath/**.h",
-			"../code/libs/bullet/BulletCollision/**.cpp", "../code/libs/bullet/BulletCollision/**.h",
-			"../code/libs/bullet/BulletDynamics/**.cpp", "../code/libs/bullet/BulletDynamics/**.h",
-			"../code/libs/bullet/BulletSoftBody/**.cpp", "../code/libs/bullet/BulletSoftBody/**.h",
-		}
-	
 	--configuration "with-freetype"
 	--	links        { "freetype" }
 	--	buildoptions { "`pkg-config --cflags freetype2`" }
@@ -473,8 +448,8 @@ project "RBQuake3"
 		flags       { "WinMain" }
 		files
 		{
+			"../code/engine/win32/*.h",
 			"../code/engine/win32/*.c",
-			"../code/engine/win32/h.c",
 			"../code/engine/win32/qe3.ico",
 			"../code/engine/win32/winquake.rc",
 		}
@@ -494,15 +469,18 @@ project "RBQuake3"
 		
 		links
 		{
-			"SDL2",
-			"SDL2main",
+			--"SDL2",
+			--"SDL2main",
+			"dxcompiler",
+			"dxgi",
+			"d3d12",
 			"winmm",
 			"wsock32",
 			--"opengl32",
-			"user32",
-			"advapi32",
-			"ws2_32",
-			"Psapi"
+			--"user32",
+			--"advapi32",
+			--"ws2_32",
+			--"Psapi"
 		}
 		buildoptions
 		{

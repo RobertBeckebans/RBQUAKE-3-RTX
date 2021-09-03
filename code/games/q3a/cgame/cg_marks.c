@@ -310,6 +310,7 @@ void CG_AddMarks( void )
 	}
 }
 
+
 // cg_particles.c
 
 #define BLOODRED    2
