@@ -3,7 +3,7 @@
 -- 
 solution "RBQUAKE-3"
 	configurations { "Debug", "Profile", "Release" }
-	platforms {"x32", "x64"}
+	platforms {"x64"}
 	
 	configuration "Debug"
 		defines
@@ -193,7 +193,7 @@ project "RBQuake3"
 		"../code/engine/client/**.c", "../code/engine/client/**.h",
 		"../code/engine/server/**.c", "../code/engine/server/**.h",
 		
-		"../code/engine/sound/**.c", "../code/engine/sound/**.h",
+		--"../code/engine/sound/**.c", "../code/engine/sound/**.h",
 		
 		"../code/engine/qcommon/**.h", 
 		"../code/engine/qcommon/cmd.c",
@@ -214,79 +214,76 @@ project "RBQuake3"
 		"../code/engine/qcommon/cm_polylib.c",
 		"../code/engine/qcommon/cm_test.c",
 		"../code/engine/qcommon/cm_trace.c",
-		"../code/engine/qcommon/cm_trisoup.c",
+		--"../code/engine/qcommon/cm_trisoup.c",
 		
 		"../code/engine/renderer/**.c", "../code/engine/renderer/**.cpp", "../code/engine/renderer/**.h",
-		
-		"../code/libs/gl3w/src/gl3w.c",
-		"../code/libs/gl3w/include/GL3/gl3.h",
-		"../code/libs/gl3w/include/GL3/gl3w.h",
+		"../code/engine/raytracing/**.c", "../code/engine/raytracing/**.cpp", "../code/engine/raytracing/**.h",
 		
 		"../code/libs/jpeg/**.c", "../code/../libs/jpeg/**.h",
-		"../code/libs/png/**.c", "../code/../libs/png/**.h",
-		"../code/libs/zlib/**.c", "../code/../libs/zlib/**.h",
-		"../code/libs/openexr/**.cpp", "../code/../libs/openexr/**.h",
+		--"../code/libs/png/**.c", "../code/../libs/png/**.h",
+		--"../code/libs/zlib/**.c", "../code/../libs/zlib/**.h",
+		--"../code/libs/openexr/**.cpp", "../code/../libs/openexr/**.h",
 		
-		--"../code/libs/ft2/**.c", "../code/../libs/ft2/**.h",
+		-- "../code/libs/ft2/**.c", "../code/../libs/ft2/**.h",
 		
-		"../code/libs/freetype/src/autofit/autofit.c",
-		"../code/libs/freetype/src/bdf/bdf.c",
-		"../code/libs/freetype/src/cff/cff.c",
-		"../code/libs/freetype/src/base/ftbase.c",
-		"../code/libs/freetype/src/base/ftbitmap.c",
-		"../code/libs/freetype/src/cache/ftcache.c",
-		"../code/libs/freetype/src/base/ftdebug.c",
-		"../code/libs/freetype/src/base/ftgasp.c",
-		"../code/libs/freetype/src/base/ftglyph.c",
-		"../code/libs/freetype/src/gzip/ftgzip.c",
-		"../code/libs/freetype/src/base/ftinit.c",
-		"../code/libs/freetype/src/lzw/ftlzw.c",
-		"../code/libs/freetype/src/base/ftstroke.c",
-		"../code/libs/freetype/src/base/ftsystem.c",
-		"../code/libs/freetype/src/smooth/smooth.c",
-		"../code/libs/freetype/src/base/ftbbox.c",
-		"../code/libs/freetype/src/base/ftmm.c",
-		"../code/libs/freetype/src/base/ftpfr.c",
-		"../code/libs/freetype/src/base/ftsynth.c",
-		"../code/libs/freetype/src/base/fttype1.c",
-		"../code/libs/freetype/src/base/ftwinfnt.c",
-		"../code/libs/freetype/src/pcf/pcf.c",
-		"../code/libs/freetype/src/pfr/pfr.c",
-		"../code/libs/freetype/src/psaux/psaux.c",
-		"../code/libs/freetype/src/pshinter/pshinter.c",
-		"../code/libs/freetype/src/psnames/psmodule.c",
-		"../code/libs/freetype/src/raster/raster.c",
-		"../code/libs/freetype/src/sfnt/sfnt.c",
-		"../code/libs/freetype/src/truetype/truetype.c",
-		"../code/libs/freetype/src/type1/type1.c",
-		"../code/libs/freetype/src/cid/type1cid.c",
-		"../code/libs/freetype/src/type42/type42.c",
-		"../code/libs/freetype/src/winfonts/winfnt.c",
+		-- "../code/libs/freetype/src/autofit/autofit.c",
+		-- "../code/libs/freetype/src/bdf/bdf.c",
+		-- "../code/libs/freetype/src/cff/cff.c",
+		-- "../code/libs/freetype/src/base/ftbase.c",
+		-- "../code/libs/freetype/src/base/ftbitmap.c",
+		-- "../code/libs/freetype/src/cache/ftcache.c",
+		-- "../code/libs/freetype/src/base/ftdebug.c",
+		-- "../code/libs/freetype/src/base/ftgasp.c",
+		-- "../code/libs/freetype/src/base/ftglyph.c",
+		-- "../code/libs/freetype/src/gzip/ftgzip.c",
+		-- "../code/libs/freetype/src/base/ftinit.c",
+		-- "../code/libs/freetype/src/lzw/ftlzw.c",
+		-- "../code/libs/freetype/src/base/ftstroke.c",
+		-- "../code/libs/freetype/src/base/ftsystem.c",
+		-- "../code/libs/freetype/src/smooth/smooth.c",
+		-- "../code/libs/freetype/src/base/ftbbox.c",
+		-- "../code/libs/freetype/src/base/ftmm.c",
+		-- "../code/libs/freetype/src/base/ftpfr.c",
+		-- "../code/libs/freetype/src/base/ftsynth.c",
+		-- "../code/libs/freetype/src/base/fttype1.c",
+		-- "../code/libs/freetype/src/base/ftwinfnt.c",
+		-- "../code/libs/freetype/src/pcf/pcf.c",
+		-- "../code/libs/freetype/src/pfr/pfr.c",
+		-- "../code/libs/freetype/src/psaux/psaux.c",
+		-- "../code/libs/freetype/src/pshinter/pshinter.c",
+		-- "../code/libs/freetype/src/psnames/psmodule.c",
+		-- "../code/libs/freetype/src/raster/raster.c",
+		-- "../code/libs/freetype/src/sfnt/sfnt.c",
+		-- "../code/libs/freetype/src/truetype/truetype.c",
+		-- "../code/libs/freetype/src/type1/type1.c",
+		-- "../code/libs/freetype/src/cid/type1cid.c",
+		-- "../code/libs/freetype/src/type42/type42.c",
+		-- "../code/libs/freetype/src/winfonts/winfnt.c",
 		
-		"../code/libs/ogg/src/bitwise.c",
-		"../code/libs/ogg/src/framing.c",
+		-- "../code/libs/ogg/src/bitwise.c",
+		-- "../code/libs/ogg/src/framing.c",
 		
-		"../code/libs/vorbis/lib/mdct.c",
-		"../code/libs/vorbis/lib/smallft.c",
-		"../code/libs/vorbis/lib/block.c",
-		"../code/libs/vorbis/lib/envelope.c",
-		"../code/libs/vorbis/lib/window.c",
-		"../code/libs/vorbis/lib/lsp.c",
-		"../code/libs/vorbis/lib/lpc.c",
-		"../code/libs/vorbis/lib/analysis.c",
-		"../code/libs/vorbis/lib/synthesis.c",
-		"../code/libs/vorbis/lib/psy.c",
-		"../code/libs/vorbis/lib/info.c",
-		"../code/libs/vorbis/lib/floor1.c",
-		"../code/libs/vorbis/lib/floor0.c",
-		"../code/libs/vorbis/lib/res0.c",
-		"../code/libs/vorbis/lib/mapping0.c",
-		"../code/libs/vorbis/lib/registry.c",
-		"../code/libs/vorbis/lib/codebook.c",
-		"../code/libs/vorbis/lib/sharedbook.c",
-		"../code/libs/vorbis/lib/lookup.c",
-		"../code/libs/vorbis/lib/bitrate.c",
-		"../code/libs/vorbis/lib/vorbisfile.c",
+		-- "../code/libs/vorbis/lib/mdct.c",
+		-- "../code/libs/vorbis/lib/smallft.c",
+		-- "../code/libs/vorbis/lib/block.c",
+		-- "../code/libs/vorbis/lib/envelope.c",
+		-- "../code/libs/vorbis/lib/window.c",
+		-- "../code/libs/vorbis/lib/lsp.c",
+		-- "../code/libs/vorbis/lib/lpc.c",
+		-- "../code/libs/vorbis/lib/analysis.c",
+		-- "../code/libs/vorbis/lib/synthesis.c",
+		-- "../code/libs/vorbis/lib/psy.c",
+		-- "../code/libs/vorbis/lib/info.c",
+		-- "../code/libs/vorbis/lib/floor1.c",
+		-- "../code/libs/vorbis/lib/floor0.c",
+		-- "../code/libs/vorbis/lib/res0.c",
+		-- "../code/libs/vorbis/lib/mapping0.c",
+		-- "../code/libs/vorbis/lib/registry.c",
+		-- "../code/libs/vorbis/lib/codebook.c",
+		-- "../code/libs/vorbis/lib/sharedbook.c",
+		-- "../code/libs/vorbis/lib/lookup.c",
+		-- "../code/libs/vorbis/lib/bitrate.c",
+		-- "../code/libs/vorbis/lib/vorbisfile.c",
 		
 		-- "../libs/speex/bits.c",
 		-- "../libs/speex/buffer.c",
@@ -329,41 +326,41 @@ project "RBQuake3"
 		-- "../libs/speex/stereo.c",
 		-- "../libs/speex/vq.c",
 		
-		"../code/libs/theora/lib/dec/apiwrapper.c",
-		"../code/libs/theora/lib/dec/bitpack.c",
-		"../code/libs/theora/lib/dec/decapiwrapper.c",
-		"../code/libs/theora/lib/dec/decinfo.c",
-		"../code/libs/theora/lib/dec/decode.c",
-		"../code/libs/theora/lib/dec/dequant.c",
-		"../code/libs/theora/lib/dec/fragment.c",
-		"../code/libs/theora/lib/dec/huffdec.c",
-		"../code/libs/theora/lib/dec/idct.c",
-		"../code/libs/theora/lib/dec/thinfo.c",
-		"../code/libs/theora/lib/dec/internal.c",
-		"../code/libs/theora/lib/dec/quant.c",
-		"../code/libs/theora/lib/dec/state.c",
+		-- "../code/libs/theora/lib/dec/apiwrapper.c",
+		-- "../code/libs/theora/lib/dec/bitpack.c",
+		-- "../code/libs/theora/lib/dec/decapiwrapper.c",
+		-- "../code/libs/theora/lib/dec/decinfo.c",
+		-- "../code/libs/theora/lib/dec/decode.c",
+		-- "../code/libs/theora/lib/dec/dequant.c",
+		-- "../code/libs/theora/lib/dec/fragment.c",
+		-- "../code/libs/theora/lib/dec/huffdec.c",
+		-- "../code/libs/theora/lib/dec/idct.c",
+		-- "../code/libs/theora/lib/dec/thinfo.c",
+		-- "../code/libs/theora/lib/dec/internal.c",
+		-- "../code/libs/theora/lib/dec/quant.c",
+		-- "../code/libs/theora/lib/dec/state.c",
 	}
 	includedirs
 	{
 		"../code/shared",
-		"../code/libs/zlib",
-		"../code/libs/gl3w/include",
+		-- "../code/libs/zlib",
+		-- "../code/libs/gl3w/include",
 		"../code/libs/freetype/include",
-		"../code/libs/ogg/include",
-		"../code/libs/vorbis/include",
-		"../code/libs/theora/include",
-		"../code/libs/speex/include",
+		-- "../code/libs/ogg/include",
+		-- "../code/libs/vorbis/include",
+		-- "../code/libs/theora/include",
+		-- "../code/libs/speex/include",
 	}
 	defines
 	{ 
 		--"STANDALONE",
 		"REF_HARD_LINKED",
-		"GLEW_STATIC",
+		--"GLEW_STATIC",
 		"BUILD_FREETYPE",
-		"FT2_BUILD_LIBRARY",
-		"USE_CODEC_VORBIS",
+		--"FT2_BUILD_LIBRARY",
+		--"USE_CODEC_VORBIS",
 		--"USE_VOIP",
-		"USE_CIN_THEORA",
+		--"USE_CIN_THEORA",
 		"USE_ALLOCA",
 		"FLOATING_POINT",
 		--"USE_CURL", 
@@ -385,10 +382,10 @@ project "RBQuake3"
 		files
 		{ 
 			--"code/qcommon/vm_x86.c",
-			"../code/libs/theora/lib/dec/x86/mmxidct.c",
-			"../code/libs/theora/lib/dec/x86/mmxfrag.c",
-			"../code/libs/theora/lib/dec/x86/mmxstate.c",
-			"../code/libs/theora/lib/dec/x86/x86state.c"
+			-- "../code/libs/theora/lib/dec/x86/mmxidct.c",
+			-- "../code/libs/theora/lib/dec/x86/mmxfrag.c",
+			-- "../code/libs/theora/lib/dec/x86/mmxstate.c",
+			-- "../code/libs/theora/lib/dec/x86/x86state.c"
 		}
 	
 	configuration "x64"
@@ -397,10 +394,10 @@ project "RBQuake3"
 		{ 
 			--"qcommon/vm_x86_64.c",
 			--"qcommon/vm_x86_64_assembler.c",
-			"../code/libs/theora/lib/dec/x86/mmxidct.c",
-			"../code/libs/theora/lib/dec/x86/mmxfrag.c",
-			"../code/libs/theora/lib/dec/x86/mmxstate.c",
-			"../code/libs/theora/lib/dec/x86/x86state.c"
+			-- "../code/libs/theora/lib/dec/x86/mmxidct.c",
+			-- "../code/libs/theora/lib/dec/x86/mmxfrag.c",
+			-- "../code/libs/theora/lib/dec/x86/mmxstate.c",
+			-- "../code/libs/theora/lib/dec/x86/x86state.c"
 		}
 		
 	--
@@ -476,26 +473,19 @@ project "RBQuake3"
 		flags       { "WinMain" }
 		files
 		{
-			"../code/engine/sys/sys_main.c",
-			"../code/engine/sys/sys_win32.c",
-			"../code/engine/sys/con_log.c",
-			"../code/engine/sys/con_win32.c",
-			"../code/engine/sys/sdl_gamma.c",
-			"../code/engine/sys/sdl_glimp.c",
-			"../code/engine/sys/sdl_input.c",
-			"../code/engine/sys/sdl_snd.c",
-			
-			"../code/engine/sys/qe3.ico",
-			"../code/engine/sys/win_resource.rc",
+			"../code/engine/win32/*.c",
+			"../code/engine/win32/h.c",
+			"../code/engine/win32/qe3.ico",
+			"../code/engine/win32/winquake.rc",
 		}
 		defines
 		{
-			"USE_OPENAL",
+			--"USE_OPENAL",
 		}
 		includedirs
 		{
-			"../code/libs/sdl2/include",
-			"../code/libs/openal/include",
+			--"../code/libs/sdl2/include",
+			--"../code/libs/openal/include",
 		}
 		libdirs
 		{
@@ -508,7 +498,7 @@ project "RBQuake3"
 			"SDL2main",
 			"winmm",
 			"wsock32",
-			"opengl32",
+			--"opengl32",
 			"user32",
 			"advapi32",
 			"ws2_32",
@@ -536,81 +526,31 @@ project "RBQuake3"
 		targetdir 	".."
 		libdirs
 		{
-			"../code/libs/sdl2/lib/x86",
-			"../code/libs/openal/libs/win32",
+			--"../code/libs/sdl2/lib/x86",
+			--"../code/libs/openal/libs/win32",
 			--"../libs/curl-7.12.2/lib"
 		}
 		links
 		{
 			--"libcurl",
-			"OpenAL32",
+			--"OpenAL32",
 		}
 		
 	configuration { "vs*", "x64" }
 		targetdir 	".."
 		libdirs
 		{
-			"../code/libs/sdl2/lib/x64",
-			"../code/libs/openal/libs/win64",
+			--"../code/libs/sdl2/lib/x64",
+			--"../code/libs/openal/libs/win64",
 			--"../code/libs/curl-7.12.2/lib"
 		}
 		links
 		{
 			--"libcurl",
-			"OpenAL32",
+			--"OpenAL32",
 		}
 
-	configuration { "linux", "gmake" }
-		buildoptions
-		{
-			"`pkg-config --cflags sdl2`",
-			"`pkg-config --cflags libcurl`",
-		}
-		linkoptions
-		{
-			"`pkg-config --libs sdl2`",
-			"`pkg-config --libs libcurl`",
-		}
-		links
-		{
-			--"libcurl",
-			"openal",
-		}
 	
-	configuration { "linux", "x32" }
-		targetdir 	"../bin/linux-x86"
-		
-	configuration { "linux", "x64" }
-		targetdir 	"../bin/linux-x86_64"
-	
-	configuration { "linux", "native" }
-		targetdir 	"../bin/linux-native"
-	
-	configuration "linux"
-		targetname  "xreal"
-		files
-		{
-			"../code/engine/sys/sys_main.c",
-			"../code/engine/sys/sys_unix.c",
-			"../code/engine/sys/con_log.c",
-			"../code/engine/sys/con_passive.c",
-			"../code/engine/sys/sdl_gamma.c",
-			"../code/engine/sys/sdl_glimp.c",
-			"../code/engine/sys/sdl_input.c",
-			"../code/engine/sys/sdl_snd.c",
-		}
-		--buildoptions
-		--{
-		--	"-pthread"
-		--}
-		links
-		{
-			"GL",
-		}
-		defines
-		{
-            "PNG_NO_ASSEMBLER_CODE",
-		}
 
 -- Quake 3 game mod code based on ioq3
 if not _OPTIONS["standalone"] then
