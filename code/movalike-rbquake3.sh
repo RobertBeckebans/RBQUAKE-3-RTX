@@ -24,6 +24,7 @@ git mv game/q_math.c shared/
 git mv game/q_shared.c shared/
 git mv game/q_shared.h shared/
 git mv game/surfaceflags.h shared/
+git mv ui/keycodes.h shared/
 
 git mv qcommon engine/
 git mv client engine/
