@@ -10,19 +10,20 @@ mkdir -p engine
 mkdir -p engine/null
 mkdir -p games/q3a
 
-mv jpeg-6 libs/jpeg
+git mv jpeg-6 libs/jpeg
 #mv AL libs/openal
 
 #mv gameshared shared
+git mv botlib shared/botlib
 
-mv qcommon engine/
-mv client engine/
-mv renderer engine/
-mv raytracing engine/
+git mv qcommon engine/
+git mv client engine/
+git mv renderer engine/
+git mv raytracing engine/
 #mv sound/* engine/client/
 
-mv server engine/
+git mv server engine/
 
-mv cgame games/q3a/
-mv game games/q3a/
-mv ui games/q3a/
+git mv cgame games/q3a/
+git mv game games/q3a/
+git mv ui games/q3a/
