@@ -1,9 +1,10 @@
 --
 -- RBQUAKE-3 build configuration script
 -- 
-solution "RBQUAKE-3"
+solution "RBQUAKE-3-RTX"
 	configurations { "Debug", "Profile", "Release" }
 	platforms {"x64"}
+	characterset ("ASCII")
 	
 	configuration "Debug"
 		defines
