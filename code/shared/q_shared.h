@@ -446,8 +446,8 @@ typedef int clipHandle_t;
 // paramters for command buffer stuffing
 typedef enum
 {
-	EXEC_NOW,    // don't return until completed, a VM should NEVER use this,
-				 // because some commands might cause the VM to be unloaded...
+	EXEC_NOW, // don't return until completed, a VM should NEVER use this,
+	// because some commands might cause the VM to be unloaded...
 	EXEC_INSERT, // insert at current position, but don't run yet
 	EXEC_APPEND  // add to end of the command buffer (normal case)
 } cbufExec_t;
@@ -1024,15 +1024,15 @@ default values.
 ==========================================================
 */
 
-#define CVAR_ARCHIVE 1 // set to cause it to be saved to vars.rc    \
+#define CVAR_ARCHIVE      1 // set to cause it to be saved to vars.rc    \
 					   // used for system variables, not for player \
 					   // specific configurations
-#define CVAR_USERINFO   2 // sent to server on connect or change
-#define CVAR_SERVERINFO 4 // sent in response to front end requests
-#define CVAR_SYSTEMINFO 8 // these cvars will be duplicated on all clients
-#define CVAR_INIT       16 // don't allow change from console at all, \
+#define CVAR_USERINFO     2 // sent to server on connect or change
+#define CVAR_SERVERINFO   4 // sent in response to front end requests
+#define CVAR_SYSTEMINFO   8 // these cvars will be duplicated on all clients
+#define CVAR_INIT         16 // don't allow change from console at all, \
 						   // but can be set from the command line
-#define CVAR_LATCH 32 // will only change when C code next does    \
+#define CVAR_LATCH        32 // will only change when C code next does    \
 					  // a Cvar_Get(), so it can't be changed      \
 					  // without proper initialization.  modified  \
 					  // will be set, even though the value hasn't \
@@ -1321,8 +1321,8 @@ typedef struct playerState_s
 							   // only generate a small move value for that frame \
 							   // walking will use different animations and       \
 							   // won't generate footsteps
-#define BUTTON_AFFIRMATIVE 32
-#define BUTTON_NEGATIVE    64
+#define BUTTON_AFFIRMATIVE  32
+#define BUTTON_NEGATIVE     64
 
 #define BUTTON_GETFLAG   128
 #define BUTTON_GUARDBASE 256

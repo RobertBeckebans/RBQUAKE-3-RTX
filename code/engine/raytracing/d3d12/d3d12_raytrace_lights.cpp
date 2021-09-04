@@ -117,7 +117,14 @@ void GL_FindTouchedLeafs( glLight_t* ent, mnode_t* node )
 
 void GL_RegisterWorldLight( refEntity_t* ent, float x, float y, float z, float radius, int lightStyle, float r, float g, float b, lightDistanceType_t attenuation )
 {
-	glLight_t light          = {};
+	glLight_t light = {};
+
+	if( numWorldLights >= MAX_WORLD_LIGHTS )
+	{
+		//Com_Printf("MAX_WORLD_LIGHTS!\n");
+		return;
+	}
+
 	light.origin_radius[ 0 ] = x;
 	light.origin_radius[ 1 ] = y;
 	light.origin_radius[ 2 ] = z;
@@ -189,6 +196,12 @@ void GL_RegisterWorldAreaLight( vec3_t normal, vec3_t mins, vec3_t maxs, int lig
 		float dist = Distance( light.origin_radius, worldLights[ i ].origin_radius );
 		if( dist < 75 )
 			return;
+	}
+
+	if( numWorldLights >= MAX_WORLD_LIGHTS )
+	{
+		//Com_Printf("MAX_WORLD_LIGHTS!\n");
+		return;
 	}
 
 	light.num_leafs                 = -1; // arealight

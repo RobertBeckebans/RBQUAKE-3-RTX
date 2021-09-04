@@ -908,11 +908,12 @@ const void* RB_StretchPic( const void* data )
 	verts[ 3 ].st[ 0 ]  = cmd->s1;
 	verts[ 3 ].st[ 1 ]  = cmd->t2;
 
+	// RB: make sure to use SetColor commands
 	vec4_t color;
-	color[ 0 ] = 1;
-	color[ 1 ] = 1;
-	color[ 2 ] = 1;
-	color[ 3 ] = 1;
+	color[ 0 ] = backEnd.color2D[ 0 ] * 1.0f / 255.0f;
+	color[ 1 ] = backEnd.color2D[ 1 ] * 1.0f / 255.0f;
+	color[ 2 ] = backEnd.color2D[ 2 ] * 1.0f / 255.0f;
+	color[ 3 ] = backEnd.color2D[ 3 ] * 1.0f / 255.0f;
 	GL_RenderUISurface( 6, &verts[ 0 ], &indexes[ 0 ], shader, color );
 
 	return ( const void* )( cmd + 1 );

@@ -602,7 +602,7 @@ aas_trace_t AAS_TraceClientBBox( vec3_t start, vec3_t end, int presencetype, int
 			VectorCopy( tstack_p->start, trace.endpos );
 			trace.ent  = 0;
 			trace.area = 0; //hit solid leaf
-							//			VectorSubtract(end, start, v1);
+				//			VectorSubtract(end, start, v1);
 			trace.planenum = tstack_p->planenum;
 			//always take the plane with normal facing towards the trace start
 			plane = &aasworld.planes[ trace.planenum ];
@@ -737,7 +737,7 @@ aas_trace_t AAS_TraceClientBBox( vec3_t start, vec3_t end, int presencetype, int
 			} //end if
 		}     //end else
 	}         //end while
-	//	return trace;
+			  //	return trace;
 } //end of the function AAS_TraceClientBBox
 //===========================================================================
 // recursive subdivision of the line by the BSP tree.
@@ -930,7 +930,7 @@ int AAS_TraceAreas( vec3_t start, vec3_t end, int* areas, vec3_t* points, int ma
 			} //end if
 		}     //end else
 	}         //end while
-	//	return numareas;
+			  //	return numareas;
 } //end of the function AAS_TraceAreas
 //===========================================================================
 // a simple cross product

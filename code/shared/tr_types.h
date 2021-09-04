@@ -37,8 +37,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 							   // for lighting.  This allows entities to sink into the floor \
 							   // with their origin going solid, and allows all parts of a   \
 							   // player to get the same lighting
-#define RF_SHADOW_PLANE 256    // use refEntity->shadowPlane
-#define RF_WRAP_FRAMES  512    // mod the model frames by the maxframes to allow continuous \
+#define RF_SHADOW_PLANE    256 // use refEntity->shadowPlane
+#define RF_WRAP_FRAMES     512 // mod the model frames by the maxframes to allow continuous \
 							   // animation without needing to know the frame count
 
 // refdef flags
@@ -168,11 +168,11 @@ typedef enum
 {
 	GLHW_GENERIC,   // where everthing works the way it should
 	GLHW_3DFX_2D3D, // Voodoo Banshee or Voodoo3, relevant since if this is
-					// the hardware type then there can NOT exist a secondary
-					// display adapter
-	GLHW_RIVA128,   // where you can't interpolate alpha
-	GLHW_RAGEPRO,   // where you can't modulate alpha on alpha textures
-	GLHW_PERMEDIA2  // where you don't have src*dst
+	// the hardware type then there can NOT exist a secondary
+	// display adapter
+	GLHW_RIVA128,  // where you can't interpolate alpha
+	GLHW_RAGEPRO,  // where you can't modulate alpha on alpha textures
+	GLHW_PERMEDIA2 // where you don't have src*dst
 } glHardwareType_t;
 
 typedef struct

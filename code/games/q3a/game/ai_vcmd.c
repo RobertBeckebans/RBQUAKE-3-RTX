@@ -293,7 +293,7 @@ void BotVoiceChat_Camp( bot_state_t* bs, int client, int mode )
 	{
 		areanum = BotPointAreaNum( entinfo.origin );
 		if( areanum )
-		{   // && trap_AAS_AreaReachability(areanum)) {
+		{ // && trap_AAS_AreaReachability(areanum)) {
 			//NOTE: just assume the bot knows where the person is
 			//if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, client)) {
 			bs->teamgoal.entitynum = client;

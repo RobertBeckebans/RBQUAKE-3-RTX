@@ -621,14 +621,14 @@ typedef enum
 typedef enum
 {
 	IT_BAD,
-	IT_WEAPON,   // EFX: rotate + upscale + minlight
-	IT_AMMO,     // EFX: rotate
-	IT_ARMOR,    // EFX: rotate + minlight
-	IT_HEALTH,   // EFX: static external sphere + rotating internal
-	IT_POWERUP,  // instant on, timer based
-				 // EFX: rotate + external ring that rotates
+	IT_WEAPON,  // EFX: rotate + upscale + minlight
+	IT_AMMO,    // EFX: rotate
+	IT_ARMOR,   // EFX: rotate + minlight
+	IT_HEALTH,  // EFX: static external sphere + rotating internal
+	IT_POWERUP, // instant on, timer based
+	// EFX: rotate + external ring that rotates
 	IT_HOLDABLE, // single use, holdable item
-				 // EFX: rotate + bob
+	// EFX: rotate + bob
 	IT_PERSISTANT_POWERUP,
 	IT_TEAM
 } itemType_t;

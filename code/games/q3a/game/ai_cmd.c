@@ -850,7 +850,7 @@ void BotMatch_Camp( bot_state_t* bs, bot_match_t* match )
 		{
 			areanum = BotPointAreaNum( entinfo.origin );
 			if( areanum )
-			{   // && trap_AAS_AreaReachability(areanum)) {
+			{ // && trap_AAS_AreaReachability(areanum)) {
 				//NOTE: just assume the bot knows where the person is
 				//if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, client)) {
 				bs->teamgoal.entitynum = client;

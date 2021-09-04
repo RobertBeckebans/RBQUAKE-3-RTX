@@ -124,7 +124,7 @@ typedef enum
 
 	SS_DECAL,       // scorch marks, etc.
 	SS_SEE_THROUGH, // ladders, grates, grills that may have small blended edges
-					// in addition to alpha test
+	// in addition to alpha test
 	SS_BANNER,
 
 	SS_FOG,
@@ -929,7 +929,7 @@ typedef struct
 	int frameCount; // incremented every frame
 	int sceneCount; // incremented every scene
 	int viewCount;  // incremented every view (twice a scene if portaled)
-					// and every R_MarkFragments call
+		// and every R_MarkFragments call
 
 	int smpFrame; // toggles from 0 to 1 every endFrame
 

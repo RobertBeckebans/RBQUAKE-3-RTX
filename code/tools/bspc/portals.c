@@ -264,7 +264,7 @@ void RemovePortalFromNode( portal_t* portal, node_t* l )
 		s            = ( p->nodes[ 1 ] == l );
 		//		if (++n >= 4096) Error("RemovePortalFromNode: more than 4096 portals\n");
 	} //end for
-	//#endif
+	  //#endif
 } //end of the function RemovePortalFromNode
 //===========================================================================
 //
