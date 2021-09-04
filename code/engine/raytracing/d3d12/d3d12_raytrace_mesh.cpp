@@ -104,7 +104,7 @@ void GL_RaytraceSurfaceGrid( dxrMesh_t* mesh, msurface_t* fa, srfGridMesh_t* cv 
 	int            lodWidth, lodHeight;
 	int            dlightBits;
 	int*           vDlightBits;
-	qboolean       needsNormal;
+	//qboolean       needsNormal;
 
 	dxrSurface_t surf;
 
@@ -129,7 +129,8 @@ void GL_RaytraceSurfaceGrid( dxrMesh_t* mesh, msurface_t* fa, srfGridMesh_t* cv 
 	tess.dlightBits |= dlightBits;
 
 	// determine the allowable discrepance
-	lodError = 0;
+	// RB: set to 250 to have nice round bezier curves
+	lodError = 250;
 
 	// determine which rows and columns of the subdivision
 	// we are actually going to use
@@ -223,6 +224,9 @@ void GL_RaytraceSurfaceGrid( dxrMesh_t* mesh, msurface_t* fa, srfGridMesh_t* cv 
 				v.st[ 0 ]     = dv->st[ 0 ];
 				v.st[ 1 ]     = dv->st[ 1 ];
 				v.st[ 2 ]     = materialInfo;
+				v.normal[ 0 ] = dv->normal[ 0 ];
+				v.normal[ 1 ] = dv->normal[ 1 ];
+				v.normal[ 2 ] = dv->normal[ 2 ];
 				v.vtinfo[ 0 ] = x;
 				v.vtinfo[ 1 ] = y;
 				v.vtinfo[ 2 ] = w;
