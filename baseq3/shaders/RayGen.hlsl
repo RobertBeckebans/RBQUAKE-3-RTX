@@ -128,7 +128,7 @@ HitInfo FirePrimaryRay()
 		// Parameter name: Payload
 		// Payload associated to the ray, which will be used to communicate
 		// between the hit/miss shaders and the raygen
-		payload 
+		payload
 	);
 
 	gOutput[launchIndex] = float4( payload.colorAndDistance.rgb, 1.f );

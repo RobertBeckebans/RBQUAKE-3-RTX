@@ -22,22 +22,19 @@ static const float k_sample_weights[KERNEL_SIZE] =
 	0.002216,
 };
 
-Texture2D<float4>   BufferIn  :
-register( t0 );
-Texture2D<float4>   AlbedoBufferIn  :
-register( t1 );
-RWTexture2D<float4> BufferOut :
-register( u2 );
+// *INDENT-OFF*
+Texture2D<float4>   BufferIn  : register( t0 );
+Texture2D<float4>   AlbedoBufferIn  : register( t1 );
+RWTexture2D<float4> BufferOut : register( u2 );
 
-cbuffer UniformBlock0 :
-register( b3 )
+cbuffer UniformBlock0 : register( b3 )
 {
 	int xoffset;
 	int yoffset;
 };
 
-Texture2D<float4>   uiTextureBuffer  :
-register( t4 );
+Texture2D<float4>   uiTextureBuffer  : register( t4 );
+// *INDENT-ON*
 
 groupshared float4  g_shared_input[NUM_THREADS_X];
 

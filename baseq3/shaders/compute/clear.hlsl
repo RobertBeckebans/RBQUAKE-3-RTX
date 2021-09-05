@@ -2,14 +2,14 @@
 #define NUM_THREADS_Y       1
 #define NUM_THREADS_Z       1
 
-RWTexture2D<float4> BufferOut :
-register( u0 );
-cbuffer UniformBlock0 :
-register( b1 )
+// *INDENT-OFF*
+RWTexture2D<float4> BufferOut : register( u0 );
+cbuffer UniformBlock0 : register( b1 )
 {
 	int xoffset;
 	int yoffset;
 };
+// *INDENT-ON*
 
 //! @fn clear_main
 //!

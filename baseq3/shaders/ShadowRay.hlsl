@@ -12,14 +12,14 @@ struct Attributes
 	float2 uv;
 };
 
-[shader( "closesthit" )] 
+[shader( "closesthit" )]
 void ShadowClosestHit( inout ShadowHitInfo hit,	Attributes bary )
 {
 	hit.isHit = true;
 	hit.vertinfo.xyz = WorldRayOrigin() + RayTCurrent() * WorldRayDirection();
 }
 
-[shader( "miss" )] 
+[shader( "miss" )]
 void ShadowMiss( inout ShadowHitInfo hit : SV_RayPayload )
 {
 	hit.isHit = false;

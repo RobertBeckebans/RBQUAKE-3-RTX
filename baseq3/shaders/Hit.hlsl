@@ -354,7 +354,7 @@ int sideOfPlane( float3 p, float3 pc, float3 pn )
 	}
 }
 
-[shader( "closesthit" )] 
+[shader( "closesthit" )]
 void ClosestHit( inout HitInfo payload, Attributes attrib )
 {
 	float3 barycentrics = float3( 1.f - attrib.bary.x - attrib.bary.y, attrib.bary.x, attrib.bary.y );
