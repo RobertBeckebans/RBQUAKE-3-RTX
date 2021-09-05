@@ -948,6 +948,7 @@ void GL_Render( float x, float y, float z, vec3_t viewaxis[ 3 ] )
 
 	// Bind the raytracing pipeline
 	m_commandList->SetPipelineState1( m_rtStateObject.Get() );
+	
 	// Dispatch the rays and write to the raytracing output
 	m_commandList->DispatchRays( &desc );
 }
