@@ -2614,6 +2614,8 @@ void CG_Player( centity_t* cent )
 
 	// add the shadow
 	//shadow = CG_PlayerShadow( cent, &shadowPlane );
+	shadow      = 0;
+	shadowPlane = 0;
 
 	// add a water splash if partially in and out of water
 	CG_PlayerSplash( cent );

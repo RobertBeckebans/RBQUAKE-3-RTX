@@ -5,6 +5,7 @@
 #include "nv_helpers_dx12/BottomLevelASGenerator.h"
 #include "nv_helpers_dx12/TopLevelASGenerator.h"
 #include <vector>
+#include "../math/vectormath.h"
 
 #define Vector2Subtract( a, b, c ) ( ( c )[ 0 ] = ( a )[ 0 ] - ( b )[ 0 ], ( c )[ 1 ] = ( a )[ 1 ] - ( b )[ 1 ] )
 
@@ -13,6 +14,103 @@ std::vector< dxrMesh_t* > dxrMeshList;
 ComPtr< ID3D12Resource >   m_vertexBuffer;
 D3D12_VERTEX_BUFFER_VIEW   m_vertexBufferView;
 std::vector< dxrVertex_t > sceneVertexes;
+
+/*
+================================================
+idTempArray is an array that is automatically free'd when it goes out of scope.
+There is no "cast" operator because these are very unsafe.
+
+The template parameter MUST BE POD!
+
+Compile time asserting POD-ness of the template parameter is complicated due
+to our vector classes that need a default constructor but are otherwise
+considered POD.
+================================================
+*/
+template< class T >
+class idTempArray
+{
+public:
+	idTempArray( idTempArray< T >& other );
+	idTempArray( unsigned int num );
+
+	~idTempArray();
+
+	T& operator[]( unsigned int i )
+	{
+		assert( i < num );
+		return buffer[ i ];
+	}
+	const T& operator[]( unsigned int i ) const
+	{
+		assert( i < num );
+		return buffer[ i ];
+	}
+
+	T* Ptr()
+	{
+		return buffer;
+	}
+	const T* Ptr() const
+	{
+		return buffer;
+	}
+
+	size_t Size() const
+	{
+		return num * sizeof( T );
+	}
+	unsigned int Num() const
+	{
+		return num;
+	}
+
+	void Zero()
+	{
+		memset( Ptr(), 0, Size() );
+	}
+
+private:
+	T*           buffer; // Ensure this buffer comes first, so this == &this->buffer
+	unsigned int num;
+};
+
+/*
+========================
+idTempArray::idTempArray
+========================
+*/
+template< class T >
+ID_INLINE idTempArray< T >::idTempArray( idTempArray< T >& other )
+{
+	this->num    = other.num;
+	this->buffer = other.buffer;
+	other.num    = 0;
+	other.buffer = NULL;
+}
+
+/*
+========================
+idTempArray::idTempArray
+========================
+*/
+template< class T >
+ID_INLINE idTempArray< T >::idTempArray( unsigned int num )
+{
+	this->num = num;
+	buffer    = ( T* )malloc( num * sizeof( T ) );
+}
+
+/*
+========================
+idTempArray::~idTempArray
+========================
+*/
+template< class T >
+ID_INLINE idTempArray< T >::~idTempArray()
+{
+	free( buffer );
+}
 
 /*
 =============
@@ -83,6 +181,379 @@ void GL_CalcTangentSpace( vec3_t tangent, vec3_t binormal, vec3_t normal, const 
 	}
 }
 
+// RB: ported from RBDOOM-3-BFG
+
+/*
+=================
+R_DeriveTangentsWithoutNormals
+
+Build texture space tangents for bump mapping
+If a surface is deformed, this must be recalculated
+
+This assumes that any mirrored vertexes have already been duplicated, so
+any shared vertexes will have the tangent spaces smoothed across.
+
+Texture wrapping slightly complicates this, but as long as the normals
+are shared, and the tangent vectors are projected onto the normals, the
+separate vertexes should wind up with identical tangent spaces.
+
+mirroring a normalmap WILL cause a slightly visible seam unless the normals
+are completely flat around the edge's full bilerp support.
+
+Vertexes which are smooth shaded must have their tangent vectors
+in the same plane, which will allow a seamless
+rendering as long as the normal map is even on both sides of the
+seam.
+
+A smooth shaded surface may have multiple tangent vectors at a vertex
+due to texture seams or mirroring, but it should only have a single
+normal vector.
+
+Each triangle has a pair of tangent vectors in it's plane
+
+Should we consider having vertexes point at shared tangent spaces
+to save space or speed transforms?
+
+this version only handles bilateral symetry
+=================
+*/
+void R_DeriveTangentsWithoutNormals( dxrMesh_t* mesh, bool useMikktspace )
+{
+	// SP begin
+#if 0
+	if( useMikktspace )
+	{
+		if( !R_DeriveMikktspaceTangents( tri ) )
+		{
+			idLib::Warning( "Mikkelsen tangent space calculation failed" );
+		}
+		else
+		{
+			tri->tangentsCalculated = true;
+			return;
+		}
+	}
+#endif
+	// SP End
+
+	for( int s = 0; s < mesh->meshSurfaces.size(); s++ )
+	{
+		dxrSurface_t* tri = &mesh->meshSurfaces[ s ];
+
+		tri->startMegaVertex = mesh->meshTriVertexes.size();
+
+		idTempArray< float3 > triangleTangents( tri->numIndexes / 3 );
+		idTempArray< float3 > triangleBitangents( tri->numIndexes / 3 );
+
+		//
+		// calculate tangent vectors for each face in isolation
+		//
+		int c_positive               = 0;
+		int c_negative               = 0;
+		int c_textureDegenerateFaces = 0;
+		for( int i = 0; i < tri->numIndexes; i += 3 )
+		{
+			int idx0 = mesh->meshIndexes[ tri->startIndex + i + 0 ];
+			int idx1 = mesh->meshIndexes[ tri->startIndex + i + 1 ];
+			int idx2 = mesh->meshIndexes[ tri->startIndex + i + 2 ];
+
+			dxrVertex_t* a = &mesh->meshVertexes[ idx0 ];
+			dxrVertex_t* b = &mesh->meshVertexes[ idx1 ];
+			dxrVertex_t* c = &mesh->meshVertexes[ idx2 ];
+
+			float3 temp;
+
+			vec2_t aST, bST, cST;
+			aST[ 0 ] = a->st[ 0 ];
+			aST[ 1 ] = a->st[ 1 ];
+
+			bST[ 0 ] = b->st[ 0 ];
+			bST[ 1 ] = b->st[ 1 ];
+
+			cST[ 0 ] = c->st[ 0 ];
+			cST[ 1 ] = c->st[ 1 ];
+
+			float d0[ 5 ];
+			d0[ 0 ] = b->xyz[ 0 ] - a->xyz[ 0 ];
+			d0[ 1 ] = b->xyz[ 1 ] - a->xyz[ 1 ];
+			d0[ 2 ] = b->xyz[ 2 ] - a->xyz[ 2 ];
+			d0[ 3 ] = bST[ 0 ] - aST[ 0 ];
+			d0[ 4 ] = bST[ 1 ] - aST[ 1 ];
+
+			float d1[ 5 ];
+			d1[ 0 ] = c->xyz[ 0 ] - a->xyz[ 0 ];
+			d1[ 1 ] = c->xyz[ 1 ] - a->xyz[ 1 ];
+			d1[ 2 ] = c->xyz[ 2 ] - a->xyz[ 2 ];
+			d1[ 3 ] = cST[ 0 ] - aST[ 0 ];
+			d1[ 4 ] = cST[ 1 ] - aST[ 1 ];
+
+			const float area = d0[ 3 ] * d1[ 4 ] - d0[ 4 ] * d1[ 3 ];
+			if( fabs( area ) < 1e-20f )
+			{
+				VectorClear( triangleTangents[ i / 3 ] );
+				VectorClear( triangleBitangents[ i / 3 ] );
+				c_textureDegenerateFaces++;
+				continue;
+			}
+			if( area > 0.0f )
+			{
+				c_positive++;
+			}
+			else
+			{
+				c_negative++;
+			}
+
+#if 1
+			float inva = ( area < 0.0f ) ? -1.0f : 1.0f; // was = 1.0f / area;
+
+			temp[ 0 ] = ( d0[ 0 ] * d1[ 4 ] - d0[ 4 ] * d1[ 0 ] ) * inva;
+			temp[ 1 ] = ( d0[ 1 ] * d1[ 4 ] - d0[ 4 ] * d1[ 1 ] ) * inva;
+			temp[ 2 ] = ( d0[ 2 ] * d1[ 4 ] - d0[ 4 ] * d1[ 2 ] ) * inva;
+			temp.NormalizeSelf();
+			triangleTangents[ i / 3 ] = temp;
+
+			temp[ 0 ] = ( d0[ 3 ] * d1[ 0 ] - d0[ 0 ] * d1[ 3 ] ) * inva;
+			temp[ 1 ] = ( d0[ 3 ] * d1[ 1 ] - d0[ 1 ] * d1[ 3 ] ) * inva;
+			temp[ 2 ] = ( d0[ 3 ] * d1[ 2 ] - d0[ 2 ] * d1[ 3 ] ) * inva;
+			temp.NormalizeSelf();
+			triangleBitangents[ i / 3 ] = temp;
+#else
+			temp[ 0 ] = ( d0[ 0 ] * d1[ 4 ] - d0[ 4 ] * d1[ 0 ] );
+			temp[ 1 ] = ( d0[ 1 ] * d1[ 4 ] - d0[ 4 ] * d1[ 1 ] );
+			temp[ 2 ] = ( d0[ 2 ] * d1[ 4 ] - d0[ 4 ] * d1[ 2 ] );
+			temp.NormalizeSelf();
+			triangleTangents[ tri->startIndex + i / 3 ] = temp;
+
+			temp[ 0 ] = ( d0[ 3 ] * d1[ 0 ] - d0[ 0 ] * d1[ 3 ] );
+			temp[ 1 ] = ( d0[ 3 ] * d1[ 1 ] - d0[ 1 ] * d1[ 3 ] );
+			temp[ 2 ] = ( d0[ 3 ] * d1[ 2 ] - d0[ 2 ] * d1[ 3 ] );
+			temp.NormalizeSelf();
+			triangleBitangents[ tri->startIndex + i / 3 ] = temp;
+#endif
+		}
+
+		idTempArray< vec3_t > vertexTangents( tri->numVertexes );
+		idTempArray< vec3_t > vertexBitangents( tri->numVertexes );
+
+		// clear the tangents
+		for( int i = 0; i < tri->numVertexes; ++i )
+		{
+			VectorClear( vertexTangents[ i ] );
+			VectorClear( vertexBitangents[ i ] );
+		}
+
+		// sum up the neighbors
+		for( int i = 0; i < tri->numIndexes; i += 3 )
+		{
+			// for each vertex on this face
+			for( int j = 0; j < 3; j++ )
+			{
+				int dst = mesh->meshIndexes[ tri->startIndex + i + j ] - tri->startVertex;
+				//int src = mesh->meshIndexes[ tri->startIndex + i / 3 ];
+
+				//int dst = i + j;
+				int src = i / 3;
+
+				VectorAdd( vertexTangents[ dst ], triangleTangents[ src ], vertexTangents[ dst ] );
+				VectorAdd( vertexBitangents[ dst ], triangleBitangents[ src ], vertexBitangents[ dst ] );
+			}
+		}
+
+		// Project the summed vectors onto the normal plane and normalize.
+		// The tangent vectors will not necessarily be orthogonal to each
+		// other, but they will be orthogonal to the surface normal.
+		for( int i = 0; i < tri->numVertexes; i++ )
+		{
+			dxrVertex_t* v = &mesh->meshVertexes[ tri->startVertex + i ];
+
+			vec3_t normal;
+			VectorNormalize2( v->normal, normal );
+
+			VectorMA( vertexTangents[ i ], -1.0f * DotProduct( vertexTangents[ i ], normal ), normal, vertexTangents[ i ] );
+			VectorNormalize( vertexTangents[ i ] );
+
+			VectorMA( vertexBitangents[ i ], -1.0f * DotProduct( vertexBitangents[ i ], normal ), normal, vertexBitangents[ i ] );
+			VectorNormalize( vertexBitangents[ i ] );
+
+			//vertexBitangents[i] -= ( vertexBitangents[i] * normal ) * normal;
+			//vertexBitangents[i].Normalize();
+		}
+
+		for( int i = 0; i < tri->numVertexes; i++ )
+		{
+			dxrVertex_t* v = &mesh->meshVertexes[ tri->startVertex + i ];
+
+			VectorCopy( vertexTangents[ i ], v->tangent );
+			VectorCopy( vertexBitangents[ i ], v->binormal );
+		}
+
+		//tri->tangentsCalculated = true;
+	}
+}
+
+/*
+============
+R_DeriveNormalsAndTangents
+
+Derives the normal and orthogonal tangent vectors for the triangle vertices.
+For each vertex the normal and tangent vectors are derived from all triangles
+using the vertex which results in smooth tangents across the mesh.
+============
+*/
+void R_DeriveNormalsAndTangents( dxrMesh_t* mesh )
+{
+	for( int s = 0; s < mesh->meshSurfaces.size(); s++ )
+	{
+		dxrSurface_t* tri = &mesh->meshSurfaces[ s ];
+
+		tri->startMegaVertex = mesh->meshTriVertexes.size();
+
+		idTempArray< float3 > vertexNormals( tri->numVertexes );
+		idTempArray< float3 > vertexTangents( tri->numVertexes );
+		idTempArray< float3 > vertexBitangents( tri->numVertexes );
+
+		vertexNormals.Zero();
+		vertexTangents.Zero();
+		vertexBitangents.Zero();
+
+		for( int i = 0; i < tri->numIndexes; i += 3 )
+		{
+			const int v0 = mesh->meshIndexes[ tri->startIndex + i + 0 ];
+			const int v1 = mesh->meshIndexes[ tri->startIndex + i + 1 ];
+			const int v2 = mesh->meshIndexes[ tri->startIndex + i + 2 ];
+
+			dxrVertex_t* a = &mesh->meshVertexes[ v0 ];
+			dxrVertex_t* b = &mesh->meshVertexes[ v1 ];
+			dxrVertex_t* c = &mesh->meshVertexes[ v2 ];
+
+			vec2_t aST, bST, cST;
+			aST[ 0 ] = a->st[ 0 ];
+			aST[ 1 ] = a->st[ 1 ];
+
+			bST[ 0 ] = b->st[ 0 ];
+			bST[ 1 ] = b->st[ 1 ];
+
+			cST[ 0 ] = c->st[ 0 ];
+			cST[ 1 ] = c->st[ 1 ];
+
+			float d0[ 5 ];
+			d0[ 0 ] = b->xyz[ 0 ] - a->xyz[ 0 ];
+			d0[ 1 ] = b->xyz[ 1 ] - a->xyz[ 1 ];
+			d0[ 2 ] = b->xyz[ 2 ] - a->xyz[ 2 ];
+			d0[ 3 ] = bST[ 0 ] - aST[ 0 ];
+			d0[ 4 ] = bST[ 1 ] - aST[ 1 ];
+
+			float d1[ 5 ];
+			d1[ 0 ] = c->xyz[ 0 ] - a->xyz[ 0 ];
+			d1[ 1 ] = c->xyz[ 1 ] - a->xyz[ 1 ];
+			d1[ 2 ] = c->xyz[ 2 ] - a->xyz[ 2 ];
+			d1[ 3 ] = cST[ 0 ] - aST[ 0 ];
+			d1[ 4 ] = cST[ 1 ] - aST[ 1 ];
+
+			float3 normal;
+			normal[ 0 ] = d1[ 1 ] * d0[ 2 ] - d1[ 2 ] * d0[ 1 ];
+			normal[ 1 ] = d1[ 2 ] * d0[ 0 ] - d1[ 0 ] * d0[ 2 ];
+			normal[ 2 ] = d1[ 0 ] * d0[ 1 ] - d1[ 1 ] * d0[ 0 ];
+
+			const float f0 = InvSqrt( normal.x * normal.x + normal.y * normal.y + normal.z * normal.z );
+
+			normal.x *= f0;
+			normal.y *= f0;
+			normal.z *= f0;
+
+			// area sign bit
+			const float  area    = d0[ 3 ] * d1[ 4 ] - d0[ 4 ] * d1[ 3 ];
+			unsigned int signBit = ( *( unsigned int* )&area ) & ( 1 << 31 );
+
+			float3 tangent;
+			tangent[ 0 ] = d0[ 0 ] * d1[ 4 ] - d0[ 4 ] * d1[ 0 ];
+			tangent[ 1 ] = d0[ 1 ] * d1[ 4 ] - d0[ 4 ] * d1[ 1 ];
+			tangent[ 2 ] = d0[ 2 ] * d1[ 4 ] - d0[ 4 ] * d1[ 2 ];
+
+			const float f1 = InvSqrt( tangent.x * tangent.x + tangent.y * tangent.y + tangent.z * tangent.z );
+			*( unsigned int* )&f1 ^= signBit;
+
+			tangent.x *= f1;
+			tangent.y *= f1;
+			tangent.z *= f1;
+
+			float3 bitangent;
+			bitangent[ 0 ] = d0[ 3 ] * d1[ 0 ] - d0[ 0 ] * d1[ 3 ];
+			bitangent[ 1 ] = d0[ 3 ] * d1[ 1 ] - d0[ 1 ] * d1[ 3 ];
+			bitangent[ 2 ] = d0[ 3 ] * d1[ 2 ] - d0[ 2 ] * d1[ 3 ];
+
+			const float f2 = InvSqrt( bitangent.x * bitangent.x + bitangent.y * bitangent.y + bitangent.z * bitangent.z );
+			*( unsigned int* )&f2 ^= signBit;
+
+			bitangent.x *= f2;
+			bitangent.y *= f2;
+			bitangent.z *= f2;
+
+			vertexNormals[ v0 - tri->startVertex ] += normal;
+			vertexTangents[ v0 - tri->startVertex ] += tangent;
+			vertexBitangents[ v0 - tri->startVertex ] += bitangent;
+
+			vertexNormals[ v1 - tri->startVertex ] += normal;
+			vertexTangents[ v1 - tri->startVertex ] += tangent;
+			vertexBitangents[ v1 - tri->startVertex ] += bitangent;
+
+			vertexNormals[ v2 - tri->startVertex ] += normal;
+			vertexTangents[ v2 - tri->startVertex ] += tangent;
+			vertexBitangents[ v2 - tri->startVertex ] += bitangent;
+		}
+
+#if 0
+		// add the normal of a duplicated vertex to the normal of the first vertex with the same XYZ
+		for( int i = 0; i < tri->numDupVerts; i++ )
+		{
+			vertexNormals[tri->dupVerts[i * 2 + 0]] += vertexNormals[tri->dupVerts[i * 2 + 1]];
+		}
+
+		// copy vertex normals to duplicated vertices
+		for( int i = 0; i < tri->numDupVerts; i++ )
+		{
+			vertexNormals[tri->dupVerts[i * 2 + 1]] = vertexNormals[tri->dupVerts[i * 2 + 0]];
+		}
+#endif
+
+		// Project the summed vectors onto the normal plane and normalize.
+		// The tangent vectors will not necessarily be orthogonal to each
+		// other, but they will be orthogonal to the surface normal.
+		for( int i = 0; i < tri->numVertexes; i++ )
+		{
+			const float normalScale = InvSqrt( vertexNormals[ i ].x * vertexNormals[ i ].x + vertexNormals[ i ].y * vertexNormals[ i ].y + vertexNormals[ i ].z * vertexNormals[ i ].z );
+			vertexNormals[ i ].x *= normalScale;
+			vertexNormals[ i ].y *= normalScale;
+			vertexNormals[ i ].z *= normalScale;
+
+			vertexTangents[ i ] -= ( vertexTangents[ i ] * vertexNormals[ i ] ) * vertexNormals[ i ];
+			vertexBitangents[ i ] -= ( vertexBitangents[ i ] * vertexNormals[ i ] ) * vertexNormals[ i ];
+
+			const float tangentScale = InvSqrt( vertexTangents[ i ].x * vertexTangents[ i ].x + vertexTangents[ i ].y * vertexTangents[ i ].y + vertexTangents[ i ].z * vertexTangents[ i ].z );
+			vertexTangents[ i ].x *= tangentScale;
+			vertexTangents[ i ].y *= tangentScale;
+			vertexTangents[ i ].z *= tangentScale;
+
+			const float bitangentScale = InvSqrt( vertexBitangents[ i ].x * vertexBitangents[ i ].x + vertexBitangents[ i ].y * vertexBitangents[ i ].y + vertexBitangents[ i ].z * vertexBitangents[ i ].z );
+			vertexBitangents[ i ].x *= bitangentScale;
+			vertexBitangents[ i ].y *= bitangentScale;
+			vertexBitangents[ i ].z *= bitangentScale;
+		}
+
+		// compress the normals and tangents
+		for( int i = 0; i < tri->numVertexes; i++ )
+		{
+			dxrVertex_t* v = &mesh->meshVertexes[ tri->startVertex + i ];
+
+			VectorCopy( vertexNormals[ i ], v->normal );
+			VectorCopy( vertexTangents[ i ], v->tangent );
+			VectorCopy( vertexBitangents[ i ], v->binormal );
+		}
+	}
+}
+// RB end
+
 /*
 =============
 GL_RaytraceSurfaceGrid
@@ -130,7 +601,7 @@ void GL_RaytraceSurfaceGrid( dxrMesh_t* mesh, msurface_t* fa, srfGridMesh_t* cv 
 
 	// determine the allowable discrepance
 	// RB: set to 250 to have nice round bezier curves
-	lodError = 250;
+	lodError = 8;
 
 	// determine which rows and columns of the subdivision
 	// we are actually going to use
@@ -391,7 +862,11 @@ void GL_LoadBottomLevelAccelStruct( dxrMesh_t* mesh, msurface_t* surfaces, int n
 		mesh->meshSurfaces.push_back( surf );
 	}
 
-	// Calculate the normals
+	// Calculate the tangent spaces
+#if 1
+	R_DeriveTangentsWithoutNormals( mesh, false );
+	//R_DeriveNormalsAndTangents( mesh );
+#else
 	for( int i = 0; i < mesh->meshSurfaces.size(); i++ )
 	{
 		mesh->meshSurfaces[ i ].startMegaVertex = mesh->meshTriVertexes.size();
@@ -422,6 +897,7 @@ void GL_LoadBottomLevelAccelStruct( dxrMesh_t* mesh, msurface_t* surfaces, int n
 			memcpy( vert2->tangent, tangent, sizeof( float ) * 3 );
 		}
 	}
+#endif
 
 	// TODO: Use a index buffer here : )
 	{
@@ -706,6 +1182,9 @@ void* GL_LoadMD3RaytracedMesh( md3Header_t* mod, int frame )
 	}
 
 	// Calculate the normals
+#if 0
+	R_DeriveNormalsAndTangents( mesh );
+#else
 	{
 		for( int i = 0; i < mesh->numSceneVertexes; i += 3 )
 		{
@@ -733,6 +1212,7 @@ void* GL_LoadMD3RaytracedMesh( md3Header_t* mod, int frame )
 			memcpy( sceneVertexes[ mesh->startSceneVertex + i + 2 ].tangent, tangent, sizeof( float ) * 3 );
 		}
 	}
+#endif
 
 	dxrMeshList.push_back( mesh );
 
