@@ -872,7 +872,6 @@ const void* RB_StretchPic( const void* data )
 	cmd = ( const stretchPicCommand_t* )data;
 
 	shader = cmd->shader;
-	//	GL_BlitUIImageUV(shader->stages[0]->bundle[0].image[0]->texnum, cmd->s1, cmd->t1, cmd->s2, cmd->t2, cmd->x, cmd->y, (int)cmd->w, (int)cmd->h);
 
 	int indexes[ 6 ];
 	indexes[ 0 ] = 3;
@@ -914,6 +913,7 @@ const void* RB_StretchPic( const void* data )
 	color[ 1 ] = backEnd.color2D[ 1 ] * 1.0f / 255.0f;
 	color[ 2 ] = backEnd.color2D[ 2 ] * 1.0f / 255.0f;
 	color[ 3 ] = backEnd.color2D[ 3 ] * 1.0f / 255.0f;
+
 	GL_RenderUISurface( 6, &verts[ 0 ], &indexes[ 0 ], shader, color );
 
 	return ( const void* )( cmd + 1 );

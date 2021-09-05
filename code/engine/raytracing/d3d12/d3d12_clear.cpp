@@ -26,8 +26,9 @@ void GL_InitClearPass( tr_texture* lightPass )
 	// Load the blur compute shader pass.
 	{
 		Com_Printf( "Loading clear compute shader...\n" );
+
 		// Open and read the file
-		std::ifstream shaderFile( "baseq3/compute/clear.hlsl" );
+		std::ifstream shaderFile( "baseq3/shaders/compute/clear.hlsl" );
 		if( shaderFile.good() == false )
 		{
 			throw std::logic_error( "Cannot find shader file" );

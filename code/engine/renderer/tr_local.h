@@ -928,8 +928,7 @@ typedef struct
 	int visCount;   // incremented every time a new vis cluster is entered
 	int frameCount; // incremented every frame
 	int sceneCount; // incremented every scene
-	int viewCount;  // incremented every view (twice a scene if portaled)
-		// and every R_MarkFragments call
+	int viewCount;  // incremented every view (twice a scene if portaled) and every R_MarkFragments call
 
 	int smpFrame; // toggles from 0 to 1 every endFrame
 
@@ -1658,6 +1657,9 @@ void R_InitFreeType();
 void R_DoneFreeType();
 void RE_RegisterFont( const char* fontName, int pointSize, fontInfo_t* font );
 
+// RB: this is the new DXR render backend API and basically all you need to render the scene
+
+// jmashall begin
 void GL_FinishDXRLoading( void );
 void RE_FinishDXRLoading( void );
 void GL_Render( float x, float y, float z, vec3_t viewaxis[ 3 ] );
@@ -1672,9 +1674,9 @@ void create_projection_matrix( float matrix[ 16 ], float znear, float zfar, floa
 void create_entity_matrix( float matrix[ 16 ], refEntity_t* e, qboolean enable_left_hand );
 void create_brush_matrix( float matrix[ 16 ], refEntity_t* e, qboolean enable_left_hand );
 
-void GL_BlitUIImage( int texnum, int srcx, int srcy, int destx, int desty );
-void GL_BlitUIImageUV( int texnum, float u, float v, float u2, float v2, int destx, int desty, int w, int h );
-void GL_BlitUIImageUVNoScale( int texnum, float u, float v, int destx, int desty, int w, int h );
+//void GL_BlitUIImage( int texnum, int srcx, int srcy, int destx, int desty );
+//void GL_BlitUIImageUV( int texnum, float u, float v, float u2, float v2, int destx, int desty, int w, int h );
+//void GL_BlitUIImageUVNoScale( int texnum, float u, float v, int destx, int desty, int w, int h );
 void GL_RegisterWorldAreaLight( vec3_t normal, vec3_t mins, vec3_t maxs, int lightStyle, float radius, float r, float g, float b );
 void GL_RegisterWorldLight( refEntity_t* ent, float x, float y, float z, float radius, int lightStyle, float r, float g, float b, lightDistanceType_t attenuation );
 void GL_SetUICanvas( float x, float y, float width, float height );
@@ -1703,6 +1705,8 @@ extern int r_finishDXRInit;
 void RE_ShutdownRaytracingMap( void );
 
 void GL_RenderUISurface( int numIndexes, drawVert_t* verts, int* indexes, const shader_t* material, vec4_t color );
+
+// jmarshall end
 
 void Mod_FreeAll( void );
 

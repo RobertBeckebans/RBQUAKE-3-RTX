@@ -558,7 +558,7 @@ int main( int argc, char** argv )
 		{
 			Log_Print( "optimize = true\n" );
 			optimize = true;
-		} //end else if
+		}
 		/*
 		else if (!stricmp(argv[i],"-glview"))
 		{
