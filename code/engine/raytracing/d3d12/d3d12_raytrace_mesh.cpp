@@ -1216,6 +1216,9 @@ void* GL_LoadMD3RaytracedMesh( md3Header_t* mod, int frame )
 
 	dxrMeshList.push_back( mesh );
 
+	// RB: call GL_FinishDXRLoading before we render the scene
+	r_invalidateDXRData = 1;
+
 	return mesh;
 }
 
@@ -1284,6 +1287,9 @@ void* GL_LoadPolyRaytracedMesh( shader_t* shader, polyVert_t* verts, int numVert
 	}
 
 	dxrMeshList.push_back( mesh );
+
+	// RB: call GL_FinishDXRLoading before we render the scene
+	r_invalidateDXRData = 1;
 
 	return mesh;
 }

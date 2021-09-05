@@ -1700,7 +1700,7 @@ void GL_FindMegaTile( const char* name, float* x, float* y, float* width, float*
 
 const char* R_GetCurrentShaderName( void );
 
-extern int r_finishDXRInit;
+extern int r_invalidateDXRData;
 
 void RE_ShutdownRaytracingMap( void );
 

@@ -6,7 +6,8 @@
 #include "nv_helpers_dx12/TopLevelASGenerator.h"
 #include <vector>
 
-#define MAX_VISEDICTS 256
+//#define MAX_VISEDICTS 256
+#define MAX_VISEDICTS MAX_ENTITIES // RB: as many as trRefEntity_t are accepted in the backend
 
 nv_helpers_dx12::TopLevelASGenerator m_topLevelASGenerator;
 AccelerationStructureBuffers         m_topLevelASBuffers;

@@ -137,25 +137,32 @@ private:
 	struct Instance
 	{
 		Instance( ID3D12Resource* blAS, const DirectX::XMMATRIX& tr, UINT iID, UINT hgId );
+
 		/// Bottom-level AS
 		ID3D12Resource* bottomLevelAS;
+
 		/// Transform matrix
 		const DirectX::XMMATRIX& transform;
+
 		/// Instance ID visible in the shader
 		UINT instanceID;
+
 		/// Hit group index used to fetch the shaders from the SBT
 		UINT hitGroupIndex;
 	};
 
 	/// Construction flags, indicating whether the AS supports iterative updates
 	D3D12_RAYTRACING_ACCELERATION_STRUCTURE_BUILD_FLAGS m_flags;
+
 	/// Instances contained in the top-level AS
 	std::vector< Instance > m_instances;
 
 	/// Size of the temporary memory used by the TLAS builder
 	UINT64 m_scratchSizeInBytes;
+
 	/// Size of the buffer containing the instance descriptors
 	UINT64 m_instanceDescsSizeInBytes;
+
 	/// Size of the buffer containing the TLAS
 	UINT64 m_resultSizeInBytes;
 };

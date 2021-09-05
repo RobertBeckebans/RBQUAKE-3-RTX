@@ -654,8 +654,8 @@ void GL_Bind( int texnum )
 
 void RE_FinishDXRLoading( void )
 {
-	r_finishDXRInit    = 1;
-	raytracingDataInit = false;
+	r_invalidateDXRData = 1;
+	raytracingDataInit  = false;
 }
 
 void GL_FinishDXRLoading( void )

@@ -444,6 +444,9 @@ void RE_RenderScene( const refdef_t* fd )
 	VectorCopy( fd->vieworg, parms.pvsOrigin );
 
 	// This is a hack@!
+
+	// RB: why only when vieworg is not 0, 0, 0 ? this can lead to errors and means that only the main scene will be rendered ever
+
 	if( tr.refdef.vieworg[ 0 ] != 0 && tr.refdef.vieworg[ 1 ] != 0 && tr.refdef.vieworg[ 2 ] != 0 )
 	{
 		memcpy( &tr.dxr_refdef, &tr.refdef, sizeof( trRefdef_t ) );

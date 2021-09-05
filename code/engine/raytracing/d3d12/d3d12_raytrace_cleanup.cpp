@@ -18,7 +18,7 @@ RE_ShutdownRaytracingMap
 */
 void RE_ShutdownRaytracingMap( void )
 {
-	r_finishDXRInit = 0;
+	r_invalidateDXRData = 0;
 
 	// Don't clean up any data until the previous frame is done rendering!
 	GL_WaitForPreviousFrame();

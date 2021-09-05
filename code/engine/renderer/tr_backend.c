@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 backEndData_t* backEndData[ SMP_FRAMES ];
 backEndState_t backEnd;
 
-int r_finishDXRInit = 0;
+int r_invalidateDXRData = 0;
 
 static float s_flipMatrix[ 16 ] = {
 	// convert from our coordinate system (looking down X)
@@ -1054,10 +1054,10 @@ const void* RB_SwapBuffers( const void* data )
 	if( tr.world != NULL )
 	{
 		// jmarshall: this is a stupid way to do this.
-		if( r_finishDXRInit )
+		if( r_invalidateDXRData )
 		{
 			GL_FinishDXRLoading(); // todo move me!
-			r_finishDXRInit = 0;
+			r_invalidateDXRData = 0;
 		}
 
 		GL_Render( tr.dxr_refdef.vieworg[ 0 ], tr.dxr_refdef.vieworg[ 1 ], tr.dxr_refdef.vieworg[ 2 ], tr.dxr_refdef.viewaxis );
