@@ -35,12 +35,12 @@ static unsigned short s_oldHardwareGamma[3][256];
 **
 ** Determines if the underlying hardware supports the Win32 gamma correction API.
 */
-void				  WG_CheckHardwareGamma( void )
+void				  WG_CheckHardwareGamma()
 {
 }
 
 /*
-void mapGammaMax( void ) {
+void mapGammaMax() {
 	int		i, j;
 	unsigned short table[3][256];
 
@@ -78,6 +78,6 @@ void GLimp_SetGamma( unsigned char red[256], unsigned char green[256], unsigned 
 /*
 ** WG_RestoreGamma
 */
-void WG_RestoreGamma( void )
+void WG_RestoreGamma()
 {
 }

@@ -61,9 +61,9 @@ typedef struct tmp_area_s
 	int					invalid;	  // true if the area is invalid
 	tmp_areasettings_t* settings;	  // area settings
 	struct tmp_area_s*	mergedarea;	  // points to the new area after merging
-								   // when mergedarea != 0 the area has only the
-								   // seperating face of the merged areas
-	int					aasareanum; // number of the aas area created for this tmp area
+									  // when mergedarea != 0 the area has only the
+									  // seperating face of the merged areas
+	int					aasareanum;	  // number of the aas area created for this tmp area
 	// links in the list with areas
 	struct tmp_area_s * l_prev, *l_next;
 } tmp_area_t;
@@ -115,15 +115,15 @@ void			 AAS_AddFaceSideToArea( tmp_face_t* tmpface, int side, tmp_area_t* tmpare
 // remvoes a face from an area
 void			 AAS_RemoveFaceFromArea( tmp_face_t* tmpface, tmp_area_t* tmparea );
 // allocate a tmp face
-tmp_face_t*		 AAS_AllocTmpFace( void );
+tmp_face_t*		 AAS_AllocTmpFace();
 // free the tmp face
 void			 AAS_FreeTmpFace( tmp_face_t* tmpface );
 // allocate a tmp area
-tmp_area_t*		 AAS_AllocTmpArea( void );
+tmp_area_t*		 AAS_AllocTmpArea();
 // free a tmp area
 void			 AAS_FreeTmpArea( tmp_area_t* tmparea );
 // allocate a tmp node
-tmp_node_t*		 AAS_AllocTmpNode( void );
+tmp_node_t*		 AAS_AllocTmpNode();
 // free a tmp node
 void			 AAS_FreeTmpNode( tmp_node_t* node );
 // checks if an area is ok

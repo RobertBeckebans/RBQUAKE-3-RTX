@@ -42,7 +42,7 @@ LONG WINAPI		MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 static qboolean s_alttab_disabled;
 
-static void		WIN_DisableAltTab( void )
+static void		WIN_DisableAltTab()
 {
 	if( s_alttab_disabled )
 		return;
@@ -60,7 +60,7 @@ static void		WIN_DisableAltTab( void )
 	s_alttab_disabled = qtrue;
 }
 
-static void WIN_EnableAltTab( void )
+static void WIN_EnableAltTab()
 {
 	if( s_alttab_disabled )
 	{

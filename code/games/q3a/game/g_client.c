@@ -145,7 +145,7 @@ go to a random point that doesn't telefrag
 ================
 */
 #define MAX_SPAWN_POINTS 128
-gentity_t* SelectRandomDeathmatchSpawnPoint( void )
+gentity_t* SelectRandomDeathmatchSpawnPoint()
 {
 	gentity_t* spot;
 	int		   count;
@@ -265,13 +265,13 @@ gentity_t* SelectSpawnPoint( vec3_t avoidPoint, vec3_t origin, vec3_t angles )
 
 	nearestSpot = SelectNearestDeathmatchSpawnPoint( avoidPoint );
 
-	spot = SelectRandomDeathmatchSpawnPoint ( );
+	spot = SelectRandomDeathmatchSpawnPoint ();
 	if ( spot == nearestSpot ) {
 		// roll again if it would be real close to point of death
-		spot = SelectRandomDeathmatchSpawnPoint ( );
+		spot = SelectRandomDeathmatchSpawnPoint ();
 		if ( spot == nearestSpot ) {
 			// last try
-			spot = SelectRandomDeathmatchSpawnPoint ( );
+			spot = SelectRandomDeathmatchSpawnPoint ();
 		}
 	}
 
@@ -350,7 +350,7 @@ BODYQUE
 InitBodyQue
 ===============
 */
-void InitBodyQue( void )
+void InitBodyQue()
 {
 	int		   i;
 	gentity_t* ent;

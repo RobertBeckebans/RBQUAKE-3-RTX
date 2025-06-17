@@ -70,7 +70,7 @@ void	  Log_Open( char* filename )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Close( void )
+void Log_Close()
 {
 	if( !logfile.fp )
 	{
@@ -91,7 +91,7 @@ void Log_Close( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Shutdown( void )
+void Log_Shutdown()
 {
 	if( logfile.fp )
 		Log_Close();
@@ -201,7 +201,7 @@ void Log_WriteTimeStamped( char* fmt, ... )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-FILE* Log_FileStruct( void )
+FILE* Log_FileStruct()
 {
 	return logfile.fp;
 } // end of the function Log_FileStruct
@@ -211,7 +211,7 @@ FILE* Log_FileStruct( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Flush( void )
+void Log_Flush()
 {
 	if( logfile.fp )
 		fflush( logfile.fp );

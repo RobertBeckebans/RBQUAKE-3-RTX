@@ -97,7 +97,7 @@ int				hl_dsurfedges_checksum;
 int				hl_bspallocated	   = false;
 int				hl_allocatedbspmem = 0;
 
-void			HL_AllocMaxBSP( void )
+void			HL_AllocMaxBSP()
 {
 	// models
 	hl_nummodels	   = 0;
@@ -165,7 +165,7 @@ void			HL_AllocMaxBSP( void )
 	Log_Print( " of BSP memory\n" );
 } // end of the function HL_AllocMaxBSP
 
-void HL_FreeMaxBSP( void )
+void HL_FreeMaxBSP()
 {
 	// models
 	hl_nummodels = 0;
@@ -675,7 +675,7 @@ HL_PrintBSPFileSizes
 Dumps info about current file
 =============
 */
-void HL_PrintBSPFileSizes( void )
+void HL_PrintBSPFileSizes()
 {
 	int numtextures = hl_texdatasize ? ( ( hl_dmiptexlump_t* )hl_dtexdata )->nummiptex : 0;
 	int totalmemory = 0;
@@ -709,7 +709,7 @@ void HL_PrintBSPFileSizes( void )
 ParseEpair
 =================
 * /
-epair_t *ParseEpair (void)
+epair_t *ParseEpair ()
 {
 	epair_t	*e;
 
@@ -732,7 +732,7 @@ epair_t *ParseEpair (void)
 ParseEntity
 ================
 * /
-qboolean	ParseEntity (void)
+qboolean	ParseEntity ()
 {
 	epair_t		*e;
 	entity_t	*mapent;
@@ -770,7 +770,7 @@ ParseEntities
 Parses the dentdata string into entities
 ================
 */
-void HL_ParseEntities( void )
+void HL_ParseEntities()
 {
 	script_t* script;
 
@@ -792,7 +792,7 @@ UnparseEntities
 Generates the dentdata string from all the entities
 ================
 */
-void HL_UnparseEntities( void )
+void HL_UnparseEntities()
 {
 	char *	 buf, *end;
 	epair_t* ep;

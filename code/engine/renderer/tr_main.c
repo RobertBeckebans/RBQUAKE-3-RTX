@@ -359,7 +359,7 @@ R_RotateForViewer
 Sets up the modelview matrix for a given viewParm
 =================
 */
-void R_RotateForViewer( void )
+void R_RotateForViewer()
 {
 	float  viewerMatrix[16];
 	vec3_t origin;
@@ -403,7 +403,7 @@ void R_RotateForViewer( void )
 /*
 ** SetFarClip
 */
-static void SetFarClip( void )
+static void SetFarClip()
 {
 	float farthestCornerDistance = 0;
 	int	  i;
@@ -470,7 +470,7 @@ static void SetFarClip( void )
 R_SetupProjection
 ===============
 */
-void R_SetupProjection( void )
+void R_SetupProjection()
 {
 	float xmin, xmax, ymin, ymax;
 	float width, height, depth;
@@ -523,7 +523,7 @@ R_SetupFrustum
 Setup that culling frustum planes for the current view
 =================
 */
-void R_SetupFrustum( void )
+void R_SetupFrustum()
 {
 	int	  i;
 	float xs, xc;
@@ -1413,7 +1413,7 @@ void R_SortDrawSurfs( drawSurf_t* drawSurfs, int numDrawSurfs )
 R_AddEntitySurfaces
 =============
 */
-void R_AddEntitySurfaces( void )
+void R_AddEntitySurfaces()
 {
 	trRefEntity_t* ent;
 	shader_t*	   shader;
@@ -1510,7 +1510,7 @@ void R_AddEntitySurfaces( void )
 R_GenerateDrawSurfs
 ====================
 */
-void R_GenerateDrawSurfs( void )
+void R_GenerateDrawSurfs()
 {
 	R_AddWorldSurfaces();
 
@@ -1565,7 +1565,7 @@ R_DebugGraphics
 Visualization aid for movement clipping debugging
 ====================
 */
-void R_DebugGraphics( void )
+void R_DebugGraphics()
 {
 	if( !r_debugSurface->integer )
 	{

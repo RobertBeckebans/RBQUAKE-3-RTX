@@ -44,7 +44,7 @@ CG_InitMarkPolys
 This is called at startup and for tournement restarts
 ===================
 */
-void		CG_InitMarkPolys( void )
+void		CG_InitMarkPolys()
 {
 	int i;
 
@@ -87,7 +87,7 @@ CG_AllocMark
 Will allways succeed, even if it requires freeing an old active mark
 ===================
 */
-markPoly_t* CG_AllocMark( void )
+markPoly_t* CG_AllocMark()
 {
 	markPoly_t* le;
 	int			time;
@@ -236,7 +236,7 @@ CG_AddMarks
 #define MARK_TOTAL_TIME 10000
 #define MARK_FADE_TIME	1000
 
-void CG_AddMarks( void )
+void CG_AddMarks()
 {
 	int			j;
 	markPoly_t *mp, *next;
@@ -405,7 +405,7 @@ float		 oldtime;
 CL_ClearParticles
 ===============
 */
-void		 CG_ClearParticles( void )
+void		 CG_ClearParticles()
 {
 	int i;
 
@@ -1114,7 +1114,7 @@ static float roll = 0.0;
 CG_AddParticles
 ===============
 */
-void		 CG_AddParticles( void )
+void		 CG_AddParticles()
 {
 	cparticle_t *p, *next;
 	float		 alpha;

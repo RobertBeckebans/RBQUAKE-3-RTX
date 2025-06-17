@@ -409,7 +409,7 @@ RB_Hyperspace
 A player has predicted a teleport, but hasn't arrived yet
 ================
 */
-static void RB_Hyperspace( void )
+static void RB_Hyperspace()
 {
 	float c;
 
@@ -425,7 +425,7 @@ static void RB_Hyperspace( void )
 	backEnd.isHyperspace = qtrue;
 }
 
-static void SetViewportAndScissor( void )
+static void SetViewportAndScissor()
 {
 	// qglMatrixMode(GL_PROJECTION);
 	// qglLoadMatrixf( backEnd.viewParms.projectionMatrix );
@@ -446,7 +446,7 @@ Any mirrored or portaled views have already been drawn, so prepare
 to actually render the visible surfaces for this view
 =================
 */
-void RB_BeginDrawingView( void )
+void RB_BeginDrawingView()
 {
 	int clearBits = 0;
 
@@ -715,7 +715,7 @@ RB_SetGL2D
 
 ================
 */
-void RB_SetGL2D( void )
+void RB_SetGL2D()
 {
 	backEnd.projection2D = qtrue;
 
@@ -978,7 +978,7 @@ was there.  This is used to test for texture thrashing.
 Also called by RE_EndRegistration
 ===============
 */
-void RB_ShowImages( void )
+void RB_ShowImages()
 {
 	int		 i;
 	image_t* image;
@@ -1158,7 +1158,7 @@ void RB_ExecuteRenderCommands( const void* data )
 RB_RenderThread
 ================
 */
-void RB_RenderThread( void )
+void RB_RenderThread()
 {
 	const void* data;
 

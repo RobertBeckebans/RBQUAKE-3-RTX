@@ -32,13 +32,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "snd_local.h"
 #include "client.h"
 
-void				S_Play_f( void );
-void				S_SoundList_f( void );
-void				S_Music_f( void );
+void				S_Play_f();
+void				S_SoundList_f();
+void				S_Music_f();
 
 void				S_Update_();
-void				S_StopAllSounds( void );
-void				S_UpdateBackgroundTrack( void );
+void				S_StopAllSounds();
+void				S_UpdateBackgroundTrack();
 
 static fileHandle_t s_backgroundFile;
 static wavinfo_t	s_backgroundInfo;
@@ -101,7 +101,7 @@ portable_samplepair_t s_rawsamples[MAX_RAW_SAMPLES];
 // User-setable variables
 // ====================================================================
 
-void				  S_SoundInfo_f( void )
+void				  S_SoundInfo_f()
 {
 	Com_Printf( "----- Sound Info -----\n" );
 	if( !s_soundStarted )
@@ -138,7 +138,7 @@ void				  S_SoundInfo_f( void )
 S_Init
 ================
 */
-void S_Init( void )
+void S_Init()
 {
 	cvar_t*	 cv;
 	qboolean r;
@@ -234,7 +234,7 @@ void S_ChannelSetup()
 // Shutdown sound engine
 // =======================================================================
 
-void S_Shutdown( void )
+void S_Shutdown()
 {
 	if( !s_soundStarted )
 	{
@@ -380,7 +380,7 @@ This is called when the hunk is cleared and the sounds
 are no longer valid.
 ===================
 */
-void S_DisableSounds( void )
+void S_DisableSounds()
 {
 	S_StopAllSounds();
 	s_soundMuted = qtrue;
@@ -392,7 +392,7 @@ S_BeginRegistration
 
 =====================
 */
-void S_BeginRegistration( void )
+void S_BeginRegistration()
 {
 	s_soundMuted = qfalse; // we can play again
 
@@ -714,7 +714,7 @@ If we are about to perform file access, clear the buffer
 so sound doesn't stutter.
 ==================
 */
-void S_ClearSoundBuffer( void )
+void S_ClearSoundBuffer()
 {
 	int clear;
 
@@ -750,7 +750,7 @@ void S_ClearSoundBuffer( void )
 S_StopAllSounds
 ==================
 */
-void S_StopAllSounds( void )
+void S_StopAllSounds()
 {
 	if( !s_soundStarted )
 	{
@@ -920,7 +920,7 @@ All sounds are on the same cycle, so any duplicates can just
 sum up the channel multipliers.
 ==================
 */
-void S_AddLoopSounds( void )
+void S_AddLoopSounds()
 {
 	int			 i, j, time;
 	int			 left_total, right_total, left, right;
@@ -1232,7 +1232,7 @@ S_ScanChannelStarts
 Returns qtrue if any new sounds were started since the last mix
 ========================
 */
-qboolean S_ScanChannelStarts( void )
+qboolean S_ScanChannelStarts()
 {
 	channel_t* ch;
 	int		   i;
@@ -1274,7 +1274,7 @@ S_Update
 Called once each time through the main loop
 ============
 */
-void S_Update( void )
+void S_Update()
 {
 	int		   i;
 	int		   total;
@@ -1312,7 +1312,7 @@ void S_Update( void )
 	S_Update_();
 }
 
-void S_GetSoundtime( void )
+void S_GetSoundtime()
 {
 	int		   samplepos;
 	static int buffers;
@@ -1358,7 +1358,7 @@ void S_GetSoundtime( void )
 	}
 }
 
-void S_Update_( void )
+void S_Update_()
 {
 	unsigned	 endtime;
 	int			 samps;
@@ -1429,7 +1429,7 @@ console functions
 ===============================================================================
 */
 
-void S_Play_f( void )
+void S_Play_f()
 {
 	int			i;
 	sfxHandle_t h;
@@ -1455,7 +1455,7 @@ void S_Play_f( void )
 	}
 }
 
-void S_Music_f( void )
+void S_Music_f()
 {
 	int c;
 
@@ -1477,7 +1477,7 @@ void S_Music_f( void )
 	}
 }
 
-void S_SoundList_f( void )
+void S_SoundList_f()
 {
 	int	   i;
 	sfx_t* sfx;
@@ -1564,7 +1564,7 @@ int S_FindWavChunk( fileHandle_t f, char* chunk )
 S_StopBackgroundTrack
 ======================
 */
-void S_StopBackgroundTrack( void )
+void S_StopBackgroundTrack()
 {
 	if( !s_backgroundFile )
 	{
@@ -1682,7 +1682,7 @@ void S_StartBackgroundTrack( const char* intro, const char* loop )
 S_UpdateBackgroundTrack
 ======================
 */
-void S_UpdateBackgroundTrack( void )
+void S_UpdateBackgroundTrack()
 {
 	int			 bufferSamples;
 	int			 fileSamples;

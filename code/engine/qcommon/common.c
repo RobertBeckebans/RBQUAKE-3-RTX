@@ -94,7 +94,7 @@ qboolean	 com_fullyInitialized;
 
 char		 com_errorMessage[MAXPRINTMSG];
 
-void		 Com_WriteConfig_f( void );
+void		 Com_WriteConfig_f();
 void		 CIN_CloseAllVideos();
 
 //============================================================================
@@ -114,7 +114,7 @@ void Com_BeginRedirect( char* buffer, int buffersize, void ( *flush )( char* ) )
 	*rd_buffer = 0;
 }
 
-void Com_EndRedirect( void )
+void Com_EndRedirect()
 {
 	if( rd_flush )
 	{
@@ -342,7 +342,7 @@ Both client and server can use this, and it will
 do the apropriate things.
 =============
 */
-void Com_Quit_f( void )
+void Com_Quit_f()
 {
 	// don't try to shutdown if we are in a recursive error
 	if( !com_errorEntered )
@@ -419,7 +419,7 @@ Check for "safe" on the command line, which will
 skip loading of q3config.cfg
 ===================
 */
-qboolean Com_SafeMode( void )
+qboolean Com_SafeMode()
 {
 	int i;
 
@@ -482,7 +482,7 @@ Returns qtrue if any late commands were added, which
 will keep the demoloop from immediately starting
 =================
 */
-qboolean Com_AddStartupCommands( void )
+qboolean Com_AddStartupCommands()
 {
 	int		 i;
 	qboolean added;
@@ -834,7 +834,7 @@ memzone_t* mainzone;
 // fragment the main zone (think of cvar and cmd strings)
 memzone_t* smallzone;
 
-void	   Z_CheckHeap( void );
+void	   Z_CheckHeap();
 
 /*
 ========================
@@ -876,7 +876,7 @@ int Z_AvailableZoneMemory( memzone_t* zone )
 Z_AvailableMemory
 ========================
 */
-int Z_AvailableMemory( void )
+int Z_AvailableMemory()
 {
 	return Z_AvailableZoneMemory( mainzone );
 }
@@ -1141,7 +1141,7 @@ void* S_Malloc( int size )
 Z_CheckHeap
 ========================
 */
-void Z_CheckHeap( void )
+void Z_CheckHeap()
 {
 	memblock_t* block;
 
@@ -1228,7 +1228,7 @@ void Z_LogZoneHeap( memzone_t* zone, char* name )
 Z_LogHeap
 ========================
 */
-void Z_LogHeap( void )
+void Z_LogHeap()
 {
 	Z_LogZoneHeap( mainzone, "MAIN" );
 	Z_LogZoneHeap( smallzone, "SMALL" );
@@ -1359,7 +1359,7 @@ static int			s_smallZoneTotal;
 Com_Meminfo_f
 =================
 */
-void				Com_Meminfo_f( void )
+void				Com_Meminfo_f()
 {
 	memblock_t* block;
 	int			zoneBytes, zoneBlocks;
@@ -1470,7 +1470,7 @@ Com_TouchMemory
 Touch all known used data to make sure it is paged in
 ===============
 */
-void Com_TouchMemory( void )
+void Com_TouchMemory()
 {
 	int			start, end;
 	int			i, j;
@@ -1522,7 +1522,7 @@ void Com_TouchMemory( void )
 Com_InitZoneMemory
 =================
 */
-void Com_InitSmallZoneMemory( void )
+void Com_InitSmallZoneMemory()
 {
 	s_smallZoneTotal = 512 * 1024;
 	// bk001205 - was malloc
@@ -1536,7 +1536,7 @@ void Com_InitSmallZoneMemory( void )
 	return;
 }
 
-void Com_InitZoneMemory( void )
+void Com_InitZoneMemory()
 {
 	cvar_t* cv;
 	// allocate the random block zone
@@ -1565,7 +1565,7 @@ void Com_InitZoneMemory( void )
 Hunk_Log
 =================
 */
-void Hunk_Log( void )
+void Hunk_Log()
 {
 	hunkblock_t* block;
 	char		 buf[4096];
@@ -1597,7 +1597,7 @@ void Hunk_Log( void )
 Hunk_SmallLog
 =================
 */
-void Hunk_SmallLog( void )
+void Hunk_SmallLog()
 {
 	hunkblock_t *block, *block2;
 	char		 buf[4096];
@@ -1652,7 +1652,7 @@ void Hunk_SmallLog( void )
 Com_InitZoneMemory
 =================
 */
-void Com_InitHunkMemory( void )
+void Com_InitHunkMemory()
 {
 	cvar_t* cv;
 	int		nMinAlloc;
@@ -1717,7 +1717,7 @@ void Com_InitHunkMemory( void )
 Hunk_MemoryRemaining
 ====================
 */
-int Hunk_MemoryRemaining( void )
+int Hunk_MemoryRemaining()
 {
 	int low, high;
 
@@ -1734,7 +1734,7 @@ Hunk_SetMark
 The server calls this after the level and game VM have been loaded
 ===================
 */
-void Hunk_SetMark( void )
+void Hunk_SetMark()
 {
 	hunk_low.mark  = hunk_low.permanent;
 	hunk_high.mark = hunk_high.permanent;
@@ -1747,7 +1747,7 @@ Hunk_ClearToMark
 The client calls this before starting a vid_restart or snd_restart
 =================
 */
-void Hunk_ClearToMark( void )
+void Hunk_ClearToMark()
 {
 	hunk_low.permanent = hunk_low.temp = hunk_low.mark;
 	hunk_high.permanent = hunk_high.temp = hunk_high.mark;
@@ -1758,7 +1758,7 @@ void Hunk_ClearToMark( void )
 Hunk_CheckMark
 =================
 */
-qboolean Hunk_CheckMark( void )
+qboolean Hunk_CheckMark()
 {
 	if( hunk_low.mark || hunk_high.mark )
 	{
@@ -1767,9 +1767,9 @@ qboolean Hunk_CheckMark( void )
 	return qfalse;
 }
 
-void CL_ShutdownCGame( void );
-void CL_ShutdownUI( void );
-void SV_ShutdownGameProgs( void );
+void CL_ShutdownCGame();
+void CL_ShutdownUI();
+void SV_ShutdownGameProgs();
 
 /*
 =================
@@ -1778,7 +1778,7 @@ Hunk_Clear
 The server calls this before shutting down or loading a new map
 =================
 */
-void Hunk_Clear( void )
+void Hunk_Clear()
 {
 #ifndef DEDICATED
 	CL_ShutdownCGame();
@@ -1808,7 +1808,7 @@ void Hunk_Clear( void )
 #endif
 }
 
-static void Hunk_SwapBanks( void )
+static void Hunk_SwapBanks()
 {
 	hunkUsed_t* swap;
 
@@ -2037,7 +2037,7 @@ touched but unused memory on this side, have future
 permanent allocs use this side.
 =================
 */
-void Hunk_ClearTempMemory( void )
+void Hunk_ClearTempMemory()
 {
 	if( s_hunkData != NULL )
 	{
@@ -2050,7 +2050,7 @@ void Hunk_ClearTempMemory( void )
 Hunk_Trash
 =================
 */
-void Hunk_Trash( void )
+void Hunk_Trash()
 {
 	int	  length, i, rnd;
 	char *buf, value;
@@ -2116,7 +2116,7 @@ static sysEvent_t com_pushedEvents[MAX_PUSHED_EVENTS];
 Com_InitJournaling
 =================
 */
-void			  Com_InitJournaling( void )
+void			  Com_InitJournaling()
 {
 	Com_StartupVariable( "journal" );
 	com_journal = Cvar_Get( "journal", "0", CVAR_INIT );
@@ -2152,7 +2152,7 @@ void			  Com_InitJournaling( void )
 Com_GetRealEvent
 =================
 */
-sysEvent_t Com_GetRealEvent( void )
+sysEvent_t Com_GetRealEvent()
 {
 	int		   r;
 	sysEvent_t ev;
@@ -2207,7 +2207,7 @@ Com_InitPushEvent
 =================
 */
 // bk001129 - added
-void Com_InitPushEvent( void )
+void Com_InitPushEvent()
 {
 	// clear the static buffer array
 	// this requires SE_NONE to be accepted as a valid but NOP event
@@ -2259,7 +2259,7 @@ void Com_PushEvent( sysEvent_t* event )
 Com_GetEvent
 =================
 */
-sysEvent_t Com_GetEvent( void )
+sysEvent_t Com_GetEvent()
 {
 	if( com_pushedEventsHead > com_pushedEventsTail )
 	{
@@ -2305,7 +2305,7 @@ Com_EventLoop
 Returns last event time
 =================
 */
-int Com_EventLoop( void )
+int Com_EventLoop()
 {
 	sysEvent_t ev;
 	netadr_t   evFrom;
@@ -2418,7 +2418,7 @@ Com_Milliseconds
 Can be used for profiling, but will be journaled accurately
 ================
 */
-int Com_Milliseconds( void )
+int Com_Milliseconds()
 {
 	sysEvent_t ev;
 
@@ -2445,7 +2445,7 @@ Just throw a fatal error to
 test error shutdown procedures
 =============
 */
-static void Com_Error_f( void )
+static void Com_Error_f()
 {
 	if( Cmd_Argc() > 1 )
 	{
@@ -2465,7 +2465,7 @@ Just freeze in place for a given number of seconds to test
 error recovery
 =============
 */
-static void Com_Freeze_f( void )
+static void Com_Freeze_f()
 {
 	float s;
 	int	  start, now;
@@ -2496,7 +2496,7 @@ Com_Crash_f
 A way to force a bus error for development reasons
 =================
 */
-static void Com_Crash_f( void )
+static void Com_Crash_f()
 {
 	*( int* )0 = 0x12345678;
 }
@@ -2811,7 +2811,7 @@ Com_WriteConfiguration
 Writes key bindings and archived cvars to config file if modified
 ===============
 */
-void Com_WriteConfiguration( void )
+void Com_WriteConfiguration()
 {
 #ifndef DEDICATED // bk001204
 	cvar_t* fs;
@@ -2852,7 +2852,7 @@ Com_WriteConfig_f
 Write the config file to a specific name
 ===============
 */
-void Com_WriteConfig_f( void )
+void Com_WriteConfig_f()
 {
 	char filename[MAX_QPATH];
 
@@ -2937,7 +2937,7 @@ int Com_ModifyMsec( int msec )
 Com_Frame
 =================
 */
-void Com_Frame( void )
+void Com_Frame()
 {
 	int		   msec, minMsec;
 	static int lastTime;
@@ -3118,7 +3118,7 @@ void Com_Frame( void )
 Com_Shutdown
 =================
 */
-void Com_Shutdown( void )
+void Com_Shutdown()
 {
 	if( logfile )
 	{
@@ -3245,7 +3245,7 @@ static void PrintMatches( const char* s )
 	}
 }
 
-static void keyConcatArgs( void )
+static void keyConcatArgs()
 {
 	int	  i;
 	char* arg;

@@ -40,10 +40,10 @@ void* GetMemoryDebug( unsigned long size, char* label, char* file, int line );
 // allocate a memory block of the given size and clear it
 void* GetClearedMemoryDebug( unsigned long size, char* label, char* file, int line );
 //
-void  PrintMemoryLabels( void );
+void  PrintMemoryLabels();
 #endif // MEMDEBUG
 
 void FreeMemory( void* ptr );
 int	 MemorySize( void* ptr );
 void PrintMemorySize( unsigned long size );
-int	 TotalAllocatedMemory( void );
+int	 TotalAllocatedMemory();

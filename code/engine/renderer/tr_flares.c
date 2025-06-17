@@ -88,7 +88,7 @@ flare_t *r_activeFlares, *r_inactiveFlares;
 R_ClearFlares
 ==================
 */
-void	 R_ClearFlares( void )
+void	 R_ClearFlares()
 {
 	int i;
 
@@ -202,7 +202,7 @@ void RB_AddFlare( void* surface, int fogNum, vec3_t point, vec3_t color, vec3_t 
 RB_AddDlightFlares
 ==================
 */
-void RB_AddDlightFlares( void )
+void RB_AddDlightFlares()
 {
 	dlight_t* l;
 	int		  i, j, k;
@@ -395,7 +395,7 @@ when occluded by something in the main view, and portal flares that should
 extend past the portal edge will be overwritten.
 ==================
 */
-void RB_RenderFlares( void )
+void RB_RenderFlares()
 {
 	//	flare_t		*f;
 	//	flare_t		**prev;

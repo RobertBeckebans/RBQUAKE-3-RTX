@@ -64,7 +64,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 BotNumActivePlayers
 ==================
 */
-int BotNumActivePlayers( void )
+int BotNumActivePlayers()
 {
 	int		   i, num;
 	char	   buf[MAX_INFO_STRING];
@@ -160,7 +160,7 @@ int BotIsLastInRankings( bot_state_t* bs )
 BotFirstClientInRankings
 ==================
 */
-char* BotFirstClientInRankings( void )
+char* BotFirstClientInRankings()
 {
 	int			  i, bestscore, bestclient;
 	char		  buf[MAX_INFO_STRING];
@@ -199,7 +199,7 @@ char* BotFirstClientInRankings( void )
 BotLastClientInRankings
 ==================
 */
-char* BotLastClientInRankings( void )
+char* BotLastClientInRankings()
 {
 	int			  i, worstscore, bestclient;
 	char		  buf[MAX_INFO_STRING];
@@ -290,7 +290,7 @@ BotMapTitle
 ==================
 */
 
-char* BotMapTitle( void )
+char* BotMapTitle()
 {
 	char		info[1024];
 	static char mapname[128];
@@ -359,7 +359,7 @@ char* BotWeaponNameForMeansOfDeath( int mod )
 BotRandomWeaponName
 ==================
 */
-char* BotRandomWeaponName( void )
+char* BotRandomWeaponName()
 {
 	int rnd;
 

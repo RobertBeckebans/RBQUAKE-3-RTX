@@ -87,8 +87,8 @@ typedef struct th_vertex_s
 {
 	vec3_t				v;
 	int					usercount; // 2x the number of to be processed
-				   // triangles using this vertex
-	struct th_vertex_s* hashnext; // next vertex in hash
+								   // triangles using this vertex
+	struct th_vertex_s* hashnext;  // next vertex in hash
 } th_vertex_t;
 
 // edge
@@ -96,8 +96,8 @@ typedef struct th_edge_s
 {
 	int				  v[2];		 // vertex indexes
 	int				  usercount; // number of to be processed
-				   // triangles using this edge
-	struct th_edge_s* hashnext; // next edge in hash
+								 // triangles using this edge
+	struct th_edge_s* hashnext;	 // next edge in hash
 } th_edge_t;
 
 // triangle
@@ -151,7 +151,7 @@ th_t thworld;
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void TH_InitMaxTH( void )
+void TH_InitMaxTH()
 {
 	// get memory for the tetrahedron data
 	thworld.vertexes	 = ( th_vertex_t* )GetClearedMemory( MAX_TH_VERTEXES * sizeof( th_vertex_t ) );
@@ -171,7 +171,7 @@ void TH_InitMaxTH( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void TH_FreeMaxTH( void )
+void TH_FreeMaxTH()
 {
 	if( thworld.vertexes )
 		FreeMemory( thworld.vertexes );
@@ -1372,7 +1372,7 @@ th_triangle_t* TH_CreateAASFaceTriangles( aas_face_t* face )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-th_triangle_t* TH_AASToTriangleMesh( void )
+th_triangle_t* TH_AASToTriangleMesh()
 {
 	int			   i, j, facenum, otherareanum;
 	aas_face_t*	   face;

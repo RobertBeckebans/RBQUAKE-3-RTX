@@ -491,7 +491,7 @@ void EA_ResetInput( int client )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int EA_Setup( void )
+int EA_Setup()
 {
 	// initialize the bot inputs
 	botinputs = ( bot_input_t* )GetClearedHunkMemory( botlibglobals.maxclients * sizeof( bot_input_t ) );
@@ -503,7 +503,7 @@ int EA_Setup( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void EA_Shutdown( void )
+void EA_Shutdown()
 {
 	FreeMemory( botinputs );
 	botinputs = NULL;

@@ -54,7 +54,7 @@ int	 dplanes2mapplanes[MAX_MAPFILE_PLANES];
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Q2_CreateMapTexinfo( void )
+void Q2_CreateMapTexinfo()
 {
 	int i;
 
@@ -143,7 +143,7 @@ void MakeAreaPortalBrush( mapbrush_t* brush )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void DPlanes2MapPlanes( void )
+void DPlanes2MapPlanes()
 {
 	int i;
 
@@ -664,7 +664,7 @@ void Q2_SetLeafBrushesModelNumbers( int leafnum, int modelnum )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Q2_InitNodeStack( void )
+void Q2_InitNodeStack()
 {
 	nodestackptr  = nodestack;
 	nodestacksize = 0;
@@ -692,7 +692,7 @@ void Q2_PushNodeStack( int num )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int Q2_PopNodeStack( void )
+int Q2_PopNodeStack()
 {
 	// if the stack is empty
 	if( nodestackptr <= nodestack )
@@ -1087,7 +1087,7 @@ void Q2_LoadMapFromBSP( char* filename, int offset, int length )
 	Q2_CreateMapTexinfo();
 } // end of the function Q2_LoadMapFromBSP
 
-void Q2_ResetMapLoading( void )
+void Q2_ResetMapLoading()
 {
 	// reset for map loading from bsp
 	memset( nodestack, 0, NODESTACKSIZE * sizeof( int ) );
@@ -1108,7 +1108,7 @@ TestExpandBrushes
 Expands all the brush planes and saves a new map out
 ================
 */
-void TestExpandBrushes( void )
+void TestExpandBrushes()
 {
 	FILE*		f;
 	side_t*		s;

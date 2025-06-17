@@ -81,7 +81,7 @@ vmCvar_t	 bot_interbreedbots;
 vmCvar_t	 bot_interbreedcycle;
 vmCvar_t	 bot_interbreedwrite;
 
-void		 ExitLevel( void );
+void		 ExitLevel();
 
 /*
 ==================
@@ -423,7 +423,7 @@ void BotReportStatus( bot_state_t* bs )
 BotTeamplayReport
 ==================
 */
-void BotTeamplayReport( void )
+void BotTeamplayReport()
 {
 	int	 i;
 	char buf[MAX_INFO_STRING];
@@ -596,7 +596,7 @@ void BotSetInfoConfigString( bot_state_t* bs )
 BotUpdateInfoConfigStrings
 ==============
 */
-void BotUpdateInfoConfigStrings( void )
+void BotUpdateInfoConfigStrings()
 {
 	int	 i;
 	char buf[MAX_INFO_STRING];
@@ -620,7 +620,7 @@ void BotUpdateInfoConfigStrings( void )
 BotInterbreedBots
 ==============
 */
-void BotInterbreedBots( void )
+void BotInterbreedBots()
 {
 	float ranks[MAX_CLIENTS];
 	int	  parent1, parent2, child;
@@ -698,7 +698,7 @@ BotInterbreedEndMatch
 add link back into ExitLevel?
 ==============
 */
-void BotInterbreedEndMatch( void )
+void BotInterbreedEndMatch()
 {
 	if( !bot_interbreed )
 		return;
@@ -722,7 +722,7 @@ void BotInterbreedEndMatch( void )
 BotInterbreeding
 ==============
 */
-void BotInterbreeding( void )
+void BotInterbreeding()
 {
 	int i;
 
@@ -771,7 +771,7 @@ void BotEntityInfo( int entnum, aas_entityinfo_t* info )
 NumBots
 ==============
 */
-int NumBots( void )
+int NumBots()
 {
 	return numbots;
 }
@@ -1066,7 +1066,7 @@ void BotUpdateInput( bot_state_t* bs, int time, int elapsed_time )
 BotAIRegularUpdate
 ==============
 */
-void BotAIRegularUpdate( void )
+void BotAIRegularUpdate()
 {
 	if( regularupdate_time < FloatTime() )
 	{
@@ -1216,7 +1216,7 @@ int BotAI( int client, float thinktime )
 BotScheduleBotThink
 ==================
 */
-void BotScheduleBotThink( void )
+void BotScheduleBotThink()
 {
 	int i, botnum;
 
@@ -1793,7 +1793,7 @@ int BotAIStartFrame( int time )
 BotInitLibrary
 ==============
 */
-int BotInitLibrary( void )
+int BotInitLibrary()
 {
 	char buf[144];
 

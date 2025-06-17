@@ -146,7 +146,7 @@ static void				  UI_SoundOptionsMenu_Event( void* ptr, int event )
 UI_SoundOptionsMenu_Init
 ===============
 */
-static void UI_SoundOptionsMenu_Init( void )
+static void UI_SoundOptionsMenu_Init()
 {
 	int y;
 
@@ -296,7 +296,7 @@ static void UI_SoundOptionsMenu_Init( void )
 UI_SoundOptionsMenu_Cache
 ===============
 */
-void UI_SoundOptionsMenu_Cache( void )
+void UI_SoundOptionsMenu_Cache()
 {
 	trap_R_RegisterShaderNoMip( ART_FRAMEL );
 	trap_R_RegisterShaderNoMip( ART_FRAMER );
@@ -309,7 +309,7 @@ void UI_SoundOptionsMenu_Cache( void )
 UI_SoundOptionsMenu
 ===============
 */
-void UI_SoundOptionsMenu( void )
+void UI_SoundOptionsMenu()
 {
 	UI_SoundOptionsMenu_Init();
 	UI_PushMenu( &soundOptionsInfo.menu );

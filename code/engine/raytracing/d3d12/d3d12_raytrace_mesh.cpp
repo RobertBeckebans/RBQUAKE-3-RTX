@@ -1306,7 +1306,7 @@ void* GL_LoadPolyRaytracedMesh( shader_t* shader, polyVert_t* verts, int numVert
 	return mesh;
 }
 
-void GL_FinishVertexBufferAllocation( void )
+void GL_FinishVertexBufferAllocation()
 {
 	//	ThrowIfFailed(m_commandList->Reset(m_commandAllocator.Get(), m_pipelineState.Get()));
 

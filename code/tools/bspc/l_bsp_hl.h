@@ -288,17 +288,17 @@ extern int			   hl_dsurfedges_checksum;
 
 int					   FastChecksum( void* buffer, int bytes );
 
-void				   HL_AllocMaxBSP( void );
-void				   HL_FreeMaxBSP( void );
+void				   HL_AllocMaxBSP();
+void				   HL_FreeMaxBSP();
 
 void				   HL_DecompressVis( byte* in, byte* decompressed );
 int					   HL_CompressVis( byte* vis, byte* dest );
 
 void				   HL_LoadBSPFile( char* filename, int offset, int length );
 void				   HL_WriteBSPFile( char* filename );
-void				   HL_PrintBSPFileSizes( void );
-void				   HL_PrintBSPFileSizes( void );
-void				   HL_ParseEntities( void );
-void				   HL_UnparseEntities( void );
+void				   HL_PrintBSPFileSizes();
+void				   HL_PrintBSPFileSizes();
+void				   HL_ParseEntities();
+void				   HL_UnparseEntities();
 
 #endif

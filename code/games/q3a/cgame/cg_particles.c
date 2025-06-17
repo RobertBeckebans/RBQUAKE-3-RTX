@@ -136,7 +136,7 @@ float		 oldtime;
 CL_ClearParticles
 ===============
 */
-void		 CG_ClearParticles( void )
+void		 CG_ClearParticles()
 {
 	int i;
 
@@ -845,7 +845,7 @@ static float roll = 0.0;
 CG_AddParticles
 ===============
 */
-void		 CG_AddParticles( void )
+void		 CG_AddParticles()
 {
 	cparticle_t *p, *next;
 	float		 alpha;

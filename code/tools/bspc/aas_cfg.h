@@ -69,5 +69,5 @@ typedef struct cfg_s
 
 extern cfg_t cfg;
 
-void		 DefaultCfg( void );
+void		 DefaultCfg();
 int			 LoadCfgFile( char* filename );

@@ -1163,7 +1163,7 @@ void WriteMapFile( char* filename )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void PrintMapInfo( void )
+void PrintMapInfo()
 {
 	Log_Print( "\n" );
 	Log_Print( "%6i brushes\n", nummapbrushes );
@@ -1185,7 +1185,7 @@ void PrintMapInfo( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ResetMapLoading( void )
+void ResetMapLoading()
 {
 	int		 i;
 	epair_t *ep, *nextep;

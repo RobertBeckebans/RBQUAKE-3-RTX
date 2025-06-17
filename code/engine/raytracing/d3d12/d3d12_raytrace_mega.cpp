@@ -20,7 +20,7 @@ extern ComPtr<ID3D12DescriptorHeap> m_srvUavHeap;
 iceMegaTexture*						diffuseMegaTexture = NULL;
 iceMegaTexture*						normalMegaTexture  = NULL;
 
-void								GL_InitMegaTextures( void )
+void								GL_InitMegaTextures()
 {
 	if( diffuseMegaTexture != NULL )
 	{
@@ -257,7 +257,7 @@ iceMegaTexture::~iceMegaTexture()
 iceMegaTexture::InitTexture
 =======================
 */
-void iceMegaTexture::InitTexture( void )
+void iceMegaTexture::InitTexture()
 {
 	int megaSize = r_megaTextureSize;
 
@@ -312,7 +312,7 @@ void iceMegaTexture::RegisterTexture( const char* texturePath, int width, int he
 iceMegaTexture::BuildMegaTexture
 =======================
 */
-void iceMegaTexture::BuildMegaTexture( void )
+void iceMegaTexture::BuildMegaTexture()
 {
 	int megaSize = r_megaTextureSize;
 

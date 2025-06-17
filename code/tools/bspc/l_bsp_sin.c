@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "l_bsp_ent.h"
 #include "l_bsp_sin.h"
 
-void			   GetLeafNums( void );
+void			   GetLeafNums();
 
 //=============================================================================
 
@@ -98,7 +98,7 @@ char			   sin_dbrushsidetextured[SIN_MAX_MAP_BRUSHSIDES];
 int				   sin_bspallocated	   = false;
 int				   sin_allocatedbspmem = 0;
 
-void			   Sin_AllocMaxBSP( void )
+void			   Sin_AllocMaxBSP()
 {
 	// models
 	sin_nummodels = 0;
@@ -183,7 +183,7 @@ void			   Sin_AllocMaxBSP( void )
 	Log_Print( " of BSP memory\n" );
 } // end of the function Sin_AllocMaxBSP
 
-void Sin_FreeMaxBSP( void )
+void Sin_FreeMaxBSP()
 {
 	// models
 	sin_nummodels = 0;
@@ -387,7 +387,7 @@ int Sin_HintSkipBrush( sin_dbrush_t* brush )
 //===========================================================================
 qboolean WindingIsTiny( winding_t* w );
 
-void	 Sin_FixTextureReferences( void )
+void	 Sin_FixTextureReferences()
 {
 	int				  i, j, k, we;
 	sin_dbrushside_t* brushside;
@@ -1049,7 +1049,7 @@ ParseEntities
 Parses the sin_dentdata string into entities
 ================
 */
-void Sin_ParseEntities( void )
+void Sin_ParseEntities()
 {
 	script_t* script;
 
@@ -1071,7 +1071,7 @@ UnparseEntities
 Generates the sin_dentdata string from all the entities
 ================
 */
-void Sin_UnparseEntities( void )
+void Sin_UnparseEntities()
 {
 	char *	 buf, *end;
 	epair_t* ep;
@@ -1135,7 +1135,7 @@ Sin_PrintBSPFileSizes
 Dumps info about current file
 =============
 */
-void Sin_PrintBSPFileSizes( void )
+void Sin_PrintBSPFileSizes()
 {
 	if( !num_entities )
 		Sin_ParseEntities();

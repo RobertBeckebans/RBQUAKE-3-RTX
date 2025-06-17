@@ -178,7 +178,7 @@ static sfxHandle_t UI_SPSkillMenu_Key( int key )
 UI_SPSkillMenu_Cache
 =================
 */
-void UI_SPSkillMenu_Cache( void )
+void UI_SPSkillMenu_Cache()
 {
 	trap_R_RegisterShaderNoMip( ART_FRAME );
 	trap_R_RegisterShaderNoMip( ART_BACK );
@@ -200,7 +200,7 @@ void UI_SPSkillMenu_Cache( void )
 UI_SPSkillMenu_Init
 =================
 */
-static void UI_SPSkillMenu_Init( void )
+static void UI_SPSkillMenu_Init()
 {
 	int skill;
 

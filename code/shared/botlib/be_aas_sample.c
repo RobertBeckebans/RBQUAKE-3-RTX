@@ -95,7 +95,7 @@ void AAS_PresenceTypeBoundingBox( int presencetype, vec3_t mins, vec3_t maxs )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitAASLinkHeap( void )
+void AAS_InitAASLinkHeap()
 {
 	int i, max_aaslinks;
 
@@ -134,7 +134,7 @@ void AAS_InitAASLinkHeap( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeAASLinkHeap( void )
+void AAS_FreeAASLinkHeap()
 {
 	if( aasworld.linkheap )
 		FreeMemory( aasworld.linkheap );
@@ -147,7 +147,7 @@ void AAS_FreeAASLinkHeap( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-aas_link_t* AAS_AllocAASLink( void )
+aas_link_t* AAS_AllocAASLink()
 {
 	aas_link_t* link;
 
@@ -192,7 +192,7 @@ void AAS_DeAllocAASLink( aas_link_t* link )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitAASLinkedEntities( void )
+void AAS_InitAASLinkedEntities()
 {
 	if( !aasworld.loaded )
 		return;
@@ -206,7 +206,7 @@ void AAS_InitAASLinkedEntities( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeAASLinkedEntities( void )
+void AAS_FreeAASLinkedEntities()
 {
 	if( aasworld.arealinkedentities )
 		FreeMemory( aasworld.arealinkedentities );

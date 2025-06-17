@@ -100,7 +100,7 @@ int		  AAS_CountTmpNodes( tmp_node_t* tmpnode )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitMaxAAS( void )
+void AAS_InitMaxAAS()
 {
 	int			numfaces, numpoints, numareas;
 	tmp_face_t* f;
@@ -141,7 +141,7 @@ void AAS_InitMaxAAS( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_AllocMaxAAS( void )
+void AAS_AllocMaxAAS()
 {
 	int i;
 
@@ -232,7 +232,7 @@ void AAS_AllocMaxAAS( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeMaxAAS( void )
+void AAS_FreeMaxAAS()
 {
 	// bounding boxes
 	if( aasworld.bboxes )
@@ -1086,7 +1086,7 @@ int AAS_StoreTree_r( tmp_node_t* tmpnode )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_StoreBoundingBoxes( void )
+void AAS_StoreBoundingBoxes()
 {
 	if( cfg.numbboxes > max_aas.max_bboxes )
 	{

@@ -102,6 +102,6 @@ void		 AAS_StoreFile( char* filename );
 // returns a number of the given plane
 qboolean	 AAS_FindPlane( vec3_t normal, float dist, int* planenum );
 // allocates the maximum AAS memory for storage
-void		 AAS_AllocMaxAAS( void );
+void		 AAS_AllocMaxAAS();
 // frees the maximum AAS memory for storage
-void		 AAS_FreeMaxAAS( void );
+void		 AAS_FreeMaxAAS();

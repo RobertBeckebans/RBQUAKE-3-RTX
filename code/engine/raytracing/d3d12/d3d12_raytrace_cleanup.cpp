@@ -16,7 +16,7 @@ extern bool					  raytracingDataInit;
 RE_ShutdownRaytracingMap
 ============================
 */
-void						  RE_ShutdownRaytracingMap( void )
+void						  RE_ShutdownRaytracingMap()
 {
 	r_invalidateDXRData = 0;
 

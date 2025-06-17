@@ -535,7 +535,7 @@ static int LAN_CompareServers( int source, int sortKey, int sortDir, int s1, int
 LAN_GetPingQueueCount
 ====================
 */
-static int LAN_GetPingQueueCount( void )
+static int LAN_GetPingQueueCount()
 {
 	return ( CL_GetPingQueueCount() );
 }
@@ -773,7 +773,7 @@ static void Key_GetBindingBuf( int keynum, char* buf, int buflen )
 Key_GetCatcher
 ====================
 */
-int Key_GetCatcher( void )
+int Key_GetCatcher()
 {
 	return cls.keyCatchers;
 }
@@ -1222,7 +1222,7 @@ int CL_UISystemCalls( intptr_t* args )
 CL_ShutdownUI
 ====================
 */
-void CL_ShutdownUI( void )
+void CL_ShutdownUI()
 {
 	cls.keyCatchers &= ~KEYCATCH_UI;
 	cls.uiStarted = qfalse;
@@ -1242,7 +1242,7 @@ CL_InitUI
 */
 #define UI_OLD_API_VERSION 4
 
-void CL_InitUI( void )
+void CL_InitUI()
 {
 	int			  v;
 	vmInterpret_t interpret;
@@ -1294,7 +1294,7 @@ UI_GameCommand
 See if the current console command is claimed by the ui
 ====================
 */
-qboolean UI_GameCommand( void )
+qboolean UI_GameCommand()
 {
 	if( !uivm )
 	{

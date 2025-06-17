@@ -41,8 +41,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "glw_win.h"
 #include "win_local.h"
 
-extern void WG_CheckHardwareGamma( void );
-extern void WG_RestoreGamma( void );
+extern void WG_CheckHardwareGamma();
+extern void WG_RestoreGamma();
 
 typedef enum
 {
@@ -60,7 +60,7 @@ typedef enum
 
 #define WINDOW_CLASS_NAME "Quake 3: Arena"
 
-static void		GLW_InitExtensions( void );
+static void		GLW_InitExtensions();
 static rserr_t	GLW_SetMode( const char* drivername, int mode, int colorbits, qboolean cdsFullscreen );
 
 static qboolean s_classRegistered = qfalse;
@@ -70,7 +70,7 @@ static qboolean s_classRegistered = qfalse;
 //
 void			QGL_EnableLogging( qboolean enable );
 qboolean		QGL_Init( const char* dllname );
-void			QGL_Shutdown( void );
+void			QGL_Shutdown();
 
 //
 // variable declarations
@@ -696,7 +696,7 @@ static rserr_t GLW_SetMode( const char* drivername, int mode, int colorbits, qbo
 /*
 ** GLW_CheckOSVersion
 */
-static qboolean GLW_CheckOSVersion( void )
+static qboolean GLW_CheckOSVersion()
 {
 #define OSR2_BUILD_NUMBER 1111
 
@@ -819,12 +819,12 @@ fail:
 /*
 ** GLimp_EndFrame
 */
-void GLimp_EndFrame( void )
+void GLimp_EndFrame()
 {
 	GL_EndRendering();
 }
 
-static void GLW_StartOpenGL( void )
+static void GLW_StartOpenGL()
 {
 	qboolean attemptedOpenGL32 = qfalse;
 	qboolean attempted3Dfx	   = qfalse;
@@ -894,7 +894,7 @@ static void GLW_StartOpenGL( void )
 ** to make sure that a functional OpenGL subsystem is operating
 ** when it returns to the ref.
 */
-void GLimp_Init( void )
+void GLimp_Init()
 {
 	char	buf[1024];
 	cvar_t* lastValidRenderer = ri.Cvar_Get( "r_lastValidRenderer", "(uninitialized)", CVAR_ARCHIVE );
@@ -1014,7 +1014,7 @@ void GLimp_Init( void )
 ** This routine does all OS specific shutdown procedures for the OpenGL
 ** subsystem.
 */
-void GLimp_Shutdown( void )
+void GLimp_Shutdown()
 {
 	//	const char *strings[] = { "soft", "hard" };
 	const char* success[] = { "failed", "success" };
@@ -1088,9 +1088,9 @@ HANDLE renderCommandsEvent;
 HANDLE renderCompletedEvent;
 HANDLE renderActiveEvent;
 
-void ( *glimpRenderThread )( void );
+void ( *glimpRenderThread )();
 
-void GLimp_RenderThreadWrapper( void )
+void GLimp_RenderThreadWrapper()
 {
 	glimpRenderThread();
 
@@ -1105,7 +1105,7 @@ GLimp_SpawnRenderThread
 */
 HANDLE	 renderThreadHandle;
 int		 renderThreadId;
-qboolean GLimp_SpawnRenderThread( void ( *function )( void ) )
+qboolean GLimp_SpawnRenderThread( void ( *function )() )
 {
 	renderCommandsEvent	 = CreateEvent( NULL, TRUE, FALSE, NULL );
 	renderCompletedEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
@@ -1131,12 +1131,12 @@ qboolean GLimp_SpawnRenderThread( void ( *function )( void ) )
 static void* smpData;
 static int	 wglErrors;
 
-void*		 GLimp_RendererSleep( void )
+void*		 GLimp_RendererSleep()
 {
 	return NULL;
 }
 
-void GLimp_FrontEndSleep( void )
+void GLimp_FrontEndSleep()
 {
 	// WaitForSingleObject( renderCompletedEvent, INFINITE );
 	//

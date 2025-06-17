@@ -30,7 +30,7 @@ volatile qboolean			  renderThreadActive;
 R_PerformanceCounters
 =====================
 */
-void						  R_PerformanceCounters( void )
+void						  R_PerformanceCounters()
 {
 	if( !r_speeds->integer )
 	{
@@ -101,7 +101,7 @@ void						  R_PerformanceCounters( void )
 R_InitCommandBuffers
 ====================
 */
-void R_InitCommandBuffers( void )
+void R_InitCommandBuffers()
 {
 	glConfig.smpActive = qfalse;
 	if( r_smp->integer )
@@ -124,7 +124,7 @@ void R_InitCommandBuffers( void )
 R_ShutdownCommandBuffers
 ====================
 */
-void R_ShutdownCommandBuffers( void )
+void R_ShutdownCommandBuffers()
 {
 	// kill the rendering thread
 	if( glConfig.smpActive )
@@ -210,7 +210,7 @@ and will remain idle and the main thread is free to issue
 OpenGL calls until R_IssueRenderCommands is called.
 ====================
 */
-void R_SyncRenderThread( void )
+void R_SyncRenderThread()
 {
 	if( !tr.registered )
 	{

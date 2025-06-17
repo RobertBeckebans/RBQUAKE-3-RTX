@@ -954,7 +954,7 @@ void InterbreedWeightConfigs( weightconfig_t* config1, weightconfig_t* config2, 
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void BotShutdownWeights( void )
+void BotShutdownWeights()
 {
 	int i;
 

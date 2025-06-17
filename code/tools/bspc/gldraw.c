@@ -35,14 +35,14 @@ vec3_t	 draw_mins, draw_maxs;
 
 #define WIN_SIZE 512
 
-void InitWindow( void )
+void InitWindow()
 {
 	auxInitDisplayMode( AUX_SINGLE | AUX_RGB );
 	auxInitPosition( 0, 0, WIN_SIZE, WIN_SIZE );
 	auxInitWindow( "qcsg" );
 }
 
-void Draw_ClearWindow( void )
+void Draw_ClearWindow()
 {
 	static int init;
 	int		   w, h, g;
@@ -94,7 +94,7 @@ void Draw_ClearWindow( void )
 	glFlush();
 }
 
-void Draw_SetRed( void )
+void Draw_SetRed()
 {
 	if( !drawflag )
 		return;
@@ -102,7 +102,7 @@ void Draw_SetRed( void )
 	glColor3f( 1, 0, 0 );
 }
 
-void Draw_SetGrey( void )
+void Draw_SetGrey()
 {
 	if( !drawflag )
 		return;
@@ -110,7 +110,7 @@ void Draw_SetGrey( void )
 	glColor3f( 0.5, 0.5, 0.5 );
 }
 
-void Draw_SetBlack( void )
+void Draw_SetBlack()
 {
 	if( !drawflag )
 		return;
@@ -169,7 +169,7 @@ void DrawAuxWinding( winding_t* w )
 qboolean wins_init;
 int		 draw_socket;
 
-void	 GLS_BeginScene( void )
+void	 GLS_BeginScene()
 {
 	WSADATA			   winsockdata;
 	WORD			   wVersionRequested;
@@ -222,7 +222,7 @@ void GLS_Winding( winding_t* w, int code )
 	send( draw_socket, buf, w->numpoints * 12 + 8, 0 );
 }
 
-void GLS_EndScene( void )
+void GLS_EndScene()
 {
 	closesocket( draw_socket );
 	draw_socket = 0;

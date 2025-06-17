@@ -90,8 +90,8 @@ extern byte				  sin_dpop[256];
 
 extern char				  sin_dbrushsidetextured[SIN_MAX_MAP_BRUSHSIDES];
 
-void					  Sin_AllocMaxBSP( void );
-void					  Sin_FreeMaxBSP( void );
+void					  Sin_AllocMaxBSP();
+void					  Sin_FreeMaxBSP();
 
 void					  Sin_DecompressVis( byte* in, byte* decompressed );
 int						  Sin_CompressVis( byte* vis, byte* dest );
@@ -99,6 +99,6 @@ int						  Sin_CompressVis( byte* vis, byte* dest );
 void					  Sin_LoadBSPFile( char* filename, int offset, int length );
 void					  Sin_LoadBSPFileTexinfo( char* filename ); // just for qdata
 void					  Sin_WriteBSPFile( char* filename );
-void					  Sin_PrintBSPFileSizes( void );
-void					  Sin_ParseEntities( void );
-void					  Sin_UnparseEntities( void );
+void					  Sin_PrintBSPFileSizes();
+void					  Sin_ParseEntities();
+void					  Sin_UnparseEntities();

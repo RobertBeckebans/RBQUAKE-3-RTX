@@ -78,7 +78,7 @@ float UI_ClampCvar( float min, float max, float value )
 UI_StartDemoLoop
 =================
 */
-void UI_StartDemoLoop( void )
+void UI_StartDemoLoop()
 {
 	trap_Cmd_ExecuteText( EXEC_APPEND, "d1\n" );
 }
@@ -141,7 +141,7 @@ void UI_PushMenu( menuframework_s* menu )
 UI_PopMenu
 =================
 */
-void UI_PopMenu( void )
+void UI_PopMenu()
 {
 	trap_S_StartLocalSound( menu_out_sound, CHAN_LOCAL_SOUND );
 
@@ -161,7 +161,7 @@ void UI_PopMenu( void )
 	}
 }
 
-void UI_ForceMenuOff( void )
+void UI_ForceMenuOff()
 {
 	uis.menusp	   = 0;
 	uis.activemenu = NULL;
@@ -846,7 +846,7 @@ void UI_DrawChar( int x, int y, int ch, int style, vec4_t color )
 	UI_DrawString( x, y, buff, style, color );
 }
 
-qboolean UI_IsFullscreen( void )
+qboolean UI_IsFullscreen()
 {
 	if( uis.activemenu && ( trap_Key_GetCatcher() & KEYCATCH_UI ) )
 	{
@@ -1027,7 +1027,7 @@ char* UI_Cvar_VariableString( const char* var_name )
 UI_Cache
 =================
 */
-void UI_Cache_f( void )
+void UI_Cache_f()
 {
 	MainMenu_Cache();
 	InGame_Cache();
@@ -1132,7 +1132,7 @@ qboolean UI_ConsoleCommand( int realTime )
 UI_Shutdown
 =================
 */
-void UI_Shutdown( void )
+void UI_Shutdown()
 {
 }
 
@@ -1141,7 +1141,7 @@ void UI_Shutdown( void )
 UI_Init
 =================
 */
-void UI_Init( void )
+void UI_Init()
 {
 	UI_RegisterCvars();
 
@@ -1273,7 +1273,7 @@ void UI_SetColor( const float* rgba )
 	trap_R_SetColor( rgba );
 }
 
-void UI_UpdateScreen( void )
+void UI_UpdateScreen()
 {
 	trap_UpdateScreen();
 }

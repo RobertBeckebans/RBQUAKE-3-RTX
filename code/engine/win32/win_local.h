@@ -71,33 +71,33 @@ void		IN_MouseEvent( int mstate );
 
 void		Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void* ptr );
 
-void		Sys_CreateConsole( void );
-void		Sys_DestroyConsole( void );
+void		Sys_CreateConsole();
+void		Sys_DestroyConsole();
 
-char*		Sys_ConsoleInput( void );
+char*		Sys_ConsoleInput();
 
 qboolean	Sys_GetPacket( netadr_t* net_from, msg_t* net_message );
 
 // Input subsystem
 
-void		IN_Init( void );
-void		IN_Shutdown( void );
-void		IN_JoystickCommands( void );
+void		IN_Init();
+void		IN_Shutdown();
+void		IN_JoystickCommands();
 
 void		IN_Move( usercmd_t* cmd );
 // add additional non keyboard / non mouse movement on top of the keyboard move cmd
 
-void		IN_DeactivateWin32Mouse( void );
+void		IN_DeactivateWin32Mouse();
 
 void		IN_Activate( qboolean active );
-void		IN_Frame( void );
+void		IN_Frame();
 
 // window procedure
 LONG WINAPI MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 void		Conbuf_AppendText( const char* msg );
 
-void		SNDDMA_Activate( void );
+void		SNDDMA_Activate();
 int			SNDDMA_InitDS();
 
 typedef struct

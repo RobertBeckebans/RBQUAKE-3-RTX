@@ -71,7 +71,7 @@ uint32_t									 m_cameraBufferSize = 0;
 
 bool										 raytracingDataInit = false;
 
-void										 GL_WaitForPreviousFrame( void )
+void										 GL_WaitForPreviousFrame()
 {
 	// WAITING FOR THE FRAME TO COMPLETE BEFORE CONTINUING IS NOT BEST PRACTICE.
 	// This is code implemented as such for simplicity. The D3D12HelloFrameBuffering
@@ -571,7 +571,7 @@ void GL_BeginRendering( int* x, int* y, int* width, int* height )
 	m_commandList->OMSetRenderTargets( 1, &rtvHandle, FALSE, nullptr );
 }
 
-void GL_EndRendering( void )
+void GL_EndRendering()
 {
 	// tr_util_update_texture_uint8(renderer->graphics_queue, glConfig.vidWidth, glConfig.vidHeight, glConfig.vidWidth * 4, uiTextureBuffer, 4, uiTexture, NULL, NULL);
 	{
@@ -643,13 +643,13 @@ void GL_Bind( int texnum )
 	// currenttexture = texnum;
 }
 
-void RE_FinishDXRLoading( void )
+void RE_FinishDXRLoading()
 {
 	r_invalidateDXRData = 1;
 	raytracingDataInit	= false;
 }
 
-void GL_FinishDXRLoading( void )
+void GL_FinishDXRLoading()
 {
 	GL_FindMegaTile( "intelredclouds", sky_map_x, sky_map_y, sky_map_w, sky_map_h );
 

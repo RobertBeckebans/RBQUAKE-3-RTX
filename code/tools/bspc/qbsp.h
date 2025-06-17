@@ -306,9 +306,9 @@ int		   BrushExists( mapbrush_t* brush );
 // loads a map from a bsp file
 int		   LoadMapFromBSP( struct quakefile_s* qf );
 // resets map loading
-void	   ResetMapLoading( void );
+void	   ResetMapLoading();
 // print some map info
-void	   PrintMapInfo( void );
+void	   PrintMapInfo();
 // writes a map file (type depending on loaded map type)
 void	   WriteMapFile( char* filename );
 
@@ -316,7 +316,7 @@ void	   WriteMapFile( char* filename );
 // map_q2.c
 //=============================================================================
 
-void	   Q2_ResetMapLoading( void );
+void	   Q2_ResetMapLoading();
 // loads a Quake2 map file
 void	   Q2_LoadMapFile( char* filename );
 // loads a map from a Quake2 bsp file
@@ -326,7 +326,7 @@ void	   Q2_LoadMapFromBSP( char* filename, int offset, int length );
 // map_q1.c
 //=============================================================================
 
-void	   Q1_ResetMapLoading( void );
+void	   Q1_ResetMapLoading();
 // loads a Quake2 map file
 void	   Q1_LoadMapFile( char* filename );
 // loads a map from a Quake1 bsp file
@@ -335,7 +335,7 @@ void	   Q1_LoadMapFromBSP( char* filename, int offset, int length );
 //=============================================================================
 // map_q3.c
 //=============================================================================
-void	   Q3_ResetMapLoading( void );
+void	   Q3_ResetMapLoading();
 // loads a map from a Quake3 bsp file
 void	   Q3_LoadMapFromBSP( struct quakefile_s* qf );
 
@@ -343,7 +343,7 @@ void	   Q3_LoadMapFromBSP( struct quakefile_s* qf );
 // map_sin.c
 //=============================================================================
 
-void	   Sin_ResetMapLoading( void );
+void	   Sin_ResetMapLoading();
 // loads a Sin map file
 void	   Sin_LoadMapFile( char* filename );
 // loads a map from a Sin bsp file
@@ -353,7 +353,7 @@ void	   Sin_LoadMapFromBSP( char* filename, int offset, int length );
 // map_hl.c
 //=============================================================================
 
-void	   HL_ResetMapLoading( void );
+void	   HL_ResetMapLoading();
 // loads a Half-Life map file
 void	   HL_LoadMapFile( char* filename );
 // loads a map from a Half-Life bsp file
@@ -406,7 +406,7 @@ tree_t*				ProcessWorldBrushes( int brush_start, int brush_end );
 void			WriteBrushList( char* name, bspbrush_t* brush, qboolean onlyvis );
 bspbrush_t*		CopyBrush( bspbrush_t* brush );
 void			SplitBrush( bspbrush_t* brush, int planenum, bspbrush_t** front, bspbrush_t** back );
-node_t*			AllocNode( void );
+node_t*			AllocNode();
 bspbrush_t*		AllocBrush( int numsides );
 int				CountBrushList( bspbrush_t* brushes );
 void			FreeBrush( bspbrush_t* brushes );
@@ -418,7 +418,7 @@ bspbrush_t*		BrushFromBounds( vec3_t mins, vec3_t maxs );
 int				BrushMostlyOnSide( bspbrush_t* brush, plane_t* plane );
 qboolean		WindingIsHuge( winding_t* w );
 qboolean		WindingIsTiny( winding_t* w );
-void			ResetBrushBSP( void );
+void			ResetBrushBSP();
 
 //=============================================================================
 // portals.c
@@ -451,11 +451,11 @@ void			WriteGLView( tree_t* tree, char* source );
 extern vec3_t	draw_mins, draw_maxs;
 extern qboolean drawflag;
 
-void			Draw_ClearWindow( void );
+void			Draw_ClearWindow();
 void			DrawWinding( winding_t* w );
-void			GLS_BeginScene( void );
+void			GLS_BeginScene();
 void			GLS_Winding( winding_t* w, int code );
-void			GLS_EndScene( void );
+void			GLS_EndScene();
 
 //=============================================================================
 // leakfile.c
@@ -467,7 +467,7 @@ void			LeakFile( tree_t* tree );
 // tree.c
 //=============================================================================
 
-tree_t*			Tree_Alloc( void );
+tree_t*			Tree_Alloc();
 void			Tree_Free( tree_t* tree );
 void			Tree_Free_r( node_t* node );
 void			Tree_Print_r( node_t* node, int depth );

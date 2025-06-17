@@ -127,37 +127,37 @@ float FloatSwap( const float* f );
 
 #ifdef _WIN64
 
-#define MAC_STATIC
+	#define MAC_STATIC
 
-#undef QDECL
-#define QDECL __cdecl
+	#undef QDECL
+	#define QDECL __cdecl
 
-// buildstring will be incorporated into the version string
-#ifdef NDEBUG
-	#define CPUSTRING "win-x64"
-#else
-	#define CPUSTRING "win-x64-debug"
-#endif
+	// buildstring will be incorporated into the version string
+	#ifdef NDEBUG
+		#define CPUSTRING "win-x64"
+	#else
+		#define CPUSTRING "win-x64-debug"
+	#endif
 
-#define ID_INLINE __inline
+	#define ID_INLINE __inline
 
 static ID_INLINE short BigShort( short l )
 {
 	return ShortSwap( l );
 }
-#define LittleShort
+	#define LittleShort
 static ID_INLINE int BigLong( int l )
 {
 	LongSwap( l );
 }
-#define LittleLong
+	#define LittleLong
 static ID_INLINE float BigFloat( const float* l )
 {
 	FloatSwap( l );
 }
-#define LittleFloat
+	#define LittleFloat
 
-#define PATH_SEP '\\'
+	#define PATH_SEP '\\'
 
 #endif
 
@@ -165,24 +165,24 @@ static ID_INLINE float BigFloat( const float* l )
 
 #if defined( MACOS_X )
 
-#define MAC_STATIC
-#define __cdecl
-#define __declspec( x )
-#define stricmp	  strcasecmp
-#define ID_INLINE inline
+	#define MAC_STATIC
+	#define __cdecl
+	#define __declspec( x )
+	#define stricmp	  strcasecmp
+	#define ID_INLINE inline
 
-#ifdef __ppc__
-	#define CPUSTRING "MacOSX-ppc"
-#elif defined __i386__
-	#define CPUSTRING "MacOSX-i386"
-#else
-	#define CPUSTRING "MacOSX-other"
-#endif
+	#ifdef __ppc__
+		#define CPUSTRING "MacOSX-ppc"
+	#elif defined __i386__
+		#define CPUSTRING "MacOSX-i386"
+	#else
+		#define CPUSTRING "MacOSX-other"
+	#endif
 
-#define PATH_SEP									   '/'
+	#define PATH_SEP									   '/'
 
-#define __rlwimi( out, in, shift, maskBegin, maskEnd ) asm( "rlwimi %0,%1,%2,%3,%4" : "=r"( out ) : "r"( in ), "i"( shift ), "i"( maskBegin ), "i"( maskEnd ) )
-#define __dcbt( addr, offset )						   asm( "dcbt %0,%1" : : "b"( addr ), "r"( offset ) )
+	#define __rlwimi( out, in, shift, maskBegin, maskEnd ) asm( "rlwimi %0,%1,%2,%3,%4" : "=r"( out ) : "r"( in ), "i"( shift ), "i"( maskBegin ), "i"( maskEnd ) )
+	#define __dcbt( addr, offset )						   asm( "dcbt %0,%1" : : "b"( addr ), "r"( offset ) )
 
 static inline unsigned int __lwbrx( register void* addr, register int offset )
 {
@@ -209,17 +209,17 @@ static inline float __fctiw( register float f )
 	return fi;
 }
 
-#define BigShort
+	#define BigShort
 static inline short LittleShort( short l )
 {
 	return ShortSwap( l );
 }
-#define BigLong
+	#define BigLong
 static inline int LittleLong( int l )
 {
 	return LongSwap( l );
 }
-#define BigFloat
+	#define BigFloat
 static inline float LittleFloat( const float l )
 {
 	return FloatSwap( &l );
@@ -231,27 +231,27 @@ static inline float LittleFloat( const float l )
 
 #ifdef __MACOS__
 
-#include <MacTypes.h>
-#define MAC_STATIC
-#define ID_INLINE inline
+	#include <MacTypes.h>
+	#define MAC_STATIC
+	#define ID_INLINE inline
 
-#define CPUSTRING "MacOS-PPC"
+	#define CPUSTRING "MacOS-PPC"
 
-#define PATH_SEP  ':'
+	#define PATH_SEP  ':'
 
-void Sys_PumpEvents( void );
+void Sys_PumpEvents();
 
-#define BigShort
+	#define BigShort
 static inline short LittleShort( short l )
 {
 	return ShortSwap( l );
 }
-#define BigLong
+	#define BigLong
 static inline int LittleLong( int l )
 {
 	return LongSwap( l );
 }
-#define BigFloat
+	#define BigFloat
 static inline float LittleFloat( const float l )
 {
 	return FloatSwap( &l );
@@ -265,119 +265,119 @@ static inline float LittleFloat( const float l )
 // just waste space and make big arrays static...
 #ifdef __linux__
 
-// bk001205 - from Makefile
-#define stricmp	   strcasecmp
+	// bk001205 - from Makefile
+	#define stricmp	   strcasecmp
 
-#define MAC_STATIC // bk: FIXME
-#define ID_INLINE  inline
+	#define MAC_STATIC // bk: FIXME
+	#define ID_INLINE  inline
 
-#ifdef __i386__
-	#define CPUSTRING "linux-i386"
-#elif defined __axp__
-	#define CPUSTRING "linux-alpha"
-#else
-	#define CPUSTRING "linux-other"
-#endif
+	#ifdef __i386__
+		#define CPUSTRING "linux-i386"
+	#elif defined __axp__
+		#define CPUSTRING "linux-alpha"
+	#else
+		#define CPUSTRING "linux-other"
+	#endif
 
-#define PATH_SEP '/'
+	#define PATH_SEP '/'
 
-// bk001205 - try
-#ifdef Q3_STATIC
-	#define GAME_HARD_LINKED
-	#define CGAME_HARD_LINKED
-	#define UI_HARD_LINKED
-	#define BOTLIB_HARD_LINKED
-#endif
+	// bk001205 - try
+	#ifdef Q3_STATIC
+		#define GAME_HARD_LINKED
+		#define CGAME_HARD_LINKED
+		#define UI_HARD_LINKED
+		#define BOTLIB_HARD_LINKED
+	#endif
 
-#if !idppc
+	#if !idppc
 inline static short BigShort( short l )
 {
 	return ShortSwap( l );
 }
-#define LittleShort
+		#define LittleShort
 inline static int BigLong( int l )
 {
 	return LongSwap( l );
 }
-#define LittleLong
+		#define LittleLong
 inline static float BigFloat( const float* l )
 {
 	return FloatSwap( l );
 }
-#define LittleFloat
-#else
-#define BigShort
+		#define LittleFloat
+	#else
+		#define BigShort
 inline static short LittleShort( short l )
 {
 	return ShortSwap( l );
 }
-#define BigLong
+		#define BigLong
 inline static int LittleLong( int l )
 {
 	return LongSwap( l );
 }
-#define BigFloat
+		#define BigFloat
 inline static float LittleFloat( const float* l )
 {
 	return FloatSwap( l );
 }
-#endif
+	#endif
 
 #endif
 
 //======================= FreeBSD DEFINES =====================
 #ifdef __FreeBSD__ // rb010123
 
-#define stricmp strcasecmp
+	#define stricmp strcasecmp
 
-#define MAC_STATIC
-#define ID_INLINE inline
+	#define MAC_STATIC
+	#define ID_INLINE inline
 
-#ifdef __i386__
-	#define CPUSTRING "freebsd-i386"
-#elif defined __axp__
-	#define CPUSTRING "freebsd-alpha"
-#else
-	#define CPUSTRING "freebsd-other"
-#endif
+	#ifdef __i386__
+		#define CPUSTRING "freebsd-i386"
+	#elif defined __axp__
+		#define CPUSTRING "freebsd-alpha"
+	#else
+		#define CPUSTRING "freebsd-other"
+	#endif
 
-#define PATH_SEP '/'
+	#define PATH_SEP '/'
 
-// bk010116 - omitted Q3STATIC (see Linux above), broken target
+	// bk010116 - omitted Q3STATIC (see Linux above), broken target
 
-#if !idppc
+	#if !idppc
 static short BigShort( short l )
 {
 	return ShortSwap( l );
 }
-#define LittleShort
+		#define LittleShort
 static int BigLong( int l )
 {
 	LongSwap( l );
 }
-#define LittleLong
+		#define LittleLong
 static float BigFloat( const float* l )
 {
 	FloatSwap( l );
 }
-#define LittleFloat
-#else
-#define BigShort
+		#define LittleFloat
+	#else
+		#define BigShort
 static short LittleShort( short l )
 {
 	return ShortSwap( l );
 }
-#define BigLong
+		#define BigLong
 static int LittleLong( int l )
 {
 	return LongSwap( l );
 }
-#define BigFloat
+		#define BigFloat
 static float LittleFloat( const float* l )
 {
 	return FloatSwap( l );
 }
-#endif
+	#endif
 
 #endif
 
@@ -505,22 +505,22 @@ typedef enum
 
 #ifdef HUNK_DEBUG
 	#define Hunk_Alloc( size, preference ) Hunk_AllocDebug( size, preference, #size, __FILE__, __LINE__ )
-	void* Hunk_AllocDebug( int size, ha_pref preference, char* label, char* file, int line );
+void* Hunk_AllocDebug( int size, ha_pref preference, char* label, char* file, int line );
 #else
-	void* Hunk_Alloc( int size, ha_pref preference );
+void* Hunk_Alloc( int size, ha_pref preference );
 #endif
 
 #ifdef __linux__
-	// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=371
-	// custom Snd_Memset implementation for glibc memset bug workaround
-	void Snd_Memset( void* dest, const int val, const size_t count );
+// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=371
+// custom Snd_Memset implementation for glibc memset bug workaround
+void Snd_Memset( void* dest, const int val, const size_t count );
 #else
 	#define Snd_Memset Com_Memset
 #endif
 
 #if !( defined __VECTORC )
-	void Com_Memset( void* dest, const int val, const size_t count );
-	void Com_Memcpy( void* dest, const void* src, const size_t count );
+void Com_Memset( void* dest, const int val, const size_t count );
+void Com_Memcpy( void* dest, const void* src, const size_t count );
 #else
 	#define Com_Memset memset
 	#define Com_Memcpy memcpy
@@ -638,15 +638,15 @@ static inline float Q_rsqrt( float number )
 {
 	float x = 0.5f * number;
 	float y;
-#ifdef __GNUC__
+	#ifdef __GNUC__
 	asm( "frsqrte %0,%1" : "=f"( y ) : "f"( number ) );
-#else
+	#else
 	y = __frsqrte( number );
-#endif
+	#endif
 	return y * ( 1.5f - ( x * y * y ) );
 }
 
-#ifdef __GNUC__
+	#ifdef __GNUC__
 static inline float Q_fabs( float x )
 {
 	float abs_x;
@@ -654,9 +654,9 @@ static inline float Q_fabs( float x )
 	asm( "fabs %0,%1" : "=f"( abs_x ) : "f"( x ) );
 	return abs_x;
 }
-#else
-#define Q_fabs __fabsf
-#endif
+	#else
+		#define Q_fabs __fabsf
+	#endif
 
 #else
 float Q_fabs( float f );
@@ -693,16 +693,16 @@ void		 ByteToDir( int b, vec3_t dir );
 #endif
 
 #ifdef __LCC__
-#ifdef VectorCopy
-#undef VectorCopy
+	#ifdef VectorCopy
+		#undef VectorCopy
 // this is a little hack to get more efficient copies in our interpreter
 typedef struct
 {
 	float v[3];
 } vec3struct_t;
-#define VectorCopy( a, b ) ( *( vec3struct_t* )b = *( vec3struct_t* )a )
-#define ID_INLINE		   static
-#endif
+		#define VectorCopy( a, b ) ( *( vec3struct_t* )b = *( vec3struct_t* )a )
+		#define ID_INLINE		   static
+	#endif
 #endif
 
 #define VectorClear( a )		( ( a )[0] = ( a )[1] = ( a )[2] = 0 )
@@ -867,7 +867,7 @@ void	 COM_StripExtension( const char* in, char* out );
 void	 COM_DefaultExtension( char* path, int maxSize, const char* extension );
 
 void	 COM_BeginParseSession( const char* name );
-int		 COM_GetCurrentParseLine( void );
+int		 COM_GetCurrentParseLine();
 char*	 COM_Parse( char** data_p );
 char*	 COM_ParseExt( char** data_p, qboolean allowLineBreak );
 int		 COM_Compress( char* data_p );
@@ -975,7 +975,7 @@ qint64  LittleLong64 (qint64 l);
 float	BigFloat (const float *l);
 float	LittleFloat (const float *l);
 
-void	Swap_Init (void);
+void	Swap_Init ();
 */
 char* QDECL va( char* format, ... );
 

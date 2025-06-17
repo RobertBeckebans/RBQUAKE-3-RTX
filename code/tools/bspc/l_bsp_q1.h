@@ -254,12 +254,12 @@ extern unsigned short* q1_dmarksurfaces; //[MAX_MAP_MARKSURFACES];
 extern int			   q1_numsurfedges;
 extern int*			   q1_dsurfedges; //[MAX_MAP_SURFEDGES];
 
-void				   Q1_AllocMaxBSP( void );
-void				   Q1_FreeMaxBSP( void );
+void				   Q1_AllocMaxBSP();
+void				   Q1_FreeMaxBSP();
 void				   Q1_LoadBSPFile( char* filename, int offset, int length );
 void				   Q1_WriteBSPFile( char* filename );
-void				   Q1_PrintBSPFileSizes( void );
-void				   Q1_ParseEntities( void );
-void				   Q1_UnparseEntities( void );
+void				   Q1_PrintBSPFileSizes();
+void				   Q1_ParseEntities();
+void				   Q1_UnparseEntities();
 
 #endif

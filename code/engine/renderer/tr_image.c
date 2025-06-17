@@ -147,7 +147,7 @@ void GL_TextureMode( const char* string )
 R_SumOfUsedImages
 ===============
 */
-int R_SumOfUsedImages( void )
+int R_SumOfUsedImages()
 {
 	int total;
 	int i;
@@ -169,7 +169,7 @@ int R_SumOfUsedImages( void )
 R_ImageList_f
 ===============
 */
-void R_ImageList_f( void )
+void R_ImageList_f()
 {
 	int			i;
 	image_t*	image;
@@ -1541,7 +1541,7 @@ static void LoadJPG( const char* filename, unsigned char** pic, int* width, int*
 
 	/* Step 3: read file parameters with jpeg_read_header() */
 
-	( void )jpeg_read_header( &cinfo, TRUE );
+	jpeg_read_header( &cinfo, TRUE );
 	/* We can ignore the return value from jpeg_read_header since
 	 *   (a) suspension is not possible with the stdio data source, and
 	 *   (b) we passed TRUE to reject a tables-only JPEG file as an error.
@@ -1556,7 +1556,7 @@ static void LoadJPG( const char* filename, unsigned char** pic, int* width, int*
 
 	/* Step 5: Start decompressor */
 
-	( void )jpeg_start_decompress( &cinfo );
+	jpeg_start_decompress( &cinfo );
 	/* We can ignore the return value since suspension is not possible
 	 * with the stdio data source.
 	 */
@@ -1590,7 +1590,7 @@ static void LoadJPG( const char* filename, unsigned char** pic, int* width, int*
 		 */
 		bbuf   = ( ( out + ( row_stride * cinfo.output_scanline ) ) );
 		buffer = &bbuf;
-		( void )jpeg_read_scanlines( &cinfo, buffer, 1 );
+		jpeg_read_scanlines( &cinfo, buffer, 1 );
 	}
 
 	// clear all the alphas to 255
@@ -1609,7 +1609,7 @@ static void LoadJPG( const char* filename, unsigned char** pic, int* width, int*
 
 	/* Step 7: Finish decompression */
 
-	( void )jpeg_finish_decompress( &cinfo );
+	jpeg_finish_decompress( &cinfo );
 	/* We can ignore the return value since suspension is not possible
 	 * with the stdio data source.
 	 */
@@ -1909,7 +1909,7 @@ void SaveJPG( char* filename, int quality, int image_width, int image_height, un
 		 * more than one scanline at a time if that's more convenient.
 		 */
 		row_pointer[0] = &image_buffer[( ( cinfo.image_height - 1 ) * row_stride ) - cinfo.next_scanline * row_stride];
-		( void )jpeg_write_scanlines( &cinfo, row_pointer, 1 );
+		jpeg_write_scanlines( &cinfo, row_pointer, 1 );
 	}
 
 	/* Step 6: Finish compression */
@@ -2061,7 +2061,7 @@ R_CreateDlightImage
 ================
 */
 #define DLIGHT_SIZE 16
-static void R_CreateDlightImage( void )
+static void R_CreateDlightImage()
 {
 	int	 x, y;
 	byte data[DLIGHT_SIZE][DLIGHT_SIZE][4];
@@ -2096,7 +2096,7 @@ static void R_CreateDlightImage( void )
 R_InitFogTable
 =================
 */
-void R_InitFogTable( void )
+void R_InitFogTable()
 {
 	int	  i;
 	float d;
@@ -2159,7 +2159,7 @@ R_CreateFogImage
 */
 #define FOG_S 256
 #define FOG_T 32
-static void R_CreateFogImage( void )
+static void R_CreateFogImage()
 {
 	int	  x, y;
 	byte* data;
@@ -2202,7 +2202,7 @@ R_CreateDefaultImage
 ==================
 */
 #define DEFAULT_SIZE 16
-static void R_CreateDefaultImage( void )
+static void R_CreateDefaultImage()
 {
 	int	 x;
 	byte data[DEFAULT_SIZE][DEFAULT_SIZE][4];
@@ -2227,7 +2227,7 @@ static void R_CreateDefaultImage( void )
 R_CreateBuiltinImages
 ==================
 */
-void R_CreateBuiltinImages( void )
+void R_CreateBuiltinImages()
 {
 	int	 x, y;
 	byte data[DEFAULT_SIZE][DEFAULT_SIZE][4];
@@ -2266,7 +2266,7 @@ void R_CreateBuiltinImages( void )
 R_SetColorMappings
 ===============
 */
-void R_SetColorMappings( void )
+void R_SetColorMappings()
 {
 	int	  i, j;
 	float g;
@@ -2370,7 +2370,7 @@ void R_SetColorMappings( void )
 R_InitImages
 ===============
 */
-void R_InitImages( void )
+void R_InitImages()
 {
 	Com_Memset( hashTable, 0, sizeof( hashTable ) );
 	// build brightness translation tables
@@ -2385,7 +2385,7 @@ void R_InitImages( void )
 R_DeleteTextures
 ===============
 */
-void R_DeleteTextures( void )
+void R_DeleteTextures()
 {
 	int i;
 
@@ -2650,7 +2650,7 @@ qhandle_t RE_RegisterSkin( const char* name )
 R_InitSkins
 ===============
 */
-void R_InitSkins( void )
+void R_InitSkins()
 {
 	skin_t* skin;
 
@@ -2683,7 +2683,7 @@ skin_t* R_GetSkinByHandle( qhandle_t hSkin )
 R_SkinList_f
 ===============
 */
-void R_SkinList_f( void )
+void R_SkinList_f()
 {
 	int		i, j;
 	skin_t* skin;

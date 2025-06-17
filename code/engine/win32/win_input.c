@@ -41,8 +41,8 @@ static int			  window_center_x, window_center_y;
 //
 // MIDI definitions
 //
-static void			  IN_StartupMIDI( void );
-static void			  IN_ShutdownMIDI( void );
+static void			  IN_StartupMIDI();
+static void			  IN_ShutdownMIDI();
 
 #define MAX_MIDIIN_DEVICES 8
 
@@ -90,10 +90,10 @@ cvar_t*				  joy_threshold;
 qboolean			  in_appactive;
 
 // forward-referenced functions
-void				  IN_StartupJoystick( void );
-void				  IN_JoyMove( void );
+void				  IN_StartupJoystick();
+void				  IN_JoyMove();
 
-static void			  MidiInfo_f( void );
+static void			  MidiInfo_f();
 
 /*
 ============================================================
@@ -108,7 +108,7 @@ WIN32 MOUSE CONTROL
 IN_InitWin32Mouse
 ================
 */
-void				  IN_InitWin32Mouse( void )
+void				  IN_InitWin32Mouse()
 {
 }
 
@@ -117,7 +117,7 @@ void				  IN_InitWin32Mouse( void )
 IN_ShutdownWin32Mouse
 ================
 */
-void IN_ShutdownWin32Mouse( void )
+void IN_ShutdownWin32Mouse()
 {
 }
 
@@ -126,7 +126,7 @@ void IN_ShutdownWin32Mouse( void )
 IN_ActivateWin32Mouse
 ================
 */
-void IN_ActivateWin32Mouse( void )
+void IN_ActivateWin32Mouse()
 {
 	int	 width, height;
 	RECT window_rect;
@@ -159,7 +159,7 @@ void IN_ActivateWin32Mouse( void )
 IN_DeactivateWin32Mouse
 ================
 */
-void IN_DeactivateWin32Mouse( void )
+void IN_DeactivateWin32Mouse()
 {
 	ClipCursor( NULL );
 	ReleaseCapture();
@@ -289,7 +289,7 @@ void					   IN_DIMouse( int* mx, int* my );
 IN_InitDIMouse
 ========================
 */
-qboolean				   IN_InitDIMouse( void )
+qboolean				   IN_InitDIMouse()
 {
 	HRESULT		hr;
 	int			x, y;
@@ -387,7 +387,7 @@ qboolean				   IN_InitDIMouse( void )
 IN_ShutdownDIMouse
 ==========================
 */
-void IN_ShutdownDIMouse( void )
+void IN_ShutdownDIMouse()
 {
 	if( g_pMouse )
 	{
@@ -407,7 +407,7 @@ void IN_ShutdownDIMouse( void )
 IN_ActivateDIMouse
 ==========================
 */
-void IN_ActivateDIMouse( void )
+void IN_ActivateDIMouse()
 {
 	HRESULT hr;
 
@@ -433,7 +433,7 @@ void IN_ActivateDIMouse( void )
 IN_DeactivateDIMouse
 ==========================
 */
-void IN_DeactivateDIMouse( void )
+void IN_DeactivateDIMouse()
 {
 	if( !g_pMouse )
 	{
@@ -560,7 +560,7 @@ IN_ActivateMouse
 Called when the window gains focus or changes in some way
 ===========
 */
-void IN_ActivateMouse( void )
+void IN_ActivateMouse()
 {
 	if( !s_wmv.mouseInitialized )
 	{
@@ -592,7 +592,7 @@ IN_DeactivateMouse
 Called when the window loses focus
 ===========
 */
-void IN_DeactivateMouse( void )
+void IN_DeactivateMouse()
 {
 	if( !s_wmv.mouseInitialized )
 	{
@@ -613,7 +613,7 @@ void IN_DeactivateMouse( void )
 IN_StartupMouse
 ===========
 */
-void IN_StartupMouse( void )
+void IN_StartupMouse()
 {
 	s_wmv.mouseInitialized	  = qfalse;
 	s_wmv.mouseStartupDelayed = qfalse;
@@ -688,7 +688,7 @@ void IN_MouseEvent( int mstate )
 IN_MouseMove
 ===========
 */
-void IN_MouseMove( void )
+void IN_MouseMove()
 {
 	int mx, my;
 
@@ -720,7 +720,7 @@ void IN_MouseMove( void )
 IN_Startup
 ===========
 */
-void IN_Startup( void )
+void IN_Startup()
 {
 	Com_Printf( "\n------- Input Initialization -------\n" );
 	IN_StartupMouse();
@@ -737,7 +737,7 @@ void IN_Startup( void )
 IN_Shutdown
 ===========
 */
-void IN_Shutdown( void )
+void IN_Shutdown()
 {
 	IN_DeactivateMouse();
 	IN_ShutdownDIMouse();
@@ -750,7 +750,7 @@ void IN_Shutdown( void )
 IN_Init
 ===========
 */
-void IN_Init( void )
+void IN_Init()
 {
 	// MIDI input controler variables
 	in_midi		   = Cvar_Get( "in_midi", "0", CVAR_ARCHIVE );
@@ -800,7 +800,7 @@ IN_Frame
 Called every frame, even if not generating commands
 ==================
 */
-void IN_Frame( void )
+void IN_Frame()
 {
 	// post joystick events
 	IN_JoyMove();
@@ -845,7 +845,7 @@ void IN_Frame( void )
 IN_ClearStates
 ===================
 */
-void IN_ClearStates( void )
+void IN_ClearStates()
 {
 	s_wmv.oldButtonState = 0;
 }
@@ -863,7 +863,7 @@ JOYSTICK
 IN_StartupJoystick
 ===============
 */
-void IN_StartupJoystick( void )
+void IN_StartupJoystick()
 {
 	int		 numdevs;
 	MMRESULT mmr;
@@ -994,7 +994,7 @@ int	 joyDirectionKeys[16] = { K_LEFTARROW,
 IN_JoyMove
 ===========
 */
-void IN_JoyMove( void )
+void IN_JoyMove()
 {
 	float fAxisValue;
 	int	  i;
@@ -1183,7 +1183,7 @@ static void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT uMsg, DWORD dwInstance, D
 	//	Sys_QueEvent( sys_msg_time, SE_KEY, wMsg, qtrue, 0, NULL );
 }
 
-static void MidiInfo_f( void )
+static void MidiInfo_f()
 {
 	int			i;
 
@@ -1208,7 +1208,7 @@ static void MidiInfo_f( void )
 	}
 }
 
-static void IN_StartupMIDI( void )
+static void IN_StartupMIDI()
 {
 	int i;
 
@@ -1237,7 +1237,7 @@ static void IN_StartupMIDI( void )
 	midiInStart( s_midiInfo.hMidiIn );
 }
 
-static void IN_ShutdownMIDI( void )
+static void IN_ShutdownMIDI()
 {
 	if( s_midiInfo.hMidiIn )
 	{

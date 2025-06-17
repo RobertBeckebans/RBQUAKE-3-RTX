@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 glconfig_t	glConfig;
 glstate_t	glState;
 
-static void GfxInfo_f( void );
+static void GfxInfo_f();
 
 cvar_t*		r_flareSize;
 cvar_t*		r_flareFade;
@@ -179,7 +179,7 @@ static void AssertCvarRange( cvar_t* cv, float minVal, float maxVal, qboolean sh
 ** setting variables, checking GL constants, and reporting the gfx system config
 ** to the user.
 */
-static void InitOpenGL( void )
+static void InitOpenGL()
 {
 	char renderer_buffer[1024];
 
@@ -230,7 +230,7 @@ static void InitOpenGL( void )
 GL_CheckErrors
 ==================
 */
-void GL_CheckErrors( void )
+void GL_CheckErrors()
 {
 }
 
@@ -291,7 +291,7 @@ qboolean   R_GetModeInfo( int* width, int* height, float* windowAspect, int mode
 /*
 ** R_ModeList_f
 */
-static void R_ModeList_f( void )
+static void R_ModeList_f()
 {
 	int i;
 
@@ -445,7 +445,7 @@ levelshots are specialized 128*128 thumbnails for
 the menu system, sampled down from full screen distorted images
 ====================
 */
-void R_LevelShot( void )
+void R_LevelShot()
 {
 }
 
@@ -461,7 +461,7 @@ screenshot [filename]
 Doesn't print the pacifier message if there is a second arg
 ==================
 */
-void R_ScreenShot_f( void )
+void R_ScreenShot_f()
 {
 	char	   checkname[MAX_OSPATH];
 	static int lastNumber = -1;
@@ -526,7 +526,7 @@ void R_ScreenShot_f( void )
 	}
 }
 
-void R_ScreenShotJPEG_f( void )
+void R_ScreenShotJPEG_f()
 {
 	char	   checkname[MAX_OSPATH];
 	static int lastNumber = -1;
@@ -596,7 +596,7 @@ void R_ScreenShotJPEG_f( void )
 /*
 ** GL_SetDefaultState
 */
-void GL_SetDefaultState( void )
+void GL_SetDefaultState()
 {
 	// qglClearDepth( 1.0f );
 	//
@@ -643,7 +643,7 @@ void GL_SetDefaultState( void )
 GfxInfo_f
 ================
 */
-void GfxInfo_f( void )
+void GfxInfo_f()
 {
 	cvar_t*		sys_cpustring	= ri.Cvar_Get( "sys_cpustring", "", 0 );
 	const char* enablestrings[] = { "disabled", "enabled" };
@@ -738,7 +738,7 @@ void GfxInfo_f( void )
 R_Register
 ===============
 */
-void R_Register( void )
+void R_Register()
 {
 	//
 	// latched and archived variables
@@ -896,7 +896,7 @@ void R_Register( void )
 R_Init
 ===============
 */
-void R_Init( void )
+void R_Init()
 {
 	int	  err;
 	int	  i;
@@ -1038,7 +1038,7 @@ RE_EndRegistration
 Touch all images to make sure they are resident
 =============
 */
-void RE_EndRegistration( void )
+void RE_EndRegistration()
 {
 	R_SyncRenderThread();
 	if( !Sys_LowPhysicalMemory() )

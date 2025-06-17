@@ -1081,7 +1081,7 @@ void HL_CreateMapBrushes( entity_t* mapent, int modelnum )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void HL_ResetMapLoading( void )
+void HL_ResetMapLoading()
 {
 } // end of the function HL_ResetMapLoading
 //===========================================================================

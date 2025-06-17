@@ -220,7 +220,7 @@ int AAS_AlternativeRouteGoals( vec3_t start, int startareanum, vec3_t goal, int 
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitAlternativeRouting( void )
+void AAS_InitAlternativeRouting()
 {
 #ifdef ENABLE_ALTROUTING
 	if( midrangeareas )
@@ -237,7 +237,7 @@ void AAS_InitAlternativeRouting( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_ShutdownAlternativeRouting( void )
+void AAS_ShutdownAlternativeRouting()
 {
 #ifdef ENABLE_ALTROUTING
 	if( midrangeareas )

@@ -363,7 +363,7 @@ int* ItemWeightIndex( weightconfig_t* iwc, itemconfig_t* ic )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void InitLevelItemHeap( void )
+void InitLevelItemHeap()
 {
 	int i, max_levelitems;
 
@@ -387,7 +387,7 @@ void InitLevelItemHeap( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-levelitem_t* AllocLevelItem( void )
+levelitem_t* AllocLevelItem()
 {
 	levelitem_t* li;
 
@@ -448,7 +448,7 @@ void RemoveLevelItemFromList( levelitem_t* li )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void BotFreeInfoEntities( void )
+void BotFreeInfoEntities()
 {
 	maplocation_t *ml, *nextml;
 	campspot_t *   cs, *nextcs;
@@ -472,7 +472,7 @@ void BotFreeInfoEntities( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void BotInitInfoEntities( void )
+void BotInitInfoEntities()
 {
 	char		   classname[MAX_EPAIRKEY];
 	maplocation_t* ml;
@@ -535,7 +535,7 @@ void BotInitInfoEntities( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void BotInitLevelItems( void )
+void BotInitLevelItems()
 {
 	int			  i, spawnflags, value;
 	char		  classname[MAX_EPAIRKEY];
@@ -1028,7 +1028,7 @@ void BotFindEntityForLevelItem( levelitem_t* li )
 // NOTE: enum entityType_t in bg_public.h
 #define ET_ITEM 2
 
-void BotUpdateEntityItems( void )
+void BotUpdateEntityItems()
 {
 	int				 ent, i, modelindex;
 	vec3_t			 dir;
@@ -1822,7 +1822,7 @@ void BotFreeGoalState( int handle )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int BotSetupGoalAI( void )
+int BotSetupGoalAI()
 {
 	char* filename;
 
@@ -1848,7 +1848,7 @@ int BotSetupGoalAI( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void BotShutdownGoalAI( void )
+void BotShutdownGoalAI()
 {
 	int i;
 

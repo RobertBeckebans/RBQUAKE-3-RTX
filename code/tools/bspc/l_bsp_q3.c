@@ -30,10 +30,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "l_bsp_q3.h"
 #include "l_bsp_ent.h"
 
-void Q3_ParseEntities( void );
-void Q3_PrintBSPFileSizes( void );
+void Q3_ParseEntities();
+void Q3_PrintBSPFileSizes();
 
-void GetLeafNums( void );
+void GetLeafNums();
 
 //=============================================================================
 
@@ -100,7 +100,7 @@ extern qboolean	 forcesidesvisible;
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void			 Q3_FreeMaxBSP( void )
+void			 Q3_FreeMaxBSP()
 {
 	if( q3_dmodels )
 		FreeMemory( q3_dmodels );
@@ -251,7 +251,7 @@ void Q3_SurfacePlane( q3_dsurface_t* surface, vec3_t normal, float* dist )
 //===========================================================================
 q3_dplane_t* q3_surfaceplanes;
 
-void		 Q3_CreatePlanarSurfacePlanes( void )
+void		 Q3_CreatePlanarSurfacePlanes()
 {
 	int			   i;
 	q3_dsurface_t* surface;
@@ -371,7 +371,7 @@ winding_t* Q3_BrushSideWinding( q3_dbrush_t* brush, q3_dbrushside_t* baseside )
 //===========================================================================
 qboolean WindingIsTiny( winding_t* w );
 
-void	 Q3_FindVisibleBrushSides( void )
+void	 Q3_FindVisibleBrushSides()
 {
 	int				 i, j, k, we, numtextured, numsides;
 	float			 dot;
@@ -494,7 +494,7 @@ Q3_SwapBSPFile
 Byte swaps all data in a bsp file.
 =============
 */
-void Q3_SwapBSPFile( void )
+void Q3_SwapBSPFile()
 {
 	int i;
 
@@ -590,7 +590,7 @@ int Q3_CopyLump( q3_dheader_t* header, int lump, void** dest, int size )
 CountTriangles
 =============
 */
-void CountTriangles( void )
+void CountTriangles()
 {
 	int			   i, numTris, numPatchTris;
 	q3_dsurface_t* surface;
@@ -743,7 +743,7 @@ Q3_PrintBSPFileSizes
 Dumps info about current file
 =============
 */
-void Q3_PrintBSPFileSizes( void )
+void Q3_PrintBSPFileSizes()
 {
 	if( !num_entities )
 	{
@@ -779,7 +779,7 @@ Q3_ParseEntities
 Parses the q3_dentdata string into entities
 ================
 */
-void Q3_ParseEntities( void )
+void Q3_ParseEntities()
 {
 	script_t* script;
 
@@ -801,7 +801,7 @@ Q3_UnparseEntities
 Generates the q3_dentdata string from all the entities
 ================
 */
-void Q3_UnparseEntities( void )
+void Q3_UnparseEntities()
 {
 	char *	 buf, *end;
 	epair_t* ep;

@@ -34,7 +34,7 @@ short*						 snd_out;
 #if !( ( defined __linux__ || defined __FreeBSD__ ) && ( defined __i386__ ) ) // rb010123
 	#if !id386
 
-void S_WriteLinearBlastStereo16( void )
+void S_WriteLinearBlastStereo16()
 {
 	int i;
 	int val;
@@ -60,7 +60,7 @@ void S_WriteLinearBlastStereo16( void )
 }
 	#else
 
-__declspec( naked ) void S_WriteLinearBlastStereo16( void )
+__declspec( naked ) void S_WriteLinearBlastStereo16()
 {
 	__asm {
 
@@ -107,7 +107,7 @@ LClampDone2:
 	#endif
 #else
 // forward declare, implementation somewhere else
-void S_WriteLinearBlastStereo16( void );
+void S_WriteLinearBlastStereo16();
 #endif
 
 void S_TransferStereo16( unsigned long* pbuf, int endtime )

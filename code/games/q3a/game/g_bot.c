@@ -160,7 +160,7 @@ static void G_LoadArenasFromFile( char* filename )
 G_LoadArenas
 ===============
 */
-static void G_LoadArenas( void )
+static void G_LoadArenas()
 {
 	int		 numdirs;
 	vmCvar_t arenasFile;
@@ -451,7 +451,7 @@ int G_CountBotPlayers( int team )
 G_CheckMinimumPlayers
 ===============
 */
-void G_CheckMinimumPlayers( void )
+void G_CheckMinimumPlayers()
 {
 	int		   minplayers;
 	int		   humanplayers, botplayers;
@@ -549,7 +549,7 @@ void G_CheckMinimumPlayers( void )
 G_CheckBotSpawn
 ===============
 */
-void G_CheckBotSpawn( void )
+void G_CheckBotSpawn()
 {
 	int	 n;
 	char userinfo[MAX_INFO_VALUE];
@@ -813,7 +813,7 @@ static void G_AddBot( const char* name, float skill, const char* team, int delay
 Svcmd_AddBot_f
 ===============
 */
-void Svcmd_AddBot_f( void )
+void Svcmd_AddBot_f()
 {
 	float skill;
 	int	  delay;
@@ -879,7 +879,7 @@ void Svcmd_AddBot_f( void )
 Svcmd_BotList_f
 ===============
 */
-void Svcmd_BotList_f( void )
+void Svcmd_BotList_f()
 {
 	int	 i;
 	char name[MAX_TOKEN_CHARS];
@@ -1015,7 +1015,7 @@ static void G_LoadBotsFromFile( char* filename )
 G_LoadBots
 ===============
 */
-static void G_LoadBots( void )
+static void G_LoadBots()
 {
 	vmCvar_t botsFile;
 	int		 numdirs;

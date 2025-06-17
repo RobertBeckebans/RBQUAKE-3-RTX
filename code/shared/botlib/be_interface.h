@@ -52,4 +52,4 @@ extern botlib_import_t	botimport;
 extern int				bot_developer; // true if developer is on
 
 //
-int						Sys_MilliSeconds( void );
+int						Sys_MilliSeconds();

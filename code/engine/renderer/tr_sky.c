@@ -234,7 +234,7 @@ static void ClipSkyPolygon( int nump, vec3_t vecs, int stage )
 ClearSkyBox
 ==============
 */
-static void ClearSkyBox( void )
+static void ClearSkyBox()
 {
 	int i;
 
@@ -647,7 +647,7 @@ void R_InitSkyTexCoords( float heightCloud )
 /*
 ** RB_DrawSun
 */
-void RB_DrawSun( void )
+void RB_DrawSun()
 {
 }
 
@@ -660,6 +660,6 @@ All of the visible sky triangles are in tess
 Other things could be stuck in here, like birds in the sky, etc
 ================
 */
-void RB_StageIteratorSky( void )
+void RB_StageIteratorSky()
 {
 }

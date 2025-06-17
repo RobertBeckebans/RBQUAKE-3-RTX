@@ -74,7 +74,7 @@ int				 botlibsetup = qfalse;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int				 Sys_MilliSeconds( void )
+int				 Sys_MilliSeconds()
 {
 	return clock() * 1000 / CLOCKS_PER_SEC;
 } // end of the function Sys_MilliSeconds
@@ -131,7 +131,7 @@ qboolean BotLibSetup( char* str )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int Export_BotLibSetup( void )
+int Export_BotLibSetup()
 {
 	int errnum;
 
@@ -176,7 +176,7 @@ int Export_BotLibSetup( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int Export_BotLibShutdown( void )
+int Export_BotLibShutdown()
 {
 	if( !BotLibSetup( "BotLibShutdown" ) )
 		return BLERR_LIBRARYNOTSETUP;

@@ -60,7 +60,7 @@ void			 R_AddEdgeDef( int i1, int i2, int facing )
 	numEdgeDefs[i1]++;
 }
 
-void R_RenderShadowEdges( void )
+void R_RenderShadowEdges()
 {
 }
 
@@ -76,7 +76,7 @@ triangleFromEdge[ v1 ][ v2 ]
   }
 =================
 */
-void RB_ShadowTessEnd( void )
+void RB_ShadowTessEnd()
 {
 }
 
@@ -90,7 +90,7 @@ because otherwise shadows from different body parts would
 overlap and double darken.
 =================
 */
-void RB_ShadowFinish( void )
+void RB_ShadowFinish()
 {
 }
 
@@ -100,7 +100,7 @@ RB_ProjectionShadowDeform
 
 =================
 */
-void RB_ProjectionShadowDeform( void )
+void RB_ProjectionShadowDeform()
 {
 	float* xyz;
 	int	   i;

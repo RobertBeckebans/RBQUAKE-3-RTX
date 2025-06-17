@@ -349,7 +349,7 @@ int AAS_IntForBSPEpairKey( int ent, char* key, int* value )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeBSPEntities( void )
+void AAS_FreeBSPEntities()
 {
 	int			  i;
 	bsp_entity_t* ent;
@@ -377,7 +377,7 @@ void AAS_FreeBSPEntities( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_ParseBSPEntities( void )
+void AAS_ParseBSPEntities()
 {
 	script_t*	  script;
 	token_t		  token;
@@ -459,7 +459,7 @@ int AAS_BSPTraceLight( vec3_t start, vec3_t end, vec3_t endpos, int* red, int* g
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_DumpBSPData( void )
+void AAS_DumpBSPData()
 {
 	AAS_FreeBSPEntities();
 
@@ -478,7 +478,7 @@ void AAS_DumpBSPData( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int AAS_LoadBSPFile( void )
+int AAS_LoadBSPFile()
 {
 	AAS_DumpBSPData();
 	bspworld.entdatasize = strlen( botimport.BSPEntityData() ) + 1;

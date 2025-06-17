@@ -208,7 +208,7 @@ Swap_Init
 ================
 */
 /*
-void Swap_Init (void)
+void Swap_Init ()
 {
 	byte	swaptest[2] = {1,0};
 
@@ -257,7 +257,7 @@ void		COM_BeginParseSession( const char* name )
 	Com_sprintf( com_parsename, sizeof( com_parsename ), "%s", name );
 }
 
-int COM_GetCurrentParseLine( void )
+int COM_GetCurrentParseLine()
 {
 	return com_lines;
 }

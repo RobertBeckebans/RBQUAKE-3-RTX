@@ -71,7 +71,7 @@ tr_buffer*					ui_uniform_buffer;
 GL_InitUI
 ==============
 */
-void						GL_InitUI( void )
+void						GL_InitUI()
 {
 	byte* shaderFileBuffer;
 	int	  shaderFileLen;
@@ -257,7 +257,7 @@ void GL_RenderUISurface( int numIndexes, drawVert_t* verts, int* indexes, const 
 GL_UpdateUI
 ===============
 */
-void GL_UpdateUI( void )
+void GL_UpdateUI()
 {
 	for( int i = 0; i < uiRenderPasses.size(); i++ )
 	{

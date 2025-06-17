@@ -313,11 +313,11 @@ static int		 compiledOfs; // in dwords
 static byte*	 code;
 static int		 pc;
 
-void			 AsmCall( void );
+void			 AsmCall();
 
 double			 itofConvert[2];
 
-static int		 Constant4( void )
+static int		 Constant4()
 {
 	int v;
 
@@ -326,7 +326,7 @@ static int		 Constant4( void )
 	return v;
 }
 
-static int Constant1( void )
+static int Constant1()
 {
 	int v;
 
@@ -1322,7 +1322,7 @@ Put this at end of file because gcc messes up debug line numbers
 */
 #ifdef __GNUC__
 
-void AsmCall( void )
+void AsmCall()
 {
 	asm(
 		// pop off the destination instruction
@@ -1409,7 +1409,7 @@ void AsmCall( void )
 
 // codewarrior version
 
-void asm AsmCall( void )
+void asm AsmCall()
 {
 	// pop off the destination instruction
 

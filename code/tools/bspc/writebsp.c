@@ -42,7 +42,7 @@ There is no oportunity to discard planes, because all of the original
 brushes will be saved in the map.
 ============
 */
-void EmitPlanes( void )
+void EmitPlanes()
 {
 	int		  i;
 	dplane_t* dp;
@@ -318,7 +318,7 @@ void WriteBSP( node_t* headnode )
 SetModelNumbers
 ============
 */
-void SetModelNumbers( void )
+void SetModelNumbers()
 {
 	int	 i;
 	int	 models;
@@ -342,7 +342,7 @@ SetLightStyles
 ============
 */
 #define MAX_SWITCHED_LIGHTS 32
-void SetLightStyles( void )
+void SetLightStyles()
 {
 	int		  stylenum;
 	char*	  t;
@@ -389,7 +389,7 @@ void SetLightStyles( void )
 EmitBrushes
 ============
 */
-void EmitBrushes( void )
+void EmitBrushes()
 {
 	int			  i, j, bnum, s, x;
 	dbrush_t*	  db;
@@ -461,7 +461,7 @@ void EmitBrushes( void )
 BeginBSPFile
 ==================
 */
-void BeginBSPFile( void )
+void BeginBSPFile()
 {
 	// these values may actually be initialized
 	// if the file existed when loaded, so clear them explicitly
@@ -490,7 +490,7 @@ void BeginBSPFile( void )
 EndBSPFile
 ============
 */
-void EndBSPFile( void )
+void EndBSPFile()
 {
 #if 0
 	char	path[1024];
@@ -519,7 +519,7 @@ BeginModel
 int		   firstmodleaf;
 extern int firstmodeledge;
 extern int firstmodelface;
-void	   BeginModel( void )
+void	   BeginModel()
 {
 	dmodel_t*	mod;
 	int			start, end;
@@ -565,7 +565,7 @@ void	   BeginModel( void )
 EndModel
 ==================
 */
-void EndModel( void )
+void EndModel()
 {
 	dmodel_t* mod;
 

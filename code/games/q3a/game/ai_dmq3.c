@@ -2464,7 +2464,7 @@ void BotFreeWaypoints( bot_waypoint_t* wp )
 BotInitWaypoints
 ==================
 */
-void BotInitWaypoints( void )
+void BotInitWaypoints()
 {
 	int i;
 
@@ -2481,7 +2481,7 @@ void BotInitWaypoints( void )
 TeamPlayIsOn
 ==================
 */
-int TeamPlayIsOn( void )
+int TeamPlayIsOn()
 {
 	return ( gametype >= GT_TEAM );
 }
@@ -5816,7 +5816,7 @@ int BotGetAlternateRouteGoal( bot_state_t* bs, int base )
 BotSetupAlternateRouteGoals
 ==================
 */
-void BotSetupAlternativeRouteGoals( void )
+void BotSetupAlternativeRouteGoals()
 {
 	if( altroutegoals_setup )
 		return;
@@ -6128,7 +6128,7 @@ int BotGoalForBSPEntity( char* classname, bot_goal_t* goal )
 BotSetupDeathmatchAI
 ==================
 */
-void BotSetupDeathmatchAI( void )
+void BotSetupDeathmatchAI()
 {
 	int	 ent, modelnum;
 	char model[128];
@@ -6206,7 +6206,7 @@ void BotSetupDeathmatchAI( void )
 BotShutdownDeathmatchAI
 ==================
 */
-void BotShutdownDeathmatchAI( void )
+void BotShutdownDeathmatchAI()
 {
 	altroutegoals_setup = qfalse;
 }

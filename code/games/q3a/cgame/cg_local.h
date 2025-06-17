@@ -1201,17 +1201,17 @@ const char* CG_Argv( int arg );
 void QDECL	CG_Printf( const char* msg, ... );
 void QDECL	CG_Error( const char* msg, ... );
 
-void		CG_StartMusic( void );
+void		CG_StartMusic();
 
-void		CG_UpdateCvars( void );
+void		CG_UpdateCvars();
 
-int			CG_CrosshairPlayer( void );
-int			CG_LastAttacker( void );
+int			CG_CrosshairPlayer();
+int			CG_LastAttacker();
 void		CG_LoadMenus( const char* menuFile );
 void		CG_KeyEvent( int key, qboolean down );
 void		CG_MouseEvent( int x, int y );
 void		CG_EventHandling( int type );
-void		CG_RankRunFrame( void );
+void		CG_RankRunFrame();
 void		CG_SetScoreSelection( void* menu );
 score_t*	CG_GetSelectedScore();
 void		CG_BuildSpectatorString();
@@ -1219,14 +1219,14 @@ void		CG_BuildSpectatorString();
 //
 // cg_view.c
 //
-void		CG_TestModel_f( void );
-void		CG_TestGun_f( void );
-void		CG_TestModelNextFrame_f( void );
-void		CG_TestModelPrevFrame_f( void );
-void		CG_TestModelNextSkin_f( void );
-void		CG_TestModelPrevSkin_f( void );
-void		CG_ZoomDown_f( void );
-void		CG_ZoomUp_f( void );
+void		CG_TestModel_f();
+void		CG_TestGun_f();
+void		CG_TestModelNextFrame_f();
+void		CG_TestModelPrevFrame_f();
+void		CG_TestModelNextSkin_f();
+void		CG_TestModelPrevSkin_f();
+void		CG_ZoomDown_f();
+void		CG_ZoomUp_f();
 void		CG_AddBufferedSound( sfxHandle_t sfx );
 
 void		CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demoPlayback );
@@ -1249,7 +1249,7 @@ int			CG_DrawStrlen( const char* str );
 
 float*		CG_FadeColor( int startMsec, int totalMsec );
 float*		CG_TeamColor( int team );
-void		CG_TileClear( void );
+void		CG_TileClear();
 void		CG_ColorForHealth( vec4_t hcolor );
 void		CG_GetColorForHealth( int health, int armor, vec4_t hcolor );
 
@@ -1268,7 +1268,7 @@ extern char systemChat[256];
 extern char teamChat1[256];
 extern char teamChat2[256];
 
-void		CG_AddLagometerFrameInfo( void );
+void		CG_AddLagometerFrameInfo();
 void		CG_AddLagometerSnapshotInfo( snapshot_t* snap );
 void		CG_CenterPrint( const char* str, int y, int charWidth );
 void		CG_DrawHead( float x, float y, float w, float h, int clientNum, vec3_t headAngles );
@@ -1311,11 +1311,11 @@ sfxHandle_t CG_CustomSound( int clientNum, const char* soundName );
 //
 // cg_predict.c
 //
-void		CG_BuildSolidList( void );
+void		CG_BuildSolidList();
 int			CG_PointContents( const vec3_t point, int passEntityNum );
 void		CG_Trace( trace_t* result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask );
-void		CG_PredictPlayerState( void );
-void		CG_LoadDeferredPlayers( void );
+void		CG_PredictPlayerState();
+void		CG_LoadDeferredPlayers();
 
 //
 // cg_events.c
@@ -1329,7 +1329,7 @@ void		CG_PainEvent( centity_t* cent, int health );
 // cg_ents.c
 //
 void		CG_SetEntitySoundPosition( centity_t* cent );
-void		CG_AddPacketEntities( void );
+void		CG_AddPacketEntities();
 void		CG_Beam( centity_t* cent );
 void		CG_AdjustPositionForMover( const vec3_t in, int moverNum, int fromTime, int toTime, vec3_t out );
 
@@ -1339,9 +1339,9 @@ void		CG_PositionRotatedEntityOnTag( refEntity_t* entity, const refEntity_t* par
 //
 // cg_weapons.c
 //
-void		CG_NextWeapon_f( void );
-void		CG_PrevWeapon_f( void );
-void		CG_Weapon_f( void );
+void		CG_NextWeapon_f();
+void		CG_PrevWeapon_f();
+void		CG_Weapon_f();
 
 void		CG_RegisterWeapon( int weaponNum );
 void		CG_RegisterItemVisuals( int itemNum );
@@ -1356,23 +1356,23 @@ void		CG_RailTrail( clientInfo_t* ci, vec3_t start, vec3_t end );
 void		CG_GrappleTrail( centity_t* ent, const weaponInfo_t* wi );
 void		CG_AddViewWeapon( playerState_t* ps );
 void		CG_AddPlayerWeapon( refEntity_t* parent, playerState_t* ps, centity_t* cent, int team );
-void		CG_DrawWeaponSelect( void );
+void		CG_DrawWeaponSelect();
 
-void		CG_OutOfAmmoChange( void ); // should this be in pmove?
+void		CG_OutOfAmmoChange(); // should this be in pmove?
 
 //
 // cg_marks.c
 //
-void		CG_InitMarkPolys( void );
-void		CG_AddMarks( void );
+void		CG_InitMarkPolys();
+void		CG_AddMarks();
 void		CG_ImpactMark( qhandle_t markShader, const vec3_t origin, const vec3_t dir, float orientation, float r, float g, float b, float a, qboolean alphaFade, float radius, qboolean temporary );
 
 //
 // cg_localents.c
 //
-void		CG_InitLocalEntities( void );
-localEntity_t* CG_AllocLocalEntity( void );
-void		   CG_AddLocalEntities( void );
+void		CG_InitLocalEntities();
+localEntity_t* CG_AllocLocalEntity();
+void		   CG_AddLocalEntities();
 
 //
 // cg_effects.c
@@ -1401,7 +1401,7 @@ localEntity_t* CG_MakeExplosion( vec3_t origin, vec3_t dir, qhandle_t hModel, qh
 //
 // cg_snapshot.c
 //
-void		   CG_ProcessSnapshots( void );
+void		   CG_ProcessSnapshots();
 
 //
 // cg_info.c
@@ -1409,35 +1409,35 @@ void		   CG_ProcessSnapshots( void );
 void		   CG_LoadingString( const char* s );
 void		   CG_LoadingItem( int itemNum );
 void		   CG_LoadingClient( int clientNum );
-void		   CG_DrawInformation( void );
+void		   CG_DrawInformation();
 
 //
 // cg_scoreboard.c
 //
-qboolean	   CG_DrawOldScoreboard( void );
-void		   CG_DrawOldTourneyScoreboard( void );
+qboolean	   CG_DrawOldScoreboard();
+void		   CG_DrawOldTourneyScoreboard();
 
 //
 // cg_consolecmds.c
 //
-qboolean	   CG_ConsoleCommand( void );
-void		   CG_InitConsoleCommands( void );
+qboolean	   CG_ConsoleCommand();
+void		   CG_InitConsoleCommands();
 
 //
 // cg_servercmds.c
 //
 void		   CG_ExecuteNewServerCommands( int latestSequence );
-void		   CG_ParseServerinfo( void );
-void		   CG_SetConfigValues( void );
-void		   CG_LoadVoiceChats( void );
-void		   CG_ShaderStateChanged( void );
+void		   CG_ParseServerinfo();
+void		   CG_SetConfigValues();
+void		   CG_LoadVoiceChats();
+void		   CG_ShaderStateChanged();
 void		   CG_VoiceChatLocal( int mode, qboolean voiceOnly, int clientNum, int color, const char* cmd );
-void		   CG_PlayBufferedVoiceChats( void );
+void		   CG_PlayBufferedVoiceChats();
 
 //
 // cg_playerstate.c
 //
-void		   CG_Respawn( void );
+void		   CG_Respawn();
 void		   CG_TransitionPlayerState( playerState_t* ps, playerState_t* ops );
 void		   CG_CheckChangedPredictableEvents( playerState_t* ps );
 
@@ -1456,7 +1456,7 @@ void		   trap_Error( const char* fmt );
 
 // milliseconds should only be used for performance tuning, never
 // for anything game related.  Get time from the CG_DrawActiveFrame parameter
-int			   trap_Milliseconds( void );
+int			   trap_Milliseconds();
 
 // console variable interaction
 void		   trap_Cvar_Register( vmCvar_t* vmCvar, const char* varName, const char* defaultValue, int flags );
@@ -1465,7 +1465,7 @@ void		   trap_Cvar_Set( const char* var_name, const char* value );
 void		   trap_Cvar_VariableStringBuffer( const char* var_name, char* buffer, int bufsize );
 
 // ServerCommand and ConsoleCommand parameter access
-int			   trap_Argc( void );
+int			   trap_Argc();
 void		   trap_Argv( int n, char* buffer, int bufferLength );
 void		   trap_Args( char* buffer, int bufferLength );
 
@@ -1491,11 +1491,11 @@ void		   trap_AddCommand( const char* cmdName );
 void		   trap_SendClientCommand( const char* s );
 
 // force a screen update, only used during gamestate load
-void		   trap_UpdateScreen( void );
+void		   trap_UpdateScreen();
 
 // model collision
 void		   trap_CM_LoadMap( const char* mapname );
-int			   trap_CM_NumInlineModels( void );
+int			   trap_CM_NumInlineModels();
 clipHandle_t   trap_CM_InlineModel( int index ); // 0 = world, 1+ = bmodels
 clipHandle_t   trap_CM_TempBoxModel( const vec3_t mins, const vec3_t maxs );
 int			   trap_CM_PointContents( const vec3_t p, clipHandle_t model );
@@ -1524,7 +1524,7 @@ void		trap_S_UpdateEntityPosition( int entityNum, const vec3_t origin );
 void		trap_S_Respatialize( int entityNum, const vec3_t origin, vec3_t axis[3], int inwater );
 sfxHandle_t trap_S_RegisterSound( const char* sample, qboolean compressed );	// returns buzz if not found
 void		trap_S_StartBackgroundTrack( const char* intro, const char* loop ); // empty name stops music
-void		trap_S_StopBackgroundTrack( void );
+void		trap_S_StopBackgroundTrack();
 
 void		trap_R_LoadWorldMap( const char* mapname );
 
@@ -1537,7 +1537,7 @@ qhandle_t	trap_R_RegisterShaderNoMip( const char* name ); // returns all white i
 
 // a scene is built up by calls to R_ClearScene and the various R_Add functions.
 // Nothing is drawn until R_RenderScene is called.
-void		trap_R_ClearScene( void );
+void		trap_R_ClearScene();
 void		trap_R_AddRefEntityToScene( const refEntity_t* re );
 
 // polys are intended for simple wall marks, not really for doing
@@ -1582,7 +1582,7 @@ qboolean	trap_GetServerCommand( int serverCommandNumber );
 // this will always be at least one higher than the number in the current
 // snapshot, and it may be quite a few higher if it is a fast computer on
 // a lagged connection
-int			trap_GetCurrentCmdNumber( void );
+int			trap_GetCurrentCmdNumber();
 
 qboolean	trap_GetUserCmd( int cmdNumber, usercmd_t* ucmd );
 
@@ -1593,10 +1593,10 @@ void		trap_SetUserCmdValue( int stateValue, float sensitivityScale );
 void		testPrintInt( char* string, int i );
 void		testPrintFloat( char* string, float f );
 
-int			trap_MemoryRemaining( void );
+int			trap_MemoryRemaining();
 void		trap_R_RegisterFont( const char* fontName, int pointSize, fontInfo_t* font );
 qboolean	trap_Key_IsDown( int keynum );
-int			trap_Key_GetCatcher( void );
+int			trap_Key_GetCatcher();
 void		trap_Key_SetCatcher( int catcher );
 int			trap_Key_GetKey( const char* binding );
 
@@ -1621,8 +1621,8 @@ qboolean		trap_getCameraInfo( int time, vec3_t* origin, vec3_t* angles );
 
 qboolean		trap_GetEntityToken( char* buffer, int bufferSize );
 
-void			CG_ClearParticles( void );
-void			CG_AddParticles( void );
+void			CG_ClearParticles();
+void			CG_AddParticles();
 void			CG_ParticleSnow( qhandle_t pshader, vec3_t origin, vec3_t origin2, int turb, float range, int snum );
 void			CG_ParticleSmoke( qhandle_t pshader, centity_t* cent );
 void			CG_AddParticleShrapnel( localEntity_t* le );
@@ -1637,11 +1637,11 @@ int				CG_NewParticleArea( int num );
 
 qboolean		trap_R_inPVS( const vec3_t p1, const vec3_t p2 );
 
-void			trap_R_FinishDXRLoading( void );
-void			trap_R_ShutdownRaytracingMap( void );
+void			trap_R_FinishDXRLoading();
+void			trap_R_ShutdownRaytracingMap();
 
 qhandle_t		trap_R_RegisterCustomModel( const char* name, qhandle_t shader, polyVert_t* verts, int numVertexes );
 
-void			CG_InitSprites( void );
+void			CG_InitSprites();
 void			CG_SpawnSprite( vec3_t origin, float scale, qhandle_t model );
 void			CG_SpawnSpriteEx( refEntity_t* ent, vec3_t origin, float scale, qhandle_t model );

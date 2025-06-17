@@ -446,12 +446,12 @@ void				 Menu_SetFeederSelection( menuDef_t* menu, int feeder, int index, const 
 void				 Display_CacheAll();
 
 void*				 UI_Alloc( int size );
-void				 UI_InitMemory( void );
+void				 UI_InitMemory();
 qboolean			 UI_OutOfMemory();
 
-void				 Controls_GetConfig( void );
+void				 Controls_GetConfig();
 void				 Controls_SetConfig( qboolean restart );
-void				 Controls_SetDefaults( void );
+void				 Controls_SetDefaults();
 
 int					 trap_PC_AddGlobalDefine( char* define );
 int					 trap_PC_LoadSource( const char* filename );

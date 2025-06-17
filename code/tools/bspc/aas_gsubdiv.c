@@ -481,7 +481,7 @@ tmp_node_t* AAS_GravitationalSubdivision_r( tmp_node_t* tmpnode )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_GravitationalSubdivision( void )
+void AAS_GravitationalSubdivision()
 {
 	Log_Write( "AAS_GravitationalSubdivision\r\n" );
 	numgravitationalsubdivisions = 0;
@@ -656,7 +656,7 @@ tmp_node_t* AAS_LadderSubdivision_r( tmp_node_t* tmpnode )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_LadderSubdivision( void )
+void AAS_LadderSubdivision()
 {
 	Log_Write( "AAS_LadderSubdivision\r\n" );
 	numladdersubdivisions = 0;

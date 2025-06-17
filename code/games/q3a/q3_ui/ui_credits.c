@@ -58,7 +58,7 @@ static sfxHandle_t	 UI_CreditMenu_Key( int key )
 UI_CreditMenu_Draw
 ===============
 */
-static void UI_CreditMenu_Draw( void )
+static void UI_CreditMenu_Draw()
 {
 	int y;
 
@@ -118,7 +118,7 @@ static void UI_CreditMenu_Draw( void )
 UI_CreditMenu
 ===============
 */
-void UI_CreditMenu( void )
+void UI_CreditMenu()
 {
 	memset( &s_credits, 0, sizeof( s_credits ) );
 

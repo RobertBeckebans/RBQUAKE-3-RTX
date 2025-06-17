@@ -147,7 +147,7 @@ static void UI_Mods_LoadModsFromFile( char *filename ) {
 UI_Mods_LoadMods
 ===============
 */
-static void UI_Mods_LoadMods( void )
+static void UI_Mods_LoadMods()
 {
 	int	  numdirs;
 	char  dirlist[2048];
@@ -187,7 +187,7 @@ static void UI_Mods_LoadMods( void )
 UI_Mods_MenuInit
 ===============
 */
-static void UI_Mods_MenuInit( void )
+static void UI_Mods_MenuInit()
 {
 	UI_ModsMenu_Cache();
 
@@ -265,7 +265,7 @@ static void UI_Mods_MenuInit( void )
 UI_Mods_Cache
 =================
 */
-void UI_ModsMenu_Cache( void )
+void UI_ModsMenu_Cache()
 {
 	trap_R_RegisterShaderNoMip( ART_BACK0 );
 	trap_R_RegisterShaderNoMip( ART_BACK1 );
@@ -280,7 +280,7 @@ void UI_ModsMenu_Cache( void )
 UI_ModsMenu
 ===============
 */
-void UI_ModsMenu( void )
+void UI_ModsMenu()
 {
 	UI_Mods_MenuInit();
 	UI_PushMenu( &s_mods.menu );

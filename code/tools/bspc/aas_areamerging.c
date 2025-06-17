@@ -235,7 +235,7 @@ int AAS_TryMergeFaceAreas( tmp_face_t* seperatingface )
 // Changes Globals:		tmpaasworld
 //===========================================================================
 /*
-void AAS_MergeAreas(void)
+void AAS_MergeAreas()
 {
 	int side, nummerges;
 	tmp_area_t *tmparea, *othertmparea;
@@ -322,7 +322,7 @@ int AAS_GroundArea( tmp_area_t* tmparea )
 	return false;
 } // end of the function AAS_GroundArea
 
-void AAS_MergeAreas( void )
+void AAS_MergeAreas()
 {
 	int			side, nummerges, merges, groundfirst;
 	tmp_area_t *tmparea, *othertmparea;

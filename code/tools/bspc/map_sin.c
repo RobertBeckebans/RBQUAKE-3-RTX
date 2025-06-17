@@ -427,7 +427,7 @@ void MoveBrushesToWorld (entity_t *mapent)
 ParseMapEntity
 ================
 * /
-qboolean	Sin_ParseMapEntity (void)
+qboolean	Sin_ParseMapEntity ()
 {
 	entity_t	*mapent;
 	epair_t		*e;
@@ -730,7 +730,7 @@ void Sin_LoadMapFile (char *filename)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Sin_CreateMapTexinfo( void )
+void Sin_CreateMapTexinfo()
 {
 	int	  i;
 	vec_t defaultvec[4] = { 1, 0, 0, 0 };
@@ -775,7 +775,7 @@ void Sin_SetLeafBrushesModelNumbers( int leafnum, int modelnum )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Sin_InitNodeStack( void )
+void Sin_InitNodeStack()
 {
 	nodestackptr  = nodestack;
 	nodestacksize = 0;
@@ -803,7 +803,7 @@ void Sin_PushNodeStack( int num )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int Sin_PopNodeStack( void )
+int Sin_PopNodeStack()
 {
 	// if the stack is empty
 	if( nodestackptr <= nodestack )
@@ -1191,7 +1191,7 @@ void Sin_LoadMapFromBSP( char* filename, int offset, int length )
 	Sin_CreateMapTexinfo();
 } // end of the function Sin_LoadMapFromBSP
 
-void Sin_ResetMapLoading( void )
+void Sin_ResetMapLoading()
 {
 	// reset for map loading from bsp
 	memset( nodestack, 0, NODESTACKSIZE * sizeof( int ) );

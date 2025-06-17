@@ -118,7 +118,7 @@ static byte* last_chunk;
 static byte* iff_data;
 static int	 iff_chunk_len;
 
-static short GetLittleShort( void )
+static short GetLittleShort()
 {
 	short val = 0;
 	val		  = *data_p;
@@ -127,7 +127,7 @@ static short GetLittleShort( void )
 	return val;
 }
 
-static int GetLittleLong( void )
+static int GetLittleLong()
 {
 	int val = 0;
 	val		= *data_p;

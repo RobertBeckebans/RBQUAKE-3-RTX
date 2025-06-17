@@ -49,7 +49,7 @@ void	   pw( winding_t* w )
 		printf( "(%5.3f, %5.3f, %5.3f)\n", w->p[i][0], w->p[i][1], w->p[i][2] );
 }
 
-void ResetWindings( void )
+void ResetWindings()
 {
 	c_active_windings	 = 0;
 	c_peak_windings		 = 0;
@@ -104,17 +104,17 @@ void FreeWinding( winding_t* w )
 	FreeMemory( w );
 } // end of the function FreeWinding
 
-int WindingMemory( void )
+int WindingMemory()
 {
 	return c_windingmemory;
 } // end of the function WindingMemory
 
-int WindingPeakMemory( void )
+int WindingPeakMemory()
 {
 	return c_peak_windingmemory;
 } // end of the function WindingPeakMemory
 
-int ActiveWindings( void )
+int ActiveWindings()
 {
 	return c_active_windings;
 } // end of the function ActiveWindings
@@ -902,7 +902,7 @@ winding_t* MergeWindings( winding_t* w1, winding_t* w2, vec3_t planenormal )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-char* WindingErrorString( void )
+char* WindingErrorString()
 {
 	return windingerror;
 } // end of the function WindingErrorString

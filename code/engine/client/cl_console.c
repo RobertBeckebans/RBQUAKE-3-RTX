@@ -68,7 +68,7 @@ vec4_t console_color = { 1.0, 1.0, 1.0, 1.0 };
 Con_ToggleConsole_f
 ================
 */
-void   Con_ToggleConsole_f( void )
+void   Con_ToggleConsole_f()
 {
 	// closing a full screen console restarts the demo loop
 	if( cls.state == CA_DISCONNECTED && cls.keyCatchers == KEYCATCH_CONSOLE )
@@ -89,7 +89,7 @@ void   Con_ToggleConsole_f( void )
 Con_MessageMode_f
 ================
 */
-void Con_MessageMode_f( void )
+void Con_MessageMode_f()
 {
 	chat_playerNum = -1;
 	chat_team	   = qfalse;
@@ -104,7 +104,7 @@ void Con_MessageMode_f( void )
 Con_MessageMode2_f
 ================
 */
-void Con_MessageMode2_f( void )
+void Con_MessageMode2_f()
 {
 	chat_playerNum = -1;
 	chat_team	   = qtrue;
@@ -118,7 +118,7 @@ void Con_MessageMode2_f( void )
 Con_MessageMode3_f
 ================
 */
-void Con_MessageMode3_f( void )
+void Con_MessageMode3_f()
 {
 	chat_playerNum = VM_Call( cgvm, CG_CROSSHAIR_PLAYER );
 	if( chat_playerNum < 0 || chat_playerNum >= MAX_CLIENTS )
@@ -137,7 +137,7 @@ void Con_MessageMode3_f( void )
 Con_MessageMode4_f
 ================
 */
-void Con_MessageMode4_f( void )
+void Con_MessageMode4_f()
 {
 	chat_playerNum = VM_Call( cgvm, CG_LAST_ATTACKER );
 	if( chat_playerNum < 0 || chat_playerNum >= MAX_CLIENTS )
@@ -156,7 +156,7 @@ void Con_MessageMode4_f( void )
 Con_Clear_f
 ================
 */
-void Con_Clear_f( void )
+void Con_Clear_f()
 {
 	int i;
 
@@ -175,7 +175,7 @@ Con_Dump_f
 Save the console contents out to a file
 ================
 */
-void Con_Dump_f( void )
+void Con_Dump_f()
 {
 	int			 l, x, i;
 	short*		 line;
@@ -234,7 +234,7 @@ void Con_Dump_f( void )
 Con_ClearNotify
 ================
 */
-void Con_ClearNotify( void )
+void Con_ClearNotify()
 {
 	int i;
 
@@ -251,7 +251,7 @@ Con_CheckResize
 If the line width has changed, reformat the buffer.
 ================
 */
-void Con_CheckResize( void )
+void Con_CheckResize()
 {
 	int				 i, j, width, oldwidth, oldtotallines, numlines, numchars;
 	MAC_STATIC short tbuf[CON_TEXTSIZE];
@@ -311,7 +311,7 @@ void Con_CheckResize( void )
 Con_Init
 ================
 */
-void Con_Init( void )
+void Con_Init()
 {
 	int i;
 
@@ -481,7 +481,7 @@ Con_DrawInput
 Draw the editline after a ] prompt
 ================
 */
-void Con_DrawInput( void )
+void Con_DrawInput()
 {
 	int y;
 
@@ -506,7 +506,7 @@ Con_DrawNotify
 Draws the last few lines of output transparently over the game top
 ================
 */
-void Con_DrawNotify( void )
+void Con_DrawNotify()
 {
 	int	   x, v;
 	short* text;
@@ -706,7 +706,7 @@ void Con_DrawSolidConsole( float frac )
 Con_DrawConsole
 ==================
 */
-void Con_DrawConsole( void )
+void Con_DrawConsole()
 {
 	// check for console width changes from a vid mode change
 	Con_CheckResize();
@@ -744,7 +744,7 @@ Con_RunConsole
 Scroll it up or down
 ==================
 */
-void Con_RunConsole( void )
+void Con_RunConsole()
 {
 	// decide on the destination height of the console
 	if( cls.keyCatchers & KEYCATCH_CONSOLE )
@@ -767,7 +767,7 @@ void Con_RunConsole( void )
 	}
 }
 
-void Con_PageUp( void )
+void Con_PageUp()
 {
 	con.display -= 2;
 	if( con.current - con.display >= con.totallines )
@@ -776,7 +776,7 @@ void Con_PageUp( void )
 	}
 }
 
-void Con_PageDown( void )
+void Con_PageDown()
 {
 	con.display += 2;
 	if( con.display > con.current )
@@ -785,7 +785,7 @@ void Con_PageDown( void )
 	}
 }
 
-void Con_Top( void )
+void Con_Top()
 {
 	con.display = con.totallines;
 	if( con.current - con.display >= con.totallines )
@@ -794,12 +794,12 @@ void Con_Top( void )
 	}
 }
 
-void Con_Bottom( void )
+void Con_Bottom()
 {
 	con.display = con.current;
 }
 
-void Con_Close( void )
+void Con_Close()
 {
 	if( !com_cl_running->integer )
 	{

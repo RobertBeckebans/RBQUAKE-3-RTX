@@ -574,7 +574,7 @@ void FixTjuncs( node_t* headnode )
 
 int		c_faces;
 
-face_t* AllocFace( void )
+face_t* AllocFace()
 {
 	face_t* f;
 

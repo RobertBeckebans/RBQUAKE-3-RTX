@@ -51,8 +51,8 @@ public:
 	idSubImage	   PackImage( idSubImage& image );
 
 	// Returns the size of the big image so far
-	int			   GetWidth( void );
-	int			   GetHeight( void );
+	int			   GetWidth();
+	int			   GetHeight();
 
 	// For debug
 	void		   DrawTree( byte* image, int width, int height );

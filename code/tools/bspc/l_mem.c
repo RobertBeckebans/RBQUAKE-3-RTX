@@ -118,7 +118,7 @@ void FreeMemory( void* ptr )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int TotalAllocatedMemory( void )
+int TotalAllocatedMemory()
 {
 	return allocedmemory;
 } // end of the function TotalAllocatedMemory
@@ -325,7 +325,7 @@ int MemorySize( void* ptr )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void PrintUsedMemorySize( void )
+void PrintUsedMemorySize()
 {
 	printf( "total botlib memory: %d KB\n", totalmemorysize >> 10 );
 	printf( "total memory blocks: %d\n", numblocks );
@@ -336,7 +336,7 @@ void PrintUsedMemorySize( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void PrintMemoryLabels( void )
+void PrintMemoryLabels()
 {
 	memoryblock_t* block;
 	int			   i;
@@ -357,7 +357,7 @@ void PrintMemoryLabels( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void DumpMemory( void )
+void DumpMemory()
 {
 	memoryblock_t* block;
 
@@ -373,7 +373,7 @@ void DumpMemory( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int TotalAllocatedMemory( void )
+int TotalAllocatedMemory()
 {
 	return totalmemorysize;
 } // end of the function TotalAllocatedMemory
@@ -400,7 +400,7 @@ int		   memhunk_low_size	 = 0;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void	   Hunk_ClearHigh( void )
+void	   Hunk_ClearHigh()
 {
 	memhunk_t *h, *nexth;
 

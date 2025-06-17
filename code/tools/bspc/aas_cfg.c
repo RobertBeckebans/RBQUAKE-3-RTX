@@ -91,7 +91,7 @@ cfg_t		cfg;
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void		DefaultCfg( void )
+void		DefaultCfg()
 {
 	int i;
 
@@ -156,7 +156,7 @@ char* QDECL va( char* format, ... )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void SetCfgLibVars( void )
+void SetCfgLibVars()
 {
 	int	  i;
 	float value;

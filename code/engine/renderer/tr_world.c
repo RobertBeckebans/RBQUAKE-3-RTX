@@ -718,7 +718,7 @@ Mark the leaves and nodes that are in the PVS for the current
 cluster
 ===============
 */
-static void R_MarkLeaves( void )
+static void R_MarkLeaves()
 {
 	const byte* vis;
 	mnode_t *	leaf, *parent;
@@ -807,7 +807,7 @@ static void R_MarkLeaves( void )
 R_AddWorldSurfaces
 =============
 */
-void R_AddWorldSurfaces( void )
+void R_AddWorldSurfaces()
 {
 	if( !r_drawworld->integer )
 	{

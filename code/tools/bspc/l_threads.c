@@ -42,7 +42,7 @@ void ( *workfunction )( int );
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int GetThreadWork( void )
+int GetThreadWork()
 {
 	int r;
 	int f;
@@ -139,7 +139,7 @@ static int		 numwaitingthreads = 0;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void			 ThreadSetDefault( void )
+void			 ThreadSetDefault()
 {
 	SYSTEM_INFO info;
 
@@ -158,7 +158,7 @@ void			 ThreadSetDefault( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadLock( void )
+void ThreadLock()
 {
 	if( !threaded )
 	{
@@ -176,7 +176,7 @@ void ThreadLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadUnlock( void )
+void ThreadUnlock()
 {
 	if( !threaded )
 	{
@@ -194,7 +194,7 @@ void ThreadUnlock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupLock( void )
+void ThreadSetupLock()
 {
 	Log_Print( "Win32 multi-threading\n" );
 	InitializeCriticalSection( &crit );
@@ -208,7 +208,7 @@ void ThreadSetupLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownLock( void )
+void ThreadShutdownLock()
 {
 	DeleteCriticalSection( &crit );
 	threaded = false; // Stupid me... forgot this!!!
@@ -219,7 +219,7 @@ void ThreadShutdownLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupSemaphore( void )
+void ThreadSetupSemaphore()
 {
 	semaphore = CreateSemaphore( NULL, 0, 99999999, "bspc" );
 } // end of the function ThreadSetupSemaphore
@@ -229,7 +229,7 @@ void ThreadSetupSemaphore( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownSemaphore( void )
+void ThreadShutdownSemaphore()
 {
 } // end of the function ThreadShutdownSemaphore
 //===========================================================================
@@ -238,7 +238,7 @@ void ThreadShutdownSemaphore( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSemaphoreWait( void )
+void ThreadSemaphoreWait()
 {
 	WaitForSingleObject( semaphore, INFINITE );
 } // end of the function ThreadSemaphoreWait
@@ -417,7 +417,7 @@ void RemoveThread( int threadid )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void WaitForAllThreadsFinished( void )
+void WaitForAllThreadsFinished()
 {
 	HANDLE handle;
 
@@ -439,7 +439,7 @@ void WaitForAllThreadsFinished( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int GetNumThreads( void )
+int GetNumThreads()
 {
 	return currentnumthreads;
 } // end of the function GetNumThreads
@@ -483,7 +483,7 @@ static int		numwaitingthreads = 0;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void			ThreadSetDefault( void )
+void			ThreadSetDefault()
 {
 	if( numthreads == -1 ) // not set manually
 	{
@@ -497,7 +497,7 @@ void			ThreadSetDefault( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadLock( void )
+void ThreadLock()
 {
 	if( !threaded )
 	{
@@ -518,7 +518,7 @@ void ThreadLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadUnlock( void )
+void ThreadUnlock()
 {
 	if( !threaded )
 	{
@@ -539,7 +539,7 @@ void ThreadUnlock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupLock( void )
+void ThreadSetupLock()
 {
 	pthread_mutexattr_t mattrib;
 
@@ -571,7 +571,7 @@ void ThreadSetupLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownLock( void )
+void ThreadShutdownLock()
 {
 	threaded = false;
 } // end of the function ThreadShutdownLock
@@ -739,7 +739,7 @@ void RemoveThread( int threadid )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void WaitForAllThreadsFinished( void )
+void WaitForAllThreadsFinished()
 {
 	pthread_t*	   thread;
 	pthread_addr_t status;
@@ -763,7 +763,7 @@ void WaitForAllThreadsFinished( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int GetNumThreads( void )
+int GetNumThreads()
 {
 	return currentnumthreads;
 } // end of the function GetNumThreads
@@ -809,7 +809,7 @@ static int		numwaitingthreads = 0;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void			ThreadSetDefault( void )
+void			ThreadSetDefault()
 {
 	if( numthreads == -1 ) // not set manually
 	{
@@ -823,7 +823,7 @@ void			ThreadSetDefault( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadLock( void )
+void ThreadLock()
 {
 	if( !threaded )
 	{
@@ -841,7 +841,7 @@ void ThreadLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadUnlock( void )
+void ThreadUnlock()
 {
 	if( !threaded )
 	{
@@ -859,7 +859,7 @@ void ThreadUnlock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupLock( void )
+void ThreadSetupLock()
 {
 	pthread_mutexattr_t mattrib;
 
@@ -875,7 +875,7 @@ void ThreadSetupLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownLock( void )
+void ThreadShutdownLock()
 {
 	threaded = false;
 } // end of the function ThreadShutdownLock
@@ -885,7 +885,7 @@ void ThreadShutdownLock( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupSemaphore( void )
+void ThreadSetupSemaphore()
 {
 	sem_init( &semaphore, 0, 0 );
 } // end of the function ThreadSetupSemaphore
@@ -895,7 +895,7 @@ void ThreadSetupSemaphore( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownSemaphore( void )
+void ThreadShutdownSemaphore()
 {
 	sem_destroy( &semaphore );
 } // end of the function ThreadShutdownSemaphore
@@ -905,7 +905,7 @@ void ThreadShutdownSemaphore( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSemaphoreWait( void )
+void ThreadSemaphoreWait()
 {
 	sem_wait( &semaphore );
 } // end of the function ThreadSemaphoreWait
@@ -1072,7 +1072,7 @@ void RemoveThread( int threadid )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void WaitForAllThreadsFinished( void )
+void WaitForAllThreadsFinished()
 {
 	pthread_t* thread;
 	void*	   pthread_return;
@@ -1096,7 +1096,7 @@ void WaitForAllThreadsFinished( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int GetNumThreads( void )
+int GetNumThreads()
 {
 	return currentnumthreads;
 } // end of the function GetNumThreads
@@ -1142,7 +1142,7 @@ abilock_t  lck;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void	   ThreadSetDefault( void )
+void	   ThreadSetDefault()
 {
 	if( numthreads == -1 )
 		numthreads = prctl( PR_MAXPPROCS );
@@ -1156,7 +1156,7 @@ void	   ThreadSetDefault( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadLock( void )
+void ThreadLock()
 {
 	spin_lock( &lck );
 } // end of the function ThreadLock
@@ -1166,7 +1166,7 @@ void ThreadLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadUnlock( void )
+void ThreadUnlock()
 {
 	release_lock( &lck );
 } // end of the function ThreadUnlock
@@ -1176,7 +1176,7 @@ void ThreadUnlock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupLock( void )
+void ThreadSetupLock()
 {
 	init_lock( &lck );
 
@@ -1192,7 +1192,7 @@ void ThreadSetupLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownLock( void )
+void ThreadShutdownLock()
 {
 	threaded = false;
 } // end of the function ThreadShutdownLock
@@ -1350,7 +1350,7 @@ void RemoveThread( int threadid )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void WaitForAllThreadsFinished( void )
+void WaitForAllThreadsFinished()
 {
 	ThreadLock();
 	while( firstthread )
@@ -1369,7 +1369,7 @@ void WaitForAllThreadsFinished( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int GetNumThreads( void )
+int GetNumThreads()
 {
 	return currentnumthreads;
 } // end of the function GetNumThreads
@@ -1393,7 +1393,7 @@ int	 currentnumthreads = 0;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetDefault( void )
+void ThreadSetDefault()
 {
 	numthreads = 1;
 } // end of the function ThreadSetDefault
@@ -1403,7 +1403,7 @@ void ThreadSetDefault( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadLock( void )
+void ThreadLock()
 {
 } // end of the function ThreadLock
 //===========================================================================
@@ -1412,7 +1412,7 @@ void ThreadLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadUnlock( void )
+void ThreadUnlock()
 {
 } // end of the function ThreadUnlock
 //===========================================================================
@@ -1421,7 +1421,7 @@ void ThreadUnlock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupLock( void )
+void ThreadSetupLock()
 {
 	Log_Print( "no multi-threading\n" );
 } // end of the function ThreadInitLock
@@ -1431,7 +1431,7 @@ void ThreadSetupLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownLock( void )
+void ThreadShutdownLock()
 {
 } // end of the function ThreadShutdownLock
 //===========================================================================
@@ -1440,7 +1440,7 @@ void ThreadShutdownLock( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSetupSemaphore( void )
+void ThreadSetupSemaphore()
 {
 } // end of the function ThreadSetupSemaphore
 //===========================================================================
@@ -1449,7 +1449,7 @@ void ThreadSetupSemaphore( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ThreadShutdownSemaphore( void )
+void ThreadShutdownSemaphore()
 {
 } // end of the function ThreadShutdownSemaphore
 //===========================================================================
@@ -1458,7 +1458,7 @@ void ThreadShutdownSemaphore( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void ThreadSemaphoreWait( void )
+void ThreadSemaphoreWait()
 {
 } // end of the function ThreadSemaphoreWait
 //===========================================================================
@@ -1525,7 +1525,7 @@ void RemoveThread( int threadid )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void WaitForAllThreadsFinished( void )
+void WaitForAllThreadsFinished()
 {
 } // end of the function WaitForAllThreadsFinished
 //===========================================================================
@@ -1534,7 +1534,7 @@ void WaitForAllThreadsFinished( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int GetNumThreads( void )
+int GetNumThreads()
 {
 	return currentnumthreads;
 } // end of the function GetNumThreads

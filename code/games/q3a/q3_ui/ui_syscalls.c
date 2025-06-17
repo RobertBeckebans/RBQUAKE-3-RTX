@@ -52,7 +52,7 @@ void trap_Error( const char* string )
 	syscall( UI_ERROR, string );
 }
 
-int trap_Milliseconds( void )
+int trap_Milliseconds()
 {
 	return syscall( UI_MILLISECONDS );
 }
@@ -104,7 +104,7 @@ void trap_Cvar_InfoStringBuffer( int bit, char* buffer, int bufsize )
 	syscall( UI_CVAR_INFOSTRINGBUFFER, bit, buffer, bufsize );
 }
 
-int trap_Argc( void )
+int trap_Argc()
 {
 	return syscall( UI_ARGC );
 }
@@ -169,7 +169,7 @@ qhandle_t trap_R_RegisterShaderNoMip( const char* name )
 	return syscall( UI_R_REGISTERSHADERNOMIP, name );
 }
 
-void trap_R_ClearScene( void )
+void trap_R_ClearScene()
 {
 	syscall( UI_R_CLEARSCENE );
 }
@@ -209,7 +209,7 @@ void trap_R_ModelBounds( clipHandle_t model, vec3_t mins, vec3_t maxs )
 	syscall( UI_R_MODELBOUNDS, model, mins, maxs );
 }
 
-void trap_UpdateScreen( void )
+void trap_UpdateScreen()
 {
 	syscall( UI_UPDATESCREEN );
 }
@@ -249,7 +249,7 @@ qboolean trap_Key_IsDown( int keynum )
 	return syscall( UI_KEY_ISDOWN, keynum );
 }
 
-qboolean trap_Key_GetOverstrikeMode( void )
+qboolean trap_Key_GetOverstrikeMode()
 {
 	return syscall( UI_KEY_GETOVERSTRIKEMODE );
 }
@@ -259,12 +259,12 @@ void trap_Key_SetOverstrikeMode( qboolean state )
 	syscall( UI_KEY_SETOVERSTRIKEMODE, state );
 }
 
-void trap_Key_ClearStates( void )
+void trap_Key_ClearStates()
 {
 	syscall( UI_KEY_CLEARSTATES );
 }
 
-int trap_Key_GetCatcher( void )
+int trap_Key_GetCatcher()
 {
 	return syscall( UI_KEY_GETCATCHER );
 }
@@ -314,7 +314,7 @@ int trap_LAN_GetServerPing( int source, int n )
 	return syscall( UI_LAN_GETSERVERPING, source, n );
 }
 
-int trap_LAN_GetPingQueueCount( void )
+int trap_LAN_GetPingQueueCount()
 {
 	return syscall( UI_LAN_GETPINGQUEUECOUNT );
 }
@@ -384,7 +384,7 @@ int trap_LAN_CompareServers( int source, int sortKey, int sortDir, int s1, int s
 	return syscall( UI_LAN_COMPARESERVERS, source, sortKey, sortDir, s1, s2 );
 }
 
-int trap_MemoryRemaining( void )
+int trap_MemoryRemaining()
 {
 	return syscall( UI_MEMORY_REMAINING );
 }
@@ -424,7 +424,7 @@ int trap_PC_SourceFileAndLine( int handle, char* filename, int* line )
 	return syscall( UI_PC_SOURCE_FILE_AND_LINE, handle, filename, line );
 }
 
-void trap_S_StopBackgroundTrack( void )
+void trap_S_StopBackgroundTrack()
 {
 	syscall( UI_S_STOPBACKGROUNDTRACK );
 }

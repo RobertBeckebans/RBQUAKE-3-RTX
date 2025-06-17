@@ -59,7 +59,7 @@ void			  GL_SetNumMapLights()
 GL_ClearLights
 ===============
 */
-void GL_ClearLights( void )
+void GL_ClearLights()
 {
 	memset( &worldLights[0], 0, sizeof( worldLights ) );
 	numWorldLights		 = 0;

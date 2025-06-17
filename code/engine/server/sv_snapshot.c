@@ -726,7 +726,7 @@ void SV_SendClientSnapshot( client_t* client )
 SV_SendClientMessages
 =======================
 */
-void SV_SendClientMessages( void )
+void SV_SendClientMessages()
 {
 	int		  i;
 	client_t* c;

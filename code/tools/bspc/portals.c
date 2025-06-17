@@ -36,7 +36,7 @@ int		  c_portalmemory;
 //  Returns:					-
 //  Changes Globals:		-
 //===========================================================================
-portal_t* AllocPortal( void )
+portal_t* AllocPortal()
 {
 	portal_t* p;
 
@@ -717,7 +717,7 @@ void P_AddNodeToList( node_t* node )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-node_t* P_NextNodeFromList( void )
+node_t* P_NextNodeFromList()
 {
 	node_t* node;
 

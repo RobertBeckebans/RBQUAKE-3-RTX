@@ -131,7 +131,7 @@ int	 Q3_BrushContents( mapbrush_t* b )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void Q3_DPlanes2MapPlanes( void )
+void Q3_DPlanes2MapPlanes()
 {
 	int i;
 
@@ -450,7 +450,7 @@ qboolean Q3_ParseBSPEntity( int entnum )
 //===========================================================================
 #define MAX_PATCH_VERTS 1024
 
-void AAS_CreateCurveBrushes( void )
+void AAS_CreateCurveBrushes()
 {
 	int				i, j, n, planenum, numcurvebrushes = 0;
 	q3_dsurface_t*	surface;
@@ -678,7 +678,7 @@ void Q3_LoadMapFromBSP( struct quakefile_s* qf )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void Q3_ResetMapLoading( void )
+void Q3_ResetMapLoading()
 {
 	// reset for map loading from bsp
 	memset( nodestack, 0, NODESTACKSIZE * sizeof( int ) );

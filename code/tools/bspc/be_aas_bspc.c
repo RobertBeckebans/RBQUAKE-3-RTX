@@ -66,7 +66,7 @@ void				   AAS_Error( char* fmt, ... )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-int Sys_MilliSeconds( void )
+int Sys_MilliSeconds()
 {
 	return clock() * 1000 / CLOCKS_PER_SEC;
 } // end of the function Sys_MilliSeconds
@@ -85,7 +85,7 @@ void AAS_DebugLine( vec3_t start, vec3_t end, int color )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_ClearShownDebugLines( void )
+void AAS_ClearShownDebugLines()
 {
 } // end of the function AAS_ClearShownDebugLines
 //===========================================================================
@@ -94,7 +94,7 @@ void AAS_ClearShownDebugLines( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-char* BotImport_BSPEntityData( void )
+char* BotImport_BSPEntityData()
 {
 	return CM_EntityString();
 } // end of the function AAS_GetEntityData
@@ -249,7 +249,7 @@ void Com_Memcpy( void* dest, const void* src, const size_t count )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitBotImport( void )
+void AAS_InitBotImport()
 {
 	botimport.BSPEntityData			 = BotImport_BSPEntityData;
 	botimport.GetMemory				 = BotImport_GetMemory;

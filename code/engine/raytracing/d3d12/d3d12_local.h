@@ -92,7 +92,7 @@ struct dxrMesh_t
 	AccelerationStructureBuffers buffers;
 };
 
-void									  GL_FinishVertexBufferAllocation( void );
+void									  GL_FinishVertexBufferAllocation();
 
 const int								  FrameCount = 3;
 
@@ -132,7 +132,7 @@ extern std::vector<dxrVertex_t> sceneVertexes;
 extern "C"
 {
 	byte*			 SV_FatPVS( vec3_t org, qmodel_t* worldmodel );
-	mnode_t*		 SV_GetMapNodes( void );
+	mnode_t*		 SV_GetMapNodes();
 	extern cvar_t	 scr_fov;
 	extern char		 map_name[512];
 	extern qmodel_t* loadmodel;
@@ -140,16 +140,16 @@ extern "C"
 
 void					 GL_RenderUI( ID3D12GraphicsCommandList4* cmdList, ID3D12CommandAllocator* commandAllocator );
 extern tr_render_target* uiRenderTarget;
-void					 GL_UpdateUI( void );
+void					 GL_UpdateUI();
 
 void					 GL_BuildLightList( float x, float y, float z );
-void					 GL_ClearLights( void );
-void					 GL_WaitForPreviousFrame( void );
+void					 GL_ClearLights();
+void					 GL_WaitForPreviousFrame();
 
 void					 GL_InitClearPass( tr_texture* lightPass );
 void					 GL_ClearLightPass( tr_texture* lightPass, ID3D12GraphicsCommandList4* cmdList, ID3D12CommandAllocator* commandAllocator );
 
-void					 GL_InitUI( void );
+void					 GL_InitUI();
 
 extern int				 numWorldLights;
 
@@ -177,12 +177,12 @@ public:
 	iceMegaTexture();
 	~iceMegaTexture();
 
-	void  InitTexture( void );
+	void  InitTexture();
 	void  RegisterTexture( const char* texturePath, int width, int height, byte* data );
-	void  BuildMegaTexture( void );
+	void  BuildMegaTexture();
 	void  FindMegaTile( const char* name, float& x, float& y, float& width, float& height );
 
-	byte* GetMegaBuffer( void ) { return megaTextureBuffer; }
+	byte* GetMegaBuffer() { return megaTextureBuffer; }
 
 private:
 	byte*					  megaTextureBuffer;

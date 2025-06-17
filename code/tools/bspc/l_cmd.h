@@ -80,7 +80,7 @@ char*		  ExpandArg( char* path );	// from cmd line
 char*		  ExpandPath( char* path ); // from scripts
 char*		  ExpandPathAndArchive( char* path );
 
-double		  I_FloatTime( void );
+double		  I_FloatTime();
 
 void		  Error( char* error, ... );
 void		  Warning( char* warning, ... );

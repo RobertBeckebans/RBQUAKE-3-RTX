@@ -128,7 +128,7 @@ int AAS_TryMergeFaces(tmp_face_t *face1, tmp_face_t *face2)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_MergeAreaFaces( void )
+void AAS_MergeAreaFaces()
 {
 	int			num_facemerges = 0;
 	int			side1, side2, restart;
@@ -257,7 +257,7 @@ int AAS_CanMergePlaneFaces( tmp_area_t* tmparea, int planenum )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_MergeAreaPlaneFaces( void )
+void AAS_MergeAreaPlaneFaces()
 {
 	int			num_facemerges = 0;
 	int			side1;

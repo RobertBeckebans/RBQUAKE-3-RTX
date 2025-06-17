@@ -135,7 +135,7 @@ static void UI_AddBotsMenu_BackEvent( void* ptr, int event )
 UI_AddBotsMenu_SetBotNames
 =================
 */
-static void UI_AddBotsMenu_SetBotNames( void )
+static void UI_AddBotsMenu_SetBotNames()
 {
 	int			n;
 	const char* info;
@@ -208,7 +208,7 @@ static int QDECL UI_AddBotsMenu_SortCompare( const void* arg1, const void* arg2 
 	return Q_stricmp( name1, name2 );
 }
 
-static void UI_AddBotsMenu_GetSortedBotNums( void )
+static void UI_AddBotsMenu_GetSortedBotNums()
 {
 	int n;
 
@@ -226,7 +226,7 @@ static void UI_AddBotsMenu_GetSortedBotNums( void )
 UI_AddBotsMenu_Draw
 =================
 */
-static void UI_AddBotsMenu_Draw( void )
+static void UI_AddBotsMenu_Draw()
 {
 	UI_DrawBannerString( 320, 16, "ADD BOTS", UI_CENTER, color_white );
 	UI_DrawNamedPic( 320 - 233, 240 - 166, 466, 332, ART_BACKGROUND );
@@ -246,7 +246,7 @@ static const char* teamNames1[] = { "Free", 0 };
 
 static const char* teamNames2[] = { "Red", "Blue", 0 };
 
-static void		   UI_AddBotsMenu_Init( void )
+static void		   UI_AddBotsMenu_Init()
 {
 	int	 n;
 	int	 y;
@@ -384,7 +384,7 @@ static void		   UI_AddBotsMenu_Init( void )
 UI_AddBots_Cache
 =================
 */
-void UI_AddBots_Cache( void )
+void UI_AddBots_Cache()
 {
 	trap_R_RegisterShaderNoMip( ART_BACK0 );
 	trap_R_RegisterShaderNoMip( ART_BACK1 );
@@ -401,7 +401,7 @@ void UI_AddBots_Cache( void )
 UI_AddBotsMenu
 =================
 */
-void UI_AddBotsMenu( void )
+void UI_AddBotsMenu()
 {
 	UI_AddBotsMenu_Init();
 	UI_PushMenu( &addBotsMenuInfo.menu );

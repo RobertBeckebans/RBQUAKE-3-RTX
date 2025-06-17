@@ -84,7 +84,7 @@ tmp_node_t* AAS_PruneNodes_r( tmp_node_t* tmpnode )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_PruneNodes( void )
+void AAS_PruneNodes()
 {
 	Log_Write( "AAS_PruneNodes\r\n" );
 	AAS_PruneNodes_r( tmpaasworld.nodes );

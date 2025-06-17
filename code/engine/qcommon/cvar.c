@@ -475,7 +475,7 @@ Cvar_SetCheatState
 Any testing variables will be reset to the safe values
 ============
 */
-void Cvar_SetCheatState( void )
+void Cvar_SetCheatState()
 {
 	cvar_t* var;
 
@@ -506,7 +506,7 @@ Cvar_Command
 Handles variable inspection and changing from the console
 ============
 */
-qboolean Cvar_Command( void )
+qboolean Cvar_Command()
 {
 	cvar_t* v;
 
@@ -540,7 +540,7 @@ Cvar_Toggle_f
 Toggles a cvar for easy single key binding
 ============
 */
-void Cvar_Toggle_f( void )
+void Cvar_Toggle_f()
 {
 	int v;
 
@@ -564,7 +564,7 @@ Allows setting and defining of arbitrary cvars from console, even if they
 weren't declared in C code.
 ============
 */
-void Cvar_Set_f( void )
+void Cvar_Set_f()
 {
 	int	 i, c, l, len;
 	char combined[MAX_STRING_TOKENS];
@@ -602,7 +602,7 @@ Cvar_SetU_f
 As Cvar_Set, but also flags it as userinfo
 ============
 */
-void Cvar_SetU_f( void )
+void Cvar_SetU_f()
 {
 	cvar_t* v;
 
@@ -627,7 +627,7 @@ Cvar_SetS_f
 As Cvar_Set, but also flags it as userinfo
 ============
 */
-void Cvar_SetS_f( void )
+void Cvar_SetS_f()
 {
 	cvar_t* v;
 
@@ -652,7 +652,7 @@ Cvar_SetA_f
 As Cvar_Set, but also flags it as archived
 ============
 */
-void Cvar_SetA_f( void )
+void Cvar_SetA_f()
 {
 	cvar_t* v;
 
@@ -675,7 +675,7 @@ void Cvar_SetA_f( void )
 Cvar_Reset_f
 ============
 */
-void Cvar_Reset_f( void )
+void Cvar_Reset_f()
 {
 	if( Cmd_Argc() != 2 )
 	{
@@ -725,7 +725,7 @@ void Cvar_WriteVariables( fileHandle_t f )
 Cvar_List_f
 ============
 */
-void Cvar_List_f( void )
+void Cvar_List_f()
 {
 	cvar_t* var;
 	int		i;
@@ -817,7 +817,7 @@ Cvar_Restart_f
 Resets all cvars to their hardcoded values
 ============
 */
-void Cvar_Restart_f( void )
+void Cvar_Restart_f()
 {
 	cvar_t*	 var;
 	cvar_t** prev;
@@ -997,7 +997,7 @@ Cvar_Init
 Reads in all archived cvars
 ============
 */
-void Cvar_Init( void )
+void Cvar_Init()
 {
 	cvar_cheats = Cvar_Get( "sv_cheats", "1", CVAR_ROM | CVAR_SYSTEMINFO );
 

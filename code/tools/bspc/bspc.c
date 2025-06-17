@@ -84,7 +84,7 @@ qboolean	   capsule_collision = 0;
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ProcessWorldModel (void)
+void ProcessWorldModel ()
 {
 	entity_t	*e;
 	tree_t *tree;
@@ -145,7 +145,7 @@ void ProcessWorldModel (void)
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ProcessSubModel (void)
+void ProcessSubModel ()
 {
 	entity_t	*e;
 	int start, end;
@@ -176,7 +176,7 @@ void ProcessSubModel (void)
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ProcessModels (void)
+void ProcessModels ()
 {
 	BeginBSPFile();
 

@@ -141,12 +141,12 @@ struct float2
 	bool  operator!=( const float2& r ) const { return !( *this == r ); }
 
 	// Hadd
-	float hadd( void ) const { return x + y; }
+	float hadd() const { return x + y; }
 
 	// Length
-	float lengthSq( void ) const { return x * x + y * y; }
-	float length( void ) const { return sqrtf( lengthSq() ); }
-	void  normalize( void ) { *this /= length(); }
+	float lengthSq() const { return x * x + y * y; }
+	float length() const { return sqrtf( lengthSq() ); }
+	void  normalize() { *this /= length(); }
 };
 
 inline float dot2( const float2& l, const float2& r )
@@ -334,13 +334,13 @@ struct float3
 	bool   operator!=( const float3& r ) const { return !( *this == r ); }
 
 	// Hadd
-	float  hadd( void ) const { return x + y + z; }
+	float  hadd() const { return x + y + z; }
 
 	// Length
-	float  lengthSq( void ) const { return x * x + y * y + z * z; }
-	float  length( void ) const { return sqrtf( lengthSq() ); }
+	float  lengthSq() const { return x * x + y * y + z * z; }
+	float  length() const { return sqrtf( lengthSq() ); }
 
-	float3 normalize( void ) { return ( *this /= length() ); }
+	float3 normalize() { return ( *this /= length() ); }
 
 	float  NormalizeSelf()
 	{
@@ -510,12 +510,12 @@ __declspec( align( 16 ) ) struct float4
 	bool  operator!=( const float4& r ) const { return !( *this == r ); }
 
 	// Hadd
-	float hadd( void ) const { return x + y + z + w; }
+	float hadd() const { return x + y + z + w; }
 
 	// Length
-	float lengthSq( void ) const { return x * x + y * y + z * z + w * w; }
-	float length( void ) const { return sqrtf( lengthSq() ); }
-	void  normalize( void ) { *this /= length(); }
+	float lengthSq() const { return x * x + y * y + z * z + w * w; }
+	float length() const { return sqrtf( lengthSq() ); }
+	void  normalize() { *this /= length(); }
 };
 
 inline float dot4( const float4& l, const float4& r )
@@ -718,14 +718,14 @@ struct float3x3
 		return f0 + f1 + f2;
 	}
 
-	void transpose( void )
+	void transpose()
 	{
 		Swap( r0.y, r1.x );
 		Swap( r0.z, r2.x );
 		Swap( r1.z, r2.y );
 	}
 
-	void invert( void )
+	void invert()
 	{
 		float	 det = determinant();
 		float3x3 inv;
@@ -748,7 +748,7 @@ struct float3x3
 		*this = inv;
 	}
 };
-inline float3x3 float3x3Identity( void )
+inline float3x3 float3x3Identity()
 {
 	return float3x3( 1, 0, 0, 0, 1, 0, 0, 0, 1 );
 }
@@ -986,7 +986,7 @@ struct float4x4
 		return det;
 	}
 
-	void transpose( void )
+	void transpose()
 	{
 		Swap( r0.y, r1.x );
 		Swap( r0.z, r2.x );
@@ -996,7 +996,7 @@ struct float4x4
 		Swap( r2.w, r3.z );
 	}
 
-	void invert( void )
+	void invert()
 	{
 		float4x4 ret;
 		float	 recip;
@@ -1083,12 +1083,12 @@ struct float4x4
 	}
 
 	// Axis access
-	float3 getXAxis( void ) const { return r0; }
-	float3 getYAxis( void ) const { return r1; }
-	float3 getZAxis( void ) const { return r2; }
-	float3 getPosition( void ) const { return float3( r3 ); }
+	float3 getXAxis() const { return r0; }
+	float3 getYAxis() const { return r1; }
+	float3 getZAxis() const { return r2; }
+	float3 getPosition() const { return float3( r3 ); }
 
-	void   orthonormalize( void )
+	void   orthonormalize()
 	{
 		float3 x = getXAxis();
 		float3 y = getYAxis();
@@ -1111,7 +1111,7 @@ inline float determinant( const float4x4& m )
 {
 	return m.determinant();
 }
-inline float4x4 float4x4Identity( void )
+inline float4x4 float4x4Identity()
 {
 	return float4x4( 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 );
 }
@@ -1324,23 +1324,23 @@ struct quaternion : public float4
 	}
 
 	/* Methods */
-	float3 getXAxis( void ) const
+	float3 getXAxis() const
 	{
 		float3 ret( 1 - 2 * ( y * y + z * z ), 2 * ( x * y + w * z ), 2 * ( x * z - y * w ) );
 		return ret;
 	}
-	float3 getYAxis( void ) const
+	float3 getYAxis() const
 	{
 		float3 ret( 2 * ( x * y - z * w ), 1 - 2 * ( x * x + z * z ), 2 * ( y * z + x * w ) );
 		return ret;
 	}
-	float3 getZAxis( void ) const
+	float3 getZAxis() const
 	{
 		float3 ret( 2 * ( x * z + y * w ), 2 * ( y * z - x * w ), 1 - 2 * ( x * x + y * y ) );
 		return ret;
 	}
 
-	float3x3 getMatrix( void ) const
+	float3x3 getMatrix() const
 	{
 		quaternion q = *this;
 		q.normalize();
@@ -1359,8 +1359,8 @@ struct quaternion : public float4
 		return ret;
 	}
 
-	quaternion conjugate( void ) const { return quaternion( -x, -y, -z, w ); }
-	quaternion inverse( void ) const
+	quaternion conjugate() const { return quaternion( -x, -y, -z, w ); }
+	quaternion inverse() const
 	{
 		// Note: Only normalized quaternions are supportted at the moment
 		quaternion q = *this;
@@ -1376,7 +1376,7 @@ inline quaternion quaternionMultiply( const quaternion& l, const quaternion& r )
 	return q;
 }
 
-inline quaternion quaternionIdentity( void )
+inline quaternion quaternionIdentity()
 {
 	return quaternion( 0.0f, 0.0f, 0.0f, 1.0f );
 }

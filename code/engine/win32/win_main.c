@@ -99,7 +99,7 @@ qboolean Sys_LowPhysicalMemory()
 Sys_BeginProfiling
 ==================
 */
-void Sys_BeginProfiling( void )
+void Sys_BeginProfiling()
 {
 	// this is just used on the mac build
 }
@@ -150,7 +150,7 @@ void QDECL Sys_Error( const char* error, ... )
 Sys_Quit
 ==============
 */
-void Sys_Quit( void )
+void Sys_Quit()
 {
 	timeEndPeriod( 1 );
 	IN_Shutdown();
@@ -185,7 +185,7 @@ void Sys_Mkdir( const char* path )
 Sys_Cwd
 ==============
 */
-char* Sys_Cwd( void )
+char* Sys_Cwd()
 {
 	static char cwd[MAX_OSPATH];
 
@@ -200,7 +200,7 @@ char* Sys_Cwd( void )
 Sys_DefaultCDPath
 ==============
 */
-char* Sys_DefaultCDPath( void )
+char* Sys_DefaultCDPath()
 {
 	return "";
 }
@@ -210,7 +210,7 @@ char* Sys_DefaultCDPath( void )
 Sys_DefaultBasePath
 ==============
 */
-char* Sys_DefaultBasePath( void )
+char* Sys_DefaultBasePath()
 {
 	return Sys_Cwd();
 }
@@ -461,7 +461,7 @@ Search all the drives to see if there is a valid CD to grab
 the cddir from
 ================
 */
-qboolean Sys_ScanForCD( void )
+qboolean Sys_ScanForCD()
 {
 	static char cddir[MAX_OSPATH];
 	char		drive[4];
@@ -518,7 +518,7 @@ Sys_CheckCD
 Return true if the proper CD is in the drive
 ================
 */
-qboolean Sys_CheckCD( void )
+qboolean Sys_CheckCD()
 {
 	// FIXME: mission pack
 	return qtrue;
@@ -531,7 +531,7 @@ Sys_GetClipboardData
 
 ================
 */
-char* Sys_GetClipboardData( void )
+char* Sys_GetClipboardData()
 {
 	char* data = NULL;
 	char* cliptext;
@@ -708,11 +708,11 @@ BACKGROUND FILE STREAMING
 
 #if 1
 
-void Sys_InitStreamThread( void )
+void Sys_InitStreamThread()
 {
 }
 
-void Sys_ShutdownStreamThread( void )
+void Sys_ShutdownStreamThread()
 {
 }
 
@@ -764,7 +764,7 @@ Sys_StreamThread
 A thread will be sitting in this loop forever
 ================
 */
-void		  Sys_StreamThread( void )
+void		  Sys_StreamThread()
 {
 	int buffer;
 	int count;
@@ -811,7 +811,7 @@ Sys_InitStreamThread
 
 ================
 */
-void Sys_InitStreamThread( void )
+void Sys_InitStreamThread()
 {
 	int i;
 
@@ -840,7 +840,7 @@ Sys_ShutdownStreamThread
 
 ================
 */
-void Sys_ShutdownStreamThread( void )
+void Sys_ShutdownStreamThread()
 {
 }
 
@@ -1048,7 +1048,7 @@ Sys_GetEvent
 
 ================
 */
-sysEvent_t Sys_GetEvent( void )
+sysEvent_t Sys_GetEvent()
 {
 	MSG		   msg;
 	sysEvent_t ev;
@@ -1131,7 +1131,7 @@ Sys_In_Restart_f
 Restart the input subsystem
 =================
 */
-void Sys_In_Restart_f( void )
+void Sys_In_Restart_f()
 {
 	IN_Shutdown();
 	IN_Init();
@@ -1144,7 +1144,7 @@ Sys_Net_Restart_f
 Restart the network subsystem
 =================
 */
-void Sys_Net_Restart_f( void )
+void Sys_Net_Restart_f()
 {
 	NET_Restart();
 }
@@ -1160,7 +1160,7 @@ are initialized
 #define OSR2_BUILD_NUMBER  1111
 #define WIN98_BUILD_NUMBER 1998
 
-void Sys_Init( void )
+void Sys_Init()
 {
 	int cpuid;
 

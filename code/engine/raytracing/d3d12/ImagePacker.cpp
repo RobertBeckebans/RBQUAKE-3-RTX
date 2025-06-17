@@ -383,14 +383,14 @@ idSubImage idImagePacker::PackImage( idSubImage& image )
 	return PackImage( image.width, image.height );
 }
 
-int idImagePacker::GetWidth( void )
+int idImagePacker::GetWidth()
 {
 	if( !root )
 		return 0;
 	return root->rect.width;
 }
 
-int idImagePacker::GetHeight( void )
+int idImagePacker::GetHeight()
 {
 	if( !root )
 		return 0;

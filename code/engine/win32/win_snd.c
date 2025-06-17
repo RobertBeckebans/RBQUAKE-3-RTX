@@ -60,7 +60,7 @@ static const char*		   DSoundError( int error )
 SNDDMA_Shutdown
 ==================
 */
-void SNDDMA_Shutdown( void )
+void SNDDMA_Shutdown()
 {
 	Com_DPrintf( "Shutting down sound system\n" );
 
@@ -118,7 +118,7 @@ Initialize direct sound
 Returns false if failed
 ==================
 */
-qboolean SNDDMA_Init( void )
+qboolean SNDDMA_Init()
 {
 	memset( ( void* )&dma, 0, sizeof( dma ) );
 	dsound_init = 0;
@@ -287,7 +287,7 @@ inside the recirculating dma buffer, so the mixing code will know
 how many sample are required to fill it up.
 ===============
 */
-int SNDDMA_GetDMAPos( void )
+int SNDDMA_GetDMAPos()
 {
 	MMTIME mmtime;
 	int	   s;
@@ -317,7 +317,7 @@ SNDDMA_BeginPainting
 Makes sure dma.buffer is valid
 ===============
 */
-void SNDDMA_BeginPainting( void )
+void SNDDMA_BeginPainting()
 {
 	int		reps;
 	DWORD	dwSize2;
@@ -374,7 +374,7 @@ Send sound to device if buffer isn't really the dma buffer
 Also unlocks the dsound buffer
 ===============
 */
-void SNDDMA_Submit( void )
+void SNDDMA_Submit()
 {
 	// unlock the dsound buffer
 	if( pDSBuf )
@@ -390,7 +390,7 @@ SNDDMA_Activate
 When we change windows we need to do this
 =================
 */
-void SNDDMA_Activate( void )
+void SNDDMA_Activate()
 {
 	if( !pDS )
 	{

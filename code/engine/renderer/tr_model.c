@@ -53,7 +53,7 @@ model_t*		R_GetModelByHandle( qhandle_t index )
 /*
 ** R_AllocModel
 */
-model_t* R_AllocModel( void )
+model_t* R_AllocModel()
 {
 	model_t* mod;
 
@@ -667,7 +667,7 @@ void RE_BeginRegistration( glconfig_t* glconfigOut )
 R_ModelInit
 ===============
 */
-void R_ModelInit( void )
+void R_ModelInit()
 {
 	model_t* mod;
 
@@ -683,7 +683,7 @@ void R_ModelInit( void )
 R_Modellist_f
 ================
 */
-void R_Modellist_f( void )
+void R_Modellist_f()
 {
 	int		 i, j;
 	model_t* mod;
@@ -843,7 +843,7 @@ void Mod_Free( model_t* mod )
 Mod_FreeAll
 ================
 */
-void Mod_FreeAll( void )
+void Mod_FreeAll()
 {
 	int i;
 

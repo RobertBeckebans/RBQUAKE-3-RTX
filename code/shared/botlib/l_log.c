@@ -84,7 +84,7 @@ void			 Log_Open( char* filename )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Close( void )
+void Log_Close()
 {
 	if( !logfile.fp )
 		return;
@@ -102,7 +102,7 @@ void Log_Close( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Shutdown( void )
+void Log_Shutdown()
 {
 	if( logfile.fp )
 		Log_Close();
@@ -157,7 +157,7 @@ void QDECL Log_WriteTimeStamped( char* fmt, ... )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-FILE* Log_FilePointer( void )
+FILE* Log_FilePointer()
 {
 	return logfile.fp;
 } // end of the function Log_FilePointer
@@ -167,7 +167,7 @@ FILE* Log_FilePointer( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Log_Flush( void )
+void Log_Flush()
 {
 	if( logfile.fp )
 		fflush( logfile.fp );

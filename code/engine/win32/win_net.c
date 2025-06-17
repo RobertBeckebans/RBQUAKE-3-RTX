@@ -55,7 +55,7 @@ static byte localIP[MAX_IPS][4];
 NET_ErrorString
 ====================
 */
-char*		NET_ErrorString( void )
+char*		NET_ErrorString()
 {
 	int code;
 
@@ -546,7 +546,7 @@ qboolean Sys_IsLANAddress( netadr_t adr )
 Sys_ShowIP
 ==================
 */
-void Sys_ShowIP( void )
+void Sys_ShowIP()
 {
 	int i;
 
@@ -841,7 +841,7 @@ void NET_OpenSocks( int port )
 NET_GetLocalAddress
 =====================
 */
-void NET_GetLocalAddress( void )
+void NET_GetLocalAddress()
 {
 	char			hostname[256];
 	struct hostent* hostInfo;
@@ -893,7 +893,7 @@ void NET_GetLocalAddress( void )
 NET_OpenIP
 ====================
 */
-void NET_OpenIP( void )
+void NET_OpenIP()
 {
 	cvar_t* ip;
 	int		port;
@@ -985,7 +985,7 @@ int NET_IPXSocket( int port )
 NET_OpenIPX
 ====================
 */
-void NET_OpenIPX( void )
+void NET_OpenIPX()
 {
 	int port;
 
@@ -1000,7 +1000,7 @@ void NET_OpenIPX( void )
 NET_GetCvars
 ====================
 */
-static qboolean NET_GetCvars( void )
+static qboolean NET_GetCvars()
 {
 	qboolean modified;
 
@@ -1143,7 +1143,7 @@ void NET_Config( qboolean enableNetworking )
 NET_Init
 ====================
 */
-void NET_Init( void )
+void NET_Init()
 {
 	int r;
 
@@ -1169,7 +1169,7 @@ void NET_Init( void )
 NET_Shutdown
 ====================
 */
-void NET_Shutdown( void )
+void NET_Shutdown()
 {
 	if( !winsockInitialized )
 	{
@@ -1196,7 +1196,7 @@ void NET_Sleep( int msec )
 NET_Restart_f
 ====================
 */
-void NET_Restart( void )
+void NET_Restart()
 {
 	NET_Config( networkingEnabled );
 }

@@ -127,7 +127,7 @@ public:
 																		/// if an iterative update is requested
 	);
 
-	void Clear( void ) { m_instances.clear(); }
+	void Clear() { m_instances.clear(); }
 
 private:
 	/// Helper struct storing the instance data

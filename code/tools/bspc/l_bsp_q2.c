@@ -77,7 +77,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define q2_numareaportals numareaportals
 #define q2_dareaportals	  dareaportals
 
-void			GetLeafNums( void );
+void			GetLeafNums();
 
 //=============================================================================
 
@@ -148,7 +148,7 @@ char brushsidetextured[MAX_MAP_BRUSHSIDES];
 int	 bspallocated	 = false;
 int	 allocatedbspmem = 0;
 
-void Q2_AllocMaxBSP( void )
+void Q2_AllocMaxBSP()
 {
 	// models
 	nummodels = 0;
@@ -231,7 +231,7 @@ void Q2_AllocMaxBSP( void )
 	Log_Print( " of BSP memory\n" );
 } // end of the function Q2_AllocMaxBSP
 
-void Q2_FreeMaxBSP( void )
+void Q2_FreeMaxBSP()
 {
 	// models
 	nummodels = 0;
@@ -486,7 +486,7 @@ int Q2_HintSkipBrush( dbrush_t* brush )
 //===========================================================================
 qboolean WindingIsTiny( winding_t* w );
 
-void	 Q2_FixTextureReferences( void )
+void	 Q2_FixTextureReferences()
 {
 	int			  i, j, k, we;
 	dbrushside_t* brushside;
@@ -1011,7 +1011,7 @@ PrintBSPFileSizes
 Dumps info about current file
 =============
 */
-void Q2_PrintBSPFileSizes( void )
+void Q2_PrintBSPFileSizes()
 {
 	if( !num_entities )
 		Q2_ParseEntities();
@@ -1048,7 +1048,7 @@ ParseEntities
 Parses the dentdata string into entities
 ================
 */
-void Q2_ParseEntities( void )
+void Q2_ParseEntities()
 {
 	script_t* script;
 
@@ -1070,7 +1070,7 @@ UnparseEntities
 Generates the dentdata string from all the entities
 ================
 */
-void Q2_UnparseEntities( void )
+void Q2_UnparseEntities()
 {
 	char *	 buf, *end;
 	epair_t* ep;

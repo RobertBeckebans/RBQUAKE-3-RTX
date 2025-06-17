@@ -129,7 +129,7 @@ static qboolean	  StringToFilter( char* s, ipFilter_t* f )
 UpdateIPBans
 =================
 */
-static void UpdateIPBans( void )
+static void UpdateIPBans()
 {
 	byte b[4];
 	byte m[4];
@@ -237,7 +237,7 @@ static void AddIP( char* str )
 G_ProcessIPBans
 =================
 */
-void G_ProcessIPBans( void )
+void G_ProcessIPBans()
 {
 	char *s, *t;
 	char  str[MAX_CVAR_VALUE_STRING];
@@ -262,7 +262,7 @@ void G_ProcessIPBans( void )
 Svcmd_AddIP_f
 =================
 */
-void Svcmd_AddIP_f( void )
+void Svcmd_AddIP_f()
 {
 	char str[MAX_TOKEN_CHARS];
 
@@ -282,7 +282,7 @@ void Svcmd_AddIP_f( void )
 Svcmd_RemoveIP_f
 =================
 */
-void Svcmd_RemoveIP_f( void )
+void Svcmd_RemoveIP_f()
 {
 	ipFilter_t f;
 	int		   i;
@@ -319,7 +319,7 @@ void Svcmd_RemoveIP_f( void )
 Svcmd_EntityList_f
 ===================
 */
-void Svcmd_EntityList_f( void )
+void Svcmd_EntityList_f()
 {
 	int		   e;
 	gentity_t* check;
@@ -434,7 +434,7 @@ Svcmd_ForceTeam_f
 forceteam <player> <team>
 ===================
 */
-void Svcmd_ForceTeam_f( void )
+void Svcmd_ForceTeam_f()
 {
 	gclient_t* cl;
 	char	   str[MAX_TOKEN_CHARS];
@@ -460,7 +460,7 @@ ConsoleCommand
 
 =================
 */
-qboolean ConsoleCommand( void )
+qboolean ConsoleCommand()
 {
 	char cmd[MAX_TOKEN_CHARS];
 

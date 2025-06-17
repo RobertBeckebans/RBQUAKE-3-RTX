@@ -41,7 +41,7 @@ R_ToggleSmpFrame
 
 ====================
 */
-void R_ToggleSmpFrame( void )
+void R_ToggleSmpFrame()
 {
 	if( r_smp->integer )
 	{
@@ -76,7 +76,7 @@ RE_ClearScene
 
 ====================
 */
-void RE_ClearScene( void )
+void RE_ClearScene()
 {
 	r_firstSceneDlight = r_numdlights;
 	r_firstSceneEntity = r_numentities;
@@ -98,7 +98,7 @@ R_AddPolygonSurfaces
 Adds all the scene's polys into this view's drawsurf list
 =====================
 */
-void R_AddPolygonSurfaces( void )
+void R_AddPolygonSurfaces()
 {
 	int		   i;
 	shader_t*  sh;

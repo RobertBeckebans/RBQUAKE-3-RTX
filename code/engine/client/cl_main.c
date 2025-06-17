@@ -97,9 +97,9 @@ void hA3Dg_ExportRenderGeom( refexport_t* incoming_re );
 #endif
 
 extern void SV_BotFrame( int time );
-void		CL_CheckForResend( void );
-void		CL_ShowIP_f( void );
-void		CL_ServerStatus_f( void );
+void		CL_CheckForResend();
+void		CL_ShowIP_f();
+void		CL_ServerStatus_f();
 void		CL_ServerStatusResponse( netadr_t from, msg_t* msg );
 
 /*
@@ -109,7 +109,7 @@ CL_CDDialog
 Called by Com_Error when a cd is needed
 ===============
 */
-void		CL_CDDialog( void )
+void		CL_CDDialog()
 {
 	cls.cddialog = qtrue; // start it next frame
 }
@@ -150,7 +150,7 @@ void CL_AddReliableCommand( const char* cmd )
 CL_ChangeReliableCommand
 ======================
 */
-void CL_ChangeReliableCommand( void )
+void CL_ChangeReliableCommand()
 {
 	int r, index, l;
 
@@ -203,7 +203,7 @@ CL_StopRecording_f
 stop recording a demo
 ====================
 */
-void CL_StopRecord_f( void )
+void CL_StopRecord_f()
 {
 	int len;
 
@@ -260,7 +260,7 @@ Begins recording a demo from the current position
 ====================
 */
 static char demoName[MAX_QPATH]; // compiler bug workaround
-void		CL_Record_f( void )
+void		CL_Record_f()
 {
 	char		   name[MAX_OSPATH];
 	byte		   bufData[MAX_MSGLEN];
@@ -418,7 +418,7 @@ CLIENT SIDE DEMO PLAYBACK
 CL_DemoCompleted
 =================
 */
-void CL_DemoCompleted( void )
+void CL_DemoCompleted()
 {
 	if( cl_timedemo && cl_timedemo->integer )
 	{
@@ -440,7 +440,7 @@ void CL_DemoCompleted( void )
 CL_ReadDemoMessage
 =================
 */
-void CL_ReadDemoMessage( void )
+void CL_ReadDemoMessage()
 {
 	int	  r;
 	msg_t buf;
@@ -527,7 +527,7 @@ demo <demoname>
 
 ====================
 */
-void CL_PlayDemo_f( void )
+void CL_PlayDemo_f()
 {
 	char  name[MAX_OSPATH];
 	char *arg, *ext_test;
@@ -608,7 +608,7 @@ CL_StartDemoLoop
 Closing the main menu will restart the demo loop
 ====================
 */
-void CL_StartDemoLoop( void )
+void CL_StartDemoLoop()
 {
 	// start the demo loop again
 	Cbuf_AddText( "d1\n" );
@@ -623,7 +623,7 @@ Called when a demo or cinematic finishes
 If the "nextdemo" cvar is set, that command will be issued
 ==================
 */
-void CL_NextDemo( void )
+void CL_NextDemo()
 {
 	char v[MAX_STRING_CHARS];
 
@@ -648,7 +648,7 @@ void CL_NextDemo( void )
 CL_ShutdownAll
 =====================
 */
-void CL_ShutdownAll( void )
+void CL_ShutdownAll()
 {
 	// clear sounds
 	S_DisableSounds();
@@ -678,7 +678,7 @@ ways a client gets into a game
 Also called by Com_Error
 =================
 */
-void CL_FlushMemory( void )
+void CL_FlushMemory()
 {
 	// shutdown all the client stuff
 	CL_ShutdownAll();
@@ -709,7 +709,7 @@ screen to let the user know about it, then dump all client
 memory on the hunk from cgame, ui, and renderer
 =====================
 */
-void CL_MapLoading( void )
+void CL_MapLoading()
 {
 	if( !com_cl_running->integer )
 	{
@@ -753,7 +753,7 @@ CL_ClearState
 Called before parsing a gamestate
 =====================
 */
-void CL_ClearState( void )
+void CL_ClearState()
 {
 	//	S_StopAllSounds();
 
@@ -874,7 +874,7 @@ CL_RequestMotd
 
 ===================
 */
-void CL_RequestMotd( void )
+void CL_RequestMotd()
 {
 	char info[MAX_INFO_STRING];
 
@@ -945,7 +945,7 @@ If no response is received from the authorize server after two tries, the client
 in anyway.
 ===================
 */
-void CL_RequestAuthorization( void )
+void CL_RequestAuthorization()
 {
 	char	nums[64];
 	int		i, j, l;
@@ -1016,7 +1016,7 @@ CONSOLE COMMANDS
 CL_ForwardToServer_f
 ==================
 */
-void CL_ForwardToServer_f( void )
+void CL_ForwardToServer_f()
 {
 	if( cls.state != CA_ACTIVE || clc.demoplaying )
 	{
@@ -1038,7 +1038,7 @@ CL_Setenv_f
 Mostly for controlling voodoo environment variables
 ==================
 */
-void CL_Setenv_f( void )
+void CL_Setenv_f()
 {
 	int argc = Cmd_Argc();
 
@@ -1078,7 +1078,7 @@ void CL_Setenv_f( void )
 CL_Disconnect_f
 ==================
 */
-void CL_Disconnect_f( void )
+void CL_Disconnect_f()
 {
 	SCR_StopCinematic();
 	Cvar_Set( "ui_singlePlayerActive", "0" );
@@ -1094,7 +1094,7 @@ CL_Reconnect_f
 
 ================
 */
-void CL_Reconnect_f( void )
+void CL_Reconnect_f()
 {
 	if( !strlen( cls.servername ) || !strcmp( cls.servername, "localhost" ) )
 	{
@@ -1111,7 +1111,7 @@ CL_Connect_f
 
 ================
 */
-void CL_Connect_f( void )
+void CL_Connect_f()
 {
 	char* server;
 
@@ -1145,7 +1145,7 @@ void CL_Connect_f( void )
 	Con_Close();
 
 	/* MrE: 2000-09-13: now called in CL_DownloadsComplete
-	CL_FlushMemory( );
+	CL_FlushMemory();
 	*/
 
 	Q_strncpyz( cls.servername, server, sizeof( cls.servername ) );
@@ -1190,7 +1190,7 @@ CL_Rcon_f
   an unconnected command.
 =====================
 */
-void CL_Rcon_f( void )
+void CL_Rcon_f()
 {
 	char	 message[1024];
 	netadr_t to;
@@ -1245,7 +1245,7 @@ void CL_Rcon_f( void )
 CL_SendPureChecksums
 =================
 */
-void CL_SendPureChecksums( void )
+void CL_SendPureChecksums()
 {
 	const char* pChecksums;
 	char		cMsg[MAX_INFO_VALUE];
@@ -1271,7 +1271,7 @@ void CL_SendPureChecksums( void )
 CL_ResetPureClientAtServer
 =================
 */
-void CL_ResetPureClientAtServer( void )
+void CL_ResetPureClientAtServer()
 {
 	CL_AddReliableCommand( va( "vdr" ) );
 }
@@ -1286,7 +1286,7 @@ we also have to reload the UI and CGame because the renderer
 doesn't know what graphics to reload
 =================
 */
-void CL_Vid_Restart_f( void )
+void CL_Vid_Restart_f()
 {
 	// don't let them loop during the restart
 	S_StopAllSounds();
@@ -1348,7 +1348,7 @@ The cgame and game must also be forced to restart because
 handles will be invalid
 =================
 */
-void CL_Snd_Restart_f( void )
+void CL_Snd_Restart_f()
 {
 	S_Shutdown();
 	S_Init();
@@ -1361,7 +1361,7 @@ void CL_Snd_Restart_f( void )
 CL_PK3List_f
 ==================
 */
-void CL_OpenedPK3List_f( void )
+void CL_OpenedPK3List_f()
 {
 	Com_Printf( "Opened PK3 Names: %s\n", FS_LoadedPakNames() );
 }
@@ -1371,7 +1371,7 @@ void CL_OpenedPK3List_f( void )
 CL_PureList_f
 ==================
 */
-void CL_ReferencedPK3List_f( void )
+void CL_ReferencedPK3List_f()
 {
 	Com_Printf( "Referenced PK3 Names: %s\n", FS_ReferencedPakNames() );
 }
@@ -1381,7 +1381,7 @@ void CL_ReferencedPK3List_f( void )
 CL_Configstrings_f
 ==================
 */
-void CL_Configstrings_f( void )
+void CL_Configstrings_f()
 {
 	int i;
 	int ofs;
@@ -1408,7 +1408,7 @@ void CL_Configstrings_f( void )
 CL_Clientinfo_f
 ==============
 */
-void CL_Clientinfo_f( void )
+void CL_Clientinfo_f()
 {
 	Com_Printf( "--------- Client Information ---------\n" );
 	Com_Printf( "state: %i\n", cls.state );
@@ -1427,7 +1427,7 @@ CL_DownloadsComplete
 Called when all downloading has been completed
 =================
 */
-void CL_DownloadsComplete( void )
+void CL_DownloadsComplete()
 {
 	// if we downloaded files we need to restart the file system
 	if( clc.downloadRestart )
@@ -1517,7 +1517,7 @@ CL_NextDownload
 A download completed or failed
 =================
 */
-void CL_NextDownload( void )
+void CL_NextDownload()
 {
 	char* s;
 	char *remoteName, *localName;
@@ -1568,7 +1568,7 @@ After receiving a valid game state, we valid the cgame and local zip files here
 and determine if we need to download them
 =================
 */
-void CL_InitDownloads( void )
+void CL_InitDownloads()
 {
 	char missingfiles[1024];
 
@@ -1609,7 +1609,7 @@ CL_CheckForResend
 Resend a connect message if the last one has timed out
 =================
 */
-void CL_CheckForResend( void )
+void CL_CheckForResend()
 {
 	int	 port, i;
 	char info[MAX_INFO_STRING];
@@ -2117,7 +2117,7 @@ CL_CheckTimeout
 
 ==================
 */
-void CL_CheckTimeout( void )
+void CL_CheckTimeout()
 {
 	//
 	// check timeout
@@ -2145,7 +2145,7 @@ CL_CheckUserinfo
 
 ==================
 */
-void CL_CheckUserinfo( void )
+void CL_CheckUserinfo()
 {
 	// don't add reliable commands when not yet connected
 	if( cls.state < CA_CHALLENGING )
@@ -2287,7 +2287,7 @@ void QDECL CL_RefPrintf( int print_level, const char* fmt, ... )
 CL_ShutdownRef
 ============
 */
-void CL_ShutdownRef( void )
+void CL_ShutdownRef()
 {
 	if( !re.Shutdown )
 	{
@@ -2302,7 +2302,7 @@ void CL_ShutdownRef( void )
 CL_InitRenderer
 ============
 */
-void CL_InitRenderer( void )
+void CL_InitRenderer()
 {
 	// this sets up the renderer and calls R_Init
 	re.BeginRegistration( &cls.glconfig );
@@ -2323,7 +2323,7 @@ After the server has cleared the hunk, these will need to be restarted
 This is the only place that any of these functions are called from
 ============================
 */
-void CL_StartHunkUsers( void )
+void CL_StartHunkUsers()
 {
 	if( !com_cl_running )
 	{
@@ -2370,7 +2370,7 @@ void* CL_RefMalloc( int size )
 	return Z_TagMalloc( size, TAG_RENDERER );
 }
 
-int CL_ScaledMilliseconds( void )
+int CL_ScaledMilliseconds()
 {
 	return Sys_Milliseconds() * com_timescale->value;
 }
@@ -2380,7 +2380,7 @@ int CL_ScaledMilliseconds( void )
 CL_InitRef
 ============
 */
-void CL_InitRef( void )
+void CL_InitRef()
 {
 	refimport_t	 ri;
 	refexport_t* ret;
@@ -2442,7 +2442,7 @@ void CL_InitRef( void )
 
 //===========================================================================================
 
-void CL_SetModel_f( void )
+void CL_SetModel_f()
 {
 	char* arg;
 	char  name[256];
@@ -2465,7 +2465,7 @@ void CL_SetModel_f( void )
 CL_Init
 ====================
 */
-void CL_Init( void )
+void CL_Init()
 {
 	Com_Printf( "----- Client Initialization -----\n" );
 
@@ -2611,7 +2611,7 @@ CL_Shutdown
 
 ===============
 */
-void CL_Shutdown( void )
+void CL_Shutdown()
 {
 	static qboolean recursive = qfalse;
 
@@ -3061,7 +3061,7 @@ void CL_ServerStatusResponse( netadr_t from, msg_t* msg )
 CL_LocalServers_f
 ==================
 */
-void CL_LocalServers_f( void )
+void CL_LocalServers_f()
 {
 	char*	 message;
 	int		 i, j;
@@ -3110,7 +3110,7 @@ void CL_LocalServers_f( void )
 CL_GlobalServers_f
 ==================
 */
-void CL_GlobalServers_f( void )
+void CL_GlobalServers_f()
 {
 	netadr_t to;
 	int		 i;
@@ -3258,7 +3258,7 @@ void CL_ClearPing( int n )
 CL_GetPingQueueCount
 ==================
 */
-int CL_GetPingQueueCount( void )
+int CL_GetPingQueueCount()
 {
 	int		i;
 	int		count;
@@ -3283,7 +3283,7 @@ int CL_GetPingQueueCount( void )
 CL_GetFreePing
 ==================
 */
-ping_t* CL_GetFreePing( void )
+ping_t* CL_GetFreePing()
 {
 	ping_t* pingptr;
 	ping_t* best;
@@ -3340,7 +3340,7 @@ ping_t* CL_GetFreePing( void )
 CL_Ping_f
 ==================
 */
-void CL_Ping_f( void )
+void CL_Ping_f()
 {
 	netadr_t to;
 	ping_t*	 pingptr;
@@ -3505,7 +3505,7 @@ qboolean CL_UpdateVisiblePings_f( int source )
 CL_ServerStatus_f
 ==================
 */
-void CL_ServerStatus_f( void )
+void CL_ServerStatus_f()
 {
 	netadr_t		to;
 	char*			server;
@@ -3546,7 +3546,7 @@ void CL_ServerStatus_f( void )
 CL_ShowIP_f
 ==================
 */
-void CL_ShowIP_f( void )
+void CL_ShowIP_f()
 {
 	Sys_ShowIP();
 }

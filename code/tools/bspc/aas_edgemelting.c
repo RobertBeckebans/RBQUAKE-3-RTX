@@ -92,7 +92,7 @@ int AAS_MeltFaceWindingsOfArea( tmp_area_t* tmparea )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_MeltAreaFaceWindings( void )
+void AAS_MeltAreaFaceWindings()
 {
 	tmp_area_t* tmparea;
 	int			num_windingsplits = 0;

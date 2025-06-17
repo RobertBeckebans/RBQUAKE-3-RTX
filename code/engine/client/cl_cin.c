@@ -56,7 +56,7 @@ extern glconfig_t	  glConfig;
 extern int			  s_paintedtime;
 extern int			  s_rawend;
 
-static void			  RoQ_init( void );
+static void			  RoQ_init();
 
 /******************************************************************************
  *
@@ -139,7 +139,7 @@ static int			CL_handle	  = -1;
 extern int			s_soundtime;   // sample PAIRS
 extern int			s_paintedtime; // sample PAIRS
 
-void				CIN_CloseAllVideos( void )
+void				CIN_CloseAllVideos()
 {
 	int i;
 
@@ -152,7 +152,7 @@ void				CIN_CloseAllVideos( void )
 	}
 }
 
-static int CIN_HandleForVideo( void )
+static int CIN_HandleForVideo()
 {
 	int i;
 
@@ -167,7 +167,7 @@ static int CIN_HandleForVideo( void )
 	return -1;
 }
 
-extern int	CL_ScaledMilliseconds( void );
+extern int	CL_ScaledMilliseconds();
 
 //-----------------------------------------------------------------------------
 // RllSetupTable
@@ -654,7 +654,7 @@ static void blitVQQuad32fs( byte** status, unsigned char* data )
  *
  ******************************************************************************/
 
-static void ROQ_GenYUVTables( void )
+static void ROQ_GenYUVTables()
 {
 	float t_ub, t_vr, t_ug, t_vg;
 	long  i;
@@ -1372,7 +1372,7 @@ static void RoQReset()
  *
  ******************************************************************************/
 
-static void RoQInterrupt( void )
+static void RoQInterrupt()
 {
 	byte* framedata;
 	short sbuf[32768];
@@ -1539,7 +1539,7 @@ redump:
  *
  ******************************************************************************/
 
-static void RoQ_init( void )
+static void RoQ_init()
 {
 	// we need to use CL_ScaledMilliseconds because of the smp mode calls from the renderer
 	cinTable[currentHandle].startTime = cinTable[currentHandle].lastTime = CL_ScaledMilliseconds() * com_timescale->value;
@@ -1572,7 +1572,7 @@ static void RoQ_init( void )
  *
  ******************************************************************************/
 
-static void RoQShutdown( void )
+static void RoQShutdown()
 {
 	const char* s;
 
@@ -1958,7 +1958,7 @@ void CIN_DrawCinematic( int handle )
 	cinTable[handle].dirty = qfalse;
 }
 
-void CL_PlayCinematic_f( void )
+void CL_PlayCinematic_f()
 {
 	char *	 arg, *s;
 	qboolean holdatend;
@@ -1995,7 +1995,7 @@ void CL_PlayCinematic_f( void )
 	}
 }
 
-void SCR_DrawCinematic( void )
+void SCR_DrawCinematic()
 {
 	if( CL_handle >= 0 && CL_handle < MAX_VIDEO_HANDLES )
 	{
@@ -2003,7 +2003,7 @@ void SCR_DrawCinematic( void )
 	}
 }
 
-void SCR_RunCinematic( void )
+void SCR_RunCinematic()
 {
 	if( CL_handle >= 0 && CL_handle < MAX_VIDEO_HANDLES )
 	{
@@ -2011,7 +2011,7 @@ void SCR_RunCinematic( void )
 	}
 }
 
-void SCR_StopCinematic( void )
+void SCR_StopCinematic()
 {
 	if( CL_handle >= 0 && CL_handle < MAX_VIDEO_HANDLES )
 	{

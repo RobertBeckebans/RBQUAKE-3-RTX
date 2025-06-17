@@ -77,5 +77,5 @@ extern q3_dfog_t*		q3_dfogs; //[Q3_MAX_MAP_FOGS];
 extern char				q3_dbrushsidetextured[Q3_MAX_MAP_BRUSHSIDES];
 
 void					Q3_LoadBSPFile( struct quakefile_s* qf );
-void					Q3_FreeMaxBSP( void );
-void					Q3_ParseEntities( void );
+void					Q3_FreeMaxBSP();
+void					Q3_ParseEntities();

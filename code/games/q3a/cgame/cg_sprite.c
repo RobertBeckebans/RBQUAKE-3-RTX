@@ -18,7 +18,7 @@ polyVert_t spriteVerts[] = {
 CG_InitSmokePuffSprite
 ===============
 */
-void CG_InitSmokePuffSprite( void )
+void CG_InitSmokePuffSprite()
 {
 	qhandle_t shader;
 	shader					 = trap_R_RegisterShader( "smokePuff" );
@@ -30,7 +30,7 @@ void CG_InitSmokePuffSprite( void )
 CG_InitPlasmaSprite
 ===============
 */
-void CG_InitPlasmaSprite( void )
+void CG_InitPlasmaSprite()
 {
 	qhandle_t shader;
 	shader					  = trap_R_RegisterShader( "sprites/plasma1" );
@@ -42,7 +42,7 @@ void CG_InitPlasmaSprite( void )
 CG_InitSprites
 ===============
 */
-void CG_InitSprites( void )
+void CG_InitSprites()
 {
 	CG_InitPlasmaSprite();
 	CG_InitSmokePuffSprite();

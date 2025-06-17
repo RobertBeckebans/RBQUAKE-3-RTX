@@ -164,7 +164,7 @@ ProjectDlightTexture
 Perform dynamic lighting with another rendering pass
 ===================
 */
-static void ProjectDlightTexture( void )
+static void ProjectDlightTexture()
 {
 }
 
@@ -175,7 +175,7 @@ RB_FogPass
 Blends a fog texture on top of everything else
 ===================
 */
-static void RB_FogPass( void )
+static void RB_FogPass()
 {
 }
 
@@ -548,7 +548,7 @@ static void RB_IterateStagesGeneric( shaderCommands_t* input )
 /*
 ** RB_StageIteratorGeneric
 */
-void RB_StageIteratorGeneric( void )
+void RB_StageIteratorGeneric()
 {
 	shaderCommands_t* input;
 
@@ -662,20 +662,20 @@ void RB_StageIteratorGeneric( void )
 /*
 ** RB_StageIteratorVertexLitTexture
 */
-void RB_StageIteratorVertexLitTexture( void )
+void RB_StageIteratorVertexLitTexture()
 {
 }
 
 // define	REPLACE_MODE
 
-void RB_StageIteratorLightmappedMultitexture( void )
+void RB_StageIteratorLightmappedMultitexture()
 {
 }
 
 /*
 ** RB_EndSurface
 */
-void RB_EndSurface( void )
+void RB_EndSurface()
 {
 	shaderCommands_t* input;
 

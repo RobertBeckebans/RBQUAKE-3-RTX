@@ -67,8 +67,8 @@ static qboolean		 debugMode = qfalse;
 static int		lastListBoxClickTime = 0;
 
 void			Item_RunScript( itemDef_t* item, const char* s );
-void			Item_SetupKeywordHash( void );
-void			Menu_SetupKeywordHash( void );
+void			Item_SetupKeywordHash();
+void			Menu_SetupKeywordHash();
 int				BindingIDFromName( const char* name );
 qboolean		Item_Bind_HandleKey( itemDef_t* item, int key, qboolean down );
 itemDef_t*		Menu_SetPrevCursorItem( menuDef_t* menu );
@@ -116,7 +116,7 @@ void*		UI_Alloc( int size )
 UI_InitMemory
 ===============
 */
-void UI_InitMemory( void )
+void UI_InitMemory()
 {
 	allocPoint	= 0;
 	outOfMemory = qfalse;
@@ -3864,7 +3864,7 @@ static void Controls_GetKeyAssignment( char* command, int* twokeys )
 Controls_GetConfig
 =================
 */
-void Controls_GetConfig( void )
+void Controls_GetConfig()
 {
 	int i;
 	int twokeys[2];
@@ -3930,7 +3930,7 @@ void Controls_SetConfig( qboolean restart )
 Controls_SetDefaults
 =================
 */
-void Controls_SetDefaults( void )
+void Controls_SetDefaults()
 {
 	int i;
 
@@ -6131,7 +6131,7 @@ keywordHash_t* itemParseKeywordHash[KEYWORDHASH_SIZE];
 Item_SetupKeywordHash
 ===============
 */
-void		   Item_SetupKeywordHash( void )
+void		   Item_SetupKeywordHash()
 {
 	int i;
 
@@ -6597,7 +6597,7 @@ keywordHash_t* menuParseKeywordHash[KEYWORDHASH_SIZE];
 Menu_SetupKeywordHash
 ===============
 */
-void		   Menu_SetupKeywordHash( void )
+void		   Menu_SetupKeywordHash()
 {
 	int i;
 

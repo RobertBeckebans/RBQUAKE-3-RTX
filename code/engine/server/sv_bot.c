@@ -43,7 +43,7 @@ int						bot_enable;
 SV_BotAllocateClient
 ==================
 */
-int						SV_BotAllocateClient( void )
+int						SV_BotAllocateClient()
 {
 	int		  i;
 	client_t* cl;
@@ -270,7 +270,7 @@ int BotImport_inPVS( vec3_t p1, vec3_t p2 )
 BotImport_BSPEntityData
 ==================
 */
-char* BotImport_BSPEntityData( void )
+char* BotImport_BSPEntityData()
 {
 	return CM_EntityString();
 }
@@ -410,7 +410,7 @@ void BotImport_DebugPolygonDelete( int id )
 BotImport_DebugLineCreate
 ==================
 */
-int BotImport_DebugLineCreate( void )
+int BotImport_DebugLineCreate()
 {
 	vec3_t points[1];
 	return BotImport_DebugPolygonCreate( 0, 0, points );
@@ -491,7 +491,7 @@ void SV_BotFrame( int time )
 SV_BotLibSetup
 ===============
 */
-int SV_BotLibSetup( void )
+int SV_BotLibSetup()
 {
 	if( !bot_enable )
 	{
@@ -515,7 +515,7 @@ Called when either the entire server is being killed, or
 it is changing to a different game directory.
 ===============
 */
-int SV_BotLibShutdown( void )
+int SV_BotLibShutdown()
 {
 	if( !botlib_export )
 	{
@@ -530,7 +530,7 @@ int SV_BotLibShutdown( void )
 SV_BotInitCvars
 ==================
 */
-void SV_BotInitCvars( void )
+void SV_BotInitCvars()
 {
 	Cvar_Get( "bot_enable", "1", 0 );					  // enable the bot
 	Cvar_Get( "bot_developer", "0", CVAR_CHEAT );		  // bot developer mode
@@ -569,7 +569,7 @@ void SV_BotInitCvars( void )
 SV_BotInitBotLib
 ==================
 */
-void SV_BotInitBotLib( void )
+void SV_BotInitBotLib()
 {
 	botlib_import_t botlib_import;
 

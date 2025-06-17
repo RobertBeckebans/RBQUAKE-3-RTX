@@ -42,8 +42,8 @@ int	  vm_debugLevel;
 #define MAX_VM 3
 vm_t  vmTable[MAX_VM];
 
-void  VM_VmInfo_f( void );
-void  VM_VmProfile_f( void );
+void  VM_VmInfo_f();
+void  VM_VmProfile_f();
 
 // converts a VM pointer to a C pointer and
 // checks to make sure that the range is acceptable
@@ -62,7 +62,7 @@ void VM_Debug( int level )
 VM_Init
 ==============
 */
-void VM_Init( void )
+void VM_Init()
 {
 	Cvar_Get( "vm_cgame", "0", CVAR_ARCHIVE ); // !@# SHIP WITH SET TO 2
 	Cvar_Get( "vm_game", "0", CVAR_ARCHIVE );  // !@# SHIP WITH SET TO 2
@@ -263,7 +263,7 @@ void VM_Free( vm_t* vm )
 	lastVM	  = NULL;
 }
 
-void VM_Clear( void )
+void VM_Clear()
 {
 	int i;
 	for( i = 0; i < MAX_VM; i++ )
@@ -410,7 +410,7 @@ VM_VmProfile_f
 
 ==============
 */
-void VM_VmProfile_f( void )
+void VM_VmProfile_f()
 {
 	vm_t*		 vm;
 	vmSymbol_t **sorted, *sym;
@@ -462,7 +462,7 @@ VM_VmInfo_f
 
 ==============
 */
-void VM_VmInfo_f( void )
+void VM_VmInfo_f()
 {
 	vm_t* vm;
 	int	  i;

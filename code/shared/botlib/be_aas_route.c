@@ -90,7 +90,7 @@ int max_routingcachesize;
 // Changes Globals:		-
 //===========================================================================
 #ifdef ROUTING_DEBUG
-void AAS_RoutingInfo( void )
+void AAS_RoutingInfo()
 {
 	botimport.Print( PRT_MESSAGE, "%d area cache updates\n", numareacacheupdates );
 	botimport.Print( PRT_MESSAGE, "%d portal cache updates\n", numportalcacheupdates );
@@ -132,7 +132,7 @@ __inline int AAS_ClusterAreaNum( int cluster, int areanum )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitTravelFlagFromType( void )
+void AAS_InitTravelFlagFromType()
 {
 	int i;
 
@@ -343,7 +343,7 @@ int AAS_EnableRoutingArea( int areanum, int enable )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-__inline float AAS_RoutingTime( void )
+__inline float AAS_RoutingTime()
 {
 	return AAS_Time();
 } // end of the function AAS_RoutingTime
@@ -403,7 +403,7 @@ int AAS_AreaContentsTravelFlags( int areanum )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitAreaContentsTravelFlags( void )
+void AAS_InitAreaContentsTravelFlags()
 {
 	int i;
 
@@ -422,7 +422,7 @@ void AAS_InitAreaContentsTravelFlags( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_CreateReversedReachability( void )
+void AAS_CreateReversedReachability()
 {
 	int					i, n;
 	aas_reversedlink_t* revlink;
@@ -507,7 +507,7 @@ unsigned short int AAS_AreaTravelTime( int areanum, vec3_t start, vec3_t end )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_CalculateAreaTravelTimes( void )
+void AAS_CalculateAreaTravelTimes()
 {
 	int							i, l, n, size;
 	char*						ptr;
@@ -608,7 +608,7 @@ int AAS_PortalMaxTravelTime( int portalnum )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitPortalMaxTravelTimes( void )
+void AAS_InitPortalMaxTravelTimes()
 {
 	int i;
 
@@ -630,7 +630,7 @@ void AAS_InitPortalMaxTravelTimes( void )
 // Changes Globals:		-
 //===========================================================================
 /*
-int AAS_FreeOldestCache(void)
+int AAS_FreeOldestCache()
 {
 	int i, j, bestcluster, bestarea, freed;
 	float besttime;
@@ -704,7 +704,7 @@ int AAS_FreeOldestCache(void)
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_FreeOldestCache( void )
+int AAS_FreeOldestCache()
 {
 	int					clusterareanum;
 	aas_routingcache_t* cache;
@@ -775,7 +775,7 @@ aas_routingcache_t* AAS_AllocRoutingCache( int numtraveltimes )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeAllClusterAreaCache( void )
+void AAS_FreeAllClusterAreaCache()
 {
 	int					i, j;
 	aas_routingcache_t *cache, *nextcache;
@@ -808,7 +808,7 @@ void AAS_FreeAllClusterAreaCache( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitClusterAreaCache( void )
+void AAS_InitClusterAreaCache()
 {
 	int	  i, size;
 	char* ptr;
@@ -835,7 +835,7 @@ void AAS_InitClusterAreaCache( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeAllPortalCache( void )
+void AAS_FreeAllPortalCache()
 {
 	int					i;
 	aas_routingcache_t *cache, *nextcache;
@@ -862,7 +862,7 @@ void AAS_FreeAllPortalCache( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitPortalCache( void )
+void AAS_InitPortalCache()
 {
 	//
 	aasworld.portalcache = ( aas_routingcache_t** )GetClearedMemory( aasworld.numareas * sizeof( aas_routingcache_t* ) );
@@ -873,7 +873,7 @@ void AAS_InitPortalCache( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitRoutingUpdate( void )
+void AAS_InitRoutingUpdate()
 {
 	int i, maxreachabilityareas;
 
@@ -903,7 +903,7 @@ void AAS_InitRoutingUpdate( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_CreateAllRoutingCache( void )
+void AAS_CreateAllRoutingCache()
 {
 	int i, j, t;
 
@@ -953,7 +953,7 @@ typedef struct routecacheheader_s
 // void AAS_DecompressVis(byte *in, int numareas, byte *decompressed);
 // int AAS_CompressVis(byte *vis, int numareas, byte *dest);
 
-void AAS_WriteRouteCache( void )
+void AAS_WriteRouteCache()
 {
 	int					i, j, numportalcache, numareacache, totalsize;
 	aas_routingcache_t* cache;
@@ -1068,7 +1068,7 @@ aas_routingcache_t* AAS_ReadCache( fileHandle_t fp )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-int AAS_ReadRouteCache( void )
+int AAS_ReadRouteCache()
 {
 	int					i, clusterareanum; //, size;
 	fileHandle_t		fp;
@@ -1159,7 +1159,7 @@ int AAS_ReadRouteCache( void )
 //===========================================================================
 #define MAX_REACHABILITYPASSAREAS 32
 
-void AAS_InitReachabilityAreas( void )
+void AAS_InitReachabilityAreas()
 {
 	int					i, j, numareas, areas[MAX_REACHABILITYPASSAREAS];
 	int					numreachareas;
@@ -1241,7 +1241,7 @@ void AAS_InitReachabilityAreas( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_InitRouting( void )
+void AAS_InitRouting()
 {
 	AAS_InitTravelFlagFromType();
 	//
@@ -1277,7 +1277,7 @@ void AAS_InitRouting( void )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeRoutingCaches( void )
+void AAS_FreeRoutingCaches()
 {
 	// free all the existing cluster area cache
 	AAS_FreeAllClusterAreaCache();

@@ -147,7 +147,7 @@ void RB_AddQuadStamp( vec3_t origin, vec3_t left, vec3_t up, byte* color )
 RB_SurfaceSprite
 ==============
 */
-static void RB_SurfaceSprite( void )
+static void RB_SurfaceSprite()
 {
 	vec3_t left, up;
 	float  radius;
@@ -287,7 +287,7 @@ void RB_SurfaceTriangles( srfTriangles_t* srf )
 RB_SurfaceBeam
 ==============
 */
-void RB_SurfaceBeam( void )
+void RB_SurfaceBeam()
 {
 }
 
@@ -409,7 +409,7 @@ static void DoRailDiscs( int numSegs, const vec3_t start, const vec3_t dir, cons
 /*
 ** RB_SurfaceRailRinges
 */
-void RB_SurfaceRailRings( void )
+void RB_SurfaceRailRings()
 {
 	refEntity_t* e;
 	int			 numSegs;
@@ -441,7 +441,7 @@ void RB_SurfaceRailRings( void )
 /*
 ** RB_SurfaceRailCore
 */
-void RB_SurfaceRailCore( void )
+void RB_SurfaceRailCore()
 {
 	refEntity_t* e;
 	int			 len;
@@ -472,7 +472,7 @@ void RB_SurfaceRailCore( void )
 /*
 ** RB_SurfaceLightningBolt
 */
-void RB_SurfaceLightningBolt( void )
+void RB_SurfaceLightningBolt()
 {
 	refEntity_t* e;
 	int			 len;
@@ -1048,7 +1048,7 @@ RB_SurfaceAxis
 Draws x/y/z lines from the origin for orientation debugging
 ===================
 */
-void RB_SurfaceAxis( void )
+void RB_SurfaceAxis()
 {
 	GL_Bind( tr.whiteImage );
 }

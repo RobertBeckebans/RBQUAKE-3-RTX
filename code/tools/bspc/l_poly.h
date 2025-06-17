@@ -86,13 +86,13 @@ winding_t* TryMergeWinding( winding_t* f1, winding_t* f2, vec3_t planenormal );
 winding_t* MergeWindings( winding_t* w1, winding_t* w2, vec3_t planenormal );
 
 // #ifdef ME
-void	   ResetWindings( void );
+void	   ResetWindings();
 // returns the amount of winding memory
-int		   WindingMemory( void );
-int		   WindingPeakMemory( void );
-int		   ActiveWindings( void );
+int		   WindingMemory();
+int		   WindingPeakMemory();
+int		   ActiveWindings();
 // returns the winding error string
-char*	   WindingErrorString( void );
+char*	   WindingErrorString();
 // returns one of the WE_ flags when the winding has errors
 int		   WindingError( winding_t* w );
 // removes equal points from the winding

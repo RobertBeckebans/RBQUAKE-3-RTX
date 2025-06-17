@@ -1145,7 +1145,7 @@ void Q1_CreateMapBrushes( entity_t* mapent, int modelnum )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void Q1_ResetMapLoading( void )
+void Q1_ResetMapLoading()
 {
 } // end of the function Q1_ResetMapLoading
 //===========================================================================

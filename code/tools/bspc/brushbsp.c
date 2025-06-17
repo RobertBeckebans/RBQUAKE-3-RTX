@@ -116,7 +116,7 @@ void	PrintContents( int contents )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-void ResetBrushBSP( void )
+void ResetBrushBSP()
 {
 	c_nodes				  = 0;
 	c_nonvis			  = 0;
@@ -404,7 +404,7 @@ int CountBrushList( bspbrush_t* brushes )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-node_t* AllocNode( void )
+node_t* AllocNode()
 {
 	node_t* node;
 
@@ -1575,7 +1575,7 @@ void AddNodeToQueue( node_t* node )
 	ThreadSemaphoreIncrease( 1 );
 } // end of the function AddNodeToQueue
 // get the first node from the front of the node list
-node_t* NextNodeFromList( void )
+node_t* NextNodeFromList()
 {
 	node_t* node;
 
@@ -1608,7 +1608,7 @@ node_t* NextNodeFromList( void )
 	return node;
 } // end of the function NextNodeFromList
 // returns the size of the node list
-int NodeListSize( void )
+int NodeListSize()
 {
 	int size;
 
@@ -1619,7 +1619,7 @@ int NodeListSize( void )
 	return size;
 } // end of the function NodeListSize
 //
-void IncreaseNodeCounter( void )
+void IncreaseNodeCounter()
 {
 	ThreadLock();
 	// if (verbose) printf("\r%6d", numrecurse++);

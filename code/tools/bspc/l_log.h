@@ -23,9 +23,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // open a log file
 void  Log_Open( char* filename );
 // close the current log file
-void  Log_Close( void );
+void  Log_Close();
 // close log file if present
-void  Log_Shutdown( void );
+void  Log_Shutdown();
 // print on stdout and write to the current opened log file
 void  Log_Print( char* fmt, ... );
 // write to the current opened log file
@@ -33,9 +33,9 @@ void  Log_Write( char* fmt, ... );
 // write to the current opened log file with a time stamp
 void  Log_WriteTimeStamped( char* fmt, ... );
 // returns the log file structure
-FILE* Log_FileStruct( void );
+FILE* Log_FileStruct();
 // flush log file
-void  Log_Flush( void );
+void  Log_Flush();
 
 #ifdef WINBSPC
 void WinBSPCPrint( char* str );

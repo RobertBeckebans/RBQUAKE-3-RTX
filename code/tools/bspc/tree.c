@@ -175,7 +175,7 @@ void Tree_Free( tree_t* tree )
 // Returns:				-
 // Changes Globals:		-
 //===========================================================================
-tree_t* Tree_Alloc( void )
+tree_t* Tree_Alloc()
 {
 	tree_t* tree;
 

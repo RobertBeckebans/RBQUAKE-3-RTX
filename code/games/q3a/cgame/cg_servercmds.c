@@ -66,7 +66,7 @@ CG_ParseScores
 
 =================
 */
-static void CG_ParseScores( void )
+static void CG_ParseScores()
 {
 	int i, powerups;
 
@@ -118,7 +118,7 @@ CG_ParseTeamInfo
 
 =================
 */
-static void CG_ParseTeamInfo( void )
+static void CG_ParseTeamInfo()
 {
 	int i;
 	int client;
@@ -147,7 +147,7 @@ This is called explicitly when the gamestate is first received,
 and whenever the server updates any serverinfo flagged cvars
 ================
 */
-void CG_ParseServerinfo( void )
+void CG_ParseServerinfo()
 {
 	const char* info;
 	char*		mapname;
@@ -174,7 +174,7 @@ void CG_ParseServerinfo( void )
 CG_ParseWarmup
 ==================
 */
-static void CG_ParseWarmup( void )
+static void CG_ParseWarmup()
 {
 	const char* info;
 	int			warmup;
@@ -211,7 +211,7 @@ CG_SetConfigValues
 Called on load to set the initial values from configure strings
 ================
 */
-void CG_SetConfigValues( void )
+void CG_SetConfigValues()
 {
 	const char* s;
 
@@ -239,7 +239,7 @@ void CG_SetConfigValues( void )
 CG_ShaderStateChanged
 =====================
 */
-void CG_ShaderStateChanged( void )
+void CG_ShaderStateChanged()
 {
 	char		originalShader[MAX_QPATH];
 	char		newShader[MAX_QPATH];
@@ -289,7 +289,7 @@ CG_ConfigStringModified
 
 ================
 */
-static void CG_ConfigStringModified( void )
+static void CG_ConfigStringModified()
 {
 	const char* str;
 	int			num;
@@ -507,7 +507,7 @@ A tournement restart will clear everything, but doesn't
 require a reload of all the media
 ===============
 */
-static void CG_MapRestart( void )
+static void CG_MapRestart()
 {
 	if( cg_showmiss.integer )
 	{
@@ -707,7 +707,7 @@ int					 CG_ParseVoiceChats( const char* filename, voiceChatList_t* voiceChatLis
 CG_LoadVoiceChats
 =================
 */
-void CG_LoadVoiceChats( void )
+void CG_LoadVoiceChats()
 {
 	int size;
 
@@ -966,7 +966,7 @@ void				CG_PlayVoiceChat( bufferedVoiceChat_t* vchat )
 CG_PlayBufferedVoieChats
 =====================
 */
-void CG_PlayBufferedVoiceChats( void )
+void CG_PlayBufferedVoiceChats()
 {
 #ifdef MISSIONPACK
 	if( cg.voiceChatTime < cg.time )
@@ -1121,7 +1121,7 @@ The string has been tokenized and can be retrieved with
 Cmd_Argc() / Cmd_Argv()
 =================
 */
-static void CG_ServerCommand( void )
+static void CG_ServerCommand()
 {
 	const char* cmd;
 	char		text[MAX_SAY_TEXT];

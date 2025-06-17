@@ -58,11 +58,11 @@ typedef struct
 
 	// EndRegistration will draw a tiny polygon with each texture, forcing
 	// them to be loaded into card memory
-	void ( *EndRegistration )( void );
+	void ( *EndRegistration )();
 
 	// a scene is built up by calls to R_ClearScene and the various R_Add functions.
 	// Nothing is drawn until R_RenderScene is called.
-	void ( *ClearScene )( void );
+	void ( *ClearScene )();
 	void ( *AddRefEntityToScene )( const refEntity_t* re );
 	void ( *AddPolyToScene )( qhandle_t hShader, int numVerts, const polyVert_t* verts, int num );
 	int ( *LightForPoint )( vec3_t point, vec3_t ambientLight, vec3_t directedLight, vec3_t lightDir );
@@ -95,8 +95,8 @@ typedef struct
 	void ( *RemapShader )( const char* oldShader, const char* newShader, const char* offsetTime );
 	qboolean ( *GetEntityToken )( char* buffer, int size );
 	qboolean ( *inPVS )( const vec3_t p1, const vec3_t p2 );
-	void ( *R_FinishDXRLoading )( void );
-	void ( *ShutdownRaytracingMap )( void );
+	void ( *R_FinishDXRLoading )();
+	void ( *ShutdownRaytracingMap )();
 
 	qhandle_t ( *RegisterCustomModel )( const char* name, qhandle_t shader, polyVert_t* verts, int numVertexes );
 } refexport_t;
@@ -114,7 +114,7 @@ typedef struct
 
 	// milliseconds should only be used for profiling, never
 	// for anything game related.  Get time from the refdef
-	int ( *Milliseconds )( void );
+	int ( *Milliseconds )();
 
 	// stack based memory allocation for per-level things that
 	// won't be freed
@@ -133,10 +133,10 @@ typedef struct
 	cvar_t* ( *Cvar_Get )( const char* name, const char* value, int flags );
 	void ( *Cvar_Set )( const char* name, const char* value );
 
-	void ( *Cmd_AddCommand )( const char* name, void ( *cmd )( void ) );
+	void ( *Cmd_AddCommand )( const char* name, void ( *cmd )() );
 	void ( *Cmd_RemoveCommand )( const char* name );
 
-	int ( *Cmd_Argc )( void );
+	int ( *Cmd_Argc )();
 	char* ( *Cmd_Argv )( int i );
 
 	void ( *Cmd_ExecuteText )( int exec_when, const char* text );

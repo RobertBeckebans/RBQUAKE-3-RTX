@@ -39,7 +39,7 @@ Sys_Milliseconds
 ================
 */
 int sys_timeBase;
-int Sys_Milliseconds( void )
+int Sys_Milliseconds()
 {
 	int				sys_curtime;
 	static qboolean initialized = qfalse;
@@ -85,7 +85,7 @@ void Sys_SnapVector( float* v )
 **
 ** --------------------------------------------------------------------------------
 */
-int Sys_GetProcessorId( void )
+int Sys_GetProcessorId()
 {
 	return CPUID_GENERIC;
 }
@@ -99,7 +99,7 @@ int Sys_GetProcessorId( void )
 
 //============================================
 
-char* Sys_GetCurrentUser( void )
+char* Sys_GetCurrentUser()
 {
 	static char	  s_userName[1024];
 	unsigned long size = sizeof( s_userName );
@@ -115,12 +115,12 @@ char* Sys_GetCurrentUser( void )
 	return s_userName;
 }
 
-char* Sys_DefaultHomePath( void )
+char* Sys_DefaultHomePath()
 {
 	return NULL;
 }
 
-char* Sys_DefaultInstallPath( void )
+char* Sys_DefaultInstallPath()
 {
 	return Sys_Cwd();
 }

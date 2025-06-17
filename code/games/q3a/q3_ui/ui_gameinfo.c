@@ -71,7 +71,7 @@ void*		 UI_Alloc( int size )
 UI_InitMemory
 ===============
 */
-void UI_InitMemory( void )
+void UI_InitMemory()
 {
 	allocPoint	= 0;
 	outOfMemory = qfalse;
@@ -179,7 +179,7 @@ static void UI_LoadArenasFromFile( char* filename )
 UI_LoadArenas
 ===============
 */
-static void UI_LoadArenas( void )
+static void UI_LoadArenas()
 {
 	int		 numdirs;
 	vmCvar_t arenasFile;
@@ -396,7 +396,7 @@ static void UI_LoadBotsFromFile( char* filename )
 UI_LoadBots
 ===============
 */
-static void UI_LoadBots( void )
+static void UI_LoadBots()
 {
 	vmCvar_t botsFile;
 	int		 numdirs;
@@ -724,7 +724,7 @@ UI_GetCurrentGame
 Returns the next level the player has not won
 ===============
 */
-int UI_GetCurrentGame( void )
+int UI_GetCurrentGame()
 {
 	int			level;
 	int			rank;
@@ -766,7 +766,7 @@ UI_NewGame
 Clears the scores and sets the difficutly level
 ===============
 */
-void UI_NewGame( void )
+void UI_NewGame()
 {
 	trap_Cvar_Set( "g_spScores1", "" );
 	trap_Cvar_Set( "g_spScores2", "" );
@@ -782,7 +782,7 @@ void UI_NewGame( void )
 UI_GetNumArenas
 ===============
 */
-int UI_GetNumArenas( void )
+int UI_GetNumArenas()
 {
 	return ui_numArenas;
 }
@@ -792,7 +792,7 @@ int UI_GetNumArenas( void )
 UI_GetNumSPArenas
 ===============
 */
-int UI_GetNumSPArenas( void )
+int UI_GetNumSPArenas()
 {
 	return ui_numSinglePlayerArenas;
 }
@@ -802,7 +802,7 @@ int UI_GetNumSPArenas( void )
 UI_GetNumSPTiers
 ===============
 */
-int UI_GetNumSPTiers( void )
+int UI_GetNumSPTiers()
 {
 	return ui_numSinglePlayerArenas / ARENAS_PER_TIER;
 }
@@ -812,7 +812,7 @@ int UI_GetNumSPTiers( void )
 UI_GetNumBots
 ===============
 */
-int UI_GetNumBots( void )
+int UI_GetNumBots()
 {
 	return ui_numBots;
 }
@@ -822,7 +822,7 @@ int UI_GetNumBots( void )
 UI_SPUnlock_f
 ===============
 */
-void UI_SPUnlock_f( void )
+void UI_SPUnlock_f()
 {
 	char arenaKey[16];
 	char scores[MAX_INFO_VALUE];
@@ -856,7 +856,7 @@ void UI_SPUnlock_f( void )
 UI_SPUnlockMedals_f
 ===============
 */
-void UI_SPUnlockMedals_f( void )
+void UI_SPUnlockMedals_f()
 {
 	int	 n;
 	char key[16];
@@ -880,7 +880,7 @@ void UI_SPUnlockMedals_f( void )
 UI_InitGameinfo
 ===============
 */
-void UI_InitGameinfo( void )
+void UI_InitGameinfo()
 {
 	UI_InitMemory();
 	UI_LoadArenas();

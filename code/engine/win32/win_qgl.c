@@ -39,7 +39,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ** Unloads the specified DLL then nulls out all the proc pointers.  This
 ** is only called during a hard shutdown of the OGL subsystem (e.g. vid_restart).
 */
-void QGL_Shutdown( void )
+void QGL_Shutdown()
 {
 	ri.Printf( PRINT_ALL, "...shutting down QGL\n" );
 

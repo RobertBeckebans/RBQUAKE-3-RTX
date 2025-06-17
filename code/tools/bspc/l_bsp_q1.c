@@ -80,7 +80,7 @@ int*			q1_dsurfedges; //[MAX_MAP_SURFEDGES];
 int				q1_bspallocated	   = false;
 int				q1_allocatedbspmem = 0;
 
-void			Q1_AllocMaxBSP( void )
+void			Q1_AllocMaxBSP()
 {
 	// models
 	q1_nummodels	   = 0;
@@ -148,7 +148,7 @@ void			Q1_AllocMaxBSP( void )
 	Log_Print( " of BSP memory\n" );
 } // end of the function Q1_AllocMaxBSP
 
-void Q1_FreeMaxBSP( void )
+void Q1_FreeMaxBSP()
 {
 	// models
 	q1_nummodels = 0;
@@ -523,7 +523,7 @@ Q1_PrintBSPFileSizes
 Dumps info about current file
 =============
 */
-void Q1_PrintBSPFileSizes( void )
+void Q1_PrintBSPFileSizes()
 {
 	printf( "%5i planes       %6i\n", q1_numplanes, ( int )( q1_numplanes * sizeof( q1_dplane_t ) ) );
 	printf( "%5i vertexes     %6i\n", q1_numvertexes, ( int )( q1_numvertexes * sizeof( q1_dvertex_t ) ) );
@@ -551,7 +551,7 @@ Q1_ParseEntities
 Parses the dentdata string into entities
 ================
 */
-void Q1_ParseEntities( void )
+void Q1_ParseEntities()
 {
 	script_t* script;
 
@@ -573,7 +573,7 @@ Q1_UnparseEntities
 Generates the dentdata string from all the entities
 ================
 */
-void Q1_UnparseEntities( void )
+void Q1_UnparseEntities()
 {
 	char *	 buf, *end;
 	epair_t* ep;

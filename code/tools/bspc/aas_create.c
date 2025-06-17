@@ -45,7 +45,7 @@ tmp_aas_t tmpaasworld;
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void	  AAS_InitTmpAAS( void )
+void	  AAS_InitTmpAAS()
 {
 	// tmp faces
 	tmpaasworld.numfaces = 0;
@@ -67,7 +67,7 @@ void	  AAS_InitTmpAAS( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FreeTmpAAS( void )
+void AAS_FreeTmpAAS()
 {
 	tmp_face_t *   f, *nextf;
 	tmp_area_t *   a, *nexta;
@@ -102,7 +102,7 @@ void AAS_FreeTmpAAS( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-tmp_face_t* AAS_AllocTmpFace( void )
+tmp_face_t* AAS_AllocTmpFace()
 {
 	tmp_face_t* tmpface;
 
@@ -143,7 +143,7 @@ void AAS_FreeTmpFace( tmp_face_t* tmpface )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-tmp_area_t* AAS_AllocTmpArea( void )
+tmp_area_t* AAS_AllocTmpArea()
 {
 	tmp_area_t* tmparea;
 
@@ -182,7 +182,7 @@ void AAS_FreeTmpArea( tmp_area_t* tmparea )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-tmp_node_t* AAS_AllocTmpNode( void )
+tmp_node_t* AAS_AllocTmpNode()
 {
 	tmp_nodebuf_t* nodebuf;
 
@@ -431,7 +431,7 @@ void AAS_CheckFaceWindingPlane( tmp_face_t* face )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_CheckAreaWindingPlanes( void )
+void AAS_CheckAreaWindingPlanes()
 {
 	int			side;
 	tmp_area_t* tmparea;
@@ -516,7 +516,7 @@ void AAS_FlipAreaFaces( tmp_area_t* tmparea )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_RemoveAreaFaceColinearPoints( void )
+void AAS_RemoveAreaFaceColinearPoints()
 {
 	int			side;
 	tmp_face_t* face;
@@ -539,7 +539,7 @@ void AAS_RemoveAreaFaceColinearPoints( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_RemoveTinyFaces( void )
+void AAS_RemoveTinyFaces()
 {
 	int			side, num;
 	tmp_face_t *face, *nextface;
@@ -575,7 +575,7 @@ void AAS_RemoveTinyFaces( void )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_CreateAreaSettings( void )
+void AAS_CreateAreaSettings()
 {
 	int			i, flags, side, numgrounded, numladderareas, numliquidareas;
 	tmp_face_t* face;
@@ -812,7 +812,7 @@ void AAS_CreateAreas( node_t* node )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_PrintNumGroundFaces( void )
+void AAS_PrintNumGroundFaces()
 {
 	tmp_face_t* tmpface;
 	int			numgroundfaces = 0;
@@ -877,7 +877,7 @@ void AAS_CheckAreaSharedFaces( tmp_area_t* tmparea1, tmp_area_t* tmparea2 )
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_CheckSharedFaces( void )
+void AAS_CheckSharedFaces()
 {
 	tmp_area_t *tmparea1, *tmparea2;
 
@@ -976,7 +976,7 @@ void AAS_FlipAreaSharedFaces(tmp_area_t *tmparea1, tmp_area_t *tmparea2)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FlipSharedFaces(void)
+void AAS_FlipSharedFaces()
 {
 	int i;
 	tmp_area_t *tmparea1, *tmparea2;
@@ -1003,7 +1003,7 @@ void AAS_FlipSharedFaces(void)
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void AAS_FlipSharedFaces( void )
+void AAS_FlipSharedFaces()
 {
 	int			i, side1, side2;
 	tmp_area_t* tmparea1;
