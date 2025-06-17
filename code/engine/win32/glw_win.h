@@ -28,22 +28,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 typedef struct
 {
-	WNDPROC wndproc;
+	WNDPROC	  wndproc;
 
-	HDC   hDC;   // handle to device context
-	HGLRC hGLRC; // handle to GL rendering context
+	HDC		  hDC;	 // handle to device context
+	HGLRC	  hGLRC; // handle to GL rendering context
 
 	HINSTANCE hinstOpenGL; // HINSTANCE for the OpenGL library
 
-	qboolean allowdisplaydepthchange;
-	qboolean pixelFormatSet;
+	qboolean  allowdisplaydepthchange;
+	qboolean  pixelFormatSet;
 
-	int desktopBitsPixel;
-	int desktopWidth, desktopHeight;
+	int		  desktopBitsPixel;
+	int		  desktopWidth, desktopHeight;
 
-	qboolean cdsFullscreen;
+	qboolean  cdsFullscreen;
 
-	FILE* log_fp;
+	FILE*	  log_fp;
 } glwstate_t;
 
 extern glwstate_t glw_state;

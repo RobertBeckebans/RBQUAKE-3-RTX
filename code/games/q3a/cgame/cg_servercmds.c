@@ -30,11 +30,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 typedef struct
 {
 	const char* order;
-	int         taskNum;
+	int			taskNum;
 } orderTask_t;
 
-static const orderTask_t validOrders[] = {
-	{ VOICECHAT_GETFLAG, TEAMTASK_OFFENSE },
+static const orderTask_t validOrders[] = { { VOICECHAT_GETFLAG, TEAMTASK_OFFENSE },
 	{ VOICECHAT_OFFENSE, TEAMTASK_OFFENSE },
 	{ VOICECHAT_DEFEND, TEAMTASK_DEFENSE },
 	{ VOICECHAT_DEFENDFLAG, TEAMTASK_DEFENSE },
@@ -42,10 +41,9 @@ static const orderTask_t validOrders[] = {
 	{ VOICECHAT_CAMP, TEAMTASK_CAMP },
 	{ VOICECHAT_FOLLOWME, TEAMTASK_FOLLOW },
 	{ VOICECHAT_RETURNFLAG, TEAMTASK_RETRIEVE },
-	{ VOICECHAT_FOLLOWFLAGCARRIER, TEAMTASK_ESCORT }
-};
+	{ VOICECHAT_FOLLOWFLAGCARRIER, TEAMTASK_ESCORT } };
 
-static const int numValidOrders = sizeof( validOrders ) / sizeof( orderTask_t );
+static const int		 numValidOrders = sizeof( validOrders ) / sizeof( orderTask_t );
 
 #ifdef MISSIONPACK // bk001204
 static int CG_ValidOrder( const char* p )
@@ -53,9 +51,9 @@ static int CG_ValidOrder( const char* p )
 	int i;
 	for( i = 0; i < numValidOrders; i++ )
 	{
-		if( Q_stricmp( p, validOrders[ i ].order ) == 0 )
+		if( Q_stricmp( p, validOrders[i].order ) == 0 )
 		{
-			return validOrders[ i ].taskNum;
+			return validOrders[i].taskNum;
 		}
 	}
 	return -1;
@@ -78,36 +76,36 @@ static void CG_ParseScores( void )
 		cg.numScores = MAX_CLIENTS;
 	}
 
-	cg.teamScores[ 0 ] = atoi( CG_Argv( 2 ) );
-	cg.teamScores[ 1 ] = atoi( CG_Argv( 3 ) );
+	cg.teamScores[0] = atoi( CG_Argv( 2 ) );
+	cg.teamScores[1] = atoi( CG_Argv( 3 ) );
 
 	memset( cg.scores, 0, sizeof( cg.scores ) );
 	for( i = 0; i < cg.numScores; i++ )
 	{
 		//
-		cg.scores[ i ].client          = atoi( CG_Argv( i * 14 + 4 ) );
-		cg.scores[ i ].score           = atoi( CG_Argv( i * 14 + 5 ) );
-		cg.scores[ i ].ping            = atoi( CG_Argv( i * 14 + 6 ) );
-		cg.scores[ i ].time            = atoi( CG_Argv( i * 14 + 7 ) );
-		cg.scores[ i ].scoreFlags      = atoi( CG_Argv( i * 14 + 8 ) );
-		powerups                       = atoi( CG_Argv( i * 14 + 9 ) );
-		cg.scores[ i ].accuracy        = atoi( CG_Argv( i * 14 + 10 ) );
-		cg.scores[ i ].impressiveCount = atoi( CG_Argv( i * 14 + 11 ) );
-		cg.scores[ i ].excellentCount  = atoi( CG_Argv( i * 14 + 12 ) );
-		cg.scores[ i ].guantletCount   = atoi( CG_Argv( i * 14 + 13 ) );
-		cg.scores[ i ].defendCount     = atoi( CG_Argv( i * 14 + 14 ) );
-		cg.scores[ i ].assistCount     = atoi( CG_Argv( i * 14 + 15 ) );
-		cg.scores[ i ].perfect         = atoi( CG_Argv( i * 14 + 16 ) );
-		cg.scores[ i ].captures        = atoi( CG_Argv( i * 14 + 17 ) );
+		cg.scores[i].client			 = atoi( CG_Argv( i * 14 + 4 ) );
+		cg.scores[i].score			 = atoi( CG_Argv( i * 14 + 5 ) );
+		cg.scores[i].ping			 = atoi( CG_Argv( i * 14 + 6 ) );
+		cg.scores[i].time			 = atoi( CG_Argv( i * 14 + 7 ) );
+		cg.scores[i].scoreFlags		 = atoi( CG_Argv( i * 14 + 8 ) );
+		powerups					 = atoi( CG_Argv( i * 14 + 9 ) );
+		cg.scores[i].accuracy		 = atoi( CG_Argv( i * 14 + 10 ) );
+		cg.scores[i].impressiveCount = atoi( CG_Argv( i * 14 + 11 ) );
+		cg.scores[i].excellentCount	 = atoi( CG_Argv( i * 14 + 12 ) );
+		cg.scores[i].guantletCount	 = atoi( CG_Argv( i * 14 + 13 ) );
+		cg.scores[i].defendCount	 = atoi( CG_Argv( i * 14 + 14 ) );
+		cg.scores[i].assistCount	 = atoi( CG_Argv( i * 14 + 15 ) );
+		cg.scores[i].perfect		 = atoi( CG_Argv( i * 14 + 16 ) );
+		cg.scores[i].captures		 = atoi( CG_Argv( i * 14 + 17 ) );
 
-		if( cg.scores[ i ].client < 0 || cg.scores[ i ].client >= MAX_CLIENTS )
+		if( cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS )
 		{
-			cg.scores[ i ].client = 0;
+			cg.scores[i].client = 0;
 		}
-		cgs.clientinfo[ cg.scores[ i ].client ].score    = cg.scores[ i ].score;
-		cgs.clientinfo[ cg.scores[ i ].client ].powerups = powerups;
+		cgs.clientinfo[cg.scores[i].client].score	 = cg.scores[i].score;
+		cgs.clientinfo[cg.scores[i].client].powerups = powerups;
 
-		cg.scores[ i ].team = cgs.clientinfo[ cg.scores[ i ].client ].team;
+		cg.scores[i].team = cgs.clientinfo[cg.scores[i].client].team;
 	}
 #ifdef MISSIONPACK
 	CG_SetScoreSelection( NULL );
@@ -131,13 +129,13 @@ static void CG_ParseTeamInfo( void )
 	{
 		client = atoi( CG_Argv( i * 6 + 2 ) );
 
-		sortedTeamPlayers[ i ] = client;
+		sortedTeamPlayers[i] = client;
 
-		cgs.clientinfo[ client ].location  = atoi( CG_Argv( i * 6 + 3 ) );
-		cgs.clientinfo[ client ].health    = atoi( CG_Argv( i * 6 + 4 ) );
-		cgs.clientinfo[ client ].armor     = atoi( CG_Argv( i * 6 + 5 ) );
-		cgs.clientinfo[ client ].curWeapon = atoi( CG_Argv( i * 6 + 6 ) );
-		cgs.clientinfo[ client ].powerups  = atoi( CG_Argv( i * 6 + 7 ) );
+		cgs.clientinfo[client].location	 = atoi( CG_Argv( i * 6 + 3 ) );
+		cgs.clientinfo[client].health	 = atoi( CG_Argv( i * 6 + 4 ) );
+		cgs.clientinfo[client].armor	 = atoi( CG_Argv( i * 6 + 5 ) );
+		cgs.clientinfo[client].curWeapon = atoi( CG_Argv( i * 6 + 6 ) );
+		cgs.clientinfo[client].powerups	 = atoi( CG_Argv( i * 6 + 7 ) );
 	}
 }
 
@@ -152,18 +150,18 @@ and whenever the server updates any serverinfo flagged cvars
 void CG_ParseServerinfo( void )
 {
 	const char* info;
-	char*       mapname;
+	char*		mapname;
 
-	info         = CG_ConfigString( CS_SERVERINFO );
+	info		 = CG_ConfigString( CS_SERVERINFO );
 	cgs.gametype = atoi( Info_ValueForKey( info, "g_gametype" ) );
 	trap_Cvar_Set( "g_gametype", va( "%i", cgs.gametype ) );
-	cgs.dmflags      = atoi( Info_ValueForKey( info, "dmflags" ) );
-	cgs.teamflags    = atoi( Info_ValueForKey( info, "teamflags" ) );
-	cgs.fraglimit    = atoi( Info_ValueForKey( info, "fraglimit" ) );
+	cgs.dmflags		 = atoi( Info_ValueForKey( info, "dmflags" ) );
+	cgs.teamflags	 = atoi( Info_ValueForKey( info, "teamflags" ) );
+	cgs.fraglimit	 = atoi( Info_ValueForKey( info, "fraglimit" ) );
 	cgs.capturelimit = atoi( Info_ValueForKey( info, "capturelimit" ) );
-	cgs.timelimit    = atoi( Info_ValueForKey( info, "timelimit" ) );
-	cgs.maxclients   = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
-	mapname          = Info_ValueForKey( info, "mapname" );
+	cgs.timelimit	 = atoi( Info_ValueForKey( info, "timelimit" ) );
+	cgs.maxclients	 = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
+	mapname			 = Info_ValueForKey( info, "mapname" );
 	Com_sprintf( cgs.mapname, sizeof( cgs.mapname ), "maps/%s.bsp", mapname );
 	Q_strncpyz( cgs.redTeam, Info_ValueForKey( info, "g_redTeam" ), sizeof( cgs.redTeam ) );
 	trap_Cvar_Set( "g_redTeam", cgs.redTeam );
@@ -179,11 +177,11 @@ CG_ParseWarmup
 static void CG_ParseWarmup( void )
 {
 	const char* info;
-	int         warmup;
+	int			warmup;
 
 	info = CG_ConfigString( CS_WARMUP );
 
-	warmup         = atoi( info );
+	warmup		   = atoi( info );
 	cg.warmupCount = -1;
 
 	if( warmup == 0 && cg.warmup )
@@ -217,20 +215,20 @@ void CG_SetConfigValues( void )
 {
 	const char* s;
 
-	cgs.scores1        = atoi( CG_ConfigString( CS_SCORES1 ) );
-	cgs.scores2        = atoi( CG_ConfigString( CS_SCORES2 ) );
+	cgs.scores1		   = atoi( CG_ConfigString( CS_SCORES1 ) );
+	cgs.scores2		   = atoi( CG_ConfigString( CS_SCORES2 ) );
 	cgs.levelStartTime = atoi( CG_ConfigString( CS_LEVEL_START_TIME ) );
 	if( cgs.gametype == GT_CTF )
 	{
-		s            = CG_ConfigString( CS_FLAGSTATUS );
-		cgs.redflag  = s[ 0 ] - '0';
-		cgs.blueflag = s[ 1 ] - '0';
+		s			 = CG_ConfigString( CS_FLAGSTATUS );
+		cgs.redflag	 = s[0] - '0';
+		cgs.blueflag = s[1] - '0';
 	}
 #ifdef MISSIONPACK
 	else if( cgs.gametype == GT_1FCTF )
 	{
-		s              = CG_ConfigString( CS_FLAGSTATUS );
-		cgs.flagStatus = s[ 0 ] - '0';
+		s			   = CG_ConfigString( CS_FLAGSTATUS );
+		cgs.flagStatus = s[0] - '0';
 	}
 #endif
 	cg.warmup = atoi( CG_ConfigString( CS_WARMUP ) );
@@ -243,11 +241,11 @@ CG_ShaderStateChanged
 */
 void CG_ShaderStateChanged( void )
 {
-	char        originalShader[ MAX_QPATH ];
-	char        newShader[ MAX_QPATH ];
-	char        timeOffset[ 16 ];
+	char		originalShader[MAX_QPATH];
+	char		newShader[MAX_QPATH];
+	char		timeOffset[16];
 	const char* o;
-	char *      n, *t;
+	char *		n, *t;
 
 	o = CG_ConfigString( CS_SHADERSTATE );
 	while( o && *o )
@@ -256,13 +254,13 @@ void CG_ShaderStateChanged( void )
 		if( n && *n )
 		{
 			strncpy( originalShader, o, n - o );
-			originalShader[ n - o ] = 0;
+			originalShader[n - o] = 0;
 			n++;
 			t = strstr( n, ":" );
 			if( t && *t )
 			{
 				strncpy( newShader, n, t - n );
-				newShader[ t - n ] = 0;
+				newShader[t - n] = 0;
 			}
 			else
 			{
@@ -273,7 +271,7 @@ void CG_ShaderStateChanged( void )
 			if( o )
 			{
 				strncpy( timeOffset, t, o - t );
-				timeOffset[ o - t ] = 0;
+				timeOffset[o - t] = 0;
 				o++;
 				trap_R_RemapShader( originalShader, newShader, timeOffset );
 			}
@@ -294,7 +292,7 @@ CG_ConfigStringModified
 static void CG_ConfigStringModified( void )
 {
 	const char* str;
-	int         num;
+	int			num;
 
 	num = atoi( CG_Argv( 1 ) );
 
@@ -332,17 +330,17 @@ static void CG_ConfigStringModified( void )
 	}
 	else if( num == CS_VOTE_TIME )
 	{
-		cgs.voteTime     = atoi( str );
+		cgs.voteTime	 = atoi( str );
 		cgs.voteModified = qtrue;
 	}
 	else if( num == CS_VOTE_YES )
 	{
-		cgs.voteYes      = atoi( str );
+		cgs.voteYes		 = atoi( str );
 		cgs.voteModified = qtrue;
 	}
 	else if( num == CS_VOTE_NO )
 	{
-		cgs.voteNo       = atoi( str );
+		cgs.voteNo		 = atoi( str );
 		cgs.voteModified = qtrue;
 	}
 	else if( num == CS_VOTE_STRING )
@@ -350,26 +348,26 @@ static void CG_ConfigStringModified( void )
 		Q_strncpyz( cgs.voteString, str, sizeof( cgs.voteString ) );
 #ifdef MISSIONPACK
 		trap_S_StartLocalSound( cgs.media.voteNow, CHAN_ANNOUNCER );
-#endif //MISSIONPACK
+#endif // MISSIONPACK
 	}
 	else if( num >= CS_TEAMVOTE_TIME && num <= CS_TEAMVOTE_TIME + 1 )
 	{
-		cgs.teamVoteTime[ num - CS_TEAMVOTE_TIME ]     = atoi( str );
-		cgs.teamVoteModified[ num - CS_TEAMVOTE_TIME ] = qtrue;
+		cgs.teamVoteTime[num - CS_TEAMVOTE_TIME]	 = atoi( str );
+		cgs.teamVoteModified[num - CS_TEAMVOTE_TIME] = qtrue;
 	}
 	else if( num >= CS_TEAMVOTE_YES && num <= CS_TEAMVOTE_YES + 1 )
 	{
-		cgs.teamVoteYes[ num - CS_TEAMVOTE_YES ]      = atoi( str );
-		cgs.teamVoteModified[ num - CS_TEAMVOTE_YES ] = qtrue;
+		cgs.teamVoteYes[num - CS_TEAMVOTE_YES]		= atoi( str );
+		cgs.teamVoteModified[num - CS_TEAMVOTE_YES] = qtrue;
 	}
 	else if( num >= CS_TEAMVOTE_NO && num <= CS_TEAMVOTE_NO + 1 )
 	{
-		cgs.teamVoteNo[ num - CS_TEAMVOTE_NO ]       = atoi( str );
-		cgs.teamVoteModified[ num - CS_TEAMVOTE_NO ] = qtrue;
+		cgs.teamVoteNo[num - CS_TEAMVOTE_NO]	   = atoi( str );
+		cgs.teamVoteModified[num - CS_TEAMVOTE_NO] = qtrue;
 	}
 	else if( num >= CS_TEAMVOTE_STRING && num <= CS_TEAMVOTE_STRING + 1 )
 	{
-		Q_strncpyz( cgs.teamVoteString[ num - CS_TEAMVOTE_STRING ], str, sizeof( cgs.teamVoteString ) );
+		Q_strncpyz( cgs.teamVoteString[num - CS_TEAMVOTE_STRING], str, sizeof( cgs.teamVoteString ) );
 #ifdef MISSIONPACK
 		trap_S_StartLocalSound( cgs.media.voteNow, CHAN_ANNOUNCER );
 #endif
@@ -380,13 +378,13 @@ static void CG_ConfigStringModified( void )
 	}
 	else if( num >= CS_MODELS && num < CS_MODELS + MAX_MODELS )
 	{
-		cgs.gameModels[ num - CS_MODELS ] = trap_R_RegisterModel( str );
+		cgs.gameModels[num - CS_MODELS] = trap_R_RegisterModel( str );
 	}
 	else if( num >= CS_SOUNDS && num < CS_SOUNDS + MAX_MODELS )
 	{
-		if( str[ 0 ] != '*' )
+		if( str[0] != '*' )
 		{ // player specific sounds don't register here
-			cgs.gameSounds[ num - CS_SOUNDS ] = trap_S_RegisterSound( str, qfalse );
+			cgs.gameSounds[num - CS_SOUNDS] = trap_S_RegisterSound( str, qfalse );
 		}
 	}
 	else if( num >= CS_PLAYERS && num < CS_PLAYERS + MAX_CLIENTS )
@@ -399,13 +397,13 @@ static void CG_ConfigStringModified( void )
 		if( cgs.gametype == GT_CTF )
 		{
 			// format is rb where its red/blue, 0 is at base, 1 is taken, 2 is dropped
-			cgs.redflag  = str[ 0 ] - '0';
-			cgs.blueflag = str[ 1 ] - '0';
+			cgs.redflag	 = str[0] - '0';
+			cgs.blueflag = str[1] - '0';
 		}
 #ifdef MISSIONPACK
 		else if( cgs.gametype == GT_1FCTF )
 		{
-			cgs.flagStatus = str[ 0 ] - '0';
+			cgs.flagStatus = str[0] - '0';
 		}
 #endif
 	}
@@ -423,10 +421,10 @@ CG_AddToTeamChat
 */
 static void CG_AddToTeamChat( const char* str )
 {
-	int   len;
+	int	  len;
 	char *p, *ls;
-	int   lastcolor;
-	int   chatHeight;
+	int	  lastcolor;
+	int	  chatHeight;
 
 	if( cg_teamChatHeight.integer < TEAMCHAT_HEIGHT )
 	{
@@ -446,7 +444,7 @@ static void CG_AddToTeamChat( const char* str )
 
 	len = 0;
 
-	p  = cgs.teamChatMsgs[ cgs.teamChatPos % chatHeight ];
+	p  = cgs.teamChatMsgs[cgs.teamChatPos % chatHeight];
 	*p = 0;
 
 	lastcolor = '7';
@@ -464,22 +462,22 @@ static void CG_AddToTeamChat( const char* str )
 			}
 			*p = 0;
 
-			cgs.teamChatMsgTimes[ cgs.teamChatPos % chatHeight ] = cg.time;
+			cgs.teamChatMsgTimes[cgs.teamChatPos % chatHeight] = cg.time;
 
 			cgs.teamChatPos++;
-			p    = cgs.teamChatMsgs[ cgs.teamChatPos % chatHeight ];
-			*p   = 0;
+			p	 = cgs.teamChatMsgs[cgs.teamChatPos % chatHeight];
+			*p	 = 0;
 			*p++ = Q_COLOR_ESCAPE;
 			*p++ = lastcolor;
-			len  = 0;
-			ls   = NULL;
+			len	 = 0;
+			ls	 = NULL;
 		}
 
 		if( Q_IsColorString( str ) )
 		{
-			*p++      = *str++;
+			*p++	  = *str++;
 			lastcolor = *str;
-			*p++      = *str++;
+			*p++	  = *str++;
 			continue;
 		}
 		if( *str == ' ' )
@@ -491,7 +489,7 @@ static void CG_AddToTeamChat( const char* str )
 	}
 	*p = 0;
 
-	cgs.teamChatMsgTimes[ cgs.teamChatPos % chatHeight ] = cg.time;
+	cgs.teamChatMsgTimes[cgs.teamChatPos % chatHeight] = cg.time;
 	cgs.teamChatPos++;
 
 	if( cgs.teamChatPos - cgs.teamLastChatPos > chatHeight )
@@ -557,52 +555,52 @@ static void CG_MapRestart( void )
 }
 
 #define MAX_VOICEFILESIZE 16384
-#define MAX_VOICEFILES    8
-#define MAX_VOICECHATS    64
-#define MAX_VOICESOUNDS   64
-#define MAX_CHATSIZE      64
-#define MAX_HEADMODELS    64
+#define MAX_VOICEFILES	  8
+#define MAX_VOICECHATS	  64
+#define MAX_VOICESOUNDS	  64
+#define MAX_CHATSIZE	  64
+#define MAX_HEADMODELS	  64
 
 typedef struct voiceChat_s
 {
-	char        id[ 64 ];
-	int         numSounds;
-	sfxHandle_t sounds[ MAX_VOICESOUNDS ];
-	char        chats[ MAX_VOICESOUNDS ][ MAX_CHATSIZE ];
+	char		id[64];
+	int			numSounds;
+	sfxHandle_t sounds[MAX_VOICESOUNDS];
+	char		chats[MAX_VOICESOUNDS][MAX_CHATSIZE];
 } voiceChat_t;
 
 typedef struct voiceChatList_s
 {
-	char        name[ 64 ];
-	int         gender;
-	int         numVoiceChats;
-	voiceChat_t voiceChats[ MAX_VOICECHATS ];
+	char		name[64];
+	int			gender;
+	int			numVoiceChats;
+	voiceChat_t voiceChats[MAX_VOICECHATS];
 } voiceChatList_t;
 
 typedef struct headModelVoiceChat_s
 {
-	char headmodel[ 64 ];
-	int  voiceChatNum;
+	char headmodel[64];
+	int	 voiceChatNum;
 } headModelVoiceChat_t;
 
-voiceChatList_t      voiceChatLists[ MAX_VOICEFILES ];
-headModelVoiceChat_t headModelVoiceChat[ MAX_HEADMODELS ];
+voiceChatList_t		 voiceChatLists[MAX_VOICEFILES];
+headModelVoiceChat_t headModelVoiceChat[MAX_HEADMODELS];
 
 /*
 =================
 CG_ParseVoiceChats
 =================
 */
-int CG_ParseVoiceChats( const char* filename, voiceChatList_t* voiceChatList, int maxVoiceChats )
+int					 CG_ParseVoiceChats( const char* filename, voiceChatList_t* voiceChatList, int maxVoiceChats )
 {
-	int          len, i;
+	int			 len, i;
 	fileHandle_t f;
-	char         buf[ MAX_VOICEFILESIZE ];
-	char **      p, *ptr;
-	char*        token;
+	char		 buf[MAX_VOICEFILESIZE];
+	char **		 p, *ptr;
+	char*		 token;
 	voiceChat_t* voiceChats;
-	qboolean     compress;
-	sfxHandle_t  sound;
+	qboolean	 compress;
+	sfxHandle_t	 sound;
 
 	compress = qtrue;
 	if( cg_buildScript.integer )
@@ -624,20 +622,20 @@ int CG_ParseVoiceChats( const char* filename, voiceChatList_t* voiceChatList, in
 	}
 
 	trap_FS_Read( buf, len, f );
-	buf[ len ] = 0;
+	buf[len] = 0;
 	trap_FS_FCloseFile( f );
 
 	ptr = buf;
-	p   = &ptr;
+	p	= &ptr;
 
 	Com_sprintf( voiceChatList->name, sizeof( voiceChatList->name ), "%s", filename );
 	voiceChats = voiceChatList->voiceChats;
 	for( i = 0; i < maxVoiceChats; i++ )
 	{
-		voiceChats[ i ].id[ 0 ] = 0;
+		voiceChats[i].id[0] = 0;
 	}
 	token = COM_ParseExt( p, qtrue );
-	if( !token || token[ 0 ] == 0 )
+	if( !token || token[0] == 0 )
 	{
 		return qtrue;
 	}
@@ -663,38 +661,38 @@ int CG_ParseVoiceChats( const char* filename, voiceChatList_t* voiceChatList, in
 	while( 1 )
 	{
 		token = COM_ParseExt( p, qtrue );
-		if( !token || token[ 0 ] == 0 )
+		if( !token || token[0] == 0 )
 		{
 			return qtrue;
 		}
-		Com_sprintf( voiceChats[ voiceChatList->numVoiceChats ].id, sizeof( voiceChats[ voiceChatList->numVoiceChats ].id ), "%s", token );
+		Com_sprintf( voiceChats[voiceChatList->numVoiceChats].id, sizeof( voiceChats[voiceChatList->numVoiceChats].id ), "%s", token );
 		token = COM_ParseExt( p, qtrue );
 		if( Q_stricmp( token, "{" ) )
 		{
 			trap_Print( va( S_COLOR_RED "expected { found %s in voice chat file: %s\n", token, filename ) );
 			return qfalse;
 		}
-		voiceChats[ voiceChatList->numVoiceChats ].numSounds = 0;
+		voiceChats[voiceChatList->numVoiceChats].numSounds = 0;
 		while( 1 )
 		{
 			token = COM_ParseExt( p, qtrue );
-			if( !token || token[ 0 ] == 0 )
+			if( !token || token[0] == 0 )
 			{
 				return qtrue;
 			}
 			if( !Q_stricmp( token, "}" ) )
 				break;
-			sound                                                                                                     = trap_S_RegisterSound( token, compress );
-			voiceChats[ voiceChatList->numVoiceChats ].sounds[ voiceChats[ voiceChatList->numVoiceChats ].numSounds ] = sound;
-			token                                                                                                     = COM_ParseExt( p, qtrue );
-			if( !token || token[ 0 ] == 0 )
+			sound																								= trap_S_RegisterSound( token, compress );
+			voiceChats[voiceChatList->numVoiceChats].sounds[voiceChats[voiceChatList->numVoiceChats].numSounds] = sound;
+			token																								= COM_ParseExt( p, qtrue );
+			if( !token || token[0] == 0 )
 			{
 				return qtrue;
 			}
-			Com_sprintf( voiceChats[ voiceChatList->numVoiceChats ].chats[ voiceChats[ voiceChatList->numVoiceChats ].numSounds ], MAX_CHATSIZE, "%s", token );
+			Com_sprintf( voiceChats[voiceChatList->numVoiceChats].chats[voiceChats[voiceChatList->numVoiceChats].numSounds], MAX_CHATSIZE, "%s", token );
 			if( sound )
-				voiceChats[ voiceChatList->numVoiceChats ].numSounds++;
-			if( voiceChats[ voiceChatList->numVoiceChats ].numSounds >= MAX_VOICESOUNDS )
+				voiceChats[voiceChatList->numVoiceChats].numSounds++;
+			if( voiceChats[voiceChatList->numVoiceChats].numSounds >= MAX_VOICESOUNDS )
 				break;
 		}
 		voiceChatList->numVoiceChats++;
@@ -714,14 +712,14 @@ void CG_LoadVoiceChats( void )
 	int size;
 
 	size = trap_MemoryRemaining();
-	CG_ParseVoiceChats( "scripts/female1.voice", &voiceChatLists[ 0 ], MAX_VOICECHATS );
-	CG_ParseVoiceChats( "scripts/female2.voice", &voiceChatLists[ 1 ], MAX_VOICECHATS );
-	CG_ParseVoiceChats( "scripts/female3.voice", &voiceChatLists[ 2 ], MAX_VOICECHATS );
-	CG_ParseVoiceChats( "scripts/male1.voice", &voiceChatLists[ 3 ], MAX_VOICECHATS );
-	CG_ParseVoiceChats( "scripts/male2.voice", &voiceChatLists[ 4 ], MAX_VOICECHATS );
-	CG_ParseVoiceChats( "scripts/male3.voice", &voiceChatLists[ 5 ], MAX_VOICECHATS );
-	CG_ParseVoiceChats( "scripts/male4.voice", &voiceChatLists[ 6 ], MAX_VOICECHATS );
-	CG_ParseVoiceChats( "scripts/male5.voice", &voiceChatLists[ 7 ], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/female1.voice", &voiceChatLists[0], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/female2.voice", &voiceChatLists[1], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/female3.voice", &voiceChatLists[2], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/male1.voice", &voiceChatLists[3], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/male2.voice", &voiceChatLists[4], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/male3.voice", &voiceChatLists[5], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/male4.voice", &voiceChatLists[6], MAX_VOICECHATS );
+	CG_ParseVoiceChats( "scripts/male5.voice", &voiceChatLists[7], MAX_VOICECHATS );
 	CG_Printf( "voice chat memory size = %d\n", size - trap_MemoryRemaining() );
 }
 
@@ -732,16 +730,16 @@ CG_HeadModelVoiceChats
 */
 int CG_HeadModelVoiceChats( char* filename )
 {
-	int          len, i;
+	int			 len, i;
 	fileHandle_t f;
-	char         buf[ MAX_VOICEFILESIZE ];
-	char **      p, *ptr;
-	char*        token;
+	char		 buf[MAX_VOICEFILESIZE];
+	char **		 p, *ptr;
+	char*		 token;
 
 	len = trap_FS_FOpenFile( filename, &f, FS_READ );
 	if( !f )
 	{
-		//trap_Print( va( "voice chat file not found: %s\n", filename ) );
+		// trap_Print( va( "voice chat file not found: %s\n", filename ) );
 		return -1;
 	}
 	if( len >= MAX_VOICEFILESIZE )
@@ -752,27 +750,27 @@ int CG_HeadModelVoiceChats( char* filename )
 	}
 
 	trap_FS_Read( buf, len, f );
-	buf[ len ] = 0;
+	buf[len] = 0;
 	trap_FS_FCloseFile( f );
 
 	ptr = buf;
-	p   = &ptr;
+	p	= &ptr;
 
 	token = COM_ParseExt( p, qtrue );
-	if( !token || token[ 0 ] == 0 )
+	if( !token || token[0] == 0 )
 	{
 		return -1;
 	}
 
 	for( i = 0; i < MAX_VOICEFILES; i++ )
 	{
-		if( !Q_stricmp( token, voiceChatLists[ i ].name ) )
+		if( !Q_stricmp( token, voiceChatLists[i].name ) )
 		{
 			return i;
 		}
 	}
 
-	//FIXME: maybe try to load the .voice file which name is stored in token?
+	// FIXME: maybe try to load the .voice file which name is stored in token?
 
 	return -1;
 }
@@ -788,11 +786,11 @@ int CG_GetVoiceChat( voiceChatList_t* voiceChatList, const char* id, sfxHandle_t
 
 	for( i = 0; i < voiceChatList->numVoiceChats; i++ )
 	{
-		if( !Q_stricmp( id, voiceChatList->voiceChats[ i ].id ) )
+		if( !Q_stricmp( id, voiceChatList->voiceChats[i].id ) )
 		{
-			rnd   = random() * voiceChatList->voiceChats[ i ].numSounds;
-			*snd  = voiceChatList->voiceChats[ i ].sounds[ rnd ];
-			*chat = voiceChatList->voiceChats[ i ].chats[ rnd ];
+			rnd	  = random() * voiceChatList->voiceChats[i].numSounds;
+			*snd  = voiceChatList->voiceChats[i].sounds[rnd];
+			*chat = voiceChatList->voiceChats[i].chats[rnd];
 			return qtrue;
 		}
 	}
@@ -807,20 +805,20 @@ CG_VoiceChatListForClient
 voiceChatList_t* CG_VoiceChatListForClient( int clientNum )
 {
 	clientInfo_t* ci;
-	int           voiceChatNum, i, j, k, gender;
-	char          filename[ MAX_QPATH ], headModelName[ MAX_QPATH ];
+	int			  voiceChatNum, i, j, k, gender;
+	char		  filename[MAX_QPATH], headModelName[MAX_QPATH];
 
 	if( clientNum < 0 || clientNum >= MAX_CLIENTS )
 	{
 		clientNum = 0;
 	}
-	ci = &cgs.clientinfo[ clientNum ];
+	ci = &cgs.clientinfo[clientNum];
 
 	for( k = 0; k < 2; k++ )
 	{
 		if( k == 0 )
 		{
-			if( ci->headModelName[ 0 ] == '*' )
+			if( ci->headModelName[0] == '*' )
 			{
 				Com_sprintf( headModelName, sizeof( headModelName ), "%s/%s", ci->headModelName + 1, ci->headSkinName );
 			}
@@ -831,7 +829,7 @@ voiceChatList_t* CG_VoiceChatListForClient( int clientNum )
 		}
 		else
 		{
-			if( ci->headModelName[ 0 ] == '*' )
+			if( ci->headModelName[0] == '*' )
 			{
 				Com_sprintf( headModelName, sizeof( headModelName ), "%s", ci->headModelName + 1 );
 			}
@@ -843,27 +841,27 @@ voiceChatList_t* CG_VoiceChatListForClient( int clientNum )
 		// find the voice file for the head model the client uses
 		for( i = 0; i < MAX_HEADMODELS; i++ )
 		{
-			if( !Q_stricmp( headModelVoiceChat[ i ].headmodel, headModelName ) )
+			if( !Q_stricmp( headModelVoiceChat[i].headmodel, headModelName ) )
 			{
 				break;
 			}
 		}
 		if( i < MAX_HEADMODELS )
 		{
-			return &voiceChatLists[ headModelVoiceChat[ i ].voiceChatNum ];
+			return &voiceChatLists[headModelVoiceChat[i].voiceChatNum];
 		}
 		// find a <headmodelname>.vc file
 		for( i = 0; i < MAX_HEADMODELS; i++ )
 		{
-			if( !strlen( headModelVoiceChat[ i ].headmodel ) )
+			if( !strlen( headModelVoiceChat[i].headmodel ) )
 			{
 				Com_sprintf( filename, sizeof( filename ), "scripts/%s.vc", headModelName );
 				voiceChatNum = CG_HeadModelVoiceChats( filename );
 				if( voiceChatNum == -1 )
 					break;
-				Com_sprintf( headModelVoiceChat[ i ].headmodel, sizeof( headModelVoiceChat[ i ].headmodel ), "%s", headModelName );
-				headModelVoiceChat[ i ].voiceChatNum = voiceChatNum;
-				return &voiceChatLists[ headModelVoiceChat[ i ].voiceChatNum ];
+				Com_sprintf( headModelVoiceChat[i].headmodel, sizeof( headModelVoiceChat[i].headmodel ), "%s", headModelName );
+				headModelVoiceChat[i].voiceChatNum = voiceChatNum;
+				return &voiceChatLists[headModelVoiceChat[i].voiceChatNum];
 			}
 		}
 	}
@@ -873,21 +871,21 @@ voiceChatList_t* CG_VoiceChatListForClient( int clientNum )
 		// just pick the first with the right gender
 		for( i = 0; i < MAX_VOICEFILES; i++ )
 		{
-			if( strlen( voiceChatLists[ i ].name ) )
+			if( strlen( voiceChatLists[i].name ) )
 			{
-				if( voiceChatLists[ i ].gender == gender )
+				if( voiceChatLists[i].gender == gender )
 				{
 					// store this head model with voice chat for future reference
 					for( j = 0; j < MAX_HEADMODELS; j++ )
 					{
-						if( !strlen( headModelVoiceChat[ j ].headmodel ) )
+						if( !strlen( headModelVoiceChat[j].headmodel ) )
 						{
-							Com_sprintf( headModelVoiceChat[ j ].headmodel, sizeof( headModelVoiceChat[ j ].headmodel ), "%s", headModelName );
-							headModelVoiceChat[ j ].voiceChatNum = i;
+							Com_sprintf( headModelVoiceChat[j].headmodel, sizeof( headModelVoiceChat[j].headmodel ), "%s", headModelName );
+							headModelVoiceChat[j].voiceChatNum = i;
 							break;
 						}
 					}
-					return &voiceChatLists[ i ];
+					return &voiceChatLists[i];
 				}
 			}
 		}
@@ -899,36 +897,36 @@ voiceChatList_t* CG_VoiceChatListForClient( int clientNum )
 	// store this head model with voice chat for future reference
 	for( j = 0; j < MAX_HEADMODELS; j++ )
 	{
-		if( !strlen( headModelVoiceChat[ j ].headmodel ) )
+		if( !strlen( headModelVoiceChat[j].headmodel ) )
 		{
-			Com_sprintf( headModelVoiceChat[ j ].headmodel, sizeof( headModelVoiceChat[ j ].headmodel ), "%s", headModelName );
-			headModelVoiceChat[ j ].voiceChatNum = 0;
+			Com_sprintf( headModelVoiceChat[j].headmodel, sizeof( headModelVoiceChat[j].headmodel ), "%s", headModelName );
+			headModelVoiceChat[j].voiceChatNum = 0;
 			break;
 		}
 	}
 	// just return the first voice chat list
-	return &voiceChatLists[ 0 ];
+	return &voiceChatLists[0];
 }
 
 #define MAX_VOICECHATBUFFER 32
 
 typedef struct bufferedVoiceChat_s
 {
-	int         clientNum;
+	int			clientNum;
 	sfxHandle_t snd;
-	int         voiceOnly;
-	char        cmd[ MAX_SAY_TEXT ];
-	char        message[ MAX_SAY_TEXT ];
+	int			voiceOnly;
+	char		cmd[MAX_SAY_TEXT];
+	char		message[MAX_SAY_TEXT];
 } bufferedVoiceChat_t;
 
-bufferedVoiceChat_t voiceChatBuffer[ MAX_VOICECHATBUFFER ];
+bufferedVoiceChat_t voiceChatBuffer[MAX_VOICECHATBUFFER];
 
 /*
 =================
 CG_PlayVoiceChat
 =================
 */
-void CG_PlayVoiceChat( bufferedVoiceChat_t* vchat )
+void				CG_PlayVoiceChat( bufferedVoiceChat_t* vchat )
 {
 #ifdef MISSIONPACK
 	// if we are going into the intermission, don't start any voices
@@ -947,7 +945,7 @@ void CG_PlayVoiceChat( bufferedVoiceChat_t* vchat )
 			{
 				cgs.acceptOrderTime = cg.time + 5000;
 				Q_strncpyz( cgs.acceptVoice, vchat->cmd, sizeof( cgs.acceptVoice ) );
-				cgs.acceptTask   = orderTask;
+				cgs.acceptTask	 = orderTask;
 				cgs.acceptLeader = vchat->clientNum;
 			}
 			// see if this was an order
@@ -959,7 +957,7 @@ void CG_PlayVoiceChat( bufferedVoiceChat_t* vchat )
 		CG_AddToTeamChat( vchat->message );
 		CG_Printf( "%s\n", vchat->message );
 	}
-	voiceChatBuffer[ cg.voiceChatBufferOut ].snd = 0;
+	voiceChatBuffer[cg.voiceChatBufferOut].snd = 0;
 #endif
 }
 
@@ -973,13 +971,13 @@ void CG_PlayBufferedVoiceChats( void )
 #ifdef MISSIONPACK
 	if( cg.voiceChatTime < cg.time )
 	{
-		if( cg.voiceChatBufferOut != cg.voiceChatBufferIn && voiceChatBuffer[ cg.voiceChatBufferOut ].snd )
+		if( cg.voiceChatBufferOut != cg.voiceChatBufferIn && voiceChatBuffer[cg.voiceChatBufferOut].snd )
 		{
 			//
-			CG_PlayVoiceChat( &voiceChatBuffer[ cg.voiceChatBufferOut ] );
+			CG_PlayVoiceChat( &voiceChatBuffer[cg.voiceChatBufferOut] );
 			//
 			cg.voiceChatBufferOut = ( cg.voiceChatBufferOut + 1 ) % MAX_VOICECHATBUFFER;
-			cg.voiceChatTime      = cg.time + 1000;
+			cg.voiceChatTime	  = cg.time + 1000;
 		}
 	}
 #endif
@@ -999,11 +997,11 @@ void CG_AddBufferedVoiceChat( bufferedVoiceChat_t* vchat )
 		return;
 	}
 
-	memcpy( &voiceChatBuffer[ cg.voiceChatBufferIn ], vchat, sizeof( bufferedVoiceChat_t ) );
+	memcpy( &voiceChatBuffer[cg.voiceChatBufferIn], vchat, sizeof( bufferedVoiceChat_t ) );
 	cg.voiceChatBufferIn = ( cg.voiceChatBufferIn + 1 ) % MAX_VOICECHATBUFFER;
 	if( cg.voiceChatBufferIn == cg.voiceChatBufferOut )
 	{
-		CG_PlayVoiceChat( &voiceChatBuffer[ cg.voiceChatBufferOut ] );
+		CG_PlayVoiceChat( &voiceChatBuffer[cg.voiceChatBufferOut] );
 		cg.voiceChatBufferOut++;
 	}
 #endif
@@ -1017,10 +1015,10 @@ CG_VoiceChatLocal
 void CG_VoiceChatLocal( int mode, qboolean voiceOnly, int clientNum, int color, const char* cmd )
 {
 #ifdef MISSIONPACK
-	char*               chat;
-	voiceChatList_t*    voiceChatList;
-	clientInfo_t*       ci;
-	sfxHandle_t         snd;
+	char*				chat;
+	voiceChatList_t*	voiceChatList;
+	clientInfo_t*		ci;
+	sfxHandle_t			snd;
 	bufferedVoiceChat_t vchat;
 
 	// if we are going into the intermission, don't start any voices
@@ -1033,7 +1031,7 @@ void CG_VoiceChatLocal( int mode, qboolean voiceOnly, int clientNum, int color, 
 	{
 		clientNum = 0;
 	}
-	ci = &cgs.clientinfo[ clientNum ];
+	ci = &cgs.clientinfo[clientNum];
 
 	cgs.currentVoiceClient = clientNum;
 
@@ -1045,7 +1043,7 @@ void CG_VoiceChatLocal( int mode, qboolean voiceOnly, int clientNum, int color, 
 		if( mode == SAY_TEAM || !cg_teamChatsOnly.integer )
 		{
 			vchat.clientNum = clientNum;
-			vchat.snd       = snd;
+			vchat.snd		= snd;
 			vchat.voiceOnly = voiceOnly;
 			Q_strncpyz( vchat.cmd, cmd, sizeof( vchat.cmd ) );
 			if( mode == SAY_TELL )
@@ -1075,18 +1073,17 @@ void CG_VoiceChat( int mode )
 {
 #ifdef MISSIONPACK
 	const char* cmd;
-	int         clientNum, color;
-	qboolean    voiceOnly;
+	int			clientNum, color;
+	qboolean	voiceOnly;
 
 	voiceOnly = atoi( CG_Argv( 1 ) );
 	clientNum = atoi( CG_Argv( 2 ) );
-	color     = atoi( CG_Argv( 3 ) );
-	cmd       = CG_Argv( 4 );
+	color	  = atoi( CG_Argv( 3 ) );
+	cmd		  = CG_Argv( 4 );
 
 	if( cg_noTaunt.integer != 0 )
 	{
-		if( !strcmp( cmd, VOICECHAT_KILLINSULT ) || !strcmp( cmd, VOICECHAT_TAUNT ) ||
-			!strcmp( cmd, VOICECHAT_DEATHINSULT ) || !strcmp( cmd, VOICECHAT_KILLGAUNTLET ) ||
+		if( !strcmp( cmd, VOICECHAT_KILLINSULT ) || !strcmp( cmd, VOICECHAT_TAUNT ) || !strcmp( cmd, VOICECHAT_DEATHINSULT ) || !strcmp( cmd, VOICECHAT_KILLGAUNTLET ) ||
 			!strcmp( cmd, VOICECHAT_PRAISE ) )
 		{
 			return;
@@ -1107,13 +1104,13 @@ static void CG_RemoveChatEscapeChar( char* text )
 	int i, l;
 
 	l = 0;
-	for( i = 0; text[ i ]; i++ )
+	for( i = 0; text[i]; i++ )
 	{
-		if( text[ i ] == '\x19' )
+		if( text[i] == '\x19' )
 			continue;
-		text[ l++ ] = text[ i ];
+		text[l++] = text[i];
 	}
-	text[ l ] = '\0';
+	text[l] = '\0';
 }
 
 /*
@@ -1127,11 +1124,11 @@ Cmd_Argc() / Cmd_Argv()
 static void CG_ServerCommand( void )
 {
 	const char* cmd;
-	char        text[ MAX_SAY_TEXT ];
+	char		text[MAX_SAY_TEXT];
 
 	cmd = CG_Argv( 0 );
 
-	if( !cmd[ 0 ] )
+	if( !cmd[0] )
 	{
 		// server claimed the command
 		return;

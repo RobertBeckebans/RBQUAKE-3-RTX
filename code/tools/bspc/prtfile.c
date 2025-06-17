@@ -34,10 +34,10 @@ Save out name.prt for qvis to read
 #define PORTALFILE "PRT1"
 
 FILE* pf;
-int   num_visclusters; // clusters the player can be in
-int   num_visportals;
+int	  num_visclusters; // clusters the player can be in
+int	  num_visportals;
 
-void WriteFloat2( FILE* f, vec_t v )
+void  WriteFloat2( FILE* f, vec_t v )
 {
 	if( fabs( v - Q_rint( v ) ) < 0.001 )
 		fprintf( f, "%i ", ( int )Q_rint( v ) );
@@ -52,28 +52,28 @@ WritePortalFile_r
 */
 void WritePortalFile_r( node_t* node )
 {
-	int        i, s;
+	int		   i, s;
 	portal_t*  p;
 	winding_t* w;
-	vec3_t     normal;
-	vec_t      dist;
+	vec3_t	   normal;
+	vec_t	   dist;
 
 	// decision node
 	if( node->planenum != PLANENUM_LEAF && !node->detail_seperator )
 	{
-		WritePortalFile_r( node->children[ 0 ] );
-		WritePortalFile_r( node->children[ 1 ] );
+		WritePortalFile_r( node->children[0] );
+		WritePortalFile_r( node->children[1] );
 		return;
 	}
 
 	if( node->contents & CONTENTS_SOLID )
 		return;
 
-	for( p = node->portals; p; p = p->next[ s ] )
+	for( p = node->portals; p; p = p->next[s] )
 	{
 		w = p->winding;
-		s = ( p->nodes[ 1 ] == node );
-		if( w && p->nodes[ 0 ] == node )
+		s = ( p->nodes[1] == node );
+		if( w && p->nodes[0] == node )
 		{
 			if( !Portal_VisFlood( p ) )
 				continue;
@@ -86,16 +86,16 @@ void WritePortalFile_r( node_t* node )
 			WindingPlane( w, normal, &dist );
 			if( DotProduct( p->plane.normal, normal ) < 0.99 )
 			{ // backwards...
-				fprintf( pf, "%i %i %i ", w->numpoints, p->nodes[ 1 ]->cluster, p->nodes[ 0 ]->cluster );
+				fprintf( pf, "%i %i %i ", w->numpoints, p->nodes[1]->cluster, p->nodes[0]->cluster );
 			}
 			else
-				fprintf( pf, "%i %i %i ", w->numpoints, p->nodes[ 0 ]->cluster, p->nodes[ 1 ]->cluster );
+				fprintf( pf, "%i %i %i ", w->numpoints, p->nodes[0]->cluster, p->nodes[1]->cluster );
 			for( i = 0; i < w->numpoints; i++ )
 			{
 				fprintf( pf, "(" );
-				WriteFloat2( pf, w->p[ i ][ 0 ] );
-				WriteFloat2( pf, w->p[ i ][ 1 ] );
-				WriteFloat2( pf, w->p[ i ][ 2 ] );
+				WriteFloat2( pf, w->p[i][0] );
+				WriteFloat2( pf, w->p[i][1] );
+				WriteFloat2( pf, w->p[i][2] );
 				fprintf( pf, ") " );
 			}
 			fprintf( pf, "\n" );
@@ -121,8 +121,8 @@ void FillLeafNumbers_r( node_t* node, int num )
 		return;
 	}
 	node->cluster = num;
-	FillLeafNumbers_r( node->children[ 0 ], num );
-	FillLeafNumbers_r( node->children[ 1 ], num );
+	FillLeafNumbers_r( node->children[0], num );
+	FillLeafNumbers_r( node->children[1], num );
 }
 
 /*
@@ -137,8 +137,8 @@ void NumberLeafs_r( node_t* node )
 	if( node->planenum != PLANENUM_LEAF && !node->detail_seperator )
 	{ // decision node
 		node->cluster = -99;
-		NumberLeafs_r( node->children[ 0 ] );
-		NumberLeafs_r( node->children[ 1 ] );
+		NumberLeafs_r( node->children[0] );
+		NumberLeafs_r( node->children[1] );
 		return;
 	}
 
@@ -156,14 +156,14 @@ void NumberLeafs_r( node_t* node )
 	// count the portals
 	for( p = node->portals; p; )
 	{
-		if( p->nodes[ 0 ] == node ) // only write out from first leaf
+		if( p->nodes[0] == node ) // only write out from first leaf
 		{
 			if( Portal_VisFlood( p ) )
 				num_visportals++;
-			p = p->next[ 0 ];
+			p = p->next[0];
 		}
 		else
-			p = p->next[ 1 ];
+			p = p->next[1];
 	}
 }
 
@@ -182,8 +182,8 @@ void CreateVisPortals_r( node_t* node )
 	MakeNodePortal( node );
 	SplitNodePortals( node );
 
-	CreateVisPortals_r( node->children[ 0 ] );
-	CreateVisPortals_r( node->children[ 1 ] );
+	CreateVisPortals_r( node->children[0] );
+	CreateVisPortals_r( node->children[1] );
 }
 
 /*
@@ -199,8 +199,8 @@ void FinishVisPortals2_r( node_t* node )
 	MakeNodePortal( node );
 	SplitNodePortals( node );
 
-	FinishVisPortals2_r( node->children[ 0 ] );
-	FinishVisPortals2_r( node->children[ 1 ] );
+	FinishVisPortals2_r( node->children[0] );
+	FinishVisPortals2_r( node->children[1] );
 }
 
 void FinishVisPortals_r( node_t* node )
@@ -214,20 +214,20 @@ void FinishVisPortals_r( node_t* node )
 		return;
 	}
 
-	FinishVisPortals_r( node->children[ 0 ] );
-	FinishVisPortals_r( node->children[ 1 ] );
+	FinishVisPortals_r( node->children[0] );
+	FinishVisPortals_r( node->children[1] );
 }
 
-int  clusterleaf;
+int	 clusterleaf;
 void SaveClusters_r( node_t* node )
 {
 	if( node->planenum == PLANENUM_LEAF )
 	{
-		dleafs[ clusterleaf++ ].cluster = node->cluster;
+		dleafs[clusterleaf++].cluster = node->cluster;
 		return;
 	}
-	SaveClusters_r( node->children[ 0 ] );
-	SaveClusters_r( node->children[ 1 ] );
+	SaveClusters_r( node->children[0] );
+	SaveClusters_r( node->children[1] );
 }
 
 /*
@@ -237,14 +237,14 @@ WritePortalFile
 */
 void WritePortalFile( tree_t* tree )
 {
-	char    filename[ 1024 ];
+	char	filename[1024];
 	node_t* headnode;
 
 	qprintf( "--- WritePortalFile ---\n" );
 
-	headnode        = tree->headnode;
+	headnode		= tree->headnode;
 	num_visclusters = 0;
-	num_visportals  = 0;
+	num_visportals	= 0;
 
 	Tree_FreePortals_r( headnode );
 

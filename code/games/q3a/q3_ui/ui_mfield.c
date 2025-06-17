@@ -32,15 +32,15 @@ x, y, are in pixels
 */
 void MField_Draw( mfield_t* edit, int x, int y, int style, vec4_t color )
 {
-	int  len;
-	int  charw;
-	int  drawLen;
-	int  prestep;
-	int  cursorChar;
-	char str[ MAX_STRING_CHARS ];
+	int	 len;
+	int	 charw;
+	int	 drawLen;
+	int	 prestep;
+	int	 cursorChar;
+	char str[MAX_STRING_CHARS];
 
 	drawLen = edit->widthInChars;
-	len     = strlen( edit->buffer ) + 1;
+	len		= strlen( edit->buffer ) + 1;
 
 	// guarantee that cursor will be visible
 	if( len <= drawLen )
@@ -71,7 +71,7 @@ void MField_Draw( mfield_t* edit, int x, int y, int style, vec4_t color )
 		trap_Error( "drawLen >= MAX_STRING_CHARS" );
 	}
 	memcpy( str, edit->buffer + prestep, drawLen );
-	str[ drawLen ] = 0;
+	str[drawLen] = 0;
 
 	UI_DrawString( x, y, str, style, color );
 
@@ -109,12 +109,12 @@ void MField_Draw( mfield_t* edit, int x, int y, int style, vec4_t color )
 	if( style & UI_CENTER )
 	{
 		len = strlen( str );
-		x   = x - len * charw / 2;
+		x	= x - len * charw / 2;
 	}
 	else if( style & UI_RIGHT )
 	{
 		len = strlen( str );
-		x   = x - len * charw;
+		x	= x - len * charw;
 	}
 
 	UI_DrawChar( x + ( edit->cursor - prestep ) * charw, y, cursorChar, style & ~( UI_CENTER | UI_RIGHT ), color );
@@ -127,8 +127,8 @@ MField_Paste
 */
 void MField_Paste( mfield_t* edit )
 {
-	char pasteBuffer[ 64 ];
-	int  pasteLen, i;
+	char pasteBuffer[64];
+	int	 pasteLen, i;
 
 	trap_GetClipboardData( pasteBuffer, 64 );
 
@@ -136,7 +136,7 @@ void MField_Paste( mfield_t* edit )
 	pasteLen = strlen( pasteBuffer );
 	for( i = 0; i < pasteLen; i++ )
 	{
-		MField_CharEvent( edit, pasteBuffer[ i ] );
+		MField_CharEvent( edit, pasteBuffer[i] );
 	}
 }
 
@@ -167,9 +167,7 @@ void MField_KeyDownEvent( mfield_t* edit, int key )
 	{
 		if( edit->cursor < len )
 		{
-			memmove( edit->buffer + edit->cursor,
-				edit->buffer + edit->cursor + 1,
-				len - edit->cursor );
+			memmove( edit->buffer + edit->cursor, edit->buffer + edit->cursor + 1, len - edit->cursor );
 		}
 		return;
 	}
@@ -250,9 +248,7 @@ void MField_CharEvent( mfield_t* edit, int ch )
 	{ // ctrl-h is backspace
 		if( edit->cursor > 0 )
 		{
-			memmove( edit->buffer + edit->cursor - 1,
-				edit->buffer + edit->cursor,
-				len + 1 - edit->cursor );
+			memmove( edit->buffer + edit->cursor - 1, edit->buffer + edit->cursor, len + 1 - edit->cursor );
 			edit->cursor--;
 			if( edit->cursor < edit->scroll )
 			{
@@ -299,7 +295,7 @@ void MField_CharEvent( mfield_t* edit, int ch )
 		memmove( edit->buffer + edit->cursor + 1, edit->buffer + edit->cursor, len + 1 - edit->cursor );
 	}
 
-	edit->buffer[ edit->cursor ] = ch;
+	edit->buffer[edit->cursor] = ch;
 	if( !edit->maxchars || edit->cursor < edit->maxchars - 1 )
 		edit->cursor++;
 
@@ -310,7 +306,7 @@ void MField_CharEvent( mfield_t* edit, int ch )
 
 	if( edit->cursor == len + 1 )
 	{
-		edit->buffer[ edit->cursor ] = 0;
+		edit->buffer[edit->cursor] = 0;
 	}
 }
 
@@ -321,9 +317,9 @@ MField_Clear
 */
 void MField_Clear( mfield_t* edit )
 {
-	edit->buffer[ 0 ] = 0;
-	edit->cursor      = 0;
-	edit->scroll      = 0;
+	edit->buffer[0] = 0;
+	edit->cursor	= 0;
+	edit->scroll	= 0;
 }
 
 /*
@@ -359,8 +355,8 @@ void MenuField_Init( menufield_s* m )
 		l = 0;
 	}
 
-	m->generic.left   = m->generic.x - l;
-	m->generic.top    = m->generic.y;
+	m->generic.left	  = m->generic.x - l;
+	m->generic.top	  = m->generic.y;
 	m->generic.right  = m->generic.x + w + m->field.widthInChars * w;
 	m->generic.bottom = m->generic.y + h;
 }
@@ -372,27 +368,27 @@ MenuField_Draw
 */
 void MenuField_Draw( menufield_s* f )
 {
-	int      x;
-	int      y;
-	int      w;
-	int      h;
-	int      style;
+	int		 x;
+	int		 y;
+	int		 w;
+	int		 h;
+	int		 style;
 	qboolean focus;
-	float*   color;
+	float*	 color;
 
 	x = f->generic.x;
 	y = f->generic.y;
 
 	if( f->generic.flags & QMF_SMALLFONT )
 	{
-		w     = SMALLCHAR_WIDTH;
-		h     = SMALLCHAR_HEIGHT;
+		w	  = SMALLCHAR_WIDTH;
+		h	  = SMALLCHAR_HEIGHT;
 		style = UI_SMALLFONT;
 	}
 	else
 	{
-		w     = BIGCHAR_WIDTH;
-		h     = BIGCHAR_HEIGHT;
+		w	  = BIGCHAR_WIDTH;
+		h	  = BIGCHAR_HEIGHT;
 		style = UI_BIGFONT;
 	}
 

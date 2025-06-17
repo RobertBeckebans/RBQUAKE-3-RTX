@@ -33,13 +33,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include <io.h>
 #include <conio.h>
 
-#define CD_BASEDIR       "quake3"
-#define CD_EXE           "quake3.exe"
+#define CD_BASEDIR		 "quake3"
+#define CD_EXE			 "quake3.exe"
 #define CD_BASEDIR_LINUX "bin\\x86\\glibc-2.1"
-#define CD_EXE_LINUX     "quake3"
-#define MEM_THRESHOLD    96 * 1024 * 1024
+#define CD_EXE_LINUX	 "quake3"
+#define MEM_THRESHOLD	 96 * 1024 * 1024
 
-static char sys_cmdline[ MAX_STRING_CHARS ];
+static char sys_cmdline[MAX_STRING_CHARS];
 
 // define this to use alternate spanking method
 // I found out that the regular way doesn't work on my box for some reason
@@ -49,7 +49,7 @@ static char sys_cmdline[ MAX_STRING_CHARS ];
 	#include <stdio.h>
 	#include <sys\stat.h>
 
-int fh = 0;
+int	 fh = 0;
 
 void Spk_Open( char* name )
 {
@@ -68,7 +68,7 @@ void Spk_Close()
 void Spk_Printf( const char* text, ... )
 {
 	va_list argptr;
-	char    buf[ 32768 ];
+	char	buf[32768];
 
 	if( !fh )
 		return;
@@ -114,8 +114,8 @@ Show the early console as an error dialog
 void QDECL Sys_Error( const char* error, ... )
 {
 	va_list argptr;
-	char    text[ 4096 ];
-	MSG     msg;
+	char	text[4096];
+	MSG		msg;
 
 	va_start( argptr, error );
 	vsprintf( text, error, argptr );
@@ -187,10 +187,10 @@ Sys_Cwd
 */
 char* Sys_Cwd( void )
 {
-	static char cwd[ MAX_OSPATH ];
+	static char cwd[MAX_OSPATH];
 
 	_getcwd( cwd, sizeof( cwd ) - 1 );
-	cwd[ MAX_OSPATH - 1 ] = 0;
+	cwd[MAX_OSPATH - 1] = 0;
 
 	return cwd;
 }
@@ -227,9 +227,9 @@ DIRECTORY SCANNING
 
 void Sys_ListFilteredFiles( const char* basedir, char* subdirs, char* filter, char** list, int* numfiles )
 {
-	char               search[ MAX_OSPATH ], newsubdirs[ MAX_OSPATH ];
-	char               filename[ MAX_OSPATH ];
-	int                findhandle;
+	char			   search[MAX_OSPATH], newsubdirs[MAX_OSPATH];
+	char			   filename[MAX_OSPATH];
+	int				   findhandle;
 	struct _finddata_t findinfo;
 
 	if( *numfiles >= MAX_FOUND_FILES - 1 )
@@ -276,7 +276,7 @@ void Sys_ListFilteredFiles( const char* basedir, char* subdirs, char* filter, ch
 		Com_sprintf( filename, sizeof( filename ), "%s\\%s", subdirs, findinfo.name );
 		if( !Com_FilterPath( filter, filename, qfalse ) )
 			continue;
-		list[ *numfiles ] = CopyString( filename );
+		list[*numfiles] = CopyString( filename );
 		( *numfiles )++;
 	} while( _findnext( findhandle, &findinfo ) != -1 );
 
@@ -297,11 +297,11 @@ static qboolean strgtr( const char* s0, const char* s1 )
 
 	for( i = 0; i < l0; i++ )
 	{
-		if( s1[ i ] > s0[ i ] )
+		if( s1[i] > s0[i] )
 		{
 			return qtrue;
 		}
-		if( s1[ i ] < s0[ i ] )
+		if( s1[i] < s0[i] )
 		{
 			return qfalse;
 		}
@@ -316,23 +316,23 @@ Sys_ListFiles
 */
 char** Sys_ListFiles( const char* directory, const char* extension, char* filter, int* numfiles, qboolean wantsubs )
 {
-	char               search[ MAX_OSPATH ];
-	int                nfiles;
-	char**             listCopy;
-	char*              list[ MAX_FOUND_FILES ];
+	char			   search[MAX_OSPATH];
+	int				   nfiles;
+	char**			   listCopy;
+	char*			   list[MAX_FOUND_FILES];
 	struct _finddata_t findinfo;
-	intptr_t           findhandle;
-	int                flag;
-	int                i;
-	int                extLen;
+	intptr_t		   findhandle;
+	int				   flag;
+	int				   i;
+	int				   extLen;
 
 	if( filter )
 	{
 		nfiles = 0;
 		Sys_ListFilteredFiles( directory, "", filter, list, &nfiles );
 
-		list[ nfiles ] = 0;
-		*numfiles      = nfiles;
+		list[nfiles] = 0;
+		*numfiles	 = nfiles;
 
 		if( !nfiles )
 			return NULL;
@@ -340,9 +340,9 @@ char** Sys_ListFiles( const char* directory, const char* extension, char* filter
 		listCopy = Z_Malloc( ( nfiles + 1 ) * sizeof( *listCopy ) );
 		for( i = 0; i < nfiles; i++ )
 		{
-			listCopy[ i ] = list[ i ];
+			listCopy[i] = list[i];
 		}
-		listCopy[ i ] = NULL;
+		listCopy[i] = NULL;
 
 		return listCopy;
 	}
@@ -353,10 +353,10 @@ char** Sys_ListFiles( const char* directory, const char* extension, char* filter
 	}
 
 	// passing a slash as extension will find directories
-	if( extension[ 0 ] == '/' && extension[ 1 ] == 0 )
+	if( extension[0] == '/' && extension[1] == 0 )
 	{
 		extension = "";
-		flag      = 0;
+		flag	  = 0;
 	}
 	else
 	{
@@ -383,10 +383,7 @@ char** Sys_ListFiles( const char* directory, const char* extension, char* filter
 		{
 			if( *extension )
 			{
-				if( strlen( findinfo.name ) < extLen ||
-					Q_stricmp(
-						findinfo.name + strlen( findinfo.name ) - extLen,
-						extension ) )
+				if( strlen( findinfo.name ) < extLen || Q_stricmp( findinfo.name + strlen( findinfo.name ) - extLen, extension ) )
 				{
 					continue; // didn't match
 				}
@@ -395,12 +392,12 @@ char** Sys_ListFiles( const char* directory, const char* extension, char* filter
 			{
 				break;
 			}
-			list[ nfiles ] = CopyString( findinfo.name );
+			list[nfiles] = CopyString( findinfo.name );
 			nfiles++;
 		}
 	} while( _findnext( findhandle, &findinfo ) != -1 );
 
-	list[ nfiles ] = 0;
+	list[nfiles] = 0;
 
 	_findclose( findhandle );
 
@@ -415,21 +412,21 @@ char** Sys_ListFiles( const char* directory, const char* extension, char* filter
 	listCopy = Z_Malloc( ( nfiles + 1 ) * sizeof( *listCopy ) );
 	for( i = 0; i < nfiles; i++ )
 	{
-		listCopy[ i ] = list[ i ];
+		listCopy[i] = list[i];
 	}
-	listCopy[ i ] = NULL;
+	listCopy[i] = NULL;
 
 	do
 	{
 		flag = 0;
 		for( i = 1; i < nfiles; i++ )
 		{
-			if( strgtr( listCopy[ i - 1 ], listCopy[ i ] ) )
+			if( strgtr( listCopy[i - 1], listCopy[i] ) )
 			{
-				char* temp        = listCopy[ i ];
-				listCopy[ i ]     = listCopy[ i - 1 ];
-				listCopy[ i - 1 ] = temp;
-				flag              = 1;
+				char* temp		= listCopy[i];
+				listCopy[i]		= listCopy[i - 1];
+				listCopy[i - 1] = temp;
+				flag			= 1;
 			}
 		}
 	} while( flag );
@@ -446,9 +443,9 @@ void Sys_FreeFileList( char** list )
 		return;
 	}
 
-	for( i = 0; list[ i ]; i++ )
+	for( i = 0; list[i]; i++ )
 	{
-		Z_Free( list[ i ] );
+		Z_Free( list[i] );
 	}
 
 	Z_Free( list );
@@ -466,10 +463,10 @@ the cddir from
 */
 qboolean Sys_ScanForCD( void )
 {
-	static char cddir[ MAX_OSPATH ];
-	char        drive[ 4 ];
-	FILE*       f;
-	char        test[ MAX_OSPATH ];
+	static char cddir[MAX_OSPATH];
+	char		drive[4];
+	FILE*		f;
+	char		test[MAX_OSPATH];
 #if 0
 	// don't override a cdpath on the command line
 	if ( strstr( sys_cmdline, "cdpath" ) ) {
@@ -477,13 +474,13 @@ qboolean Sys_ScanForCD( void )
 	}
 #endif
 
-	drive[ 0 ] = 'c';
-	drive[ 1 ] = ':';
-	drive[ 2 ] = '\\';
-	drive[ 3 ] = 0;
+	drive[0] = 'c';
+	drive[1] = ':';
+	drive[2] = '\\';
+	drive[3] = 0;
 
 	// scan the drives
-	for( drive[ 0 ] = 'c'; drive[ 0 ] <= 'z'; drive[ 0 ]++ )
+	for( drive[0] = 'c'; drive[0] <= 'z'; drive[0]++ )
 	{
 		if( GetDriveType( drive ) != DRIVE_CDROM )
 		{
@@ -525,7 +522,7 @@ qboolean Sys_CheckCD( void )
 {
 	// FIXME: mission pack
 	return qtrue;
-	//return Sys_ScanForCD();
+	// return Sys_ScanForCD();
 }
 
 /*
@@ -599,7 +596,7 @@ extern char* FS_BuildOSPath( const char* base, const char* game, const char* qpa
 // fqpath param added 7/20/02 by T.Ray - Sys_LoadDll is only called in vm.c at this time
 // fqpath will be empty if dll not loaded, otherwise will hold fully qualified path of dll module loaded
 // fqpath buffersize must be at least MAX_QPATH+1 bytes long
-void* QDECL Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoint )( int, ... ), int( QDECL* systemcalls )( int, ... ) )
+void* QDECL	 Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoint )( int, ... ), int( QDECL* systemcalls )( int, ... ) )
 {
 	static int lastWarning = 0;
 	HINSTANCE  libHandle;
@@ -612,7 +609,7 @@ void* QDECL Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoint
 	int timestamp;
 	int ret;
 #endif
-	char filename[ MAX_QPATH ];
+	char filename[MAX_QPATH];
 
 	*fqpath = 0; // added 7/20/02 by T.Ray
 
@@ -625,14 +622,15 @@ void* QDECL Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoint
 		if( FS_FileExists( filename ) )
 		{
 			lastWarning = timestamp;
-			ret         = MessageBoxEx( NULL, "You are about to load a .DLL executable that\n"
-                                      "has not been verified for use with Quake III Arena.\n"
-                                      "This type of file can compromise the security of\n"
-                                      "your computer.\n\n"
-                                      "Select 'OK' if you choose to load it anyway.",
-                "Security Warning",
-                MB_OKCANCEL | MB_ICONEXCLAMATION | MB_DEFBUTTON2 | MB_TOPMOST | MB_SETFOREGROUND,
-                MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ) );
+			ret			= MessageBoxEx( NULL,
+				"You are about to load a .DLL executable that\n"
+						"has not been verified for use with Quake III Arena.\n"
+						"This type of file can compromise the security of\n"
+						"your computer.\n\n"
+						"Select 'OK' if you choose to load it anyway.",
+				"Security Warning",
+				MB_OKCANCEL | MB_ICONEXCLAMATION | MB_DEFBUTTON2 | MB_TOPMOST | MB_SETFOREGROUND,
+				MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ) );
 			if( ret != IDOK )
 			{
 				return NULL;
@@ -651,10 +649,10 @@ void* QDECL Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoint
 	{
 #endif
 		basepath = Cvar_VariableString( "fs_basepath" );
-		cdpath   = Cvar_VariableString( "fs_cdpath" );
-		gamedir  = Cvar_VariableString( "fs_game" );
+		cdpath	 = Cvar_VariableString( "fs_cdpath" );
+		gamedir	 = Cvar_VariableString( "fs_game" );
 
-		fn        = FS_BuildOSPath( basepath, gamedir, filename );
+		fn		  = FS_BuildOSPath( basepath, gamedir, filename );
 		libHandle = LoadLibrary( fn );
 #ifndef NDEBUG
 		if( libHandle )
@@ -665,9 +663,9 @@ void* QDECL Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoint
 
 		if( !libHandle )
 		{
-			if( cdpath[ 0 ] )
+			if( cdpath[0] )
 			{
-				fn        = FS_BuildOSPath( cdpath, gamedir, filename );
+				fn		  = FS_BuildOSPath( cdpath, gamedir, filename );
 				libHandle = LoadLibrary( fn );
 #ifndef NDEBUG
 				if( libHandle )
@@ -686,7 +684,7 @@ void* QDECL Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoint
 	}
 #endif
 
-	dllEntry    = ( void( QDECL* )( int( QDECL* )( int, ... ) ) )GetProcAddress( libHandle, "dllEntry" );
+	dllEntry	= ( void( QDECL* )( int( QDECL* )( int, ... ) ) )GetProcAddress( libHandle, "dllEntry" );
 	*entryPoint = ( int( QDECL* )( int, ... ) )GetProcAddress( libHandle, "vmMain" );
 	if( !*entryPoint || !dllEntry )
 	{
@@ -741,20 +739,20 @@ void Sys_StreamSeek( fileHandle_t f, int offset, int origin )
 typedef struct
 {
 	fileHandle_t file;
-	byte*        buffer;
-	qboolean     eof;
-	qboolean     active;
-	int          bufferSize;
-	int          streamPosition; // next byte to be returned by Sys_StreamRead
-	int          threadPosition; // next byte to be read from file
+	byte*		 buffer;
+	qboolean	 eof;
+	qboolean	 active;
+	int			 bufferSize;
+	int			 streamPosition; // next byte to be returned by Sys_StreamRead
+	int			 threadPosition; // next byte to be read from file
 } streamsIO_t;
 
 typedef struct
 {
-	HANDLE           threadHandle;
-	int              threadId;
+	HANDLE			 threadHandle;
+	int				 threadId;
 	CRITICAL_SECTION crit;
-	streamsIO_t      sIO[ MAX_FILE_HANDLES ];
+	streamsIO_t		 sIO[MAX_FILE_HANDLES];
 } streamState_t;
 
 streamState_t stream;
@@ -766,7 +764,7 @@ Sys_StreamThread
 A thread will be sitting in this loop forever
 ================
 */
-void Sys_StreamThread( void )
+void		  Sys_StreamThread( void )
 {
 	int buffer;
 	int count;
@@ -782,24 +780,24 @@ void Sys_StreamThread( void )
 		for( i = 1; i < MAX_FILE_HANDLES; i++ )
 		{
 			// if there is any space left in the buffer, fill it up
-			if( stream.sIO[ i ].active && !stream.sIO[ i ].eof )
+			if( stream.sIO[i].active && !stream.sIO[i].eof )
 			{
-				count = stream.sIO[ i ].bufferSize - ( stream.sIO[ i ].threadPosition - stream.sIO[ i ].streamPosition );
+				count = stream.sIO[i].bufferSize - ( stream.sIO[i].threadPosition - stream.sIO[i].streamPosition );
 				if( !count )
 				{
 					continue;
 				}
 
-				bufferPoint = stream.sIO[ i ].threadPosition % stream.sIO[ i ].bufferSize;
-				buffer      = stream.sIO[ i ].bufferSize - bufferPoint;
-				readCount   = buffer < count ? buffer : count;
+				bufferPoint = stream.sIO[i].threadPosition % stream.sIO[i].bufferSize;
+				buffer		= stream.sIO[i].bufferSize - bufferPoint;
+				readCount	= buffer < count ? buffer : count;
 
-				r = FS_Read( stream.sIO[ i ].buffer + bufferPoint, readCount, stream.sIO[ i ].file );
-				stream.sIO[ i ].threadPosition += r;
+				r = FS_Read( stream.sIO[i].buffer + bufferPoint, readCount, stream.sIO[i].file );
+				stream.sIO[i].threadPosition += r;
 
 				if( r != readCount )
 				{
-					stream.sIO[ i ].eof = qtrue;
+					stream.sIO[i].eof = qtrue;
 				}
 			}
 		}
@@ -824,16 +822,15 @@ void Sys_InitStreamThread( void )
 	// to sleep without any overhead
 	//	EnterCriticalSection( &stream.crit );
 
-	stream.threadHandle = CreateThread(
-		NULL,                                       // LPSECURITY_ATTRIBUTES lpsa,
-		0,                                          // DWORD cbStack,
+	stream.threadHandle = CreateThread( NULL,		// LPSECURITY_ATTRIBUTES lpsa,
+		0,											// DWORD cbStack,
 		( LPTHREAD_START_ROUTINE )Sys_StreamThread, // LPTHREAD_START_ROUTINE lpStartAddr,
-		0,                                          // LPVOID lpvThreadParm,
-		0,                                          //   DWORD fdwCreate,
+		0,											// LPVOID lpvThreadParm,
+		0,											//   DWORD fdwCreate,
 		&stream.threadId );
 	for( i = 0; i < MAX_FILE_HANDLES; i++ )
 	{
-		stream.sIO[ i ].active = qfalse;
+		stream.sIO[i].active = qfalse;
 	}
 }
 
@@ -855,18 +852,18 @@ Sys_BeginStreamedFile
 */
 void Sys_BeginStreamedFile( fileHandle_t f, int readAhead )
 {
-	if( stream.sIO[ f ].file )
+	if( stream.sIO[f].file )
 	{
-		Sys_EndStreamedFile( stream.sIO[ f ].file );
+		Sys_EndStreamedFile( stream.sIO[f].file );
 	}
 
-	stream.sIO[ f ].file           = f;
-	stream.sIO[ f ].buffer         = Z_Malloc( readAhead );
-	stream.sIO[ f ].bufferSize     = readAhead;
-	stream.sIO[ f ].streamPosition = 0;
-	stream.sIO[ f ].threadPosition = 0;
-	stream.sIO[ f ].eof            = qfalse;
-	stream.sIO[ f ].active         = qtrue;
+	stream.sIO[f].file			 = f;
+	stream.sIO[f].buffer		 = Z_Malloc( readAhead );
+	stream.sIO[f].bufferSize	 = readAhead;
+	stream.sIO[f].streamPosition = 0;
+	stream.sIO[f].threadPosition = 0;
+	stream.sIO[f].eof			 = qfalse;
+	stream.sIO[f].active		 = qtrue;
 
 	// let the thread start running
 	//	LeaveCriticalSection( &stream.crit );
@@ -880,17 +877,17 @@ Sys_EndStreamedFile
 */
 void Sys_EndStreamedFile( fileHandle_t f )
 {
-	if( f != stream.sIO[ f ].file )
+	if( f != stream.sIO[f].file )
 	{
 		Com_Error( ERR_FATAL, "Sys_EndStreamedFile: wrong file" );
 	}
 	// don't leave critical section until another stream is started
 	EnterCriticalSection( &stream.crit );
 
-	stream.sIO[ f ].file   = 0;
-	stream.sIO[ f ].active = qfalse;
+	stream.sIO[f].file	 = 0;
+	stream.sIO[f].active = qfalse;
 
-	Z_Free( stream.sIO[ f ].buffer );
+	Z_Free( stream.sIO[f].buffer );
 
 	LeaveCriticalSection( &stream.crit );
 }
@@ -903,20 +900,20 @@ Sys_StreamedRead
 */
 int Sys_StreamedRead( void* buffer, int size, int count, fileHandle_t f )
 {
-	int   available;
-	int   remaining;
-	int   sleepCount;
-	int   copy;
-	int   bufferCount;
-	int   bufferPoint;
+	int	  available;
+	int	  remaining;
+	int	  sleepCount;
+	int	  copy;
+	int	  bufferCount;
+	int	  bufferPoint;
 	byte* dest;
 
-	if( stream.sIO[ f ].active == qfalse )
+	if( stream.sIO[f].active == qfalse )
 	{
 		Com_Error( ERR_FATAL, "Streamed read with non-streaming file" );
 	}
 
-	dest      = ( byte* )buffer;
+	dest	  = ( byte* )buffer;
 	remaining = size * count;
 
 	if( remaining <= 0 )
@@ -927,10 +924,10 @@ int Sys_StreamedRead( void* buffer, int size, int count, fileHandle_t f )
 	sleepCount = 0;
 	while( remaining > 0 )
 	{
-		available = stream.sIO[ f ].threadPosition - stream.sIO[ f ].streamPosition;
+		available = stream.sIO[f].threadPosition - stream.sIO[f].streamPosition;
 		if( !available )
 		{
-			if( stream.sIO[ f ].eof )
+			if( stream.sIO[f].eof )
 			{
 				break;
 			}
@@ -948,16 +945,16 @@ int Sys_StreamedRead( void* buffer, int size, int count, fileHandle_t f )
 
 		EnterCriticalSection( &stream.crit );
 
-		bufferPoint = stream.sIO[ f ].streamPosition % stream.sIO[ f ].bufferSize;
-		bufferCount = stream.sIO[ f ].bufferSize - bufferPoint;
+		bufferPoint = stream.sIO[f].streamPosition % stream.sIO[f].bufferSize;
+		bufferCount = stream.sIO[f].bufferSize - bufferPoint;
 
 		copy = available < bufferCount ? available : bufferCount;
 		if( copy > remaining )
 		{
 			copy = remaining;
 		}
-		memcpy( dest, stream.sIO[ f ].buffer + bufferPoint, copy );
-		stream.sIO[ f ].streamPosition += copy;
+		memcpy( dest, stream.sIO[f].buffer + bufferPoint, copy );
+		stream.sIO[f].streamPosition += copy;
 		dest += copy;
 		remaining -= copy;
 
@@ -980,9 +977,9 @@ void Sys_StreamSeek( fileHandle_t f, int offset, int origin )
 
 	// clear to that point
 	FS_Seek( f, offset, origin );
-	stream.sIO[ f ].streamPosition = 0;
-	stream.sIO[ f ].threadPosition = 0;
-	stream.sIO[ f ].eof            = qfalse;
+	stream.sIO[f].streamPosition = 0;
+	stream.sIO[f].threadPosition = 0;
+	stream.sIO[f].eof			 = qfalse;
 
 	// let the thread start running at the new position
 	LeaveCriticalSection( &stream.crit );
@@ -998,12 +995,12 @@ EVENT LOOP
 ========================================================================
 */
 
-#define MAX_QUED_EVENTS  256
+#define MAX_QUED_EVENTS	 256
 #define MASK_QUED_EVENTS ( MAX_QUED_EVENTS - 1 )
 
-sysEvent_t eventQue[ MAX_QUED_EVENTS ];
-int        eventHead, eventTail;
-byte       sys_packetReceived[ MAX_MSGLEN ];
+sysEvent_t eventQue[MAX_QUED_EVENTS];
+int		   eventHead, eventTail;
+byte	   sys_packetReceived[MAX_MSGLEN];
 
 /*
 ================
@@ -1014,11 +1011,11 @@ Ptr should either be null, or point to a block of data that can
 be freed by the game later.
 ================
 */
-void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void* ptr )
+void	   Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void* ptr )
 {
 	sysEvent_t* ev;
 
-	ev = &eventQue[ eventHead & MASK_QUED_EVENTS ];
+	ev = &eventQue[eventHead & MASK_QUED_EVENTS];
 	if( eventHead - eventTail >= MAX_QUED_EVENTS )
 	{
 		Com_Printf( "Sys_QueEvent: overflow\n" );
@@ -1037,12 +1034,12 @@ void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptr
 		time = Sys_Milliseconds();
 	}
 
-	ev->evTime      = time;
-	ev->evType      = type;
-	ev->evValue     = value;
-	ev->evValue2    = value2;
+	ev->evTime		= time;
+	ev->evType		= type;
+	ev->evValue		= value;
+	ev->evValue2	= value2;
 	ev->evPtrLength = ptrLength;
-	ev->evPtr       = ptr;
+	ev->evPtr		= ptr;
 }
 
 /*
@@ -1053,17 +1050,17 @@ Sys_GetEvent
 */
 sysEvent_t Sys_GetEvent( void )
 {
-	MSG        msg;
+	MSG		   msg;
 	sysEvent_t ev;
-	char*      s;
-	msg_t      netmsg;
+	char*	   s;
+	msg_t	   netmsg;
 	netadr_t   adr;
 
 	// return if we have data
 	if( eventHead > eventTail )
 	{
 		eventTail++;
-		return eventQue[ ( eventTail - 1 ) & MASK_QUED_EVENTS ];
+		return eventQue[( eventTail - 1 ) & MASK_QUED_EVENTS];
 	}
 
 	// pump the message loop
@@ -1086,10 +1083,10 @@ sysEvent_t Sys_GetEvent( void )
 	if( s )
 	{
 		char* b;
-		int   len;
+		int	  len;
 
 		len = strlen( s ) + 1;
-		b   = Z_Malloc( len );
+		b	= Z_Malloc( len );
 		Q_strncpyz( b, s, len - 1 );
 		Sys_QueEvent( 0, SE_CONSOLE, 0, 0, len, b );
 	}
@@ -1099,14 +1096,14 @@ sysEvent_t Sys_GetEvent( void )
 	if( Sys_GetPacket( &adr, &netmsg ) )
 	{
 		netadr_t* buf;
-		int       len;
+		int		  len;
 
 		// copy out to a seperate buffer for qeueing
 		// the readcount stepahead is for SOCKS support
-		len  = sizeof( netadr_t ) + netmsg.cursize - netmsg.readcount;
-		buf  = Z_Malloc( len );
+		len	 = sizeof( netadr_t ) + netmsg.cursize - netmsg.readcount;
+		buf	 = Z_Malloc( len );
 		*buf = adr;
-		memcpy( buf + 1, &netmsg.data[ netmsg.readcount ], netmsg.cursize - netmsg.readcount );
+		memcpy( buf + 1, &netmsg.data[netmsg.readcount], netmsg.cursize - netmsg.readcount );
 		Sys_QueEvent( 0, SE_PACKET, 0, 0, len, buf );
 	}
 
@@ -1114,7 +1111,7 @@ sysEvent_t Sys_GetEvent( void )
 	if( eventHead > eventTail )
 	{
 		eventTail++;
-		return eventQue[ ( eventTail - 1 ) & MASK_QUED_EVENTS ];
+		return eventQue[( eventTail - 1 ) & MASK_QUED_EVENTS];
 	}
 
 	// create an empty event to return
@@ -1209,8 +1206,8 @@ void Sys_Init( void )
 	}
 
 	// save out a couple things in rom cvars for the renderer to access
-	//Cvar_Get( "win_hinstance", va("%i", (int)g_wv.hInstance), CVAR_ROM );
-	//Cvar_Get( "win_wndproc", va("%i", (int)MainWndProc), CVAR_ROM );
+	// Cvar_Get( "win_hinstance", va("%i", (int)g_wv.hInstance), CVAR_ROM );
+	// Cvar_Get( "win_wndproc", va("%i", (int)MainWndProc), CVAR_ROM );
 
 	//
 	// figure out our CPU
@@ -1293,7 +1290,7 @@ void Sys_Init( void )
 
 //=======================================================================
 
-int totalMsec, countMsec;
+int		   totalMsec, countMsec;
 
 /*
 ==================
@@ -1303,8 +1300,8 @@ WinMain
 */
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
-	char cwd[ MAX_OSPATH ];
-	int  startTime, endTime;
+	char cwd[MAX_OSPATH];
+	int	 startTime, endTime;
 
 	// should never get a previous instance in Win32
 	if( hPrevInstance )

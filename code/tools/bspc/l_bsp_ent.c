@@ -27,13 +27,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../botlib/l_script.h"
 #include "l_bsp_ent.h"
 
-#define MAX_KEY   32
+#define MAX_KEY	  32
 #define MAX_VALUE 1024
 
-int      num_entities;
-entity_t entities[ MAX_MAP_ENTITIES ];
+int		 num_entities;
+entity_t entities[MAX_MAP_ENTITIES];
 
-void StripTrailing( char* e )
+void	 StripTrailing( char* e )
 {
 	char* s;
 
@@ -53,7 +53,7 @@ ParseEpair
 epair_t* ParseEpair( script_t* script )
 {
 	epair_t* e;
-	token_t  token;
+	token_t	 token;
 
 	e = GetMemory( sizeof( epair_t ) );
 	memset( e, 0, sizeof( epair_t ) );
@@ -74,7 +74,7 @@ epair_t* ParseEpair( script_t* script )
 	StripTrailing( e->value );
 
 	return e;
-} //end of the function ParseEpair
+} // end of the function ParseEpair
 
 /*
 ================
@@ -85,7 +85,7 @@ qboolean ParseEntity( script_t* script )
 {
 	epair_t*  e;
 	entity_t* mapent;
-	token_t   token;
+	token_t	  token;
 
 	if( !PS_ReadToken( script, &token ) )
 		return false;
@@ -96,7 +96,7 @@ qboolean ParseEntity( script_t* script )
 	if( num_entities == MAX_MAP_ENTITIES )
 		Error( "num_entities == MAX_MAP_ENTITIES" );
 
-	mapent = &entities[ num_entities ];
+	mapent = &entities[num_entities];
 	num_entities++;
 
 	do
@@ -106,13 +106,13 @@ qboolean ParseEntity( script_t* script )
 		if( !strcmp( token.string, "}" ) )
 			break;
 		PS_UnreadLastToken( script );
-		e              = ParseEpair( script );
-		e->next        = mapent->epairs;
+		e			   = ParseEpair( script );
+		e->next		   = mapent->epairs;
 		mapent->epairs = e;
 	} while( 1 );
 
 	return true;
-} //end of the function ParseEntity
+} // end of the function ParseEntity
 
 void PrintEntity( entity_t* ent )
 {
@@ -136,11 +136,11 @@ void SetKeyValue( entity_t* ent, char* key, char* value )
 			ep->value = copystring( value );
 			return;
 		}
-	ep          = GetMemory( sizeof( *ep ) );
-	ep->next    = ent->epairs;
+	ep			= GetMemory( sizeof( *ep ) );
+	ep->next	= ent->epairs;
 	ent->epairs = ep;
-	ep->key     = copystring( key );
-	ep->value   = copystring( value );
+	ep->key		= copystring( key );
+	ep->value	= copystring( value );
 }
 
 char* ValueForKey( entity_t* ent, char* key )
@@ -170,7 +170,7 @@ void GetVectorForKey( entity_t* ent, char* key, vec3_t vec )
 	// scanf into doubles, then assign, so it is vec_t size independent
 	v1 = v2 = v3 = 0;
 	sscanf( k, "%lf %lf %lf", &v1, &v2, &v3 );
-	vec[ 0 ] = v1;
-	vec[ 1 ] = v2;
-	vec[ 2 ] = v3;
+	vec[0] = v1;
+	vec[1] = v2;
+	vec[2] = v3;
 }

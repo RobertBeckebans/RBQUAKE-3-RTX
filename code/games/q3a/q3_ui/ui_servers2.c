@@ -41,221 +41,185 @@ MULTIPLAYER MENU (SERVER BROWSER)
 #define MAX_LEAGUELENGTH   28
 #define MAX_LISTBOXWIDTH   68
 
-#define ART_BACK0       "menu/art/back_0"
-#define ART_BACK1       "menu/art/back_1"
-#define ART_CREATE0     "menu/art/create_0"
-#define ART_CREATE1     "menu/art/create_1"
-#define ART_SPECIFY0    "menu/art/specify_0"
-#define ART_SPECIFY1    "menu/art/specify_1"
-#define ART_REFRESH0    "menu/art/refresh_0"
-#define ART_REFRESH1    "menu/art/refresh_1"
-#define ART_CONNECT0    "menu/art/fight_0"
-#define ART_CONNECT1    "menu/art/fight_1"
-#define ART_ARROWS0     "menu/art/arrows_vert_0"
-#define ART_ARROWS_UP   "menu/art/arrows_vert_top"
-#define ART_ARROWS_DOWN "menu/art/arrows_vert_bot"
-#define ART_UNKNOWNMAP  "menu/art/unknownmap"
-#define ART_REMOVE0     "menu/art/delete_0"
-#define ART_REMOVE1     "menu/art/delete_1"
-#define ART_PUNKBUSTER  "menu/art/pblogo"
+#define ART_BACK0		   "menu/art/back_0"
+#define ART_BACK1		   "menu/art/back_1"
+#define ART_CREATE0		   "menu/art/create_0"
+#define ART_CREATE1		   "menu/art/create_1"
+#define ART_SPECIFY0	   "menu/art/specify_0"
+#define ART_SPECIFY1	   "menu/art/specify_1"
+#define ART_REFRESH0	   "menu/art/refresh_0"
+#define ART_REFRESH1	   "menu/art/refresh_1"
+#define ART_CONNECT0	   "menu/art/fight_0"
+#define ART_CONNECT1	   "menu/art/fight_1"
+#define ART_ARROWS0		   "menu/art/arrows_vert_0"
+#define ART_ARROWS_UP	   "menu/art/arrows_vert_top"
+#define ART_ARROWS_DOWN	   "menu/art/arrows_vert_bot"
+#define ART_UNKNOWNMAP	   "menu/art/unknownmap"
+#define ART_REMOVE0		   "menu/art/delete_0"
+#define ART_REMOVE1		   "menu/art/delete_1"
+#define ART_PUNKBUSTER	   "menu/art/pblogo"
 
-#define ID_MASTER      10
-#define ID_GAMETYPE    11
-#define ID_SORTKEY     12
-#define ID_SHOW_FULL   13
-#define ID_SHOW_EMPTY  14
-#define ID_LIST        15
-#define ID_SCROLL_UP   16
-#define ID_SCROLL_DOWN 17
-#define ID_BACK        18
-#define ID_REFRESH     19
-#define ID_SPECIFY     20
-#define ID_CREATE      21
-#define ID_CONNECT     22
-#define ID_REMOVE      23
-#define ID_PUNKBUSTER  24
+#define ID_MASTER		   10
+#define ID_GAMETYPE		   11
+#define ID_SORTKEY		   12
+#define ID_SHOW_FULL	   13
+#define ID_SHOW_EMPTY	   14
+#define ID_LIST			   15
+#define ID_SCROLL_UP	   16
+#define ID_SCROLL_DOWN	   17
+#define ID_BACK			   18
+#define ID_REFRESH		   19
+#define ID_SPECIFY		   20
+#define ID_CREATE		   21
+#define ID_CONNECT		   22
+#define ID_REMOVE		   23
+#define ID_PUNKBUSTER	   24
 
-#define GR_LOGO    30
-#define GR_LETTERS 31
+#define GR_LOGO			   30
+#define GR_LETTERS		   31
 
-#define AS_LOCAL     0
-#define AS_MPLAYER   1
-#define AS_GLOBAL    2
-#define AS_FAVORITES 3
+#define AS_LOCAL		   0
+#define AS_MPLAYER		   1
+#define AS_GLOBAL		   2
+#define AS_FAVORITES	   3
 
-#define SORT_HOST    0
-#define SORT_MAP     1
-#define SORT_CLIENTS 2
-#define SORT_GAME    3
-#define SORT_PING    4
+#define SORT_HOST		   0
+#define SORT_MAP		   1
+#define SORT_CLIENTS	   2
+#define SORT_GAME		   3
+#define SORT_PING		   4
 
-#define GAMES_ALL      0
-#define GAMES_FFA      1
-#define GAMES_TEAMPLAY 2
-#define GAMES_TOURNEY  3
-#define GAMES_CTF      4
+#define GAMES_ALL		   0
+#define GAMES_FFA		   1
+#define GAMES_TEAMPLAY	   2
+#define GAMES_TOURNEY	   3
+#define GAMES_CTF		   4
 
-static const char* master_items[] = {
-	"Local",
-	"Internet",
-	"Favorites",
-	0
-};
+static const char* master_items[] = { "Local", "Internet", "Favorites", 0 };
 
-static const char* servertype_items[] = {
-	"All",
-	"Free For All",
-	"Team Deathmatch",
-	"Tournament",
-	"Capture the Flag",
-	0
-};
+static const char* servertype_items[] = { "All", "Free For All", "Team Deathmatch", "Tournament", "Capture the Flag", 0 };
 
-static const char* sortkey_items[] = {
-	"Server Name",
-	"Map Name",
-	"Open Player Spots",
-	"Game Type",
-	"Ping Time",
-	0
-};
+static const char* sortkey_items[] = { "Server Name", "Map Name", "Open Player Spots", "Game Type", "Ping Time", 0 };
 
-static char* gamenames[] = {
-	"DM ",            // deathmatch
-	"1v1",            // tournament
-	"SP ",            // single player
-	"Team DM",        // team deathmatch
-	"CTF",            // capture the flag
-	"One Flag CTF",   // one flag ctf
-	"OverLoad",       // Overload
-	"Harvester",      // Harvester
-	"Rocket Arena 3", // Rocket Arena 3
-	"Q3F",            // Q3F
-	"Urban Terror",   // Urban Terror
-	"OSP",            // Orange Smoothie Productions
-	"???",            // unknown
-	0
-};
+static char*	   gamenames[] = { "DM ", // deathmatch
+		  "1v1",						  // tournament
+		  "SP ",						  // single player
+		  "Team DM",					  // team deathmatch
+		  "CTF",						  // capture the flag
+		  "One Flag CTF",				  // one flag ctf
+		  "OverLoad",					  // Overload
+		  "Harvester",					  // Harvester
+		  "Rocket Arena 3",				  // Rocket Arena 3
+		  "Q3F",						  // Q3F
+		  "Urban Terror",				  // Urban Terror
+		  "OSP",						  // Orange Smoothie Productions
+		  "???",						  // unknown
+		  0 };
 
-static char* netnames[] = {
-	"???",
-	"UDP",
-	"IPX",
-	NULL
-};
+static char*	   netnames[] = { "???", "UDP", "IPX", NULL };
 
-static char quake3worldMessage[] = "Visit www.quake3world.com - News, Community, Events, Files";
+static char		   quake3worldMessage[] = "Visit www.quake3world.com - News, Community, Events, Files";
 
-const char* punkbuster_items[] = {
-	"Disabled",
-	"Enabled",
-	NULL
-};
+const char*		   punkbuster_items[] = { "Disabled", "Enabled", NULL };
 
-const char* punkbuster_msg[] = {
-	"PunkBuster will be",
-	"disabled the next time",
-	"Quake III Arena",
-	"is started.",
-	NULL
-};
+const char*		   punkbuster_msg[] = { "PunkBuster will be", "disabled the next time", "Quake III Arena", "is started.", NULL };
 
 typedef struct
 {
-	char adrstr[ MAX_ADDRESSLENGTH ];
-	int  start;
+	char adrstr[MAX_ADDRESSLENGTH];
+	int	 start;
 } pinglist_t;
 
 typedef struct servernode_s
 {
-	char     adrstr[ MAX_ADDRESSLENGTH ];
-	char     hostname[ MAX_HOSTNAMELENGTH + 3 ];
-	char     mapname[ MAX_MAPNAMELENGTH ];
-	int      numclients;
-	int      maxclients;
-	int      pingtime;
-	int      gametype;
-	char     gamename[ 12 ];
-	int      nettype;
-	int      minPing;
-	int      maxPing;
+	char	 adrstr[MAX_ADDRESSLENGTH];
+	char	 hostname[MAX_HOSTNAMELENGTH + 3];
+	char	 mapname[MAX_MAPNAMELENGTH];
+	int		 numclients;
+	int		 maxclients;
+	int		 pingtime;
+	int		 gametype;
+	char	 gamename[12];
+	int		 nettype;
+	int		 minPing;
+	int		 maxPing;
 	qboolean bPB;
 
 } servernode_t;
 
 typedef struct
 {
-	char          buff[ MAX_LISTBOXWIDTH ];
+	char		  buff[MAX_LISTBOXWIDTH];
 	servernode_t* servernode;
 } table_t;
 
 typedef struct
 {
-	menuframework_s menu;
+	menuframework_s	  menu;
 
-	menutext_s banner;
+	menutext_s		  banner;
 
-	menulist_s        master;
-	menulist_s        gametype;
-	menulist_s        sortkey;
+	menulist_s		  master;
+	menulist_s		  gametype;
+	menulist_s		  sortkey;
 	menuradiobutton_s showfull;
 	menuradiobutton_s showempty;
 
-	menulist_s   list;
-	menubitmap_s mappic;
-	menubitmap_s arrows;
-	menubitmap_s up;
-	menubitmap_s down;
-	menutext_s   status;
-	menutext_s   statusbar;
+	menulist_s		  list;
+	menubitmap_s	  mappic;
+	menubitmap_s	  arrows;
+	menubitmap_s	  up;
+	menubitmap_s	  down;
+	menutext_s		  status;
+	menutext_s		  statusbar;
 
-	menubitmap_s remove;
-	menubitmap_s back;
-	menubitmap_s refresh;
-	menubitmap_s specify;
-	menubitmap_s create;
-	menubitmap_s go;
+	menubitmap_s	  remove;
+	menubitmap_s	  back;
+	menubitmap_s	  refresh;
+	menubitmap_s	  specify;
+	menubitmap_s	  create;
+	menubitmap_s	  go;
 
-	pinglist_t    pinglist[ MAX_PINGREQUESTS ];
-	table_t       table[ MAX_LISTBOXITEMS ];
-	char*         items[ MAX_LISTBOXITEMS ];
-	int           numqueriedservers;
-	int*          numservers;
-	servernode_t* serverlist;
-	int           currentping;
-	qboolean      refreshservers;
-	int           nextpingtime;
-	int           maxservers;
-	int           refreshtime;
-	char          favoriteaddresses[ MAX_FAVORITESERVERS ][ MAX_ADDRESSLENGTH ];
-	int           numfavoriteaddresses;
+	pinglist_t		  pinglist[MAX_PINGREQUESTS];
+	table_t			  table[MAX_LISTBOXITEMS];
+	char*			  items[MAX_LISTBOXITEMS];
+	int				  numqueriedservers;
+	int*			  numservers;
+	servernode_t*	  serverlist;
+	int				  currentping;
+	qboolean		  refreshservers;
+	int				  nextpingtime;
+	int				  maxservers;
+	int				  refreshtime;
+	char			  favoriteaddresses[MAX_FAVORITESERVERS][MAX_ADDRESSLENGTH];
+	int				  numfavoriteaddresses;
 
-	menulist_s   punkbuster;
-	menubitmap_s pblogo;
+	menulist_s		  punkbuster;
+	menubitmap_s	  pblogo;
 } arenaservers_t;
 
 static arenaservers_t g_arenaservers;
 
-static servernode_t g_globalserverlist[ MAX_GLOBALSERVERS ];
-static int          g_numglobalservers;
-static servernode_t g_localserverlist[ MAX_LOCALSERVERS ];
-static int          g_numlocalservers;
-static servernode_t g_favoriteserverlist[ MAX_FAVORITESERVERS ];
-static int          g_numfavoriteservers;
-static servernode_t g_mplayerserverlist[ MAX_GLOBALSERVERS ];
-static int          g_nummplayerservers;
-static int          g_servertype;
-static int          g_gametype;
-static int          g_sortkey;
-static int          g_emptyservers;
-static int          g_fullservers;
+static servernode_t	  g_globalserverlist[MAX_GLOBALSERVERS];
+static int			  g_numglobalservers;
+static servernode_t	  g_localserverlist[MAX_LOCALSERVERS];
+static int			  g_numlocalservers;
+static servernode_t	  g_favoriteserverlist[MAX_FAVORITESERVERS];
+static int			  g_numfavoriteservers;
+static servernode_t	  g_mplayerserverlist[MAX_GLOBALSERVERS];
+static int			  g_nummplayerservers;
+static int			  g_servertype;
+static int			  g_gametype;
+static int			  g_sortkey;
+static int			  g_emptyservers;
+static int			  g_fullservers;
 
 /*
 =================
 ArenaServers_MaxPing
 =================
 */
-static int ArenaServers_MaxPing( void )
+static int			  ArenaServers_MaxPing( void )
 {
 	int maxPing;
 
@@ -274,8 +238,8 @@ ArenaServers_Compare
 */
 static int QDECL ArenaServers_Compare( const void* arg1, const void* arg2 )
 {
-	float         f1;
-	float         f2;
+	float		  f1;
+	float		  f2;
 	servernode_t* t1;
 	servernode_t* t2;
 
@@ -348,7 +312,7 @@ static void ArenaServers_Go( void )
 {
 	servernode_t* servernode;
 
-	servernode = g_arenaservers.table[ g_arenaservers.list.curvalue ].servernode;
+	servernode = g_arenaservers.table[g_arenaservers.list.curvalue].servernode;
 	if( servernode )
 	{
 		trap_Cmd_ExecuteText( EXEC_APPEND, va( "connect %s\n", servernode->adrstr ) );
@@ -362,7 +326,7 @@ ArenaServers_UpdatePicture
 */
 static void ArenaServers_UpdatePicture( void )
 {
-	static char   picname[ 64 ];
+	static char	  picname[64];
 	servernode_t* servernodeptr;
 
 	if( !g_arenaservers.list.numitems )
@@ -371,7 +335,7 @@ static void ArenaServers_UpdatePicture( void )
 	}
 	else
 	{
-		servernodeptr = g_arenaservers.table[ g_arenaservers.list.curvalue ].servernode;
+		servernodeptr = g_arenaservers.table[g_arenaservers.list.curvalue].servernode;
 		Com_sprintf( picname, sizeof( picname ), "levelshots/%s.tga", servernodeptr->mapname );
 		g_arenaservers.mappic.generic.name = picname;
 	}
@@ -387,13 +351,13 @@ ArenaServers_UpdateMenu
 */
 static void ArenaServers_UpdateMenu( void )
 {
-	int           i;
-	int           j;
-	int           count;
-	char*         buff;
+	int			  i;
+	int			  j;
+	int			  count;
+	char*		  buff;
 	servernode_t* servernodeptr;
-	table_t*      tableptr;
-	char*         pingColor;
+	table_t*	  tableptr;
+	char*		  pingColor;
 
 	if( g_arenaservers.numqueriedservers > 0 )
 	{
@@ -484,7 +448,7 @@ static void ArenaServers_UpdateMenu( void )
 		// zero out list box
 		g_arenaservers.list.numitems = 0;
 		g_arenaservers.list.curvalue = 0;
-		g_arenaservers.list.top      = 0;
+		g_arenaservers.list.top		 = 0;
 
 		// update picture
 		ArenaServers_UpdatePicture();
@@ -493,12 +457,12 @@ static void ArenaServers_UpdateMenu( void )
 
 	// build list box strings - apply culling filters
 	servernodeptr = g_arenaservers.serverlist;
-	count         = *g_arenaservers.numservers;
+	count		  = *g_arenaservers.numservers;
 	for( i = 0, j = 0; i < count; i++, servernodeptr++ )
 	{
-		tableptr             = &g_arenaservers.table[ j ];
+		tableptr			 = &g_arenaservers.table[j];
 		tableptr->servernode = servernodeptr;
-		buff                 = tableptr->buff;
+		buff				 = tableptr->buff;
 
 		// can only cull valid results
 		if( !g_emptyservers && !servernodeptr->numclients )
@@ -566,13 +530,24 @@ static void ArenaServers_UpdateMenu( void )
 			pingColor = S_COLOR_RED;
 		}
 
-		Com_sprintf( buff, MAX_LISTBOXWIDTH, "%-20.20s %-12.12s %2d/%2d %-8.8s %3s %s%3d " S_COLOR_YELLOW "%s", servernodeptr->hostname, servernodeptr->mapname, servernodeptr->numclients, servernodeptr->maxclients, servernodeptr->gamename, netnames[ servernodeptr->nettype ], pingColor, servernodeptr->pingtime, servernodeptr->bPB ? "Yes" : "No" );
+		Com_sprintf( buff,
+			MAX_LISTBOXWIDTH,
+			"%-20.20s %-12.12s %2d/%2d %-8.8s %3s %s%3d " S_COLOR_YELLOW "%s",
+			servernodeptr->hostname,
+			servernodeptr->mapname,
+			servernodeptr->numclients,
+			servernodeptr->maxclients,
+			servernodeptr->gamename,
+			netnames[servernodeptr->nettype],
+			pingColor,
+			servernodeptr->pingtime,
+			servernodeptr->bPB ? "Yes" : "No" );
 		j++;
 	}
 
 	g_arenaservers.list.numitems = j;
 	g_arenaservers.list.curvalue = 0;
-	g_arenaservers.list.top      = 0;
+	g_arenaservers.list.top		 = 0;
 
 	// update picture
 	ArenaServers_UpdatePicture();
@@ -585,9 +560,9 @@ ArenaServers_Remove
 */
 static void ArenaServers_Remove( void )
 {
-	int           i;
+	int			  i;
 	servernode_t* servernodeptr;
-	table_t*      tableptr;
+	table_t*	  tableptr;
 
 	if( !g_arenaservers.list.numitems )
 		return;
@@ -596,12 +571,12 @@ static void ArenaServers_Remove( void )
 	// items are in scattered order due to sort and cull
 	// perform delete on list box contents, resync all lists
 
-	tableptr      = &g_arenaservers.table[ g_arenaservers.list.curvalue ];
+	tableptr	  = &g_arenaservers.table[g_arenaservers.list.curvalue];
 	servernodeptr = tableptr->servernode;
 
 	// find address in master list
 	for( i = 0; i < g_arenaservers.numfavoriteaddresses; i++ )
-		if( !Q_stricmp( g_arenaservers.favoriteaddresses[ i ], servernodeptr->adrstr ) )
+		if( !Q_stricmp( g_arenaservers.favoriteaddresses[i], servernodeptr->adrstr ) )
 			break;
 
 	// delete address from master list
@@ -610,14 +585,14 @@ static void ArenaServers_Remove( void )
 		if( i < g_arenaservers.numfavoriteaddresses - 1 )
 		{
 			// shift items up
-			memcpy( &g_arenaservers.favoriteaddresses[ i ], &g_arenaservers.favoriteaddresses[ i + 1 ], ( g_arenaservers.numfavoriteaddresses - i - 1 ) * sizeof( MAX_ADDRESSLENGTH ) );
+			memcpy( &g_arenaservers.favoriteaddresses[i], &g_arenaservers.favoriteaddresses[i + 1], ( g_arenaservers.numfavoriteaddresses - i - 1 ) * sizeof( MAX_ADDRESSLENGTH ) );
 		}
 		g_arenaservers.numfavoriteaddresses--;
 	}
 
 	// find address in server list
 	for( i = 0; i < g_numfavoriteservers; i++ )
-		if( &g_favoriteserverlist[ i ] == servernodeptr )
+		if( &g_favoriteserverlist[i] == servernodeptr )
 			break;
 
 	// delete address from server list
@@ -626,13 +601,13 @@ static void ArenaServers_Remove( void )
 		if( i < g_numfavoriteservers - 1 )
 		{
 			// shift items up
-			memcpy( &g_favoriteserverlist[ i ], &g_favoriteserverlist[ i + 1 ], ( g_numfavoriteservers - i - 1 ) * sizeof( servernode_t ) );
+			memcpy( &g_favoriteserverlist[i], &g_favoriteserverlist[i + 1], ( g_numfavoriteservers - i - 1 ) * sizeof( servernode_t ) );
 		}
 		g_numfavoriteservers--;
 	}
 
 	g_arenaservers.numqueriedservers = g_arenaservers.numfavoriteaddresses;
-	g_arenaservers.currentping       = g_arenaservers.numfavoriteaddresses;
+	g_arenaservers.currentping		 = g_arenaservers.numfavoriteaddresses;
 }
 
 /*
@@ -643,8 +618,8 @@ ArenaServers_Insert
 static void ArenaServers_Insert( char* adrstr, char* info, int pingtime )
 {
 	servernode_t* servernodeptr;
-	char*         s;
-	int           i;
+	char*		  s;
+	int			  i;
 
 	if( ( pingtime >= ArenaServers_MaxPing() ) && ( g_servertype != AS_FAVORITES ) )
 	{
@@ -676,10 +651,10 @@ static void ArenaServers_Insert( char* adrstr, char* info, int pingtime )
 
 	servernodeptr->numclients = atoi( Info_ValueForKey( info, "clients" ) );
 	servernodeptr->maxclients = atoi( Info_ValueForKey( info, "sv_maxclients" ) );
-	servernodeptr->pingtime   = pingtime;
-	servernodeptr->minPing    = atoi( Info_ValueForKey( info, "minPing" ) );
-	servernodeptr->maxPing    = atoi( Info_ValueForKey( info, "maxPing" ) );
-	servernodeptr->bPB        = atoi( Info_ValueForKey( info, "punkbuster" ) );
+	servernodeptr->pingtime	  = pingtime;
+	servernodeptr->minPing	  = atoi( Info_ValueForKey( info, "minPing" ) );
+	servernodeptr->maxPing	  = atoi( Info_ValueForKey( info, "maxPing" ) );
+	servernodeptr->bPB		  = atoi( Info_ValueForKey( info, "punkbuster" ) );
 
 	/*
 	s = Info_ValueForKey( info, "nettype" );
@@ -717,7 +692,7 @@ static void ArenaServers_Insert( char* adrstr, char* info, int pingtime )
 	else
 	{
 		servernodeptr->gametype = i;
-		Q_strncpyz( servernodeptr->gamename, gamenames[ i ], sizeof( servernodeptr->gamename ) );
+		Q_strncpyz( servernodeptr->gamename, gamenames[i], sizeof( servernodeptr->gamename ) );
 	}
 }
 
@@ -730,24 +705,24 @@ Insert nonresponsive address book entries into display lists.
 */
 void ArenaServers_InsertFavorites( void )
 {
-	int  i;
-	int  j;
-	char info[ MAX_INFO_STRING ];
+	int	 i;
+	int	 j;
+	char info[MAX_INFO_STRING];
 
 	// resync existing results with new or deleted cvars
-	info[ 0 ] = '\0';
+	info[0] = '\0';
 	Info_SetValueForKey( info, "hostname", "No Response" );
 	for( i = 0; i < g_arenaservers.numfavoriteaddresses; i++ )
 	{
 		// find favorite address in refresh list
 		for( j = 0; j < g_numfavoriteservers; j++ )
-			if( !Q_stricmp( g_arenaservers.favoriteaddresses[ i ], g_favoriteserverlist[ j ].adrstr ) )
+			if( !Q_stricmp( g_arenaservers.favoriteaddresses[i], g_favoriteserverlist[j].adrstr ) )
 				break;
 
 		if( j >= g_numfavoriteservers )
 		{
 			// not in list, add it
-			ArenaServers_Insert( g_arenaservers.favoriteaddresses[ i ], info, ArenaServers_MaxPing() );
+			ArenaServers_Insert( g_arenaservers.favoriteaddresses[i], info, ArenaServers_MaxPing() );
 		}
 	}
 }
@@ -761,16 +736,16 @@ Load cvar address book entries into local lists.
 */
 void ArenaServers_LoadFavorites( void )
 {
-	int          i;
-	int          j;
-	int          numtempitems;
-	char         emptyinfo[ MAX_INFO_STRING ];
-	char         adrstr[ MAX_ADDRESSLENGTH ];
-	servernode_t templist[ MAX_FAVORITESERVERS ];
-	qboolean     found;
+	int			 i;
+	int			 j;
+	int			 numtempitems;
+	char		 emptyinfo[MAX_INFO_STRING];
+	char		 adrstr[MAX_ADDRESSLENGTH];
+	servernode_t templist[MAX_FAVORITESERVERS];
+	qboolean	 found;
 
-	found          = qfalse;
-	emptyinfo[ 0 ] = '\0';
+	found		 = qfalse;
+	emptyinfo[0] = '\0';
 
 	// copy the old
 	memcpy( templist, g_favoriteserverlist, sizeof( servernode_t ) * MAX_FAVORITESERVERS );
@@ -784,35 +759,35 @@ void ArenaServers_LoadFavorites( void )
 	for( i = 0; i < MAX_FAVORITESERVERS; i++ )
 	{
 		trap_Cvar_VariableStringBuffer( va( "server%d", i + 1 ), adrstr, MAX_ADDRESSLENGTH );
-		if( !adrstr[ 0 ] )
+		if( !adrstr[0] )
 			continue;
 
 		// quick sanity check to avoid slow domain name resolving
 		// first character must be numeric
-		if( adrstr[ 0 ] < '0' || adrstr[ 0 ] > '9' )
+		if( adrstr[0] < '0' || adrstr[0] > '9' )
 			continue;
 
 		// favorite server addresses must be maintained outside refresh list
 		// this mimics local and global netadr's stored in client
 		// these can be fetched to fill ping list
-		strcpy( g_arenaservers.favoriteaddresses[ g_numfavoriteservers ], adrstr );
+		strcpy( g_arenaservers.favoriteaddresses[g_numfavoriteservers], adrstr );
 
 		// find this server in the old list
 		for( j = 0; j < numtempitems; j++ )
-			if( !Q_stricmp( templist[ j ].adrstr, adrstr ) )
+			if( !Q_stricmp( templist[j].adrstr, adrstr ) )
 				break;
 
 		if( j < numtempitems )
 		{
 			// found server - add exisiting results
-			memcpy( &g_favoriteserverlist[ g_numfavoriteservers ], &templist[ j ], sizeof( servernode_t ) );
+			memcpy( &g_favoriteserverlist[g_numfavoriteservers], &templist[j], sizeof( servernode_t ) );
 			found = qtrue;
 		}
 		else
 		{
 			// add new server
-			Q_strncpyz( g_favoriteserverlist[ g_numfavoriteservers ].adrstr, adrstr, MAX_ADDRESSLENGTH );
-			g_favoriteserverlist[ g_numfavoriteservers ].pingtime = ArenaServers_MaxPing();
+			Q_strncpyz( g_favoriteserverlist[g_numfavoriteservers].adrstr, adrstr, MAX_ADDRESSLENGTH );
+			g_favoriteserverlist[g_numfavoriteservers].pingtime = ArenaServers_MaxPing();
 		}
 
 		g_numfavoriteservers++;
@@ -850,7 +825,7 @@ static void ArenaServers_StopRefresh( void )
 	// final tally
 	if( g_arenaservers.numqueriedservers >= 0 )
 	{
-		g_arenaservers.currentping       = *g_arenaservers.numservers;
+		g_arenaservers.currentping		 = *g_arenaservers.numservers;
 		g_arenaservers.numqueriedservers = *g_arenaservers.numservers;
 	}
 
@@ -867,12 +842,12 @@ ArenaServers_DoRefresh
 */
 static void ArenaServers_DoRefresh( void )
 {
-	int  i;
-	int  j;
-	int  time;
-	int  maxPing;
-	char adrstr[ MAX_ADDRESSLENGTH ];
-	char info[ MAX_INFO_STRING ];
+	int	 i;
+	int	 j;
+	int	 time;
+	int	 maxPing;
+	char adrstr[MAX_ADDRESSLENGTH];
+	char info[MAX_INFO_STRING];
 
 	if( uis.realtime < g_arenaservers.refreshtime )
 	{
@@ -907,7 +882,7 @@ static void ArenaServers_DoRefresh( void )
 	for( i = 0; i < MAX_PINGREQUESTS; i++ )
 	{
 		trap_LAN_GetPing( i, adrstr, MAX_ADDRESSLENGTH, &time );
-		if( !adrstr[ 0 ] )
+		if( !adrstr[0] )
 		{
 			// ignore empty or pending pings
 			continue;
@@ -915,7 +890,7 @@ static void ArenaServers_DoRefresh( void )
 
 		// find ping result in our local list
 		for( j = 0; j < MAX_PINGREQUESTS; j++ )
-			if( !Q_stricmp( adrstr, g_arenaservers.pinglist[ j ].adrstr ) )
+			if( !Q_stricmp( adrstr, g_arenaservers.pinglist[j].adrstr ) )
 				break;
 
 		if( j < MAX_PINGREQUESTS )
@@ -923,7 +898,7 @@ static void ArenaServers_DoRefresh( void )
 			// found it
 			if( !time )
 			{
-				time = uis.realtime - g_arenaservers.pinglist[ j ].start;
+				time = uis.realtime - g_arenaservers.pinglist[j].start;
 				if( time < maxPing )
 				{
 					// still waiting
@@ -934,8 +909,8 @@ static void ArenaServers_DoRefresh( void )
 			if( time > maxPing )
 			{
 				// stale it out
-				info[ 0 ] = '\0';
-				time      = maxPing;
+				info[0] = '\0';
+				time	= maxPing;
 			}
 			else
 			{
@@ -946,7 +921,7 @@ static void ArenaServers_DoRefresh( void )
 			ArenaServers_Insert( adrstr, info, time );
 
 			// clear this query from internal list
-			g_arenaservers.pinglist[ j ].adrstr[ 0 ] = '\0';
+			g_arenaservers.pinglist[j].adrstr[0] = '\0';
 		}
 
 		// clear this query from external list
@@ -979,7 +954,7 @@ static void ArenaServers_DoRefresh( void )
 
 		// find empty slot
 		for( j = 0; j < MAX_PINGREQUESTS; j++ )
-			if( !g_arenaservers.pinglist[ j ].adrstr[ 0 ] )
+			if( !g_arenaservers.pinglist[j].adrstr[0] )
 				break;
 
 		if( j >= MAX_PINGREQUESTS )
@@ -990,15 +965,15 @@ static void ArenaServers_DoRefresh( void )
 
 		if( g_servertype == AS_FAVORITES )
 		{
-			strcpy( adrstr, g_arenaservers.favoriteaddresses[ g_arenaservers.currentping ] );
+			strcpy( adrstr, g_arenaservers.favoriteaddresses[g_arenaservers.currentping] );
 		}
 		else
 		{
 			trap_LAN_GetServerAddressString( g_servertype, g_arenaservers.currentping, adrstr, MAX_ADDRESSLENGTH );
 		}
 
-		strcpy( g_arenaservers.pinglist[ j ].adrstr, adrstr );
-		g_arenaservers.pinglist[ j ].start = uis.realtime;
+		strcpy( g_arenaservers.pinglist[j].adrstr, adrstr );
+		g_arenaservers.pinglist[j].start = uis.realtime;
 
 		trap_Cmd_ExecuteText( EXEC_NOW, va( "ping %s\n", adrstr ) );
 
@@ -1024,21 +999,21 @@ ArenaServers_StartRefresh
 */
 static void ArenaServers_StartRefresh( void )
 {
-	int  i;
-	char myargs[ 32 ], protocol[ 32 ];
+	int	 i;
+	char myargs[32], protocol[32];
 
 	memset( g_arenaservers.serverlist, 0, g_arenaservers.maxservers * sizeof( table_t ) );
 
 	for( i = 0; i < MAX_PINGREQUESTS; i++ )
 	{
-		g_arenaservers.pinglist[ i ].adrstr[ 0 ] = '\0';
+		g_arenaservers.pinglist[i].adrstr[0] = '\0';
 		trap_LAN_ClearPing( i );
 	}
 
-	g_arenaservers.refreshservers    = qtrue;
-	g_arenaservers.currentping       = 0;
-	g_arenaservers.nextpingtime      = 0;
-	*g_arenaservers.numservers       = 0;
+	g_arenaservers.refreshservers	 = qtrue;
+	g_arenaservers.currentping		 = 0;
+	g_arenaservers.nextpingtime		 = 0;
+	*g_arenaservers.numservers		 = 0;
 	g_arenaservers.numqueriedservers = 0;
 
 	// allow max 5 seconds for responses
@@ -1068,7 +1043,7 @@ static void ArenaServers_StartRefresh( void )
 		{
 			default:
 			case GAMES_ALL:
-				myargs[ 0 ] = 0;
+				myargs[0] = 0;
 				break;
 
 			case GAMES_FFA:
@@ -1098,7 +1073,7 @@ static void ArenaServers_StartRefresh( void )
 			strcat( myargs, " full" );
 		}
 
-		protocol[ 0 ] = '\0';
+		protocol[0] = '\0';
 		trap_Cvar_VariableStringBuffer( "debug_protocol", protocol, sizeof( protocol ) );
 		if( strlen( protocol ) )
 		{
@@ -1121,7 +1096,7 @@ void ArenaServers_SaveChanges( void )
 	int i;
 
 	for( i = 0; i < g_arenaservers.numfavoriteaddresses; i++ )
-		trap_Cvar_Set( va( "server%d", i + 1 ), g_arenaservers.favoriteaddresses[ i ] );
+		trap_Cvar_Set( va( "server%d", i + 1 ), g_arenaservers.favoriteaddresses[i] );
 
 	for( ; i < MAX_FAVORITESERVERS; i++ )
 		trap_Cvar_Set( va( "server%d", i + 1 ), "" );
@@ -1194,7 +1169,7 @@ void ArenaServers_SetType( int type )
 	else
 	{
 		// avoid slow operation, use existing results
-		g_arenaservers.currentping       = *g_arenaservers.numservers;
+		g_arenaservers.currentping		 = *g_arenaservers.numservers;
 		g_arenaservers.numqueriedservers = *g_arenaservers.numservers;
 		ArenaServers_UpdateMenu();
 	}
@@ -1359,8 +1334,7 @@ static sfxHandle_t ArenaServers_MenuKey( int key )
 		return menu_move_sound;
 	}
 
-	if( ( key == K_DEL || key == K_KP_DEL ) && ( g_servertype == AS_FAVORITES ) &&
-		( Menu_ItemAtCursor( &g_arenaservers.menu ) == &g_arenaservers.list ) )
+	if( ( key == K_DEL || key == K_KP_DEL ) && ( g_servertype == AS_FAVORITES ) && ( Menu_ItemAtCursor( &g_arenaservers.menu ) == &g_arenaservers.list ) )
 	{
 		ArenaServers_Remove();
 		ArenaServers_UpdateMenu();
@@ -1383,11 +1357,11 @@ ArenaServers_MenuInit
 */
 static void ArenaServers_MenuInit( void )
 {
-	int         i;
-	int         type;
-	int         y;
-	int         value;
-	static char statusbuffer[ MAX_STATUSLENGTH ];
+	int			i;
+	int			type;
+	int			y;
+	int			value;
+	static char statusbuffer[MAX_STATUSLENGTH];
 
 	// zero set all our globals
 	memset( &g_arenaservers, 0, sizeof( arenaservers_t ) );
@@ -1396,216 +1370,216 @@ static void ArenaServers_MenuInit( void )
 
 	g_arenaservers.menu.fullscreen = qtrue;
 	g_arenaservers.menu.wrapAround = qtrue;
-	g_arenaservers.menu.draw       = ArenaServers_MenuDraw;
-	g_arenaservers.menu.key        = ArenaServers_MenuKey;
+	g_arenaservers.menu.draw	   = ArenaServers_MenuDraw;
+	g_arenaservers.menu.key		   = ArenaServers_MenuKey;
 
-	g_arenaservers.banner.generic.type  = MTYPE_BTEXT;
+	g_arenaservers.banner.generic.type	= MTYPE_BTEXT;
 	g_arenaservers.banner.generic.flags = QMF_CENTER_JUSTIFY;
-	g_arenaservers.banner.generic.x     = 320;
-	g_arenaservers.banner.generic.y     = 16;
-	g_arenaservers.banner.string        = "ARENA SERVERS";
-	g_arenaservers.banner.style         = UI_CENTER;
-	g_arenaservers.banner.color         = color_white;
+	g_arenaservers.banner.generic.x		= 320;
+	g_arenaservers.banner.generic.y		= 16;
+	g_arenaservers.banner.string		= "ARENA SERVERS";
+	g_arenaservers.banner.style			= UI_CENTER;
+	g_arenaservers.banner.color			= color_white;
 
-	y                                      = 80;
-	g_arenaservers.master.generic.type     = MTYPE_SPINCONTROL;
-	g_arenaservers.master.generic.name     = "Servers:";
-	g_arenaservers.master.generic.flags    = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	y									   = 80;
+	g_arenaservers.master.generic.type	   = MTYPE_SPINCONTROL;
+	g_arenaservers.master.generic.name	   = "Servers:";
+	g_arenaservers.master.generic.flags	   = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	g_arenaservers.master.generic.callback = ArenaServers_Event;
-	g_arenaservers.master.generic.id       = ID_MASTER;
-	g_arenaservers.master.generic.x        = 320;
-	g_arenaservers.master.generic.y        = y;
-	g_arenaservers.master.itemnames        = master_items;
+	g_arenaservers.master.generic.id	   = ID_MASTER;
+	g_arenaservers.master.generic.x		   = 320;
+	g_arenaservers.master.generic.y		   = y;
+	g_arenaservers.master.itemnames		   = master_items;
 
 	y += SMALLCHAR_HEIGHT;
-	g_arenaservers.gametype.generic.type     = MTYPE_SPINCONTROL;
-	g_arenaservers.gametype.generic.name     = "Game Type:";
-	g_arenaservers.gametype.generic.flags    = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	g_arenaservers.gametype.generic.type	 = MTYPE_SPINCONTROL;
+	g_arenaservers.gametype.generic.name	 = "Game Type:";
+	g_arenaservers.gametype.generic.flags	 = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	g_arenaservers.gametype.generic.callback = ArenaServers_Event;
-	g_arenaservers.gametype.generic.id       = ID_GAMETYPE;
-	g_arenaservers.gametype.generic.x        = 320;
-	g_arenaservers.gametype.generic.y        = y;
-	g_arenaservers.gametype.itemnames        = servertype_items;
+	g_arenaservers.gametype.generic.id		 = ID_GAMETYPE;
+	g_arenaservers.gametype.generic.x		 = 320;
+	g_arenaservers.gametype.generic.y		 = y;
+	g_arenaservers.gametype.itemnames		 = servertype_items;
 
 	y += SMALLCHAR_HEIGHT;
-	g_arenaservers.sortkey.generic.type     = MTYPE_SPINCONTROL;
-	g_arenaservers.sortkey.generic.name     = "Sort By:";
-	g_arenaservers.sortkey.generic.flags    = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	g_arenaservers.sortkey.generic.type		= MTYPE_SPINCONTROL;
+	g_arenaservers.sortkey.generic.name		= "Sort By:";
+	g_arenaservers.sortkey.generic.flags	= QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	g_arenaservers.sortkey.generic.callback = ArenaServers_Event;
-	g_arenaservers.sortkey.generic.id       = ID_SORTKEY;
-	g_arenaservers.sortkey.generic.x        = 320;
-	g_arenaservers.sortkey.generic.y        = y;
-	g_arenaservers.sortkey.itemnames        = sortkey_items;
+	g_arenaservers.sortkey.generic.id		= ID_SORTKEY;
+	g_arenaservers.sortkey.generic.x		= 320;
+	g_arenaservers.sortkey.generic.y		= y;
+	g_arenaservers.sortkey.itemnames		= sortkey_items;
 
 	y += SMALLCHAR_HEIGHT;
-	g_arenaservers.showfull.generic.type     = MTYPE_RADIOBUTTON;
-	g_arenaservers.showfull.generic.name     = "Show Full:";
-	g_arenaservers.showfull.generic.flags    = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	g_arenaservers.showfull.generic.type	 = MTYPE_RADIOBUTTON;
+	g_arenaservers.showfull.generic.name	 = "Show Full:";
+	g_arenaservers.showfull.generic.flags	 = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	g_arenaservers.showfull.generic.callback = ArenaServers_Event;
-	g_arenaservers.showfull.generic.id       = ID_SHOW_FULL;
-	g_arenaservers.showfull.generic.x        = 320;
-	g_arenaservers.showfull.generic.y        = y;
+	g_arenaservers.showfull.generic.id		 = ID_SHOW_FULL;
+	g_arenaservers.showfull.generic.x		 = 320;
+	g_arenaservers.showfull.generic.y		 = y;
 
 	y += SMALLCHAR_HEIGHT;
-	g_arenaservers.showempty.generic.type     = MTYPE_RADIOBUTTON;
-	g_arenaservers.showempty.generic.name     = "Show Empty:";
-	g_arenaservers.showempty.generic.flags    = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	g_arenaservers.showempty.generic.type	  = MTYPE_RADIOBUTTON;
+	g_arenaservers.showempty.generic.name	  = "Show Empty:";
+	g_arenaservers.showempty.generic.flags	  = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	g_arenaservers.showempty.generic.callback = ArenaServers_Event;
-	g_arenaservers.showempty.generic.id       = ID_SHOW_EMPTY;
-	g_arenaservers.showempty.generic.x        = 320;
-	g_arenaservers.showempty.generic.y        = y;
+	g_arenaservers.showempty.generic.id		  = ID_SHOW_EMPTY;
+	g_arenaservers.showempty.generic.x		  = 320;
+	g_arenaservers.showempty.generic.y		  = y;
 
 	y += 3 * SMALLCHAR_HEIGHT;
-	g_arenaservers.list.generic.type     = MTYPE_SCROLLLIST;
-	g_arenaservers.list.generic.flags    = QMF_HIGHLIGHT_IF_FOCUS;
-	g_arenaservers.list.generic.id       = ID_LIST;
+	g_arenaservers.list.generic.type	 = MTYPE_SCROLLLIST;
+	g_arenaservers.list.generic.flags	 = QMF_HIGHLIGHT_IF_FOCUS;
+	g_arenaservers.list.generic.id		 = ID_LIST;
 	g_arenaservers.list.generic.callback = ArenaServers_Event;
-	g_arenaservers.list.generic.x        = 72;
-	g_arenaservers.list.generic.y        = y;
-	g_arenaservers.list.width            = MAX_LISTBOXWIDTH;
-	g_arenaservers.list.height           = 11;
-	g_arenaservers.list.itemnames        = ( const char** )g_arenaservers.items;
+	g_arenaservers.list.generic.x		 = 72;
+	g_arenaservers.list.generic.y		 = y;
+	g_arenaservers.list.width			 = MAX_LISTBOXWIDTH;
+	g_arenaservers.list.height			 = 11;
+	g_arenaservers.list.itemnames		 = ( const char** )g_arenaservers.items;
 	for( i = 0; i < MAX_LISTBOXITEMS; i++ )
 	{
-		g_arenaservers.items[ i ] = g_arenaservers.table[ i ].buff;
+		g_arenaservers.items[i] = g_arenaservers.table[i].buff;
 	}
 
-	g_arenaservers.mappic.generic.type  = MTYPE_BITMAP;
+	g_arenaservers.mappic.generic.type	= MTYPE_BITMAP;
 	g_arenaservers.mappic.generic.flags = QMF_LEFT_JUSTIFY | QMF_INACTIVE;
-	g_arenaservers.mappic.generic.x     = 72;
-	g_arenaservers.mappic.generic.y     = 80;
-	g_arenaservers.mappic.width         = 128;
-	g_arenaservers.mappic.height        = 96;
-	g_arenaservers.mappic.errorpic      = ART_UNKNOWNMAP;
+	g_arenaservers.mappic.generic.x		= 72;
+	g_arenaservers.mappic.generic.y		= 80;
+	g_arenaservers.mappic.width			= 128;
+	g_arenaservers.mappic.height		= 96;
+	g_arenaservers.mappic.errorpic		= ART_UNKNOWNMAP;
 
-	g_arenaservers.arrows.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.arrows.generic.name     = ART_ARROWS0;
-	g_arenaservers.arrows.generic.flags    = QMF_LEFT_JUSTIFY | QMF_INACTIVE;
+	g_arenaservers.arrows.generic.type	   = MTYPE_BITMAP;
+	g_arenaservers.arrows.generic.name	   = ART_ARROWS0;
+	g_arenaservers.arrows.generic.flags	   = QMF_LEFT_JUSTIFY | QMF_INACTIVE;
 	g_arenaservers.arrows.generic.callback = ArenaServers_Event;
-	g_arenaservers.arrows.generic.x        = 512 + 48;
-	g_arenaservers.arrows.generic.y        = 240 - 64 + 16;
-	g_arenaservers.arrows.width            = 64;
-	g_arenaservers.arrows.height           = 128;
+	g_arenaservers.arrows.generic.x		   = 512 + 48;
+	g_arenaservers.arrows.generic.y		   = 240 - 64 + 16;
+	g_arenaservers.arrows.width			   = 64;
+	g_arenaservers.arrows.height		   = 128;
 
-	g_arenaservers.up.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.up.generic.flags    = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS | QMF_MOUSEONLY;
+	g_arenaservers.up.generic.type	   = MTYPE_BITMAP;
+	g_arenaservers.up.generic.flags	   = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS | QMF_MOUSEONLY;
 	g_arenaservers.up.generic.callback = ArenaServers_Event;
-	g_arenaservers.up.generic.id       = ID_SCROLL_UP;
-	g_arenaservers.up.generic.x        = 512 + 48;
-	g_arenaservers.up.generic.y        = 240 - 64 + 16;
-	g_arenaservers.up.width            = 64;
-	g_arenaservers.up.height           = 64;
-	g_arenaservers.up.focuspic         = ART_ARROWS_UP;
+	g_arenaservers.up.generic.id	   = ID_SCROLL_UP;
+	g_arenaservers.up.generic.x		   = 512 + 48;
+	g_arenaservers.up.generic.y		   = 240 - 64 + 16;
+	g_arenaservers.up.width			   = 64;
+	g_arenaservers.up.height		   = 64;
+	g_arenaservers.up.focuspic		   = ART_ARROWS_UP;
 
-	g_arenaservers.down.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.down.generic.flags    = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS | QMF_MOUSEONLY;
+	g_arenaservers.down.generic.type	 = MTYPE_BITMAP;
+	g_arenaservers.down.generic.flags	 = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS | QMF_MOUSEONLY;
 	g_arenaservers.down.generic.callback = ArenaServers_Event;
-	g_arenaservers.down.generic.id       = ID_SCROLL_DOWN;
-	g_arenaservers.down.generic.x        = 512 + 48;
-	g_arenaservers.down.generic.y        = 240 + 16;
-	g_arenaservers.down.width            = 64;
-	g_arenaservers.down.height           = 64;
-	g_arenaservers.down.focuspic         = ART_ARROWS_DOWN;
+	g_arenaservers.down.generic.id		 = ID_SCROLL_DOWN;
+	g_arenaservers.down.generic.x		 = 512 + 48;
+	g_arenaservers.down.generic.y		 = 240 + 16;
+	g_arenaservers.down.width			 = 64;
+	g_arenaservers.down.height			 = 64;
+	g_arenaservers.down.focuspic		 = ART_ARROWS_DOWN;
 
-	y                                  = 376;
+	y								   = 376;
 	g_arenaservers.status.generic.type = MTYPE_TEXT;
-	g_arenaservers.status.generic.x    = 320;
-	g_arenaservers.status.generic.y    = y;
-	g_arenaservers.status.string       = statusbuffer;
-	g_arenaservers.status.style        = UI_CENTER | UI_SMALLFONT;
-	g_arenaservers.status.color        = menu_text_color;
+	g_arenaservers.status.generic.x	   = 320;
+	g_arenaservers.status.generic.y	   = y;
+	g_arenaservers.status.string	   = statusbuffer;
+	g_arenaservers.status.style		   = UI_CENTER | UI_SMALLFONT;
+	g_arenaservers.status.color		   = menu_text_color;
 
 	y += SMALLCHAR_HEIGHT;
 	g_arenaservers.statusbar.generic.type = MTYPE_TEXT;
-	g_arenaservers.statusbar.generic.x    = 320;
-	g_arenaservers.statusbar.generic.y    = y;
-	g_arenaservers.statusbar.string       = "";
-	g_arenaservers.statusbar.style        = UI_CENTER | UI_SMALLFONT;
-	g_arenaservers.statusbar.color        = text_color_normal;
+	g_arenaservers.statusbar.generic.x	  = 320;
+	g_arenaservers.statusbar.generic.y	  = y;
+	g_arenaservers.statusbar.string		  = "";
+	g_arenaservers.statusbar.style		  = UI_CENTER | UI_SMALLFONT;
+	g_arenaservers.statusbar.color		  = text_color_normal;
 
-	g_arenaservers.remove.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.remove.generic.name     = ART_REMOVE0;
-	g_arenaservers.remove.generic.flags    = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	g_arenaservers.remove.generic.type	   = MTYPE_BITMAP;
+	g_arenaservers.remove.generic.name	   = ART_REMOVE0;
+	g_arenaservers.remove.generic.flags	   = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	g_arenaservers.remove.generic.callback = ArenaServers_Event;
-	g_arenaservers.remove.generic.id       = ID_REMOVE;
-	g_arenaservers.remove.generic.x        = 450;
-	g_arenaservers.remove.generic.y        = 86;
-	g_arenaservers.remove.width            = 96;
-	g_arenaservers.remove.height           = 48;
-	g_arenaservers.remove.focuspic         = ART_REMOVE1;
+	g_arenaservers.remove.generic.id	   = ID_REMOVE;
+	g_arenaservers.remove.generic.x		   = 450;
+	g_arenaservers.remove.generic.y		   = 86;
+	g_arenaservers.remove.width			   = 96;
+	g_arenaservers.remove.height		   = 48;
+	g_arenaservers.remove.focuspic		   = ART_REMOVE1;
 
-	g_arenaservers.back.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.back.generic.name     = ART_BACK0;
-	g_arenaservers.back.generic.flags    = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	g_arenaservers.back.generic.type	 = MTYPE_BITMAP;
+	g_arenaservers.back.generic.name	 = ART_BACK0;
+	g_arenaservers.back.generic.flags	 = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	g_arenaservers.back.generic.callback = ArenaServers_Event;
-	g_arenaservers.back.generic.id       = ID_BACK;
-	g_arenaservers.back.generic.x        = 0;
-	g_arenaservers.back.generic.y        = 480 - 64;
-	g_arenaservers.back.width            = 128;
-	g_arenaservers.back.height           = 64;
-	g_arenaservers.back.focuspic         = ART_BACK1;
+	g_arenaservers.back.generic.id		 = ID_BACK;
+	g_arenaservers.back.generic.x		 = 0;
+	g_arenaservers.back.generic.y		 = 480 - 64;
+	g_arenaservers.back.width			 = 128;
+	g_arenaservers.back.height			 = 64;
+	g_arenaservers.back.focuspic		 = ART_BACK1;
 
-	g_arenaservers.specify.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.specify.generic.name     = ART_SPECIFY0;
-	g_arenaservers.specify.generic.flags    = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	g_arenaservers.specify.generic.type		= MTYPE_BITMAP;
+	g_arenaservers.specify.generic.name		= ART_SPECIFY0;
+	g_arenaservers.specify.generic.flags	= QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	g_arenaservers.specify.generic.callback = ArenaServers_Event;
-	g_arenaservers.specify.generic.id       = ID_SPECIFY;
-	g_arenaservers.specify.generic.x        = 128;
-	g_arenaservers.specify.generic.y        = 480 - 64;
-	g_arenaservers.specify.width            = 128;
-	g_arenaservers.specify.height           = 64;
-	g_arenaservers.specify.focuspic         = ART_SPECIFY1;
+	g_arenaservers.specify.generic.id		= ID_SPECIFY;
+	g_arenaservers.specify.generic.x		= 128;
+	g_arenaservers.specify.generic.y		= 480 - 64;
+	g_arenaservers.specify.width			= 128;
+	g_arenaservers.specify.height			= 64;
+	g_arenaservers.specify.focuspic			= ART_SPECIFY1;
 
-	g_arenaservers.refresh.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.refresh.generic.name     = ART_REFRESH0;
-	g_arenaservers.refresh.generic.flags    = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	g_arenaservers.refresh.generic.type		= MTYPE_BITMAP;
+	g_arenaservers.refresh.generic.name		= ART_REFRESH0;
+	g_arenaservers.refresh.generic.flags	= QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	g_arenaservers.refresh.generic.callback = ArenaServers_Event;
-	g_arenaservers.refresh.generic.id       = ID_REFRESH;
-	g_arenaservers.refresh.generic.x        = 256;
-	g_arenaservers.refresh.generic.y        = 480 - 64;
-	g_arenaservers.refresh.width            = 128;
-	g_arenaservers.refresh.height           = 64;
-	g_arenaservers.refresh.focuspic         = ART_REFRESH1;
+	g_arenaservers.refresh.generic.id		= ID_REFRESH;
+	g_arenaservers.refresh.generic.x		= 256;
+	g_arenaservers.refresh.generic.y		= 480 - 64;
+	g_arenaservers.refresh.width			= 128;
+	g_arenaservers.refresh.height			= 64;
+	g_arenaservers.refresh.focuspic			= ART_REFRESH1;
 
-	g_arenaservers.create.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.create.generic.name     = ART_CREATE0;
-	g_arenaservers.create.generic.flags    = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
+	g_arenaservers.create.generic.type	   = MTYPE_BITMAP;
+	g_arenaservers.create.generic.name	   = ART_CREATE0;
+	g_arenaservers.create.generic.flags	   = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;
 	g_arenaservers.create.generic.callback = ArenaServers_Event;
-	g_arenaservers.create.generic.id       = ID_CREATE;
-	g_arenaservers.create.generic.x        = 384;
-	g_arenaservers.create.generic.y        = 480 - 64;
-	g_arenaservers.create.width            = 128;
-	g_arenaservers.create.height           = 64;
-	g_arenaservers.create.focuspic         = ART_CREATE1;
+	g_arenaservers.create.generic.id	   = ID_CREATE;
+	g_arenaservers.create.generic.x		   = 384;
+	g_arenaservers.create.generic.y		   = 480 - 64;
+	g_arenaservers.create.width			   = 128;
+	g_arenaservers.create.height		   = 64;
+	g_arenaservers.create.focuspic		   = ART_CREATE1;
 
-	g_arenaservers.go.generic.type     = MTYPE_BITMAP;
-	g_arenaservers.go.generic.name     = ART_CONNECT0;
-	g_arenaservers.go.generic.flags    = QMF_RIGHT_JUSTIFY | QMF_PULSEIFFOCUS;
+	g_arenaservers.go.generic.type	   = MTYPE_BITMAP;
+	g_arenaservers.go.generic.name	   = ART_CONNECT0;
+	g_arenaservers.go.generic.flags	   = QMF_RIGHT_JUSTIFY | QMF_PULSEIFFOCUS;
 	g_arenaservers.go.generic.callback = ArenaServers_Event;
-	g_arenaservers.go.generic.id       = ID_CONNECT;
-	g_arenaservers.go.generic.x        = 640;
-	g_arenaservers.go.generic.y        = 480 - 64;
-	g_arenaservers.go.width            = 128;
-	g_arenaservers.go.height           = 64;
-	g_arenaservers.go.focuspic         = ART_CONNECT1;
+	g_arenaservers.go.generic.id	   = ID_CONNECT;
+	g_arenaservers.go.generic.x		   = 640;
+	g_arenaservers.go.generic.y		   = 480 - 64;
+	g_arenaservers.go.width			   = 128;
+	g_arenaservers.go.height		   = 64;
+	g_arenaservers.go.focuspic		   = ART_CONNECT1;
 
-	g_arenaservers.punkbuster.generic.type     = MTYPE_SPINCONTROL;
-	g_arenaservers.punkbuster.generic.name     = "Punkbuster:";
-	g_arenaservers.punkbuster.generic.flags    = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
+	g_arenaservers.punkbuster.generic.type	   = MTYPE_SPINCONTROL;
+	g_arenaservers.punkbuster.generic.name	   = "Punkbuster:";
+	g_arenaservers.punkbuster.generic.flags	   = QMF_PULSEIFFOCUS | QMF_SMALLFONT;
 	g_arenaservers.punkbuster.generic.callback = ArenaServers_Event;
-	g_arenaservers.punkbuster.generic.id       = ID_PUNKBUSTER;
-	g_arenaservers.punkbuster.generic.x        = 480 + 32;
-	g_arenaservers.punkbuster.generic.y        = 144;
-	g_arenaservers.punkbuster.itemnames        = punkbuster_items;
+	g_arenaservers.punkbuster.generic.id	   = ID_PUNKBUSTER;
+	g_arenaservers.punkbuster.generic.x		   = 480 + 32;
+	g_arenaservers.punkbuster.generic.y		   = 144;
+	g_arenaservers.punkbuster.itemnames		   = punkbuster_items;
 
-	g_arenaservers.pblogo.generic.type  = MTYPE_BITMAP;
-	g_arenaservers.pblogo.generic.name  = ART_PUNKBUSTER;
+	g_arenaservers.pblogo.generic.type	= MTYPE_BITMAP;
+	g_arenaservers.pblogo.generic.name	= ART_PUNKBUSTER;
 	g_arenaservers.pblogo.generic.flags = QMF_LEFT_JUSTIFY | QMF_INACTIVE;
-	g_arenaservers.pblogo.generic.x     = 526;
-	g_arenaservers.pblogo.generic.y     = 176;
-	g_arenaservers.pblogo.width         = 32;
-	g_arenaservers.pblogo.height        = 16;
-	g_arenaservers.pblogo.errorpic      = ART_UNKNOWNMAP;
+	g_arenaservers.pblogo.generic.x		= 526;
+	g_arenaservers.pblogo.generic.y		= 176;
+	g_arenaservers.pblogo.width			= 32;
+	g_arenaservers.pblogo.height		= 16;
+	g_arenaservers.pblogo.errorpic		= ART_UNKNOWNMAP;
 
 	Menu_AddItem( &g_arenaservers.menu, ( void* )&g_arenaservers.banner );
 
@@ -1642,22 +1616,22 @@ static void ArenaServers_MenuInit( void )
 		value--;
 	g_arenaservers.master.curvalue = value;
 
-	g_gametype                       = Com_Clamp( 0, 4, ui_browserGameType.integer );
+	g_gametype						 = Com_Clamp( 0, 4, ui_browserGameType.integer );
 	g_arenaservers.gametype.curvalue = g_gametype;
 
-	g_sortkey                       = Com_Clamp( 0, 4, ui_browserSortKey.integer );
+	g_sortkey						= Com_Clamp( 0, 4, ui_browserSortKey.integer );
 	g_arenaservers.sortkey.curvalue = g_sortkey;
 
-	g_fullservers                    = Com_Clamp( 0, 1, ui_browserShowFull.integer );
+	g_fullservers					 = Com_Clamp( 0, 1, ui_browserShowFull.integer );
 	g_arenaservers.showfull.curvalue = g_fullservers;
 
-	g_emptyservers                    = Com_Clamp( 0, 1, ui_browserShowEmpty.integer );
+	g_emptyservers					  = Com_Clamp( 0, 1, ui_browserShowEmpty.integer );
 	g_arenaservers.showempty.curvalue = g_emptyservers;
 
 	g_arenaservers.punkbuster.curvalue = Com_Clamp( 0, 1, trap_Cvar_VariableValue( "cl_punkbuster" ) );
 
 	// force to initial state and refresh
-	type         = g_servertype;
+	type		 = g_servertype;
 	g_servertype = -1;
 	ArenaServers_SetType( type );
 

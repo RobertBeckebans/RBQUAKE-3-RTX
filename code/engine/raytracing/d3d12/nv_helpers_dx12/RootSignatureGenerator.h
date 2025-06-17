@@ -63,7 +63,7 @@ class RootSignatureGenerator
 {
 public:
 	/// Add a set of heap range descriptors as a parameter of the root signature.
-	void AddHeapRangesParameter( const std::vector< D3D12_DESCRIPTOR_RANGE >& ranges );
+	void				 AddHeapRangesParameter( const std::vector<D3D12_DESCRIPTOR_RANGE>& ranges );
 
 	/// Add a set of heap ranges as a parameter of the root signature. Each range
 	/// is defined as follows:
@@ -83,13 +83,12 @@ public:
 	/// be explicit, or implicit using D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND. In
 	/// this case the index in the heap is the one directly following the last
 	/// parameter range (or 0 if it's the first)
-	void AddHeapRangesParameter( std::vector< std::tuple< UINT, // BaseShaderRegister,
-			UINT,                                               // NumDescriptors
-			UINT,                                               // RegisterSpace
-			D3D12_DESCRIPTOR_RANGE_TYPE,                        // RangeType
-			UINT                                                // OffsetInDescriptorsFromTableStart
-			> >
-			ranges );
+	void				 AddHeapRangesParameter( std::vector<std::tuple<UINT, // BaseShaderRegister,
+							UINT,											  // NumDescriptors
+							UINT,											  // RegisterSpace
+							D3D12_DESCRIPTOR_RANGE_TYPE,					  // RangeType
+							UINT											  // OffsetInDescriptorsFromTableStart
+							>> ranges );
 
 	/// Add a root parameter to the shader, defined by its type: constant buffer (CBV), shader
 	/// resource (SRV), unordered access (UAV), or root constant (CBV, directly defined by its value
@@ -98,27 +97,27 @@ public:
 	/// accessible via register(t1, space0).
 	/// In case of a root constant, the last parameter indicates how many successive 32-bit constants
 	/// will be bound.
-	void AddRootParameter( D3D12_ROOT_PARAMETER_TYPE type, UINT shaderRegister = 0, UINT registerSpace = 0, UINT numRootConstants = 1 );
+	void				 AddRootParameter( D3D12_ROOT_PARAMETER_TYPE type, UINT shaderRegister = 0, UINT registerSpace = 0, UINT numRootConstants = 1 );
 
 	/// Create the root signature from the set of parameters, in the order of the addition calls
 	ID3D12RootSignature* Generate( ID3D12Device* device, bool isLocal );
 
 private:
 	/// Heap range descriptors
-	std::vector< std::vector< D3D12_DESCRIPTOR_RANGE > > m_ranges;
+	std::vector<std::vector<D3D12_DESCRIPTOR_RANGE>> m_ranges;
 	/// Root parameter descriptors
-	std::vector< D3D12_ROOT_PARAMETER > m_parameters;
+	std::vector<D3D12_ROOT_PARAMETER>				 m_parameters;
 
 	/// For each entry of m_parameter, indicate the index of the range array in m_ranges, and ~0u if
 	/// the parameter is not a heap range descriptor
-	std::vector< UINT > m_rangeLocations;
+	std::vector<UINT>								 m_rangeLocations;
 
 	enum
 	{
-		RSC_BASE_SHADER_REGISTER                   = 0,
-		RSC_NUM_DESCRIPTORS                        = 1,
-		RSC_REGISTER_SPACE                         = 2,
-		RSC_RANGE_TYPE                             = 3,
+		RSC_BASE_SHADER_REGISTER				   = 0,
+		RSC_NUM_DESCRIPTORS						   = 1,
+		RSC_REGISTER_SPACE						   = 2,
+		RSC_RANGE_TYPE							   = 3,
 		RSC_OFFSET_IN_DESCRIPTORS_FROM_TABLE_START = 4
 	};
 };

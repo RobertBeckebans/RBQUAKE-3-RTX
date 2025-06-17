@@ -21,7 +21,7 @@ CG_InitSmokePuffSprite
 void CG_InitSmokePuffSprite( void )
 {
 	qhandle_t shader;
-	shader                   = trap_R_RegisterShader( "smokePuff" );
+	shader					 = trap_R_RegisterShader( "smokePuff" );
 	cgs.media.smokePuffModel = trap_R_RegisterCustomModel( "_smokePuffMesh", shader, &spriteVerts, 6 );
 }
 
@@ -33,7 +33,7 @@ CG_InitPlasmaSprite
 void CG_InitPlasmaSprite( void )
 {
 	qhandle_t shader;
-	shader                    = trap_R_RegisterShader( "sprites/plasma1" );
+	shader					  = trap_R_RegisterShader( "sprites/plasma1" );
 	cgs.media.plasmaBallModel = trap_R_RegisterCustomModel( "_plasmaSpriteMesh", shader, &spriteVerts, 6 );
 }
 
@@ -82,6 +82,6 @@ void CG_SpawnSpriteEx( refEntity_t* ent, vec3_t origin, float scale, qhandle_t m
 
 	ent->reType = RT_MODEL;
 	ent->hModel = model;
-	ent->scale  = scale;
+	ent->scale	= scale;
 	AnglesToAxis( cg.refdefViewAngles, ent->axis );
 }

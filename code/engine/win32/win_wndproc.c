@@ -32,17 +32,17 @@ WinVars_t g_wv;
 static UINT MSH_MOUSEWHEEL;
 
 // Console variables that we need to access from this module
-cvar_t* vid_xpos; // X coordinate of window position
-cvar_t* vid_ypos; // Y coordinate of window position
-cvar_t* r_fullscreen;
+cvar_t*		vid_xpos; // X coordinate of window position
+cvar_t*		vid_ypos; // Y coordinate of window position
+cvar_t*		r_fullscreen;
 
-#define VID_NUM_MODES ( sizeof( vid_modes ) / sizeof( vid_modes[ 0 ] ) )
+#define VID_NUM_MODES ( sizeof( vid_modes ) / sizeof( vid_modes[0] ) )
 
-LONG WINAPI MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
+LONG WINAPI		MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
 static qboolean s_alttab_disabled;
 
-static void WIN_DisableAltTab( void )
+static void		WIN_DisableAltTab( void )
 {
 	if( s_alttab_disabled )
 		return;
@@ -115,7 +115,7 @@ static void VID_AppActivate( BOOL fActive, BOOL minimize )
 
 //==========================================================================
 
-static byte s_scantokey[ 128 ] = {
+static byte s_scantokey[128] = {
 	//  0           1       2       3       4       5       6       7
 	//  8           9       A       B       C       D       E       F
 	0,
@@ -197,7 +197,7 @@ static byte s_scantokey[ 128 ] = {
 	K_KP_5,
 	K_RIGHTARROW,
 	K_KP_PLUS,
-	K_END, //4
+	K_END, // 4
 	K_DOWNARROW,
 	K_PGDN,
 	K_INS,
@@ -257,8 +257,8 @@ Map from windows to quake keynums
 */
 static int MapKey( int key )
 {
-	int      result;
-	int      modified;
+	int		 result;
+	int		 modified;
 	qboolean is_extended;
 
 	//	Com_Printf( "0x%x\n", key);
@@ -277,7 +277,7 @@ static int MapKey( int key )
 		is_extended = qfalse;
 	}
 
-	result = s_scantokey[ modified ];
+	result = s_scantokey[modified];
 
 	if( !is_extended )
 	{
@@ -333,14 +333,10 @@ main window procedure
 */
 extern cvar_t* in_mouse;
 extern cvar_t* in_logitechbug;
-LONG WINAPI    MainWndProc(
-	   HWND   hWnd,
-	   UINT   uMsg,
-	   WPARAM wParam,
-	   LPARAM lParam )
+LONG WINAPI	   MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	static qboolean flip = qtrue;
-	int             zDelta, i;
+	int				zDelta, i;
 
 	// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winui/winui/windowsuserinterface/userinput/mouseinput/aboutmouseinput.asp
 	// Windows 95, Windows NT 3.51 - uses MSH_MOUSEWHEEL
@@ -419,8 +415,8 @@ LONG WINAPI    MainWndProc(
 
 			g_wv.hWnd = hWnd;
 
-			vid_xpos     = Cvar_Get( "vid_xpos", "3", CVAR_ARCHIVE );
-			vid_ypos     = Cvar_Get( "vid_ypos", "22", CVAR_ARCHIVE );
+			vid_xpos	 = Cvar_Get( "vid_xpos", "3", CVAR_ARCHIVE );
+			vid_ypos	 = Cvar_Get( "vid_ypos", "22", CVAR_ARCHIVE );
 			r_fullscreen = Cvar_Get( "r_fullscreen", "1", CVAR_ARCHIVE | CVAR_LATCH );
 
 			MSH_MOUSEWHEEL = RegisterWindowMessage( "MSWHEEL_ROLLMSG" );
@@ -465,7 +461,7 @@ LONG WINAPI    MainWndProc(
 		{
 			int fActive, fMinimized;
 
-			fActive    = LOWORD( wParam );
+			fActive	   = LOWORD( wParam );
 			fMinimized = ( BOOL )HIWORD( wParam );
 
 			VID_AppActivate( fActive != WA_INACTIVE, fMinimized );
@@ -475,18 +471,18 @@ LONG WINAPI    MainWndProc(
 
 		case WM_MOVE:
 		{
-			int  xPos, yPos;
+			int	 xPos, yPos;
 			RECT r;
-			int  style;
+			int	 style;
 
 			if( !r_fullscreen->integer )
 			{
 				xPos = ( short )LOWORD( lParam ); // horizontal position
 				yPos = ( short )HIWORD( lParam ); // vertical position
 
-				r.left   = 0;
-				r.top    = 0;
-				r.right  = 1;
+				r.left	 = 0;
+				r.top	 = 0;
+				r.right	 = 1;
 				r.bottom = 1;
 
 				style = GetWindowLong( hWnd, GWL_STYLE );

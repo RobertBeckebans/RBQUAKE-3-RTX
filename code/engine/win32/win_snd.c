@@ -28,17 +28,17 @@ HRESULT( WINAPI* pDirectSoundCreate )
 ( GUID FAR* lpGUID, LPDIRECTSOUND FAR* lplpDS, IUnknown FAR* pUnkOuter );
 #define iDirectSoundCreate( a, b, c ) pDirectSoundCreate( a, b, c )
 
-#define SECONDARY_BUFFER_SIZE 0x10000
+#define SECONDARY_BUFFER_SIZE		  0x10000
 
-static qboolean            dsound_init;
-static int                 sample16;
-static DWORD               gSndBufSize;
-static DWORD               locksize;
-static LPDIRECTSOUND       pDS;
+static qboolean			   dsound_init;
+static int				   sample16;
+static DWORD			   gSndBufSize;
+static DWORD			   locksize;
+static LPDIRECTSOUND	   pDS;
 static LPDIRECTSOUNDBUFFER pDSBuf, pDSPBuf;
-static HINSTANCE           hInstDS;
+static HINSTANCE		   hInstDS;
 
-static const char* DSoundError( int error )
+static const char*		   DSoundError( int error )
 {
 	switch( error )
 	{
@@ -86,7 +86,7 @@ void SNDDMA_Shutdown( void )
 			Com_DPrintf( "...releasing primary buffer\n" );
 			pDSPBuf->lpVtbl->Release( pDSPBuf );
 		}
-		pDSBuf  = NULL;
+		pDSBuf	= NULL;
 		pDSPBuf = NULL;
 
 		dma.buffer = NULL;
@@ -102,9 +102,9 @@ void SNDDMA_Shutdown( void )
 		hInstDS = NULL;
 	}
 
-	pDS         = NULL;
-	pDSBuf      = NULL;
-	pDSPBuf     = NULL;
+	pDS			= NULL;
+	pDSBuf		= NULL;
+	pDSPBuf		= NULL;
 	dsound_init = qfalse;
 	memset( ( void* )&dma, 0, sizeof( dma ) );
 	CoUninitialize();
@@ -139,8 +139,7 @@ qboolean SNDDMA_Init( void )
 
 #undef DEFINE_GUID
 
-#define DEFINE_GUID( name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8 ) \
-	EXTERN_C const GUID name = { l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } }
+#define DEFINE_GUID( name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8 ) EXTERN_C const GUID name = { l, w1, w2, { b1, b2, b3, b4, b5, b6, b7, b8 } }
 
 // DirectSound Component GUID {47D4D946-62E8-11CF-93BC-444553540000}
 DEFINE_GUID( CLSID_DirectSound, 0x47d4d946, 0x62e8, 0x11cf, 0x93, 0xbc, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0 );
@@ -153,11 +152,11 @@ DEFINE_GUID( IID_IDirectSound, 0x279AFA83, 0x4981, 0x11CE, 0xA5, 0x21, 0x00, 0x2
 
 int SNDDMA_InitDS()
 {
-	HRESULT      hresult;
+	HRESULT		 hresult;
 	DSBUFFERDESC dsbuf;
-	DSBCAPS      dsbcaps;
+	DSBCAPS		 dsbcaps;
 	WAVEFORMATEX format;
-	int          use8;
+	int			 use8;
 
 	Com_Printf( "Initializing DirectSound\n" );
 
@@ -201,12 +200,12 @@ int SNDDMA_InitDS()
 
 	dma.speed = 22050;
 	memset( &format, 0, sizeof( format ) );
-	format.wFormatTag      = WAVE_FORMAT_PCM;
-	format.nChannels       = dma.channels;
+	format.wFormatTag	   = WAVE_FORMAT_PCM;
+	format.nChannels	   = dma.channels;
 	format.wBitsPerSample  = dma.samplebits;
 	format.nSamplesPerSec  = dma.speed;
-	format.nBlockAlign     = format.nChannels * format.wBitsPerSample / 8;
-	format.cbSize          = 0;
+	format.nBlockAlign	   = format.nChannels * format.wBitsPerSample / 8;
+	format.cbSize		   = 0;
 	format.nAvgBytesPerSec = format.nSamplesPerSec * format.nBlockAlign;
 
 	memset( &dsbuf, 0, sizeof( dsbuf ) );
@@ -219,7 +218,7 @@ int SNDDMA_InitDS()
 		dsbuf.dwFlags |= DSBCAPS_GETCURRENTPOSITION2;
 	}
 	dsbuf.dwBufferBytes = SECONDARY_BUFFER_SIZE;
-	dsbuf.lpwfxFormat   = &format;
+	dsbuf.lpwfxFormat	= &format;
 
 	memset( &dsbcaps, 0, sizeof( dsbcaps ) );
 	dsbcaps.dwSize = sizeof( dsbcaps );
@@ -264,12 +263,12 @@ int SNDDMA_InitDS()
 
 	gSndBufSize = dsbcaps.dwBufferBytes;
 
-	dma.channels         = format.nChannels;
-	dma.samplebits       = format.wBitsPerSample;
-	dma.speed            = format.nSamplesPerSec;
-	dma.samples          = gSndBufSize / ( dma.samplebits / 8 );
+	dma.channels		 = format.nChannels;
+	dma.samplebits		 = format.wBitsPerSample;
+	dma.speed			 = format.nSamplesPerSec;
+	dma.samples			 = gSndBufSize / ( dma.samplebits / 8 );
 	dma.submission_chunk = 1;
-	dma.buffer           = NULL; // must be locked first
+	dma.buffer			 = NULL; // must be locked first
 
 	sample16 = ( dma.samplebits / 8 ) - 1;
 
@@ -291,7 +290,7 @@ how many sample are required to fill it up.
 int SNDDMA_GetDMAPos( void )
 {
 	MMTIME mmtime;
-	int    s;
+	int	   s;
 	DWORD  dwWrite;
 
 	if( !dsound_init )
@@ -320,11 +319,11 @@ Makes sure dma.buffer is valid
 */
 void SNDDMA_BeginPainting( void )
 {
-	int     reps;
-	DWORD   dwSize2;
+	int		reps;
+	DWORD	dwSize2;
 	DWORD * pbuf, *pbuf2;
 	HRESULT hresult;
-	DWORD   dwStatus;
+	DWORD	dwStatus;
 
 	if( !pDSBuf )
 	{
@@ -345,7 +344,7 @@ void SNDDMA_BeginPainting( void )
 
 	// lock the dsound buffer
 
-	reps       = 0;
+	reps	   = 0;
 	dma.buffer = NULL;
 
 	while( ( hresult = pDSBuf->lpVtbl->Lock( pDSBuf, 0, gSndBufSize, &pbuf, &locksize, &pbuf2, &dwSize2, 0 ) ) != DS_OK )

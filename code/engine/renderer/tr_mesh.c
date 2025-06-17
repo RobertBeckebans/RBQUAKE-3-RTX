@@ -29,39 +29,27 @@ static float ProjectRadius( float r, vec3_t location )
 	float  dist;
 	float  c;
 	vec3_t p;
-	float  projected[ 4 ];
+	float  projected[4];
 
-	c    = DotProduct( tr.viewParms.or.axis[ 0 ], tr.viewParms.or.origin );
-	dist = DotProduct( tr.viewParms.or.axis[ 0 ], location ) - c;
+	c	 = DotProduct( tr.viewParms.or.axis[0], tr.viewParms.or.origin );
+	dist = DotProduct( tr.viewParms.or.axis[0], location ) - c;
 
 	if( dist <= 0 )
 		return 0;
 
-	p[ 0 ] = 0;
-	p[ 1 ] = fabs( r );
-	p[ 2 ] = -dist;
+	p[0] = 0;
+	p[1] = fabs( r );
+	p[2] = -dist;
 
-	projected[ 0 ] = p[ 0 ] * tr.viewParms.projectionMatrix[ 0 ] +
-		p[ 1 ] * tr.viewParms.projectionMatrix[ 4 ] +
-		p[ 2 ] * tr.viewParms.projectionMatrix[ 8 ] +
-		tr.viewParms.projectionMatrix[ 12 ];
+	projected[0] = p[0] * tr.viewParms.projectionMatrix[0] + p[1] * tr.viewParms.projectionMatrix[4] + p[2] * tr.viewParms.projectionMatrix[8] + tr.viewParms.projectionMatrix[12];
 
-	projected[ 1 ] = p[ 0 ] * tr.viewParms.projectionMatrix[ 1 ] +
-		p[ 1 ] * tr.viewParms.projectionMatrix[ 5 ] +
-		p[ 2 ] * tr.viewParms.projectionMatrix[ 9 ] +
-		tr.viewParms.projectionMatrix[ 13 ];
+	projected[1] = p[0] * tr.viewParms.projectionMatrix[1] + p[1] * tr.viewParms.projectionMatrix[5] + p[2] * tr.viewParms.projectionMatrix[9] + tr.viewParms.projectionMatrix[13];
 
-	projected[ 2 ] = p[ 0 ] * tr.viewParms.projectionMatrix[ 2 ] +
-		p[ 1 ] * tr.viewParms.projectionMatrix[ 6 ] +
-		p[ 2 ] * tr.viewParms.projectionMatrix[ 10 ] +
-		tr.viewParms.projectionMatrix[ 14 ];
+	projected[2] = p[0] * tr.viewParms.projectionMatrix[2] + p[1] * tr.viewParms.projectionMatrix[6] + p[2] * tr.viewParms.projectionMatrix[10] + tr.viewParms.projectionMatrix[14];
 
-	projected[ 3 ] = p[ 0 ] * tr.viewParms.projectionMatrix[ 3 ] +
-		p[ 1 ] * tr.viewParms.projectionMatrix[ 7 ] +
-		p[ 2 ] * tr.viewParms.projectionMatrix[ 11 ] +
-		tr.viewParms.projectionMatrix[ 15 ];
+	projected[3] = p[0] * tr.viewParms.projectionMatrix[3] + p[1] * tr.viewParms.projectionMatrix[7] + p[2] * tr.viewParms.projectionMatrix[11] + tr.viewParms.projectionMatrix[15];
 
-	pr = projected[ 1 ] / projected[ 3 ];
+	pr = projected[1] / projected[3];
 
 	if( pr > 1.0f )
 		pr = 1.0f;
@@ -76,9 +64,9 @@ R_CullModel
 */
 static int R_CullModel( md3Header_t* header, trRefEntity_t* ent )
 {
-	vec3_t      bounds[ 2 ];
+	vec3_t		bounds[2];
 	md3Frame_t *oldFrame, *newFrame;
-	int         i;
+	int			i;
 
 	// compute frame pointers
 	newFrame = ( md3Frame_t* )( ( byte* )header + header->ofsFrames ) + ent->e.frame;
@@ -141,8 +129,8 @@ static int R_CullModel( md3Header_t* header, trRefEntity_t* ent )
 	// calculate a bounding box in the current coordinate system
 	for( i = 0; i < 3; i++ )
 	{
-		bounds[ 0 ][ i ] = oldFrame->bounds[ 0 ][ i ] < newFrame->bounds[ 0 ][ i ] ? oldFrame->bounds[ 0 ][ i ] : newFrame->bounds[ 0 ][ i ];
-		bounds[ 1 ][ i ] = oldFrame->bounds[ 1 ][ i ] > newFrame->bounds[ 1 ][ i ] ? oldFrame->bounds[ 1 ][ i ] : newFrame->bounds[ 1 ][ i ];
+		bounds[0][i] = oldFrame->bounds[0][i] < newFrame->bounds[0][i] ? oldFrame->bounds[0][i] : newFrame->bounds[0][i];
+		bounds[1][i] = oldFrame->bounds[1][i] > newFrame->bounds[1][i] ? oldFrame->bounds[1][i] : newFrame->bounds[1][i];
 	}
 
 	switch( R_CullLocalBox( bounds ) )
@@ -168,11 +156,11 @@ R_ComputeLOD
 */
 int R_ComputeLOD( trRefEntity_t* ent )
 {
-	float       radius;
-	float       flod, lodscale;
-	float       projectedRadius;
+	float		radius;
+	float		flod, lodscale;
+	float		projectedRadius;
 	md3Frame_t* frame;
-	int         lod;
+	int			lod;
 
 	if( tr.currentModel->numLods < 2 )
 	{
@@ -184,11 +172,11 @@ int R_ComputeLOD( trRefEntity_t* ent )
 		// multiple LODs exist, so compute projected bounding sphere
 		// and use that as a criteria for selecting LOD
 
-		frame = ( md3Frame_t* )( ( ( unsigned char* )tr.currentModel->md3[ 0 ] ) + tr.currentModel->md3[ 0 ]->ofsFrames );
+		frame = ( md3Frame_t* )( ( ( unsigned char* )tr.currentModel->md3[0] ) + tr.currentModel->md3[0]->ofsFrames );
 
 		frame += ent->e.frame;
 
-		radius = RadiusFromBounds( frame->bounds[ 0 ], frame->bounds[ 1 ] );
+		radius = RadiusFromBounds( frame->bounds[0], frame->bounds[1] );
 
 		if( ( projectedRadius = ProjectRadius( radius, ent->e.origin ) ) != 0 )
 		{
@@ -234,10 +222,10 @@ R_ComputeFogNum
 */
 int R_ComputeFogNum( md3Header_t* header, trRefEntity_t* ent )
 {
-	int         i, j;
-	fog_t*      fog;
+	int			i, j;
+	fog_t*		fog;
 	md3Frame_t* md3Frame;
-	vec3_t      localOrigin;
+	vec3_t		localOrigin;
 
 	if( tr.refdef.rdflags & RDF_NOWORLDMODEL )
 	{
@@ -249,14 +237,14 @@ int R_ComputeFogNum( md3Header_t* header, trRefEntity_t* ent )
 	VectorAdd( ent->e.origin, md3Frame->localOrigin, localOrigin );
 	for( i = 1; i < tr.world->numfogs; i++ )
 	{
-		fog = &tr.world->fogs[ i ];
+		fog = &tr.world->fogs[i];
 		for( j = 0; j < 3; j++ )
 		{
-			if( localOrigin[ j ] - md3Frame->radius >= fog->bounds[ 1 ][ j ] )
+			if( localOrigin[j] - md3Frame->radius >= fog->bounds[1][j] )
 			{
 				break;
 			}
-			if( localOrigin[ j ] + md3Frame->radius <= fog->bounds[ 0 ][ j ] )
+			if( localOrigin[j] + md3Frame->radius <= fog->bounds[0][j] )
 			{
 				break;
 			}
@@ -278,23 +266,23 @@ R_AddMD3Surfaces
 */
 void R_AddMD3Surfaces( trRefEntity_t* ent )
 {
-	int           i;
-	md3Header_t*  header    = 0;
-	md3Surface_t* surface   = 0;
+	int			  i;
+	md3Header_t*  header	= 0;
+	md3Surface_t* surface	= 0;
 	md3Shader_t*  md3Shader = 0;
-	shader_t*     shader    = 0;
-	int           cull;
-	int           lod;
-	int           fogNum;
-	qboolean      personalModel;
+	shader_t*	  shader	= 0;
+	int			  cull;
+	int			  lod;
+	int			  fogNum;
+	qboolean	  personalModel;
 
 	// don't add third_person objects if not in a portal
 	personalModel = ( ent->e.renderfx & RF_THIRD_PERSON ) && !tr.viewParms.isPortal;
 
 	if( ent->e.renderfx & RF_WRAP_FRAMES )
 	{
-		ent->e.frame %= tr.currentModel->md3[ 0 ]->numFrames;
-		ent->e.oldframe %= tr.currentModel->md3[ 0 ]->numFrames;
+		ent->e.frame %= tr.currentModel->md3[0]->numFrames;
+		ent->e.oldframe %= tr.currentModel->md3[0]->numFrames;
 	}
 
 	//
@@ -303,10 +291,10 @@ void R_AddMD3Surfaces( trRefEntity_t* ent )
 	// when the surfaces are rendered, they don't need to be
 	// range checked again.
 	//
-	if( ( ent->e.frame >= tr.currentModel->md3[ 0 ]->numFrames ) || ( ent->e.frame < 0 ) || ( ent->e.oldframe >= tr.currentModel->md3[ 0 ]->numFrames ) || ( ent->e.oldframe < 0 ) )
+	if( ( ent->e.frame >= tr.currentModel->md3[0]->numFrames ) || ( ent->e.frame < 0 ) || ( ent->e.oldframe >= tr.currentModel->md3[0]->numFrames ) || ( ent->e.oldframe < 0 ) )
 	{
 		ri.Printf( PRINT_DEVELOPER, "R_AddMD3Surfaces: no such frame %d to %d for '%s'\n", ent->e.oldframe, ent->e.frame, tr.currentModel->name );
-		ent->e.frame    = 0;
+		ent->e.frame	= 0;
 		ent->e.oldframe = 0;
 	}
 
@@ -315,7 +303,7 @@ void R_AddMD3Surfaces( trRefEntity_t* ent )
 	//
 	lod = R_ComputeLOD( ent );
 
-	header = tr.currentModel->md3[ lod ];
+	header = tr.currentModel->md3[lod];
 
 	//
 	// cull the entire model if merged bounding box of both frames
@@ -353,7 +341,7 @@ void R_AddMD3Surfaces( trRefEntity_t* ent )
 		else if( ent->e.customSkin > 0 && ent->e.customSkin < tr.numSkins )
 		{
 			skin_t* skin;
-			int     j;
+			int		j;
 
 			skin = R_GetSkinByHandle( ent->e.customSkin );
 
@@ -362,9 +350,9 @@ void R_AddMD3Surfaces( trRefEntity_t* ent )
 			for( j = 0; j < skin->numSurfaces; j++ )
 			{
 				// the names have both been lowercased
-				if( !strcmp( skin->surfaces[ j ]->name, surface->name ) )
+				if( !strcmp( skin->surfaces[j]->name, surface->name ) )
 				{
-					shader = skin->surfaces[ j ]->shader;
+					shader = skin->surfaces[j]->shader;
 					break;
 				}
 			}
@@ -385,7 +373,7 @@ void R_AddMD3Surfaces( trRefEntity_t* ent )
 		{
 			md3Shader = ( md3Shader_t* )( ( byte* )surface + surface->ofsShaders );
 			md3Shader += ent->e.skinNum % surface->numShaders;
-			shader = tr.shaders[ md3Shader->shaderIndex ];
+			shader = tr.shaders[md3Shader->shaderIndex];
 		}
 
 		// we will add shadows even if the main object isn't visible in the view

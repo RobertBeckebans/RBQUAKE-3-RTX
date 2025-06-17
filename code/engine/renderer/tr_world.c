@@ -118,7 +118,7 @@ This will also allow mirrors on both sides of a model without recursion.
 static qboolean R_CullSurface( surfaceType_t* surface, shader_t* shader )
 {
 	srfSurfaceFace_t* sface;
-	float             d;
+	float			  d;
 
 	if( r_nocull->integer )
 	{
@@ -152,7 +152,7 @@ static qboolean R_CullSurface( surfaceType_t* surface, shader_t* shader )
 	}
 
 	sface = ( srfSurfaceFace_t* )surface;
-	d     = DotProduct( tr.or.viewOrigin, sface->plane.normal );
+	d	  = DotProduct( tr.or.viewOrigin, sface->plane.normal );
 
 	// don't cull exactly on the plane, because there are levels of rounding
 	// through the BSP, ICD, and hardware that may cause pixel gaps if an
@@ -177,8 +177,8 @@ static qboolean R_CullSurface( surfaceType_t* surface, shader_t* shader )
 
 static int R_DlightFace( srfSurfaceFace_t* face, int dlightBits )
 {
-	float     d;
-	int       i;
+	float	  d;
+	int		  i;
 	dlight_t* dl;
 
 	for( i = 0; i < tr.refdef.num_dlights; i++ )
@@ -187,7 +187,7 @@ static int R_DlightFace( srfSurfaceFace_t* face, int dlightBits )
 		{
 			continue;
 		}
-		dl = &tr.refdef.dlights[ i ];
+		dl = &tr.refdef.dlights[i];
 		d  = DotProduct( dl->origin, face->plane.normal ) - face->plane.dist;
 		if( d < -dl->radius || d > dl->radius )
 		{
@@ -201,13 +201,13 @@ static int R_DlightFace( srfSurfaceFace_t* face, int dlightBits )
 		tr.pc.c_dlightSurfacesCulled++;
 	}
 
-	face->dlightBits[ tr.smpFrame ] = dlightBits;
+	face->dlightBits[tr.smpFrame] = dlightBits;
 	return dlightBits;
 }
 
 static int R_DlightGrid( srfGridMesh_t* grid, int dlightBits )
 {
-	int       i;
+	int		  i;
 	dlight_t* dl;
 
 	for( i = 0; i < tr.refdef.num_dlights; i++ )
@@ -216,8 +216,9 @@ static int R_DlightGrid( srfGridMesh_t* grid, int dlightBits )
 		{
 			continue;
 		}
-		dl = &tr.refdef.dlights[ i ];
-		if( dl->origin[ 0 ] - dl->radius > grid->meshBounds[ 1 ][ 0 ] || dl->origin[ 0 ] + dl->radius < grid->meshBounds[ 0 ][ 0 ] || dl->origin[ 1 ] - dl->radius > grid->meshBounds[ 1 ][ 1 ] || dl->origin[ 1 ] + dl->radius < grid->meshBounds[ 0 ][ 1 ] || dl->origin[ 2 ] - dl->radius > grid->meshBounds[ 1 ][ 2 ] || dl->origin[ 2 ] + dl->radius < grid->meshBounds[ 0 ][ 2 ] )
+		dl = &tr.refdef.dlights[i];
+		if( dl->origin[0] - dl->radius > grid->meshBounds[1][0] || dl->origin[0] + dl->radius < grid->meshBounds[0][0] || dl->origin[1] - dl->radius > grid->meshBounds[1][1] ||
+			dl->origin[1] + dl->radius < grid->meshBounds[0][1] || dl->origin[2] - dl->radius > grid->meshBounds[1][2] || dl->origin[2] + dl->radius < grid->meshBounds[0][2] )
 		{
 			// dlight doesn't reach the bounds
 			dlightBits &= ~( 1 << i );
@@ -229,14 +230,14 @@ static int R_DlightGrid( srfGridMesh_t* grid, int dlightBits )
 		tr.pc.c_dlightSurfacesCulled++;
 	}
 
-	grid->dlightBits[ tr.smpFrame ] = dlightBits;
+	grid->dlightBits[tr.smpFrame] = dlightBits;
 	return dlightBits;
 }
 
 static int R_DlightTrisurf( srfTriangles_t* surf, int dlightBits )
 {
 	// FIXME: more dlight culling to trisurfs...
-	surf->dlightBits[ tr.smpFrame ] = dlightBits;
+	surf->dlightBits[tr.smpFrame] = dlightBits;
 	return dlightBits;
 #if 0
 	int			i;
@@ -350,9 +351,9 @@ R_AddBrushModelSurfaces
 void R_AddBrushModelSurfaces( trRefEntity_t* ent )
 {
 	bmodel_t* bmodel;
-	int       clip;
+	int		  clip;
 	model_t*  pModel;
-	int       i;
+	int		  i;
 
 	pModel = R_GetModelByHandle( ent->e.hModel );
 
@@ -387,57 +388,57 @@ static void R_AddRaytacedWorldSurface( msurface_t* surface )
 	if( surface->shader == NULL )
 		return;
 
-	int    lightRange = 0;
+	int	   lightRange = 0;
 	vec3_t lightColor = { 1, 1, 1 };
 
 	if( strstr( surface->shader->name, "light" ) )
 	{
-		lightRange      = 100;
-		lightColor[ 0 ] = 233.0f / 255.0f;
-		lightColor[ 1 ] = 233.0f / 255.0f;
-		lightColor[ 2 ] = 125.0f / 255.0f;
+		lightRange	  = 100;
+		lightColor[0] = 233.0f / 255.0f;
+		lightColor[1] = 233.0f / 255.0f;
+		lightColor[2] = 125.0f / 255.0f;
 	}
 	else if( strstr( surface->shader->name, "flame1_hell" ) )
 	{
-		lightRange      = 400;
-		lightColor[ 0 ] = 226.0f / 255.0f;
-		lightColor[ 1 ] = 184.0f / 255.0f;
-		lightColor[ 2 ] = 34.0f / 255.0f;
+		lightRange	  = 400;
+		lightColor[0] = 226.0f / 255.0f;
+		lightColor[1] = 184.0f / 255.0f;
+		lightColor[2] = 34.0f / 255.0f;
 	}
 	else if( strstr( surface->shader->name, "flame" ) )
 	{
-		lightRange      = 150;
-		lightColor[ 0 ] = 226.0f / 255.0f;
-		lightColor[ 1 ] = 184.0f / 255.0f;
-		lightColor[ 2 ] = 34.0f / 255.0f;
+		lightRange	  = 150;
+		lightColor[0] = 226.0f / 255.0f;
+		lightColor[1] = 184.0f / 255.0f;
+		lightColor[2] = 34.0f / 255.0f;
 	}
 	else if( strstr( surface->shader->name, "lava" ) )
 	{
-		lightRange      = 160;
-		lightColor[ 0 ] = 128.0f / 255.0f;
-		lightColor[ 1 ] = 0.0f / 255.0f;
-		lightColor[ 2 ] = 0.0f / 255.0f;
+		lightRange	  = 160;
+		lightColor[0] = 128.0f / 255.0f;
+		lightColor[1] = 0.0f / 255.0f;
+		lightColor[2] = 0.0f / 255.0f;
 	}
 	else if( strstr( surface->shader->name, "tim_hell" ) )
 	{
-		lightRange      = 1000;
-		lightColor[ 0 ] = 128.0f / 255.0f;
-		lightColor[ 1 ] = 50.0f / 255.0f;
-		lightColor[ 2 ] = 50.0f / 255.0f;
+		lightRange	  = 1000;
+		lightColor[0] = 128.0f / 255.0f;
+		lightColor[1] = 50.0f / 255.0f;
+		lightColor[2] = 50.0f / 255.0f;
 	}
 	else if( strstr( surface->shader->name, "sky" ) )
 	{
-		lightRange      = 1000;
-		lightColor[ 0 ] = 215.0f / 255.0f;
-		lightColor[ 1 ] = 184.0f / 255.0f;
-		lightColor[ 2 ] = 120.0f / 255.0f;
+		lightRange	  = 1000;
+		lightColor[0] = 215.0f / 255.0f;
+		lightColor[1] = 184.0f / 255.0f;
+		lightColor[2] = 120.0f / 255.0f;
 	}
 	else if( strstr( surface->shader->name, "skies" ) )
 	{
-		lightRange      = 300;
-		lightColor[ 0 ] = 215.0f / 255.0f;
-		lightColor[ 1 ] = 184.0f / 255.0f;
-		lightColor[ 2 ] = 120.0f / 255.0f;
+		lightRange	  = 300;
+		lightColor[0] = 215.0f / 255.0f;
+		lightColor[1] = 184.0f / 255.0f;
+		lightColor[2] = 120.0f / 255.0f;
 	}
 
 	if( lightRange == 0 )
@@ -456,24 +457,24 @@ static void R_AddRaytacedWorldSurface( msurface_t* surface )
 	ClearBounds( mins, maxs );
 	for( int d = 0; d < tri->numVerts; d++ )
 	{
-		AddPointToBounds( tri->verts[ d ].xyz, mins, maxs );
+		AddPointToBounds( tri->verts[d].xyz, mins, maxs );
 	}
 
-	int lightStyle = 0;
+	int	   lightStyle = 0;
 
-	//if (strstr(surface->texinfo->texture->name, "light3_3")) {
+	// if (strstr(surface->texinfo->texture->name, "light3_3")) {
 	//	lightStyle = 8;
-	//}
+	// }
 
 	vec3_t plane_normal;
 
-	plane_normal[ 0 ] = tri->verts[ 0 ].normal[ 0 ];
-	plane_normal[ 1 ] = tri->verts[ 0 ].normal[ 1 ];
-	plane_normal[ 2 ] = tri->verts[ 0 ].normal[ 2 ];
+	plane_normal[0] = tri->verts[0].normal[0];
+	plane_normal[1] = tri->verts[0].normal[1];
+	plane_normal[2] = tri->verts[0].normal[2];
 
 	VectorNormalize( plane_normal );
 
-	GL_RegisterWorldAreaLight( plane_normal, mins, maxs, lightStyle, lightRange, lightColor[ 0 ], lightColor[ 1 ], lightColor[ 2 ] );
+	GL_RegisterWorldAreaLight( plane_normal, mins, maxs, lightStyle, lightRange, lightColor[0], lightColor[1], lightColor[2] );
 }
 
 /*
@@ -485,7 +486,7 @@ static void R_RecursiveWorldNode( mnode_t* node, int planeBits, int dlightBits )
 {
 	do
 	{
-		int newDlights[ 2 ];
+		int newDlights[2];
 
 		// if the node wasn't marked as potentially visible, exit
 		if( node->visframe != tr.visCount )
@@ -496,7 +497,7 @@ static void R_RecursiveWorldNode( mnode_t* node, int planeBits, int dlightBits )
 		// if the bounding volume is outside the frustum, nothing
 		// inside can be visible OPTIMIZE: don't do this all the way to leafs?
 
-		//if ( !r_nocull->integer ) {
+		// if ( !r_nocull->integer ) {
 		//	int		r;
 		//
 		//	if ( planeBits & 1 ) {
@@ -539,7 +540,7 @@ static void R_RecursiveWorldNode( mnode_t* node, int planeBits, int dlightBits )
 		//		}
 		//	}
 		//
-		//}
+		// }
 
 		if( node->contents != -1 )
 		{
@@ -550,8 +551,8 @@ static void R_RecursiveWorldNode( mnode_t* node, int planeBits, int dlightBits )
 		// since we don't care about sort orders, just go positive to negative
 
 		// determine which dlights are needed
-		newDlights[ 0 ] = 0;
-		newDlights[ 1 ] = 0;
+		newDlights[0] = 0;
+		newDlights[1] = 0;
 		if( dlightBits )
 		{
 			int i;
@@ -559,76 +560,76 @@ static void R_RecursiveWorldNode( mnode_t* node, int planeBits, int dlightBits )
 			for( i = 0; i < tr.refdef.num_dlights; i++ )
 			{
 				dlight_t* dl;
-				float     dist;
+				float	  dist;
 
 				if( dlightBits & ( 1 << i ) )
 				{
-					dl   = &tr.refdef.dlights[ i ];
+					dl	 = &tr.refdef.dlights[i];
 					dist = DotProduct( dl->origin, node->plane->normal ) - node->plane->dist;
 
 					if( dist > -dl->radius )
 					{
-						newDlights[ 0 ] |= ( 1 << i );
+						newDlights[0] |= ( 1 << i );
 					}
 					if( dist < dl->radius )
 					{
-						newDlights[ 1 ] |= ( 1 << i );
+						newDlights[1] |= ( 1 << i );
 					}
 				}
 			}
 		}
 
 		// recurse down the children, front side first
-		R_RecursiveWorldNode( node->children[ 0 ], planeBits, newDlights[ 0 ] );
+		R_RecursiveWorldNode( node->children[0], planeBits, newDlights[0] );
 
 		// tail recurse
-		node       = node->children[ 1 ];
-		dlightBits = newDlights[ 1 ];
+		node	   = node->children[1];
+		dlightBits = newDlights[1];
 	} while( 1 );
 
 	{
 		// leaf node, so add mark surfaces
-		int         c;
+		int			c;
 		msurface_t *surf, **mark;
 
 		tr.pc.c_leafs++;
 
 		// add to z buffer bounds
-		if( node->mins[ 0 ] < tr.viewParms.visBounds[ 0 ][ 0 ] )
+		if( node->mins[0] < tr.viewParms.visBounds[0][0] )
 		{
-			tr.viewParms.visBounds[ 0 ][ 0 ] = node->mins[ 0 ];
+			tr.viewParms.visBounds[0][0] = node->mins[0];
 		}
-		if( node->mins[ 1 ] < tr.viewParms.visBounds[ 0 ][ 1 ] )
+		if( node->mins[1] < tr.viewParms.visBounds[0][1] )
 		{
-			tr.viewParms.visBounds[ 0 ][ 1 ] = node->mins[ 1 ];
+			tr.viewParms.visBounds[0][1] = node->mins[1];
 		}
-		if( node->mins[ 2 ] < tr.viewParms.visBounds[ 0 ][ 2 ] )
+		if( node->mins[2] < tr.viewParms.visBounds[0][2] )
 		{
-			tr.viewParms.visBounds[ 0 ][ 2 ] = node->mins[ 2 ];
+			tr.viewParms.visBounds[0][2] = node->mins[2];
 		}
 
-		if( node->maxs[ 0 ] > tr.viewParms.visBounds[ 1 ][ 0 ] )
+		if( node->maxs[0] > tr.viewParms.visBounds[1][0] )
 		{
-			tr.viewParms.visBounds[ 1 ][ 0 ] = node->maxs[ 0 ];
+			tr.viewParms.visBounds[1][0] = node->maxs[0];
 		}
-		if( node->maxs[ 1 ] > tr.viewParms.visBounds[ 1 ][ 1 ] )
+		if( node->maxs[1] > tr.viewParms.visBounds[1][1] )
 		{
-			tr.viewParms.visBounds[ 1 ][ 1 ] = node->maxs[ 1 ];
+			tr.viewParms.visBounds[1][1] = node->maxs[1];
 		}
-		if( node->maxs[ 2 ] > tr.viewParms.visBounds[ 1 ][ 2 ] )
+		if( node->maxs[2] > tr.viewParms.visBounds[1][2] )
 		{
-			tr.viewParms.visBounds[ 1 ][ 2 ] = node->maxs[ 2 ];
+			tr.viewParms.visBounds[1][2] = node->maxs[2];
 		}
 
 		// add the individual surfaces
 		mark = node->firstmarksurface;
-		c    = node->nummarksurfaces;
+		c	 = node->nummarksurfaces;
 		while( c-- )
 		{
 			// the surface may have already been added if it
 			// spans multiple leafs
 			surf = *mark;
-			//R_AddWorldSurface( surf, dlightBits );
+			// R_AddWorldSurface( surf, dlightBits );
 			R_AddRaytacedWorldSurface( surf );
 			mark++;
 		}
@@ -643,7 +644,7 @@ R_PointInLeaf
 static mnode_t* R_PointInLeaf( const vec3_t p )
 {
 	mnode_t*  node;
-	float     d;
+	float	  d;
 	cplane_t* plane;
 
 	if( !tr.world )
@@ -659,14 +660,14 @@ static mnode_t* R_PointInLeaf( const vec3_t p )
 			break;
 		}
 		plane = node->plane;
-		d     = DotProduct( p, plane->normal ) - plane->dist;
+		d	  = DotProduct( p, plane->normal ) - plane->dist;
 		if( d > 0 )
 		{
-			node = node->children[ 0 ];
+			node = node->children[0];
 		}
 		else
 		{
-			node = node->children[ 1 ];
+			node = node->children[1];
 		}
 	}
 
@@ -696,13 +697,13 @@ R_inPVS
 qboolean R_inPVS( const vec3_t p1, const vec3_t p2 )
 {
 	mnode_t* leaf;
-	byte*    vis;
+	byte*	 vis;
 
 	leaf = R_PointInLeaf( p1 );
-	vis  = CM_ClusterPVS( leaf->cluster );
+	vis	 = CM_ClusterPVS( leaf->cluster );
 	leaf = R_PointInLeaf( p2 );
 
-	if( !( vis[ leaf->cluster >> 3 ] & ( 1 << ( leaf->cluster & 7 ) ) ) )
+	if( !( vis[leaf->cluster >> 3] & ( 1 << ( leaf->cluster & 7 ) ) ) )
 	{
 		return qfalse;
 	}
@@ -720,9 +721,9 @@ cluster
 static void R_MarkLeaves( void )
 {
 	const byte* vis;
-	mnode_t *   leaf, *parent;
-	int         i;
-	int         cluster;
+	mnode_t *	leaf, *parent;
+	int			i;
+	int			cluster;
 
 	// lockpvs lets designers walk around to determine the
 	// extent of the current pvs
@@ -732,7 +733,7 @@ static void R_MarkLeaves( void )
 	}
 
 	// current viewcluster
-	leaf    = R_PointInLeaf( tr.viewParms.pvsOrigin );
+	leaf	= R_PointInLeaf( tr.viewParms.pvsOrigin );
 	cluster = leaf->cluster;
 
 	// if the cluster is the same and the area visibility matrix
@@ -760,9 +761,9 @@ static void R_MarkLeaves( void )
 	{
 		for( i = 0; i < tr.world->numnodes; i++ )
 		{
-			if( tr.world->nodes[ i ].contents != CONTENTS_SOLID )
+			if( tr.world->nodes[i].contents != CONTENTS_SOLID )
 			{
-				tr.world->nodes[ i ].visframe = tr.visCount;
+				tr.world->nodes[i].visframe = tr.visCount;
 			}
 		}
 		return;
@@ -779,13 +780,13 @@ static void R_MarkLeaves( void )
 		}
 
 		// check general pvs
-		if( !( vis[ cluster >> 3 ] & ( 1 << ( cluster & 7 ) ) ) )
+		if( !( vis[cluster >> 3] & ( 1 << ( cluster & 7 ) ) ) )
 		{
 			continue;
 		}
 
 		// check for door connection
-		if( ( tr.refdef.areamask[ leaf->area >> 3 ] & ( 1 << ( leaf->area & 7 ) ) ) )
+		if( ( tr.refdef.areamask[leaf->area >> 3] & ( 1 << ( leaf->area & 7 ) ) ) )
 		{
 			continue; // not visible
 		}
@@ -796,7 +797,7 @@ static void R_MarkLeaves( void )
 			if( parent->visframe == tr.visCount )
 				break;
 			parent->visframe = tr.visCount;
-			parent           = parent->parent;
+			parent			 = parent->parent;
 		} while( parent );
 	}
 }
@@ -825,7 +826,7 @@ void R_AddWorldSurfaces( void )
 	R_MarkLeaves();
 
 	// clear out the visible min/max
-	ClearBounds( tr.viewParms.visBounds[ 0 ], tr.viewParms.visBounds[ 1 ] );
+	ClearBounds( tr.viewParms.visBounds[0], tr.viewParms.visBounds[1] );
 
 	// perform frustum culling and add all the potentially visible surfaces
 	if( tr.refdef.num_dlights > 32 )

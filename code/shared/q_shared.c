@@ -76,7 +76,7 @@ COM_DefaultExtension
 */
 void COM_DefaultExtension( char* path, int maxSize, const char* extension )
 {
-	char  oldPath[ MAX_QPATH ];
+	char  oldPath[MAX_QPATH];
 	char* src;
 
 	//
@@ -182,16 +182,16 @@ qint64 Long64NoSwap( qint64 ll )
 
 typedef union
 {
-	float        f;
+	float		 f;
 	unsigned int i;
 } _FloatByteUnion;
 
 float FloatSwap( const float* f )
 {
 	const _FloatByteUnion* in;
-	_FloatByteUnion        out;
+	_FloatByteUnion		   out;
 
-	in    = ( _FloatByteUnion* )f;
+	in	  = ( _FloatByteUnion* )f;
 	out.i = LongSwap( in->i );
 
 	return out.f;
@@ -212,7 +212,7 @@ void Swap_Init (void)
 {
 	byte	swaptest[2] = {1,0};
 
-// set the byte swapping variables in a portable manner	
+// set the byte swapping variables in a portable manner
 	if ( *(short *)swaptest == 1)
 	{
 		_BigShort = ShortSwap;
@@ -247,11 +247,11 @@ PARSING
 ============================================================================
 */
 
-static char com_token[ MAX_TOKEN_CHARS ];
-static char com_parsename[ MAX_TOKEN_CHARS ];
-static int  com_lines;
+static char com_token[MAX_TOKEN_CHARS];
+static char com_parsename[MAX_TOKEN_CHARS];
+static int	com_lines;
 
-void COM_BeginParseSession( const char* name )
+void		COM_BeginParseSession( const char* name )
 {
 	com_lines = 0;
 	Com_sprintf( com_parsename, sizeof( com_parsename ), "%s", name );
@@ -269,8 +269,8 @@ char* COM_Parse( char** data_p )
 
 void COM_ParseError( char* format, ... )
 {
-	va_list     argptr;
-	static char string[ 4096 ];
+	va_list		argptr;
+	static char string[4096];
 
 	va_start( argptr, format );
 	vsprintf( string, format, argptr );
@@ -281,8 +281,8 @@ void COM_ParseError( char* format, ... )
 
 void COM_ParseWarning( char* format, ... )
 {
-	va_list     argptr;
-	static char string[ 4096 ];
+	va_list		argptr;
+	static char string[4096];
 
 	va_start( argptr, format );
 	vsprintf( string, format, argptr );
@@ -326,8 +326,8 @@ static char* SkipWhitespace( char* data, qboolean* hasNewLines )
 
 int COM_Compress( char* data_p )
 {
-	char *   in, *out;
-	int      c;
+	char *	 in, *out;
+	int		 c;
 	qboolean newline = qfalse, whitespace = qfalse;
 
 	in = out = data_p;
@@ -336,7 +336,7 @@ int COM_Compress( char* data_p )
 		while( ( c = *in ) != 0 )
 		{
 			// skip double slash comments
-			if( c == '/' && in[ 1 ] == '/' )
+			if( c == '/' && in[1] == '/' )
 			{
 				while( *in && *in != '\n' )
 				{
@@ -344,9 +344,9 @@ int COM_Compress( char* data_p )
 				}
 				// skip /* */ comments
 			}
-			else if( c == '/' && in[ 1 ] == '*' )
+			else if( c == '/' && in[1] == '*' )
 			{
-				while( *in && ( *in != '*' || in[ 1 ] != '/' ) )
+				while( *in && ( *in != '*' || in[1] != '/' ) )
 					in++;
 				if( *in )
 					in += 2;
@@ -369,13 +369,13 @@ int COM_Compress( char* data_p )
 				// if we have a pending newline, emit it (and it counts as whitespace)
 				if( newline )
 				{
-					*out++     = '\n';
-					newline    = qfalse;
+					*out++	   = '\n';
+					newline	   = qfalse;
 					whitespace = qfalse;
 				}
 				if( whitespace )
 				{
-					*out++     = ' ';
+					*out++	   = ' ';
 					whitespace = qfalse;
 				}
 
@@ -418,13 +418,13 @@ int COM_Compress( char* data_p )
 
 char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 {
-	int      c           = 0, len;
+	int		 c			 = 0, len;
 	qboolean hasNewLines = qfalse;
-	char*    data;
+	char*	 data;
 
-	data           = *data_p;
-	len            = 0;
-	com_token[ 0 ] = 0;
+	data		 = *data_p;
+	len			 = 0;
+	com_token[0] = 0;
 
 	// make sure incoming data is valid
 	if( !data )
@@ -451,7 +451,7 @@ char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 		c = *data;
 
 		// skip double slash comments
-		if( c == '/' && data[ 1 ] == '/' )
+		if( c == '/' && data[1] == '/' )
 		{
 			data += 2;
 			while( *data && *data != '\n' )
@@ -460,10 +460,10 @@ char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 			}
 		}
 		// skip /* */ comments
-		else if( c == '/' && data[ 1 ] == '*' )
+		else if( c == '/' && data[1] == '*' )
 		{
 			data += 2;
-			while( *data && ( *data != '*' || data[ 1 ] != '/' ) )
+			while( *data && ( *data != '*' || data[1] != '/' ) )
 			{
 				data++;
 			}
@@ -487,13 +487,13 @@ char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 			c = *data++;
 			if( c == '\"' || !c )
 			{
-				com_token[ len ] = 0;
-				*data_p          = ( char* )data;
+				com_token[len] = 0;
+				*data_p		   = ( char* )data;
 				return com_token;
 			}
 			if( len < MAX_TOKEN_CHARS )
 			{
-				com_token[ len ] = c;
+				com_token[len] = c;
 				len++;
 			}
 		}
@@ -504,7 +504,7 @@ char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 	{
 		if( len < MAX_TOKEN_CHARS )
 		{
-			com_token[ len ] = c;
+			com_token[len] = c;
 			len++;
 		}
 		data++;
@@ -518,7 +518,7 @@ char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 		//		Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
 		len = 0;
 	}
-	com_token[ len ] = 0;
+	com_token[len] = 0;
 
 	*data_p = ( char* )data;
 	return com_token;
@@ -606,19 +606,19 @@ Internal brace depths are properly skipped.
 void SkipBracedSection( char** program )
 {
 	char* token;
-	int   depth;
+	int	  depth;
 
 	depth = 0;
 	do
 	{
 		token = COM_ParseExt( program, qtrue );
-		if( token[ 1 ] == 0 )
+		if( token[1] == 0 )
 		{
-			if( token[ 0 ] == '{' )
+			if( token[0] == '{' )
 			{
 				depth++;
 			}
-			else if( token[ 0 ] == '}' )
+			else if( token[0] == '}' )
 			{
 				depth--;
 			}
@@ -634,7 +634,7 @@ SkipRestOfLine
 void SkipRestOfLine( char** data )
 {
 	char* p;
-	int   c;
+	int	  c;
 
 	p = *data;
 	while( ( c = *p++ ) != 0 )
@@ -652,14 +652,14 @@ void SkipRestOfLine( char** data )
 void Parse1DMatrix( char** buf_p, int x, float* m )
 {
 	char* token;
-	int   i;
+	int	  i;
 
 	COM_MatchToken( buf_p, "(" );
 
 	for( i = 0; i < x; i++ )
 	{
-		token  = COM_Parse( buf_p );
-		m[ i ] = atof( token );
+		token = COM_Parse( buf_p );
+		m[i]  = atof( token );
 	}
 
 	COM_MatchToken( buf_p, ")" );
@@ -752,7 +752,7 @@ char* Q_strrchr( const char* string, int c )
 /*
 =============
 Q_strncpyz
- 
+
 Safe strncpy that ensures a trailing zero
 =============
 */
@@ -773,7 +773,7 @@ void Q_strncpyz( char* dest, const char* src, int destsize )
 	}
 
 	strncpy( dest, src, destsize - 1 );
-	dest[ destsize - 1 ] = 0;
+	dest[destsize - 1] = 0;
 }
 
 int Q_stricmpn( const char* s1, const char* s2, int n )
@@ -890,7 +890,7 @@ void Q_strcat( char* dest, int size, const char* src )
 
 int Q_PrintStrlen( const char* string )
 {
-	int         len;
+	int			len;
 	const char* p;
 
 	if( !string )
@@ -899,7 +899,7 @@ int Q_PrintStrlen( const char* string )
 	}
 
 	len = 0;
-	p   = string;
+	p	= string;
 	while( *p )
 	{
 		if( Q_IsColorString( p ) )
@@ -918,7 +918,7 @@ char* Q_CleanStr( char* string )
 {
 	char* d;
 	char* s;
-	int   c;
+	int	  c;
 
 	s = string;
 	d = string;
@@ -941,9 +941,9 @@ char* Q_CleanStr( char* string )
 
 void QDECL Com_sprintf( char* dest, int size, const char* fmt, ... )
 {
-	int     len;
+	int		len;
 	va_list argptr;
-	char    bigbuffer[ 32000 ]; // big, but small enough to fit in PPC stack
+	char	bigbuffer[32000]; // big, but small enough to fit in PPC stack
 
 	va_start( argptr, fmt );
 	len = vsprintf( bigbuffer, fmt, argptr );
@@ -973,12 +973,12 @@ FIXME: make this buffer size safe someday
 */
 char* QDECL va( char* format, ... )
 {
-	va_list     argptr;
-	static char string[ 2 ][ 32000 ]; // in case va is called by nested functions
-	static int  index = 0;
-	char*       buf;
+	va_list		argptr;
+	static char string[2][32000]; // in case va is called by nested functions
+	static int	index = 0;
+	char*		buf;
 
-	buf = string[ index & 1 ];
+	buf = string[index & 1];
 	index++;
 
 	va_start( argptr, format );
@@ -1007,11 +1007,11 @@ FIXME: overflow check?
 */
 char* Info_ValueForKey( const char* s, const char* key )
 {
-	char        pkey[ BIG_INFO_KEY ];
-	static char value[ 2 ][ BIG_INFO_VALUE ]; // use two buffers so compares
-											  // work without stomping on each other
-	static int valueindex = 0;
-	char*      o;
+	char		pkey[BIG_INFO_KEY];
+	static char value[2][BIG_INFO_VALUE]; // use two buffers so compares
+										  // work without stomping on each other
+	static int	valueindex = 0;
+	char*		o;
 
 	if( !s || !key )
 	{
@@ -1038,7 +1038,7 @@ char* Info_ValueForKey( const char* s, const char* key )
 		*o = 0;
 		s++;
 
-		o = value[ valueindex ];
+		o = value[valueindex];
 
 		while( *s != '\\' && *s )
 		{
@@ -1047,7 +1047,7 @@ char* Info_ValueForKey( const char* s, const char* key )
 		*o = 0;
 
 		if( !Q_stricmp( key, pkey ) )
-			return value[ valueindex ];
+			return value[valueindex];
 
 		if( !*s )
 			break;
@@ -1066,7 +1066,7 @@ Used to itterate through all the key/value pairs in an info string
 */
 void Info_NextPair( const char** head, char* key, char* value )
 {
-	char*       o;
+	char*		o;
 	const char* s;
 
 	s = *head;
@@ -1075,15 +1075,15 @@ void Info_NextPair( const char** head, char* key, char* value )
 	{
 		s++;
 	}
-	key[ 0 ]   = 0;
-	value[ 0 ] = 0;
+	key[0]	 = 0;
+	value[0] = 0;
 
 	o = key;
 	while( *s != '\\' )
 	{
 		if( !*s )
 		{
-			*o    = 0;
+			*o	  = 0;
 			*head = s;
 			return;
 		}
@@ -1110,8 +1110,8 @@ Info_RemoveKey
 void Info_RemoveKey( char* s, const char* key )
 {
 	char* start;
-	char  pkey[ MAX_INFO_KEY ];
-	char  value[ MAX_INFO_VALUE ];
+	char  pkey[MAX_INFO_KEY];
+	char  value[MAX_INFO_VALUE];
 	char* o;
 
 	if( strlen( s ) >= MAX_INFO_STRING )
@@ -1167,8 +1167,8 @@ Info_RemoveKey_Big
 void Info_RemoveKey_Big( char* s, const char* key )
 {
 	char* start;
-	char  pkey[ BIG_INFO_KEY ];
-	char  value[ BIG_INFO_VALUE ];
+	char  pkey[BIG_INFO_KEY];
+	char  value[BIG_INFO_VALUE];
 	char* o;
 
 	if( strlen( s ) >= BIG_INFO_STRING )
@@ -1246,7 +1246,7 @@ Changes or adds a key/value pair
 */
 void Info_SetValueForKey( char* s, const char* key, const char* value )
 {
-	char newi[ MAX_INFO_STRING ];
+	char newi[MAX_INFO_STRING];
 
 	if( strlen( s ) >= MAX_INFO_STRING )
 	{
@@ -1296,7 +1296,7 @@ Changes or adds a key/value pair
 */
 void Info_SetValueForKey_Big( char* s, const char* key, const char* value )
 {
-	char newi[ BIG_INFO_STRING ];
+	char newi[BIG_INFO_STRING];
 
 	if( strlen( s ) >= BIG_INFO_STRING )
 	{

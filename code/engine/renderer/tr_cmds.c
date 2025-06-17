@@ -23,14 +23,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 volatile renderCommandList_t* renderCommandList;
 
-volatile qboolean renderThreadActive;
+volatile qboolean			  renderThreadActive;
 
 /*
 =====================
 R_PerformanceCounters
 =====================
 */
-void R_PerformanceCounters( void )
+void						  R_PerformanceCounters( void )
 {
 	if( !r_speeds->integer )
 	{
@@ -42,12 +42,35 @@ void R_PerformanceCounters( void )
 
 	if( r_speeds->integer == 1 )
 	{
-		ri.Printf( PRINT_ALL, "%i/%i shaders/surfs %i leafs %i verts %i/%i tris %.2f mtex %.2f dc\n", backEnd.pc.c_shaders, backEnd.pc.c_surfaces, tr.pc.c_leafs, backEnd.pc.c_vertexes, backEnd.pc.c_indexes / 3, backEnd.pc.c_totalIndexes / 3, R_SumOfUsedImages() / ( 1000000.0f ), backEnd.pc.c_overDraw / ( float )( glConfig.vidWidth * glConfig.vidHeight ) );
+		ri.Printf( PRINT_ALL,
+			"%i/%i shaders/surfs %i leafs %i verts %i/%i tris %.2f mtex %.2f dc\n",
+			backEnd.pc.c_shaders,
+			backEnd.pc.c_surfaces,
+			tr.pc.c_leafs,
+			backEnd.pc.c_vertexes,
+			backEnd.pc.c_indexes / 3,
+			backEnd.pc.c_totalIndexes / 3,
+			R_SumOfUsedImages() / ( 1000000.0f ),
+			backEnd.pc.c_overDraw / ( float )( glConfig.vidWidth * glConfig.vidHeight ) );
 	}
 	else if( r_speeds->integer == 2 )
 	{
-		ri.Printf( PRINT_ALL, "(patch) %i sin %i sclip  %i sout %i bin %i bclip %i bout\n", tr.pc.c_sphere_cull_patch_in, tr.pc.c_sphere_cull_patch_clip, tr.pc.c_sphere_cull_patch_out, tr.pc.c_box_cull_patch_in, tr.pc.c_box_cull_patch_clip, tr.pc.c_box_cull_patch_out );
-		ri.Printf( PRINT_ALL, "(md3) %i sin %i sclip  %i sout %i bin %i bclip %i bout\n", tr.pc.c_sphere_cull_md3_in, tr.pc.c_sphere_cull_md3_clip, tr.pc.c_sphere_cull_md3_out, tr.pc.c_box_cull_md3_in, tr.pc.c_box_cull_md3_clip, tr.pc.c_box_cull_md3_out );
+		ri.Printf( PRINT_ALL,
+			"(patch) %i sin %i sclip  %i sout %i bin %i bclip %i bout\n",
+			tr.pc.c_sphere_cull_patch_in,
+			tr.pc.c_sphere_cull_patch_clip,
+			tr.pc.c_sphere_cull_patch_out,
+			tr.pc.c_box_cull_patch_in,
+			tr.pc.c_box_cull_patch_clip,
+			tr.pc.c_box_cull_patch_out );
+		ri.Printf( PRINT_ALL,
+			"(md3) %i sin %i sclip  %i sout %i bin %i bclip %i bout\n",
+			tr.pc.c_sphere_cull_md3_in,
+			tr.pc.c_sphere_cull_md3_clip,
+			tr.pc.c_sphere_cull_md3_out,
+			tr.pc.c_box_cull_md3_in,
+			tr.pc.c_box_cull_md3_clip,
+			tr.pc.c_box_cull_md3_out );
 	}
 	else if( r_speeds->integer == 3 )
 	{
@@ -116,14 +139,14 @@ void R_ShutdownCommandBuffers( void )
 R_IssueRenderCommands
 ====================
 */
-int c_blockedOnRender;
-int c_blockedOnMain;
+int	 c_blockedOnRender;
+int	 c_blockedOnMain;
 
 void R_IssueRenderCommands( qboolean runPerformanceCounters )
 {
 	renderCommandList_t* cmdList;
 
-	cmdList = &backEndData[ tr.smpFrame ]->commands;
+	cmdList = &backEndData[tr.smpFrame]->commands;
 	assert( cmdList ); // bk001205
 	// add an end-of-list command
 	*( int* )( cmdList->cmds + cmdList->used ) = RC_END_OF_LIST;
@@ -214,7 +237,7 @@ void* R_GetCommandBuffer( int bytes )
 {
 	renderCommandList_t* cmdList;
 
-	cmdList = &backEndData[ tr.smpFrame ]->commands;
+	cmdList = &backEndData[tr.smpFrame]->commands;
 
 	// always leave room for the end of list command
 	if( cmdList->used + bytes + 4 > MAX_RENDER_COMMANDS )
@@ -249,10 +272,10 @@ void R_AddDrawSurfCmd( drawSurf_t* drawSurfs, int numDrawSurfs )
 	}
 	cmd->commandId = RC_DRAW_SURFS;
 
-	cmd->drawSurfs    = drawSurfs;
+	cmd->drawSurfs	  = drawSurfs;
 	cmd->numDrawSurfs = numDrawSurfs;
 
-	cmd->refdef    = tr.refdef;
+	cmd->refdef	   = tr.refdef;
 	cmd->viewParms = tr.viewParms;
 }
 
@@ -279,15 +302,15 @@ void RE_SetColor( const float* rgba )
 	cmd->commandId = RC_SET_COLOR;
 	if( !rgba )
 	{
-		static float colorWhite[ 4 ] = { 1, 1, 1, 1 };
+		static float colorWhite[4] = { 1, 1, 1, 1 };
 
 		rgba = colorWhite;
 	}
 
-	cmd->color[ 0 ] = rgba[ 0 ];
-	cmd->color[ 1 ] = rgba[ 1 ];
-	cmd->color[ 2 ] = rgba[ 2 ];
-	cmd->color[ 3 ] = rgba[ 3 ];
+	cmd->color[0] = rgba[0];
+	cmd->color[1] = rgba[1];
+	cmd->color[2] = rgba[2];
+	cmd->color[3] = rgba[3];
 }
 
 /*
@@ -308,15 +331,15 @@ void RE_StretchPic( float x, float y, float w, float h, float s1, float t1, floa
 		return;
 	}
 	cmd->commandId = RC_STRETCH_PIC;
-	cmd->shader    = R_GetShaderByHandle( hShader );
-	cmd->x         = x;
-	cmd->y         = y;
-	cmd->w         = w;
-	cmd->h         = h;
-	cmd->s1        = s1;
-	cmd->t1        = t1;
-	cmd->s2        = s2;
-	cmd->t2        = t2;
+	cmd->shader	   = R_GetShaderByHandle( hShader );
+	cmd->x		   = x;
+	cmd->y		   = y;
+	cmd->w		   = w;
+	cmd->h		   = h;
+	cmd->s1		   = s1;
+	cmd->t1		   = t1;
+	cmd->s2		   = s2;
+	cmd->t2		   = t2;
 }
 
 /*
@@ -360,11 +383,11 @@ void RE_BeginFrame( stereoFrame_t stereoFrame )
 		else
 		{
 			R_SyncRenderThread();
-			//qglEnable( GL_STENCIL_TEST );
-			//qglStencilMask( ~0U );
-			//qglClearStencil( 0U );
-			//qglStencilFunc( GL_ALWAYS, 0U, ~0U );
-			//qglStencilOp( GL_KEEP, GL_INCR, GL_INCR );
+			// qglEnable( GL_STENCIL_TEST );
+			// qglStencilMask( ~0U );
+			// qglClearStencil( 0U );
+			// qglStencilFunc( GL_ALWAYS, 0U, ~0U );
+			// qglStencilOp( GL_KEEP, GL_INCR, GL_INCR );
 		}
 		r_measureOverdraw->modified = qfalse;
 	}
@@ -374,7 +397,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame )
 		if( r_measureOverdraw->modified )
 		{
 			R_SyncRenderThread();
-			//qglDisable( GL_STENCIL_TEST );
+			// qglDisable( GL_STENCIL_TEST );
 		}
 		r_measureOverdraw->modified = qfalse;
 	}
@@ -401,7 +424,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame )
 	}
 
 	// check for errors
-	//if ( !r_ignoreGLErrors->integer ) {
+	// if ( !r_ignoreGLErrors->integer ) {
 	//    int	err;
 	//
 	//	R_SyncRenderThread();
@@ -420,7 +443,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame )
 	}
 	cmd->commandId = RC_DRAW_BUFFER;
 
-	//if ( glConfig.stereoEnabled ) {
+	// if ( glConfig.stereoEnabled ) {
 	//	if ( stereoFrame == STEREO_LEFT ) {
 	//		cmd->buffer = (int)GL_BACK_LEFT;
 	//	} else if ( stereoFrame == STEREO_RIGHT ) {
@@ -428,7 +451,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame )
 	//	} else {
 	//		ri.Error( ERR_FATAL, "RE_BeginFrame: Stereo is enabled, but stereoFrame was %i", stereoFrame );
 	//	}
-	//} else {
+	// } else {
 	//	if ( stereoFrame != STEREO_CENTER ) {
 	//		ri.Error( ERR_FATAL, "RE_BeginFrame: Stereo is disabled, but stereoFrame was %i", stereoFrame );
 	//	}
@@ -437,7 +460,7 @@ void RE_BeginFrame( stereoFrame_t stereoFrame )
 	//	} else {
 	//		cmd->buffer = (int)GL_BACK;
 	//	}
-	//}
+	// }
 }
 
 /*

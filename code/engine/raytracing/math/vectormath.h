@@ -21,22 +21,28 @@
 /*
  * Constants
  */
-static const float  kEpsilon  = 0.00001f;
-static const float  kPi       = 3.14159265358979323846f;
-static const float  k2Pi      = kPi * 2.0f;
-static const float  kPiDiv2   = kPi / 2.0f;
-static const float  kInvPi    = 1.0f / kPi;
-static const float  kDegToRad = ( kPi / 180.0f );
-static const float  kRadToDeg = ( 180.0f / kPi );
-static inline float DegToRad( float fDeg ) { return fDeg * kDegToRad; }
-static inline float RadToDeg( float fRad ) { return fRad * kRadToDeg; }
+static const float	kEpsilon  = 0.00001f;
+static const float	kPi		  = 3.14159265358979323846f;
+static const float	k2Pi	  = kPi * 2.0f;
+static const float	kPiDiv2	  = kPi / 2.0f;
+static const float	kInvPi	  = 1.0f / kPi;
+static const float	kDegToRad = ( kPi / 180.0f );
+static const float	kRadToDeg = ( 180.0f / kPi );
+static inline float DegToRad( float fDeg )
+{
+	return fDeg * kDegToRad;
+}
+static inline float RadToDeg( float fRad )
+{
+	return fRad * kRadToDeg;
+}
 
-template< typename T >
+template<typename T>
 static inline void Swap( T& a, T& b )
 {
 	T t = b;
-	b   = a;
-	a   = t;
+	b	= a;
+	a	= t;
 }
 
 static inline double InvSqrt( const double x )
@@ -60,21 +66,17 @@ struct float2
 			float x;
 			float y;
 		};
-		float f[ 2 ];
+		float f[2];
 	};
 
 	/***************************************\
-    |   Constructors                        |
-    \***************************************/
+	|   Constructors                        |
+	\***************************************/
 	float2() { }
-	explicit float2( float f ) :
-		x( f ), y( f ) { }
-	explicit float2( float _x, float _y ) :
-		x( _x ), y( _y ) { }
-	explicit float2( float* f ) :
-		x( f[ 0 ] ), y( f[ 1 ] ) { }
-	float2( const float2& v ) :
-		x( v.x ), y( v.y ) { }
+	explicit float2( float f ) : x( f ), y( f ) { }
+	explicit float2( float _x, float _y ) : x( _x ), y( _y ) { }
+	explicit float2( float* f ) : x( f[0] ), y( f[1] ) { }
+	float2( const float2& v ) : x( v.x ), y( v.y ) { }
 	const float2& operator=( const float2& v )
 	{
 		x = v.x;
@@ -83,22 +85,16 @@ struct float2
 	}
 
 	/***************************************\
-    |   Basic math operations               |
-    \***************************************/
-	float2 operator+( const float2& r ) const
-	{
-		return float2( x + r.x, y + r.y );
-	}
+	|   Basic math operations               |
+	\***************************************/
+	float2		  operator+( const float2& r ) const { return float2( x + r.x, y + r.y ); }
 	const float2& operator+=( const float2& r )
 	{
 		x += r.x;
 		y += r.y;
 		return *this;
 	}
-	float2 operator-( const float2& r ) const
-	{
-		return float2( x - r.x, y - r.y );
-	}
+	float2		  operator-( const float2& r ) const { return float2( x - r.x, y - r.y ); }
 	const float2& operator-=( const float2& r )
 	{
 		x -= r.x;
@@ -106,42 +102,30 @@ struct float2
 		return *this;
 	}
 	/***************************************\
-    |   Basic math operations with scalars  |
-    \***************************************/
-	float2 operator+( float f ) const
-	{
-		return float2( x + f, y + f );
-	}
+	|   Basic math operations with scalars  |
+	\***************************************/
+	float2		  operator+( float f ) const { return float2( x + f, y + f ); }
 	const float2& operator+=( float f )
 	{
 		x += f;
 		y += f;
 		return *this;
 	}
-	float2 operator-( float f ) const
-	{
-		return float2( x - f, y - f );
-	}
+	float2		  operator-( float f ) const { return float2( x - f, y - f ); }
 	const float2& operator-=( float f )
 	{
 		x -= f;
 		y -= f;
 		return *this;
 	}
-	float2 operator*( float f ) const
-	{
-		return float2( x * f, y * f );
-	}
+	float2		  operator*( float f ) const { return float2( x * f, y * f ); }
 	const float2& operator*=( float f )
 	{
 		x *= f;
 		y *= f;
 		return *this;
 	}
-	float2 operator/( float f ) const
-	{
-		return float2( x / f, y / f );
-	}
+	float2		  operator/( float f ) const { return float2( x / f, y / f ); }
 	const float2& operator/=( float f )
 	{
 		x /= f;
@@ -150,37 +134,19 @@ struct float2
 	}
 
 	/***************************************\
-    |   Other math                          |
-    \***************************************/
+	|   Other math                          |
+	\***************************************/
 	// Equality
-	bool operator==( const float2& r ) const
-	{
-		return ( x == r.x && y == r.y );
-	}
-	bool operator!=( const float2& r ) const
-	{
-		return !( *this == r );
-	}
+	bool  operator==( const float2& r ) const { return ( x == r.x && y == r.y ); }
+	bool  operator!=( const float2& r ) const { return !( *this == r ); }
 
 	// Hadd
-	float hadd( void ) const
-	{
-		return x + y;
-	}
+	float hadd( void ) const { return x + y; }
 
 	// Length
-	float lengthSq( void ) const
-	{
-		return x * x + y * y;
-	}
-	float length( void ) const
-	{
-		return sqrtf( lengthSq() );
-	}
-	void normalize( void )
-	{
-		*this /= length();
-	}
+	float lengthSq( void ) const { return x * x + y * y; }
+	float length( void ) const { return sqrtf( lengthSq() ); }
+	void  normalize( void ) { *this /= length(); }
 };
 
 inline float dot2( const float2& l, const float2& r )
@@ -207,7 +173,7 @@ struct float3
 			float y;
 			float z;
 		};
-		float f[ 3 ];
+		float f[3];
 	};
 
 	static const float3 Left;
@@ -219,17 +185,13 @@ struct float3
 	static const float3 ZeroF;
 
 	/***************************************\
-    |   Constructors                        |
-    \***************************************/
+	|   Constructors                        |
+	\***************************************/
 	float3() { }
-	explicit float3( float f ) :
-		x( f ), y( f ), z( f ) { }
-	explicit float3( float _x, float _y, float _z ) :
-		x( _x ), y( _y ), z( _z ) { }
-	explicit float3( float* f ) :
-		x( f[ 0 ] ), y( f[ 1 ] ), z( f[ 2 ] ) { }
-	float3( const float3& v ) :
-		x( v.x ), y( v.y ), z( v.z ) { }
+	explicit float3( float f ) : x( f ), y( f ), z( f ) { }
+	explicit float3( float _x, float _y, float _z ) : x( _x ), y( _y ), z( _z ) { }
+	explicit float3( float* f ) : x( f[0] ), y( f[1] ), z( f[2] ) { }
+	float3( const float3& v ) : x( v.x ), y( v.y ), z( v.z ) { }
 	float3( const float4& v );
 	const float3& operator=( const float3& v )
 	{
@@ -240,12 +202,9 @@ struct float3
 	}
 
 	/***************************************\
-    |   Basic math operations               |
-    \***************************************/
-	float3 operator+( const float3& r ) const
-	{
-		return float3( x + r.x, y + r.y, z + r.z );
-	}
+	|   Basic math operations               |
+	\***************************************/
+	float3		  operator+( const float3& r ) const { return float3( x + r.x, y + r.y, z + r.z ); }
 	const float3& operator+=( const float3& r )
 	{
 		x += r.x;
@@ -253,34 +212,16 @@ struct float3
 		z += r.z;
 		return *this;
 	}
-	float3 operator-( const float3& r ) const
-	{
-		return float3( x - r.x, y - r.y, z - r.z );
-	}
-	float operator[]( const int index ) const
-	{
-		return ( &x )[ index ];
-	}
+	float3		  operator-( const float3& r ) const { return float3( x - r.x, y - r.y, z - r.z ); }
+	float		  operator[]( const int index ) const { return ( &x )[index]; }
 
-	float operator*( const float3& a ) const
-	{
-		return x * a.x + y * a.y + z * a.z;
-	}
+	float		  operator*( const float3& a ) const { return x * a.x + y * a.y + z * a.z; }
 
-	float Dot( const float3& a ) const
-	{
-		return x * a.x + y * a.y + z * a.z;
-	}
+	float		  Dot( const float3& a ) const { return x * a.x + y * a.y + z * a.z; }
 
-	static float Dot( const float3& a, const float3& b )
-	{
-		return a.x * b.x + a.y * b.y + a.z * b.z;
-	}
+	static float  Dot( const float3& a, const float3& b ) { return a.x * b.x + a.y * b.y + a.z * b.z; }
 
-	float& operator[]( const int index )
-	{
-		return ( &x )[ index ];
-	}
+	float&		  operator[]( const int index ) { return ( &x )[index]; }
 	const float3& operator-=( const float3& r )
 	{
 		x -= r.x;
@@ -301,20 +242,11 @@ struct float3
 		return invLength * sqrLength;
 	}
 
-	float3 operator*( float3& r )
-	{
-		return float3( x * r.x, y * r.y, z * r.z );
-	}
+	float3		  operator*( float3& r ) { return float3( x * r.x, y * r.y, z * r.z ); }
 
-	float3 operator*( const float a ) const
-	{
-		return float3( x * a, y * a, z * a );
-	}
+	float3		  operator*( const float a ) const { return float3( x * a, y * a, z * a ); }
 
-	friend float3 operator*( const float a, const float3 b )
-	{
-		return float3( b.x * a, b.y * a, b.z * a );
-	}
+	friend float3 operator*( const float a, const float3 b ) { return float3( b.x * a, b.y * a, b.z * a ); }
 
 	const float3& operator*=( const float3& r )
 	{
@@ -330,34 +262,19 @@ struct float3
 		z *= r.z;
 		return *this;
 	}
-	bool Compare( const float3& a ) const
-	{
-		return ( ( x == a.x ) && ( y == a.y ) && ( z == a.z ) );
-	}
+	bool Compare( const float3& a ) const { return ( ( x == a.x ) && ( y == a.y ) && ( z == a.z ) ); }
 
 	bool Compare( const float3& a, const float epsilon ) const
 	{
-		if( fabs( x - a.x ) > epsilon )
-		{
-			return false;
-		}
+		if( fabs( x - a.x ) > epsilon ) { return false; }
 
-		if( fabs( y - a.y ) > epsilon )
-		{
-			return false;
-		}
+		if( fabs( y - a.y ) > epsilon ) { return false; }
 
-		if( fabs( z - a.z ) > epsilon )
-		{
-			return false;
-		}
+		if( fabs( z - a.z ) > epsilon ) { return false; }
 
 		return true;
 	}
-	float3 operator/( const float3& r ) const
-	{
-		return float3( x / r.x, y / r.y, z / r.z );
-	}
+	float3		  operator/( const float3& r ) const { return float3( x / r.x, y / r.y, z / r.z ); }
 	const float3& operator/=( const float3& r )
 	{
 		x /= r.x;
@@ -367,12 +284,9 @@ struct float3
 	}
 
 	/***************************************\
-    |   Basic math operations with scalars  |
-    \***************************************/
-	float3 operator+( float f ) const
-	{
-		return float3( x + f, y + f, z + f );
-	}
+	|   Basic math operations with scalars  |
+	\***************************************/
+	float3		  operator+( float f ) const { return float3( x + f, y + f, z + f ); }
 	const float3& operator+=( float f )
 	{
 		x += f;
@@ -380,10 +294,7 @@ struct float3
 		z += f;
 		return *this;
 	}
-	float3 operator-( float f ) const
-	{
-		return float3( x - f, y - f, z - f );
-	}
+	float3		  operator-( float f ) const { return float3( x - f, y - f, z - f ); }
 	const float3& operator-=( float f )
 	{
 		x -= f;
@@ -399,10 +310,7 @@ struct float3
 		z *= f;
 		return *this;
 	}
-	float3 operator/( float f ) const
-	{
-		return float3( x / f, y / f, z / f );
-	}
+	float3		  operator/( float f ) const { return float3( x / f, y / f, z / f ); }
 	const float3& operator/=( float f )
 	{
 		x /= f;
@@ -419,40 +327,22 @@ struct float3
 	}
 
 	/***************************************\
-    |   Other math                          |
-    \***************************************/
+	|   Other math                          |
+	\***************************************/
 	// Equality
-	bool operator==( const float3& r ) const
-	{
-		return x == r.x && y == r.y && z == r.z;
-	}
-	bool operator!=( const float3& r ) const
-	{
-		return !( *this == r );
-	}
+	bool   operator==( const float3& r ) const { return x == r.x && y == r.y && z == r.z; }
+	bool   operator!=( const float3& r ) const { return !( *this == r ); }
 
 	// Hadd
-	float hadd( void ) const
-	{
-		return x + y + z;
-	}
+	float  hadd( void ) const { return x + y + z; }
 
 	// Length
-	float lengthSq( void ) const
-	{
-		return x * x + y * y + z * z;
-	}
-	float length( void ) const
-	{
-		return sqrtf( lengthSq() );
-	}
+	float  lengthSq( void ) const { return x * x + y * y + z * z; }
+	float  length( void ) const { return sqrtf( lengthSq() ); }
 
-	float3 normalize( void )
-	{
-		return ( *this /= length() );
-	}
+	float3 normalize( void ) { return ( *this /= length() ); }
 
-	float NormalizeSelf()
+	float  NormalizeSelf()
 	{
 		float sqrLength, invLength;
 
@@ -463,10 +353,7 @@ struct float3
 		z *= invLength;
 		return invLength * sqrLength;
 	}
-	float3 Cross( const float3& a ) const
-	{
-		return float3( y * a.z - z * a.y, z * a.x - x * a.z, x * a.y - y * a.x );
-	}
+	float3	Cross( const float3& a ) const { return float3( y * a.z - z * a.y, z * a.x - x * a.z, x * a.y - y * a.x ); }
 
 	float3& Cross( const float3& a, const float3& b )
 	{
@@ -484,9 +371,7 @@ inline float dot3( const float3& l, const float3& r )
 }
 inline float3 cross3( const float3& l, const float3& r )
 {
-	return float3( l.y * r.z - l.z * r.y,
-		l.z * r.x - l.x * r.z,
-		l.x * r.y - l.y * r.x );
+	return float3( l.y * r.z - l.z * r.y, l.z * r.x - l.x * r.z, l.x * r.y - l.y * r.x );
 }
 inline float3 normalize( const float3& v )
 {
@@ -517,23 +402,18 @@ __declspec( align( 16 ) ) struct float4
 			float z;
 			float w;
 		};
-		float f[ 4 ];
+		float f[4];
 	};
 
 	/***************************************\
-    |   Constructors                        |
-    \***************************************/
+	|   Constructors                        |
+	\***************************************/
 	float4() { }
-	explicit float4( float f ) :
-		x( f ), y( f ), z( f ), w( f ) { }
-	explicit float4( float _x, float _y, float _z, float _w ) :
-		x( _x ), y( _y ), z( _z ), w( _w ) { }
-	explicit float4( float* f ) :
-		x( f[ 0 ] ), y( f[ 1 ] ), z( f[ 2 ] ), w( f[ 3 ] ) { }
-	float4( const float4& v ) :
-		x( v.x ), y( v.y ), z( v.z ), w( v.w ) { }
-	float4( const float3& v, float _w ) :
-		x( v.x ), y( v.y ), z( v.z ), w( _w ) { }
+	explicit float4( float f ) : x( f ), y( f ), z( f ), w( f ) { }
+	explicit float4( float _x, float _y, float _z, float _w ) : x( _x ), y( _y ), z( _z ), w( _w ) { }
+	explicit float4( float* f ) : x( f[0] ), y( f[1] ), z( f[2] ), w( f[3] ) { }
+	float4( const float4& v ) : x( v.x ), y( v.y ), z( v.z ), w( v.w ) { }
+	float4( const float3& v, float _w ) : x( v.x ), y( v.y ), z( v.z ), w( _w ) { }
 	const float4& operator=( const float4& v )
 	{
 		x = v.x;
@@ -544,12 +424,9 @@ __declspec( align( 16 ) ) struct float4
 	}
 
 	/***************************************\
-    |   Basic math operations               |
-    \***************************************/
-	float4 operator+( const float4& r ) const
-	{
-		return float4( x + r.x, y + r.y, z + r.z, w + r.w );
-	}
+	|   Basic math operations               |
+	\***************************************/
+	float4		  operator+( const float4& r ) const { return float4( x + r.x, y + r.y, z + r.z, w + r.w ); }
 	const float4& operator+=( const float4& r )
 	{
 		x += r.x;
@@ -558,10 +435,7 @@ __declspec( align( 16 ) ) struct float4
 		w += r.w;
 		return *this;
 	}
-	float4 operator-( const float4& r ) const
-	{
-		return float4( x - r.x, y - r.y, z - r.z, w - r.w );
-	}
+	float4		  operator-( const float4& r ) const { return float4( x - r.x, y - r.y, z - r.z, w - r.w ); }
 	const float4& operator-=( const float4& r )
 	{
 		x -= r.x;
@@ -570,10 +444,7 @@ __declspec( align( 16 ) ) struct float4
 		w -= r.w;
 		return *this;
 	}
-	float4 operator*( const float4& r ) const
-	{
-		return float4( x * r.x, y * r.y, z * r.z, w * r.w );
-	}
+	float4		  operator*( const float4& r ) const { return float4( x * r.x, y * r.y, z * r.z, w * r.w ); }
 	const float4& operator*=( const float4& r )
 	{
 		x *= r.x;
@@ -582,10 +453,7 @@ __declspec( align( 16 ) ) struct float4
 		w *= r.w;
 		return *this;
 	}
-	float4 operator/( const float4& r ) const
-	{
-		return float4( x / r.x, y / r.y, z / r.z, w / r.w );
-	}
+	float4		  operator/( const float4& r ) const { return float4( x / r.x, y / r.y, z / r.z, w / r.w ); }
 	const float4& operator/=( const float4& r )
 	{
 		x /= r.x;
@@ -596,12 +464,9 @@ __declspec( align( 16 ) ) struct float4
 	}
 
 	/***************************************\
-    |   Basic math operations with scalars  |
-    \***************************************/
-	float4 operator+( float f ) const
-	{
-		return float4( x + f, y + f, z + f, w + f );
-	}
+	|   Basic math operations with scalars  |
+	\***************************************/
+	float4		  operator+( float f ) const { return float4( x + f, y + f, z + f, w + f ); }
 	const float4& operator+=( float f )
 	{
 		x += f;
@@ -609,10 +474,7 @@ __declspec( align( 16 ) ) struct float4
 		z += f;
 		return *this;
 	}
-	float4 operator-( float f ) const
-	{
-		return float4( x - f, y - f, z - f, w - f );
-	}
+	float4		  operator-( float f ) const { return float4( x - f, y - f, z - f, w - f ); }
 	const float4& operator-=( float f )
 	{
 		x -= f;
@@ -621,10 +483,7 @@ __declspec( align( 16 ) ) struct float4
 		w -= f;
 		return *this;
 	}
-	float4 operator*( float f ) const
-	{
-		return float4( x * f, y * f, z * f, w * f );
-	}
+	float4		  operator*( float f ) const { return float4( x * f, y * f, z * f, w * f ); }
 	const float4& operator*=( float f )
 	{
 		x *= f;
@@ -633,10 +492,7 @@ __declspec( align( 16 ) ) struct float4
 		w *= f;
 		return *this;
 	}
-	float4 operator/( float f ) const
-	{
-		return float4( x / f, y / f, z / f, w / f );
-	}
+	float4		  operator/( float f ) const { return float4( x / f, y / f, z / f, w / f ); }
 	const float4& operator/=( float f )
 	{
 		x /= f;
@@ -647,37 +503,19 @@ __declspec( align( 16 ) ) struct float4
 	}
 
 	/***************************************\
-    |   Other math                          |
-    \***************************************/
+	|   Other math                          |
+	\***************************************/
 	// Equality
-	bool operator==( const float4& r ) const
-	{
-		return x == r.x && y == r.y && z == r.z && w == r.w;
-	}
-	bool operator!=( const float4& r ) const
-	{
-		return !( *this == r );
-	}
+	bool  operator==( const float4& r ) const { return x == r.x && y == r.y && z == r.z && w == r.w; }
+	bool  operator!=( const float4& r ) const { return !( *this == r ); }
 
 	// Hadd
-	float hadd( void ) const
-	{
-		return x + y + z + w;
-	}
+	float hadd( void ) const { return x + y + z + w; }
 
 	// Length
-	float lengthSq( void ) const
-	{
-		return x * x + y * y + z * z + w * w;
-	}
-	float length( void ) const
-	{
-		return sqrtf( lengthSq() );
-	}
-	void normalize( void )
-	{
-		*this /= length();
-	}
+	float lengthSq( void ) const { return x * x + y * y + z * z + w * w; }
+	float length( void ) const { return sqrtf( lengthSq() ); }
+	void  normalize( void ) { *this /= length(); }
 };
 
 inline float dot4( const float4& l, const float4& r )
@@ -690,8 +528,9 @@ inline float4 normalize( const float4& v )
 	return v / length;
 }
 
-inline float3::float3( const float4& v ) :
-	x( v.x ), y( v.y ), z( v.z ) { }
+inline float3::float3( const float4& v ) : x( v.x ), y( v.y ), z( v.z )
+{
+}
 
 /**************************************\
 float3x3
@@ -707,19 +546,13 @@ struct float3x3
 	};
 
 	/***************************************\
-    |   Constructors                        |
-    \***************************************/
+	|   Constructors                        |
+	\***************************************/
 	float3x3() { }
-	explicit float3x3( float f ) :
-		r0( f ), r1( f ), r2( f ) { }
-	explicit float3x3( float* f ) :
-		r0( f + 0 ), r1( f + 3 ), r2( f + 6 ) { }
-	float3x3( const float3& _r0, const float3& _r1, const float3& _r2 ) :
-		r0( _r0 ), r1( _r1 ), r2( _r2 ) { }
-	float3x3( float _m00, float _m01, float _m02, float _m10, float _m11, float _m12, float _m20, float _m21, float _m22 ) :
-		r0( _m00, _m01, _m02 ), r1( _m10, _m11, _m12 ), r2( _m20, _m21, _m22 )
-	{
-	}
+	explicit float3x3( float f ) : r0( f ), r1( f ), r2( f ) { }
+	explicit float3x3( float* f ) : r0( f + 0 ), r1( f + 3 ), r2( f + 6 ) { }
+	float3x3( const float3& _r0, const float3& _r1, const float3& _r2 ) : r0( _r0 ), r1( _r1 ), r2( _r2 ) { }
+	float3x3( float _m00, float _m01, float _m02, float _m10, float _m11, float _m12, float _m20, float _m21, float _m22 ) : r0( _m00, _m01, _m02 ), r1( _m10, _m11, _m12 ), r2( _m20, _m21, _m22 ) { }
 	float3x3( const float4x4& m );
 	const float3x3& operator=( const float3x3& m )
 	{
@@ -730,19 +563,19 @@ struct float3x3
 	}
 
 	/***************************************\
-    |   Basic math operations               |
-    \***************************************/
+	|   Basic math operations               |
+	\***************************************/
 
-#define MTX3_INDEX( f, r, c ) ( ( f )[ ( r * 3 ) + c ] )
+#define MTX3_INDEX( f, r, c ) ( ( f )[( r * 3 ) + c] )
 	inline float3x3 operator*( const float3x3& r ) const
 	{
-		float3x3 m( 1, 0, 0, 0, 1, 0, 0, 0, 1 );
+		float3x3	 m( 1, 0, 0, 0, 1, 0, 0, 0, 1 );
 
-		const float* left   = ( const float* )&this->r0;
-		const float* right  = ( const float* )&r.r0;
-		float*       result = ( float* )&m;
+		const float* left	= ( const float* )&this->r0;
+		const float* right	= ( const float* )&r.r0;
+		float*		 result = ( float* )&m;
 
-		int ii, jj, kk;
+		int			 ii, jj, kk;
 		for( ii = 0; ii < 3; ++ii ) /* row */
 		{
 			for( jj = 0; jj < 3; ++jj ) /* column */
@@ -771,23 +604,20 @@ struct float3x3
 	}
 
 	/***************************************\
-    |   Basic math operations with scalars  |
-    \***************************************/
-	float3x3 operator+( float f ) const
-	{
-		return float3x3( r0 + f, r1 + f, r2 + f );
-	}
+	|   Basic math operations with scalars  |
+	\***************************************/
+	float3x3	  operator+( float f ) const { return float3x3( r0 + f, r1 + f, r2 + f ); }
 
 	float3 const& operator[]( int index ) const
 	{
-		//assert( ( index >= 0 ) && ( index < 3 ) );
-		return ( &r0 )[ index ];
+		// assert( ( index >= 0 ) && ( index < 3 ) );
+		return ( &r0 )[index];
 	}
 
 	float3& operator[]( int index )
 	{
-		//assert( ( index >= 0 ) && ( index < 3 ) );
-		return ( &r0 )[ index ];
+		// assert( ( index >= 0 ) && ( index < 3 ) );
+		return ( &r0 )[index];
 	}
 
 	const float3x3& operator+=( float f )
@@ -798,72 +628,53 @@ struct float3x3
 		return *this;
 	}
 
-	friend float3 operator*( const float3& vec, const float3x3& mat )
-	{
-		return mat * vec;
-	}
+	friend float3	operator*( const float3& vec, const float3x3& mat ) { return mat * vec; }
 
-	friend float3x3 operator*( const float a, const float3x3& mat )
-	{
-		return mat * a;
-	}
+	friend float3x3 operator*( const float a, const float3x3& mat ) { return mat * a; }
 
-	friend float3& operator*=( float3& vec, const float3x3& mat )
+	friend float3&	operator*=( float3& vec, const float3x3& mat )
 	{
-		float x = mat[ 0 ].x * vec.x + mat[ 1 ].x * vec.y + mat[ 2 ].x * vec.z;
-		float y = mat[ 0 ].y * vec.x + mat[ 1 ].y * vec.y + mat[ 2 ].y * vec.z;
-		vec.z   = mat[ 0 ].z * vec.x + mat[ 1 ].z * vec.y + mat[ 2 ].z * vec.z;
-		vec.x   = x;
-		vec.y   = y;
+		float x = mat[0].x * vec.x + mat[1].x * vec.y + mat[2].x * vec.z;
+		float y = mat[0].y * vec.x + mat[1].y * vec.y + mat[2].y * vec.z;
+		vec.z	= mat[0].z * vec.x + mat[1].z * vec.y + mat[2].z * vec.z;
+		vec.x	= x;
+		vec.y	= y;
 		return vec;
 	}
 
 	float3x3& operator*=( const float3x3& a )
 	{
-		int          i, j;
+		int			 i, j;
 		const float* m2Ptr;
-		float *      m1Ptr, dst[ 3 ];
+		float *		 m1Ptr, dst[3];
 
-		m1Ptr = reinterpret_cast< float* >( this );
-		m2Ptr = reinterpret_cast< const float* >( &a );
+		m1Ptr = reinterpret_cast<float*>( this );
+		m2Ptr = reinterpret_cast<const float*>( &a );
 
 		for( i = 0; i < 3; i++ )
 		{
 			for( j = 0; j < 3; j++ )
 			{
-				dst[ j ] = m1Ptr[ 0 ] * m2Ptr[ 0 * 3 + j ] + m1Ptr[ 1 ] * m2Ptr[ 1 * 3 + j ] + m1Ptr[ 2 ] * m2Ptr[ 2 * 3 + j ];
+				dst[j] = m1Ptr[0] * m2Ptr[0 * 3 + j] + m1Ptr[1] * m2Ptr[1 * 3 + j] + m1Ptr[2] * m2Ptr[2 * 3 + j];
 			}
-			m1Ptr[ 0 ] = dst[ 0 ];
-			m1Ptr[ 1 ] = dst[ 1 ];
-			m1Ptr[ 2 ] = dst[ 2 ];
+			m1Ptr[0] = dst[0];
+			m1Ptr[1] = dst[1];
+			m1Ptr[2] = dst[2];
 			m1Ptr += 3;
 		}
 		return *this;
 	}
 
-	float3x3 operator-( float f ) const
+	float3x3 operator-( float f ) const { return float3x3( r0 - f, r1 - f, r2 - f ); }
+	bool	 Compare( const float3x3& a ) const
 	{
-		return float3x3( r0 - f, r1 - f, r2 - f );
-	}
-	bool Compare( const float3x3& a ) const
-	{
-		if( r0.Compare( a[ 0 ] ) &&
-			r1.Compare( a[ 1 ] ) &&
-			r2.Compare( a[ 2 ] ) )
-		{
-			return true;
-		}
+		if( r0.Compare( a[0] ) && r1.Compare( a[1] ) && r2.Compare( a[2] ) ) { return true; }
 		return false;
 	}
 
 	bool Compare( const float3x3& a, const float epsilon ) const
 	{
-		if( r0.Compare( a[ 0 ], epsilon ) &&
-			r1.Compare( a[ 1 ], epsilon ) &&
-			r2.Compare( a[ 2 ], epsilon ) )
-		{
-			return true;
-		}
+		if( r0.Compare( a[0], epsilon ) && r1.Compare( a[1], epsilon ) && r2.Compare( a[2], epsilon ) ) { return true; }
 		return false;
 	}
 
@@ -874,10 +685,7 @@ struct float3x3
 		r2 -= f;
 		return *this;
 	}
-	float3x3 operator*( float f ) const
-	{
-		return float3x3( r0 * f, r1 * f, r2 * f );
-	}
+	float3x3		operator*( float f ) const { return float3x3( r0 * f, r1 * f, r2 * f ); }
 	const float3x3& operator*=( float f )
 	{
 		r0 *= f;
@@ -885,10 +693,7 @@ struct float3x3
 		r2 *= f;
 		return *this;
 	}
-	float3x3 operator/( float f ) const
-	{
-		return float3x3( r0 / f, r1 / f, r2 / f );
-	}
+	float3x3		operator/( float f ) const { return float3x3( r0 / f, r1 / f, r2 / f ); }
 	const float3x3& operator/=( float f )
 	{
 		r0 /= f;
@@ -898,17 +703,11 @@ struct float3x3
 	}
 
 	/***************************************\
-    |   Other math                          |
-    \***************************************/
+	|   Other math                          |
+	\***************************************/
 	// Equality
-	bool operator==( const float3x3& r ) const
-	{
-		return r0 == r.r0 && r1 == r.r1 && r2 == r.r2;
-	}
-	bool operator!=( const float3x3& r ) const
-	{
-		return !( *this == r );
-	}
+	bool  operator==( const float3x3& r ) const { return r0 == r.r0 && r1 == r.r1 && r2 == r.r2; }
+	bool  operator!=( const float3x3& r ) const { return !( *this == r ); }
 
 	float determinant() const
 	{
@@ -928,7 +727,7 @@ struct float3x3
 
 	void invert( void )
 	{
-		float    det = determinant();
+		float	 det = determinant();
 		float3x3 inv;
 
 		inv.r0.x = ( r1.y * r2.z ) - ( r1.z * r2.y );
@@ -974,36 +773,36 @@ inline float3x3 inverse( const float3x3& m )
 
 inline float3x3 float3x3RotationX( float rad )
 {
-	float    c = cosf( rad );
-	float    s = sinf( rad );
+	float	 c = cosf( rad );
+	float	 s = sinf( rad );
 	float3x3 m( 1.0f, 0.0f, 0.0f, 0.0f, c, s, 0.0f, -s, c );
 	return m;
 }
 inline float3x3 float3x3RotationY( float rad )
 {
-	float    c = cosf( rad );
-	float    s = sinf( rad );
+	float	 c = cosf( rad );
+	float	 s = sinf( rad );
 	float3x3 m( c, 0.0f, -s, 0.0f, 1.0f, 0.0f, s, 0.0f, c );
 	return m;
 }
 inline float3x3 float3x3RotationZ( float rad )
 {
-	float    c = cosf( rad );
-	float    s = sinf( rad );
+	float	 c = cosf( rad );
+	float	 s = sinf( rad );
 	float3x3 m( c, s, 0.0f, -s, c, 0.0f, 0.0f, 0.0f, 1.0f );
 	return m;
 }
 
 inline float3x3 float3x3RotationAxis( const float3& axis, float rad )
 {
-	float3 normAxis = normalize( axis );
-	float  c        = cosf( rad );
-	float  s        = sinf( rad );
-	float  t        = 1 - c;
+	float3	 normAxis = normalize( axis );
+	float	 c		  = cosf( rad );
+	float	 s		  = sinf( rad );
+	float	 t		  = 1 - c;
 
-	float x = normAxis.x;
-	float y = normAxis.y;
-	float z = normAxis.z;
+	float	 x = normAxis.x;
+	float	 y = normAxis.y;
+	float	 z = normAxis.z;
 
 	float3x3 m;
 
@@ -1041,23 +840,31 @@ struct float4x4
 	};
 
 	/***************************************\
-    |   Constructors                        |
-    \***************************************/
+	|   Constructors                        |
+	\***************************************/
 	float4x4() { }
-	explicit float4x4( float f ) :
-		r0( f ), r1( f ), r2( f ), r3( f ) { }
-	explicit float4x4( float* f ) :
-		r0( f + 0 ), r1( f + 4 ), r2( f + 8 ), r3( f + 12 ) { }
-	float4x4( const float4& _r0, const float4& _r1, const float4& _r2, const float4& _r3 ) :
-		r0( _r0 ), r1( _r1 ), r2( _r2 ), r3( _r3 ) { }
-	float4x4( float _m00, float _m01, float _m02, float _m03, float _m10, float _m11, float _m12, float _m13, float _m20, float _m21, float _m22, float _m23, float _m30, float _m31, float _m32, float _m33 ) :
-		r0( _m00, _m01, _m02, _m03 ), r1( _m10, _m11, _m12, _m13 ), r2( _m20, _m21, _m22, _m23 ), r3( _m30, _m31, _m32, _m33 )
+	explicit float4x4( float f ) : r0( f ), r1( f ), r2( f ), r3( f ) { }
+	explicit float4x4( float* f ) : r0( f + 0 ), r1( f + 4 ), r2( f + 8 ), r3( f + 12 ) { }
+	float4x4( const float4& _r0, const float4& _r1, const float4& _r2, const float4& _r3 ) : r0( _r0 ), r1( _r1 ), r2( _r2 ), r3( _r3 ) { }
+	float4x4( float _m00,
+		float		_m01,
+		float		_m02,
+		float		_m03,
+		float		_m10,
+		float		_m11,
+		float		_m12,
+		float		_m13,
+		float		_m20,
+		float		_m21,
+		float		_m22,
+		float		_m23,
+		float		_m30,
+		float		_m31,
+		float		_m32,
+		float		_m33 ) : r0( _m00, _m01, _m02, _m03 ), r1( _m10, _m11, _m12, _m13 ), r2( _m20, _m21, _m22, _m23 ), r3( _m30, _m31, _m32, _m33 )
 	{
 	}
-	float4x4( const float3x3& m ) :
-		r0( m.r0, 0.0f ), r1( m.r1, 0.0f ), r2( m.r2, 0.0f ), r3( 0.0f, 0.0f, 0.0f, 1.0f )
-	{
-	}
+	float4x4( const float3x3& m ) : r0( m.r0, 0.0f ), r1( m.r1, 0.0f ), r2( m.r2, 0.0f ), r3( 0.0f, 0.0f, 0.0f, 1.0f ) { }
 	const float4x4& operator=( const float4x4& m )
 	{
 		r0 = m.r0;
@@ -1068,19 +875,19 @@ struct float4x4
 	}
 
 	/***************************************\
-    |   Basic math operations               |
-    \***************************************/
+	|   Basic math operations               |
+	\***************************************/
 
-#define MTX4_INDEX( f, r, c ) ( ( f )[ ( r * 4 ) + c ] )
+#define MTX4_INDEX( f, r, c ) ( ( f )[( r * 4 ) + c] )
 	inline float4x4 operator*( const float4x4& r ) const
 	{
-		float4x4 m( 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 );
+		float4x4	 m( 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 );
 
-		const float* right  = ( const float* )&this->r0;
-		const float* left   = ( const float* )&r.r0;
-		float*       result = ( float* )&m;
+		const float* right	= ( const float* )&this->r0;
+		const float* left	= ( const float* )&r.r0;
+		float*		 result = ( float* )&m;
 
-		int ii, jj, kk;
+		int			 ii, jj, kk;
 		for( ii = 0; ii < 4; ++ii ) /* row */
 		{
 			for( jj = 0; jj < 4; ++jj ) /* column */
@@ -1110,12 +917,9 @@ struct float4x4
 	}
 
 	/***************************************\
-    |   Basic math operations with scalars  |
-    \***************************************/
-	float4x4 operator+( float f ) const
-	{
-		return float4x4( r0 + f, r1 + f, r2 + f, r3 + f );
-	}
+	|   Basic math operations with scalars  |
+	\***************************************/
+	float4x4		operator+( float f ) const { return float4x4( r0 + f, r1 + f, r2 + f, r3 + f ); }
 	const float4x4& operator+=( float f )
 	{
 		r0 += f;
@@ -1124,10 +928,7 @@ struct float4x4
 		r3 += f;
 		return *this;
 	}
-	float4x4 operator-( float f ) const
-	{
-		return float4x4( r0 - f, r1 - f, r2 - f, r3 - f );
-	}
+	float4x4		operator-( float f ) const { return float4x4( r0 - f, r1 - f, r2 - f, r3 - f ); }
 	const float4x4& operator-=( float f )
 	{
 		r0 -= f;
@@ -1136,10 +937,7 @@ struct float4x4
 		r3 -= f;
 		return *this;
 	}
-	float4x4 operator*( float f ) const
-	{
-		return float4x4( r0 * f, r1 * f, r2 * f, r3 * f );
-	}
+	float4x4		operator*( float f ) const { return float4x4( r0 * f, r1 * f, r2 * f, r3 * f ); }
 	const float4x4& operator*=( float f )
 	{
 		r0 *= f;
@@ -1148,10 +946,7 @@ struct float4x4
 		r3 *= f;
 		return *this;
 	}
-	float4x4 operator/( float f ) const
-	{
-		return float4x4( r0 / f, r1 / f, r2 / f, r3 / f );
-	}
+	float4x4		operator/( float f ) const { return float4x4( r0 / f, r1 / f, r2 / f, r3 / f ); }
 	const float4x4& operator/=( float f )
 	{
 		r0 /= f;
@@ -1162,21 +957,15 @@ struct float4x4
 	}
 
 	/***************************************\
-    |   Other math                          |
-    \***************************************/
+	|   Other math                          |
+	\***************************************/
 	// Equality
-	bool operator==( const float4x4& r ) const
-	{
-		return r0 == r.r0 && r1 == r.r1 && r2 == r.r2 && r3 == r.r3;
-	}
-	bool operator!=( const float4x4& r ) const
-	{
-		return !( *this == r );
-	}
+	bool  operator==( const float4x4& r ) const { return r0 == r.r0 && r1 == r.r1 && r2 == r.r2 && r3 == r.r3; }
+	bool  operator!=( const float4x4& r ) const { return !( *this == r ); }
 
 	float determinant() const
 	{
-		float det = 0.0f;
+		float	 det = 0.0f;
 
 		float3x3 a( r1.y, r1.z, r1.w, r2.y, r2.z, r2.w, r3.y, r3.z, r3.w );
 
@@ -1210,7 +999,7 @@ struct float4x4
 	void invert( void )
 	{
 		float4x4 ret;
-		float    recip;
+		float	 recip;
 
 		/* temp matrices */
 
@@ -1294,24 +1083,12 @@ struct float4x4
 	}
 
 	// Axis access
-	float3 getXAxis( void ) const
-	{
-		return r0;
-	}
-	float3 getYAxis( void ) const
-	{
-		return r1;
-	}
-	float3 getZAxis( void ) const
-	{
-		return r2;
-	}
-	float3 getPosition( void ) const
-	{
-		return float3( r3 );
-	}
+	float3 getXAxis( void ) const { return r0; }
+	float3 getYAxis( void ) const { return r1; }
+	float3 getZAxis( void ) const { return r2; }
+	float3 getPosition( void ) const { return float3( r3 ); }
 
-	void orthonormalize( void )
+	void   orthonormalize( void )
 	{
 		float3 x = getXAxis();
 		float3 y = getYAxis();
@@ -1327,8 +1104,7 @@ struct float4x4
 	}
 };
 
-inline float3x3::float3x3( const float4x4& m ) :
-	r0( m.r0 ), r1( m.r1 ), r2( m.r2 )
+inline float3x3::float3x3( const float4x4& m ) : r0( m.r0 ), r1( m.r1 ), r2( m.r2 )
 {
 }
 inline float determinant( const float4x4& m )
@@ -1355,36 +1131,36 @@ inline float4x4 inverse( const float4x4& m )
 
 inline float4x4 float4x4RotationX( float rad )
 {
-	float    c = cosf( rad );
-	float    s = sinf( rad );
+	float	 c = cosf( rad );
+	float	 s = sinf( rad );
 	float4x4 m( 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, c, s, 0.0f, 0.0f, -s, c, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f );
 	return m;
 }
 inline float4x4 float4x4RotationY( float rad )
 {
-	float    c = cosf( rad );
-	float    s = sinf( rad );
+	float	 c = cosf( rad );
+	float	 s = sinf( rad );
 	float4x4 m( c, 0.0f, -s, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, s, 0.0f, c, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f );
 	return m;
 }
 inline float4x4 float4x4RotationZ( float rad )
 {
-	float    c = cosf( rad );
-	float    s = sinf( rad );
+	float	 c = cosf( rad );
+	float	 s = sinf( rad );
 	float4x4 m( c, s, 0.0f, 0.0f, -s, c, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f );
 	return m;
 }
 
 inline float4x4 float4x4RotationAxis( const float3& axis, float rad )
 {
-	float3 normAxis = normalize( axis );
-	float  c        = cosf( rad );
-	float  s        = sinf( rad );
-	float  t        = 1 - c;
+	float3	 normAxis = normalize( axis );
+	float	 c		  = cosf( rad );
+	float	 s		  = sinf( rad );
+	float	 t		  = 1 - c;
 
-	float x = normAxis.x;
-	float y = normAxis.y;
-	float z = normAxis.z;
+	float	 x = normAxis.x;
+	float	 y = normAxis.y;
+	float	 z = normAxis.z;
 
 	float4x4 m = float4x4Identity();
 
@@ -1411,9 +1187,9 @@ inline float4x4 float4x4Scale( float x, float y, float z )
 inline float4x4 float4x4Translation( float x, float y, float z )
 {
 	float4x4 m = float4x4Identity();
-	m.r3.x     = x;
-	m.r3.y     = y;
-	m.r3.z     = z;
+	m.r3.x	   = x;
+	m.r3.y	   = y;
+	m.r3.z	   = z;
 	return m;
 }
 inline float4x4 float4x4Translation( const float3& v )
@@ -1423,22 +1199,21 @@ inline float4x4 float4x4Translation( const float3& v )
 
 inline float4x4 float4x4PerspectiveFovLH( float fov, float aspect, float nearPlane, float farPlane )
 {
-	float width  = tanf( fov * 0.5f );
-	float height = width / aspect;
-	float diff   = farPlane - nearPlane;
-	float div    = farPlane / diff;
+	float	 width	= tanf( fov * 0.5f );
+	float	 height = width / aspect;
+	float	 diff	= farPlane - nearPlane;
+	float	 div	= farPlane / diff;
 
-	float4x4 m(
-		1.0f / width, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f / height, 0.0f, 0.0f, 0.0f, 0.0f, div, 1.0f, 0.0f, 0.0f, -nearPlane * div, 0.0f );
+	float4x4 m( 1.0f / width, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f / height, 0.0f, 0.0f, 0.0f, 0.0f, div, 1.0f, 0.0f, 0.0f, -nearPlane * div, 0.0f );
 	return m;
 }
 inline float4x4 float4x4PerspectiveFovRH( float fov, float aspect, float nearPlane, float farPlane )
 {
 	float4x4 m = float4x4Identity();
 
-	float f    = tanf( kPiDiv2 - ( fov / 2.0f ) );
-	float diff = nearPlane - farPlane;
-	float div  = farPlane / diff;
+	float	 f	  = tanf( kPiDiv2 - ( fov / 2.0f ) );
+	float	 diff = nearPlane - farPlane;
+	float	 div  = farPlane / diff;
 
 	m.r0.x = f / aspect;
 	m.r1.y = f;
@@ -1476,7 +1251,7 @@ inline float4x4 float4x4OrthographicOffCenterLH( float left, float right, float 
 {
 	float4x4 m = float4x4Identity();
 
-	float diff = farPlane - nearPlane;
+	float	 diff = farPlane - nearPlane;
 
 	m.r0.x = 2.0f / ( right - left );
 	m.r1.y = 2.0f / ( top - bottom );
@@ -1489,8 +1264,8 @@ inline float4x4 float4x4OrthographicOffCenterLH( float left, float right, float 
 }
 inline float4x4 float4x4OrthographicOffCenterRH( float left, float right, float top, float bottom, float nearPlane, float farPlane )
 {
-	float4x4 m    = float4x4Identity();
-	float    diff = nearPlane - farPlane;
+	float4x4 m	  = float4x4Identity();
+	float	 diff = nearPlane - farPlane;
 
 	m.r0.x = 2.0f / ( right - left );
 	m.r1.y = 2.0f / ( top - bottom );
@@ -1503,14 +1278,14 @@ inline float4x4 float4x4OrthographicOffCenterRH( float left, float right, float 
 }
 inline float4x4 float4x4OrthographicLH( float width, float height, float nearPlane, float farPlane )
 {
-	float halfWidth  = width / 2.0f;
+	float halfWidth	 = width / 2.0f;
 	float halfHeight = height / 2.0f;
 
 	return float4x4OrthographicOffCenterLH( -halfWidth, halfWidth, halfHeight, -halfHeight, nearPlane, farPlane );
 }
 inline float4x4 float4x4OrthographicRH( float width, float height, float nearPlane, float farPlane )
 {
-	float halfWidth  = width / 2.0f;
+	float halfWidth	 = width / 2.0f;
 	float halfHeight = height / 2.0f;
 
 	return float4x4OrthographicOffCenterRH( -halfWidth, halfWidth, halfHeight, -halfHeight, nearPlane, farPlane );
@@ -1522,26 +1297,22 @@ Quaternion
 struct quaternion : public float4
 {
 	/***************************************\
-    |   Constructors                        |
-    \***************************************/
+	|   Constructors                        |
+	\***************************************/
 	quaternion() { }
-	explicit quaternion( float f ) :
-		float4( f ) { }
-	explicit quaternion( float _x, float _y, float _z, float _w ) :
-		float4( _x, _y, _z, _w ) { }
-	explicit quaternion( float* f ) :
-		float4( f ) { }
-	quaternion( const quaternion& v ) :
-		float4( v ) { }
+	explicit quaternion( float f ) : float4( f ) { }
+	explicit quaternion( float _x, float _y, float _z, float _w ) : float4( _x, _y, _z, _w ) { }
+	explicit quaternion( float* f ) : float4( f ) { }
+	quaternion( const quaternion& v ) : float4( v ) { }
 	quaternion( const float3& v, float _w )
 	{
 		float3 norm = ::normalize( v );
-		float  a    = _w * 0.5f;
-		float  s    = sinf( a );
-		x           = norm.x * s;
-		y           = norm.y * s;
-		z           = norm.z * s;
-		w           = cosf( a );
+		float  a	= _w * 0.5f;
+		float  s	= sinf( a );
+		x			= norm.x * s;
+		y			= norm.y * s;
+		z			= norm.z * s;
+		w			= cosf( a );
 	}
 	const quaternion& operator=( const quaternion& v )
 	{
@@ -1555,23 +1326,17 @@ struct quaternion : public float4
 	/* Methods */
 	float3 getXAxis( void ) const
 	{
-		float3 ret( 1 - 2 * ( y * y + z * z ),
-			2 * ( x * y + w * z ),
-			2 * ( x * z - y * w ) );
+		float3 ret( 1 - 2 * ( y * y + z * z ), 2 * ( x * y + w * z ), 2 * ( x * z - y * w ) );
 		return ret;
 	}
 	float3 getYAxis( void ) const
 	{
-		float3 ret( 2 * ( x * y - z * w ),
-			1 - 2 * ( x * x + z * z ),
-			2 * ( y * z + x * w ) );
+		float3 ret( 2 * ( x * y - z * w ), 1 - 2 * ( x * x + z * z ), 2 * ( y * z + x * w ) );
 		return ret;
 	}
 	float3 getZAxis( void ) const
 	{
-		float3 ret( 2 * ( x * z + y * w ),
-			2 * ( y * z - x * w ),
-			1 - 2 * ( x * x + y * y ) );
+		float3 ret( 2 * ( x * z + y * w ), 2 * ( y * z - x * w ), 1 - 2 * ( x * x + y * y ) );
 		return ret;
 	}
 
@@ -1579,25 +1344,22 @@ struct quaternion : public float4
 	{
 		quaternion q = *this;
 		q.normalize();
-		float xx = q.x * q.x;
-		float yy = q.y * q.y;
-		float zz = q.z * q.z;
+		float	 xx = q.x * q.x;
+		float	 yy = q.y * q.y;
+		float	 zz = q.z * q.z;
 
-		float xy = q.x * q.y;
-		float zw = q.z * q.w;
-		float xz = q.x * q.z;
-		float yw = q.y * q.w;
-		float yz = q.y * q.z;
-		float xw = q.x * q.w;
+		float	 xy = q.x * q.y;
+		float	 zw = q.z * q.w;
+		float	 xz = q.x * q.z;
+		float	 yw = q.y * q.w;
+		float	 yz = q.y * q.z;
+		float	 xw = q.x * q.w;
 
 		float3x3 ret( 1 - 2 * ( yy + zz ), 2 * ( xy + zw ), 2 * ( xz - yw ), 2 * ( xy - zw ), 1 - 2 * ( xx + zz ), 2 * ( yz + xw ), 2 * ( xz + yw ), 2 * ( yz - xw ), 1 - 2 * ( xx + yy ) );
 		return ret;
 	}
 
-	quaternion conjugate( void ) const
-	{
-		return quaternion( -x, -y, -z, w );
-	}
+	quaternion conjugate( void ) const { return quaternion( -x, -y, -z, w ); }
 	quaternion inverse( void ) const
 	{
 		// Note: Only normalized quaternions are supportted at the moment
@@ -1609,10 +1371,8 @@ struct quaternion : public float4
 
 inline quaternion quaternionMultiply( const quaternion& l, const quaternion& r )
 {
-	quaternion q( r.w * l.x + r.x * l.w + r.y * l.z - r.z * l.y,
-		r.w * l.y + r.y * l.w + r.z * l.x - r.x * l.z,
-		r.w * l.z + r.z * l.w + r.x * l.y - r.y * l.x,
-		r.w * l.w - r.x * l.x - r.y * l.y - r.z * l.z );
+	quaternion q(
+		r.w * l.x + r.x * l.w + r.y * l.z - r.z * l.y, r.w * l.y + r.y * l.w + r.z * l.x - r.x * l.z, r.w * l.z + r.z * l.w + r.x * l.y - r.y * l.x, r.w * l.w - r.x * l.x - r.y * l.y - r.z * l.z );
 	return q;
 }
 
@@ -1732,14 +1492,12 @@ __inline float4 fabs( const float4 xyz )
 	return result;
 }
 
-static const float Identity[ 16 ] = {
-	1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0
-};
+static const float Identity[16] = { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 
-__inline void _math_matrix_rotate( float4x4& matrix, float angle, float x, float y, float z )
+__inline void	   _math_matrix_rotate( float4x4& matrix, float angle, float x, float y, float z )
 {
 	float xx, yy, zz, xy, yz, zx, xs, ys, zs, one_c, s, c;
-	float m[ 16 ];
+	float m[16];
 	bool  optimized;
 #define M_PI 3.14159265358979323846
 	s = sinf( angle * M_PI / 180.0 );
@@ -1748,7 +1506,7 @@ __inline void _math_matrix_rotate( float4x4& matrix, float angle, float x, float
 	memcpy( m, Identity, sizeof( Identity ) );
 	optimized = false;
 
-#define M( row, col ) m[ col * 4 + row ]
+#define M( row, col ) m[col * 4 + row]
 
 	if( x == 0.0F )
 	{
@@ -1826,67 +1584,67 @@ __inline void _math_matrix_rotate( float4x4& matrix, float angle, float x, float
 		z /= mag;
 
 		/*
-		*     Arbitrary axis rotation matrix.
-		*
-		*  This is composed of 5 matrices, Rz, Ry, T, Ry', Rz', multiplied
-		*  like so:  Rz * Ry * T * Ry' * Rz'.  T is the final rotation
-		*  (which is about the X-axis), and the two composite transforms
-		*  Ry' * Rz' and Rz * Ry are (respectively) the rotations necessary
-		*  from the arbitrary axis to the X-axis then back.  They are
-		*  all elementary rotations.
-		*
-		*  Rz' is a rotation about the Z-axis, to bring the axis vector
-		*  into the x-z plane.  Then Ry' is applied, rotating about the
-		*  Y-axis to bring the axis vector parallel with the X-axis.  The
-		*  rotation about the X-axis is then performed.  Ry and Rz are
-		*  simply the respective inverse transforms to bring the arbitrary
-		*  axis back to its original orientation.  The first transforms
-		*  Rz' and Ry' are considered inverses, since the data from the
-		*  arbitrary axis gives you info on how to get to it, not how
-		*  to get away from it, and an inverse must be applied.
-		*
-		*  The basic calculation used is to recognize that the arbitrary
-		*  axis vector (x, y, z), since it is of unit length, actually
-		*  represents the sines and cosines of the angles to rotate the
-		*  X-axis to the same orientation, with theta being the angle about
-		*  Z and phi the angle about Y (in the order described above)
-		*  as follows:
-		*
-		*  cos ( theta ) = x / sqrt ( 1 - z^2 )
-		*  sin ( theta ) = y / sqrt ( 1 - z^2 )
-		*
-		*  cos ( phi ) = sqrt ( 1 - z^2 )
-		*  sin ( phi ) = z
-		*
-		*  Note that cos ( phi ) can further be inserted to the above
-		*  formulas:
-		*
-		*  cos ( theta ) = x / cos ( phi )
-		*  sin ( theta ) = y / sin ( phi )
-		*
-		*  ...etc.  Because of those relations and the standard trigonometric
-		*  relations, it is pssible to reduce the transforms down to what
-		*  is used below.  It may be that any primary axis chosen will give the
-		*  same results (modulo a sign convention) using thie method.
-		*
-		*  Particularly nice is to notice that all divisions that might
-		*  have caused trouble when parallel to certain planes or
-		*  axis go away with care paid to reducing the expressions.
-		*  After checking, it does perform correctly under all cases, since
-		*  in all the cases of division where the denominator would have
-		*  been zero, the numerator would have been zero as well, giving
-		*  the expected result.
-		*/
+		 *     Arbitrary axis rotation matrix.
+		 *
+		 *  This is composed of 5 matrices, Rz, Ry, T, Ry', Rz', multiplied
+		 *  like so:  Rz * Ry * T * Ry' * Rz'.  T is the final rotation
+		 *  (which is about the X-axis), and the two composite transforms
+		 *  Ry' * Rz' and Rz * Ry are (respectively) the rotations necessary
+		 *  from the arbitrary axis to the X-axis then back.  They are
+		 *  all elementary rotations.
+		 *
+		 *  Rz' is a rotation about the Z-axis, to bring the axis vector
+		 *  into the x-z plane.  Then Ry' is applied, rotating about the
+		 *  Y-axis to bring the axis vector parallel with the X-axis.  The
+		 *  rotation about the X-axis is then performed.  Ry and Rz are
+		 *  simply the respective inverse transforms to bring the arbitrary
+		 *  axis back to its original orientation.  The first transforms
+		 *  Rz' and Ry' are considered inverses, since the data from the
+		 *  arbitrary axis gives you info on how to get to it, not how
+		 *  to get away from it, and an inverse must be applied.
+		 *
+		 *  The basic calculation used is to recognize that the arbitrary
+		 *  axis vector (x, y, z), since it is of unit length, actually
+		 *  represents the sines and cosines of the angles to rotate the
+		 *  X-axis to the same orientation, with theta being the angle about
+		 *  Z and phi the angle about Y (in the order described above)
+		 *  as follows:
+		 *
+		 *  cos ( theta ) = x / sqrt ( 1 - z^2 )
+		 *  sin ( theta ) = y / sqrt ( 1 - z^2 )
+		 *
+		 *  cos ( phi ) = sqrt ( 1 - z^2 )
+		 *  sin ( phi ) = z
+		 *
+		 *  Note that cos ( phi ) can further be inserted to the above
+		 *  formulas:
+		 *
+		 *  cos ( theta ) = x / cos ( phi )
+		 *  sin ( theta ) = y / sin ( phi )
+		 *
+		 *  ...etc.  Because of those relations and the standard trigonometric
+		 *  relations, it is pssible to reduce the transforms down to what
+		 *  is used below.  It may be that any primary axis chosen will give the
+		 *  same results (modulo a sign convention) using thie method.
+		 *
+		 *  Particularly nice is to notice that all divisions that might
+		 *  have caused trouble when parallel to certain planes or
+		 *  axis go away with care paid to reducing the expressions.
+		 *  After checking, it does perform correctly under all cases, since
+		 *  in all the cases of division where the denominator would have
+		 *  been zero, the numerator would have been zero as well, giving
+		 *  the expected result.
+		 */
 
-		xx    = x * x;
-		yy    = y * y;
-		zz    = z * z;
-		xy    = x * y;
-		yz    = y * z;
-		zx    = z * x;
-		xs    = x * s;
-		ys    = y * s;
-		zs    = z * s;
+		xx	  = x * x;
+		yy	  = y * y;
+		zz	  = z * z;
+		xy	  = x * y;
+		yz	  = y * z;
+		zx	  = z * x;
+		xs	  = x * s;
+		ys	  = y * s;
+		zs	  = z * s;
 		one_c = 1.0F - c;
 
 		/* We already hold the identity-matrix so we can skip some statements */
@@ -1913,41 +1671,41 @@ __inline void _math_matrix_rotate( float4x4& matrix, float angle, float x, float
 		*/
 	}
 #undef M
-	float4x4 _internalMatrix( &m[ 0 ] );
+	float4x4 _internalMatrix( &m[0] );
 	//_internalMatrix.r[0] = XMVectorSet(m[0], m[1], m[2], m[3]);
 	//_internalMatrix.r[1] = XMVectorSet(m[4], m[5], m[6], m[7]);
 	//_internalMatrix.r[2] = XMVectorSet(m[8], m[9], m[10], m[11]);
 	//_internalMatrix.r[3] = XMVectorSet(m[12], m[13], m[14], m[15]);
 	float4x4 temp = matrix * _internalMatrix;
-	matrix        = temp;
+	matrix		  = temp;
 
-	//matmul4(mat, mat, m);
-	//matrix_multf(mat, m, MAT_FLAG_ROTATION);
+	// matmul4(mat, mat, m);
+	// matrix_multf(mat, m, MAT_FLAG_ROTATION);
 }
 
 static void glhFrustumf2( float* matrix, float left, float right, float bottom, float top, float znear, float zfar )
 {
 	float temp, temp2, temp3, temp4;
-	temp         = 2.0 * znear;
-	temp2        = right - left;
-	temp3        = top - bottom;
-	temp4        = zfar - znear;
-	matrix[ 0 ]  = temp / temp2;
-	matrix[ 1 ]  = 0.0;
-	matrix[ 2 ]  = 0.0;
-	matrix[ 3 ]  = 0.0;
-	matrix[ 4 ]  = 0.0;
-	matrix[ 5 ]  = temp / temp3;
-	matrix[ 6 ]  = 0.0;
-	matrix[ 7 ]  = 0.0;
-	matrix[ 8 ]  = ( right + left ) / temp2;
-	matrix[ 9 ]  = ( top + bottom ) / temp3;
-	matrix[ 10 ] = ( -zfar - znear ) / temp4;
-	matrix[ 11 ] = -1.0;
-	matrix[ 12 ] = 0.0;
-	matrix[ 13 ] = 0.0;
-	matrix[ 14 ] = ( -temp * zfar ) / temp4;
-	matrix[ 15 ] = 0.0;
+	temp	   = 2.0 * znear;
+	temp2	   = right - left;
+	temp3	   = top - bottom;
+	temp4	   = zfar - znear;
+	matrix[0]  = temp / temp2;
+	matrix[1]  = 0.0;
+	matrix[2]  = 0.0;
+	matrix[3]  = 0.0;
+	matrix[4]  = 0.0;
+	matrix[5]  = temp / temp3;
+	matrix[6]  = 0.0;
+	matrix[7]  = 0.0;
+	matrix[8]  = ( right + left ) / temp2;
+	matrix[9]  = ( top + bottom ) / temp3;
+	matrix[10] = ( -zfar - znear ) / temp4;
+	matrix[11] = -1.0;
+	matrix[12] = 0.0;
+	matrix[13] = 0.0;
+	matrix[14] = ( -temp * zfar ) / temp4;
+	matrix[15] = 0.0;
 }
 
 static void glhPerspectivef2( float* matrix, float fovyInDegrees, float aspectRatio, float znear, float zfar )
@@ -1955,8 +1713,8 @@ static void glhPerspectivef2( float* matrix, float fovyInDegrees, float aspectRa
 	float ymax, xmax;
 	float temp, temp2, temp3, temp4;
 	ymax = znear * tanf( fovyInDegrees * M_PI / 360.0 );
-	//ymin = -ymax;
-	//xmin = -ymax * aspectRatio;
+	// ymin = -ymax;
+	// xmin = -ymax * aspectRatio;
 	xmax = ymax * aspectRatio;
 	glhFrustumf2( matrix, -xmax, xmax, -ymax, ymax, znear, zfar );
 }

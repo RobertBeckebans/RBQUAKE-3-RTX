@@ -29,201 +29,201 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 //=============================================================================
 
-int          hl_nummodels;
-hl_dmodel_t* hl_dmodels; //[HL_MAX_MAP_MODELS];
-int          hl_dmodels_checksum;
+int				hl_nummodels;
+hl_dmodel_t*	hl_dmodels; //[HL_MAX_MAP_MODELS];
+int				hl_dmodels_checksum;
 
-int   hl_visdatasize;
-byte* hl_dvisdata; //[HL_MAX_MAP_VISIBILITY];
-int   hl_dvisdata_checksum;
+int				hl_visdatasize;
+byte*			hl_dvisdata; //[HL_MAX_MAP_VISIBILITY];
+int				hl_dvisdata_checksum;
 
-int   hl_lightdatasize;
-byte* hl_dlightdata; //[HL_MAX_MAP_LIGHTING];
-int   hl_dlightdata_checksum;
+int				hl_lightdatasize;
+byte*			hl_dlightdata; //[HL_MAX_MAP_LIGHTING];
+int				hl_dlightdata_checksum;
 
-int   hl_texdatasize;
-byte* hl_dtexdata; //[HL_MAX_MAP_MIPTEX]; // (dmiptexlump_t)
-int   hl_dtexdata_checksum;
+int				hl_texdatasize;
+byte*			hl_dtexdata; //[HL_MAX_MAP_MIPTEX]; // (dmiptexlump_t)
+int				hl_dtexdata_checksum;
 
-int   hl_entdatasize;
-char* hl_dentdata; //[HL_MAX_MAP_ENTSTRING];
-int   hl_dentdata_checksum;
+int				hl_entdatasize;
+char*			hl_dentdata; //[HL_MAX_MAP_ENTSTRING];
+int				hl_dentdata_checksum;
 
-int         hl_numleafs;
-hl_dleaf_t* hl_dleafs; //[HL_MAX_MAP_LEAFS];
-int         hl_dleafs_checksum;
+int				hl_numleafs;
+hl_dleaf_t*		hl_dleafs; //[HL_MAX_MAP_LEAFS];
+int				hl_dleafs_checksum;
 
-int          hl_numplanes;
-hl_dplane_t* hl_dplanes; //[HL_MAX_MAP_PLANES];
-int          hl_dplanes_checksum;
+int				hl_numplanes;
+hl_dplane_t*	hl_dplanes; //[HL_MAX_MAP_PLANES];
+int				hl_dplanes_checksum;
 
-int           hl_numvertexes;
-hl_dvertex_t* hl_dvertexes; //[HL_MAX_MAP_VERTS];
-int           hl_dvertexes_checksum;
+int				hl_numvertexes;
+hl_dvertex_t*	hl_dvertexes; //[HL_MAX_MAP_VERTS];
+int				hl_dvertexes_checksum;
 
-int         hl_numnodes;
-hl_dnode_t* hl_dnodes; //[HL_MAX_MAP_NODES];
-int         hl_dnodes_checksum;
+int				hl_numnodes;
+hl_dnode_t*		hl_dnodes; //[HL_MAX_MAP_NODES];
+int				hl_dnodes_checksum;
 
-int           hl_numtexinfo;
-hl_texinfo_t* hl_texinfo; //[HL_MAX_MAP_TEXINFO];
-int           hl_texinfo_checksum;
+int				hl_numtexinfo;
+hl_texinfo_t*	hl_texinfo; //[HL_MAX_MAP_TEXINFO];
+int				hl_texinfo_checksum;
 
-int         hl_numfaces;
-hl_dface_t* hl_dfaces; //[HL_MAX_MAP_FACES];
-int         hl_dfaces_checksum;
+int				hl_numfaces;
+hl_dface_t*		hl_dfaces; //[HL_MAX_MAP_FACES];
+int				hl_dfaces_checksum;
 
-int             hl_numclipnodes;
+int				hl_numclipnodes;
 hl_dclipnode_t* hl_dclipnodes; //[HL_MAX_MAP_CLIPNODES];
-int             hl_dclipnodes_checksum;
+int				hl_dclipnodes_checksum;
 
-int         hl_numedges;
-hl_dedge_t* hl_dedges; //[HL_MAX_MAP_EDGES];
-int         hl_dedges_checksum;
+int				hl_numedges;
+hl_dedge_t*		hl_dedges; //[HL_MAX_MAP_EDGES];
+int				hl_dedges_checksum;
 
-int             hl_nummarksurfaces;
+int				hl_nummarksurfaces;
 unsigned short* hl_dmarksurfaces; //[HL_MAX_MAP_MARKSURFACES];
-int             hl_dmarksurfaces_checksum;
+int				hl_dmarksurfaces_checksum;
 
-int  hl_numsurfedges;
-int* hl_dsurfedges; //[HL_MAX_MAP_SURFEDGES];
-int  hl_dsurfedges_checksum;
+int				hl_numsurfedges;
+int*			hl_dsurfedges; //[HL_MAX_MAP_SURFEDGES];
+int				hl_dsurfedges_checksum;
 
-//int				num_entities;
-//entity_t			entities[HL_MAX_MAP_ENTITIES];
+// int				num_entities;
+// entity_t			entities[HL_MAX_MAP_ENTITIES];
 
-//#ifdef //ME
+// #ifdef //ME
 
-int hl_bspallocated    = false;
-int hl_allocatedbspmem = 0;
+int				hl_bspallocated	   = false;
+int				hl_allocatedbspmem = 0;
 
-void HL_AllocMaxBSP( void )
+void			HL_AllocMaxBSP( void )
 {
-	//models
-	hl_nummodels       = 0;
-	hl_dmodels         = ( hl_dmodel_t* )GetMemory( HL_MAX_MAP_MODELS * sizeof( hl_dmodel_t ) );
+	// models
+	hl_nummodels	   = 0;
+	hl_dmodels		   = ( hl_dmodel_t* )GetMemory( HL_MAX_MAP_MODELS * sizeof( hl_dmodel_t ) );
 	hl_allocatedbspmem = HL_MAX_MAP_MODELS * sizeof( hl_dmodel_t );
-	//visibility
+	// visibility
 	hl_visdatasize = 0;
-	hl_dvisdata    = ( byte* )GetMemory( HL_MAX_MAP_VISIBILITY * sizeof( byte ) );
+	hl_dvisdata	   = ( byte* )GetMemory( HL_MAX_MAP_VISIBILITY * sizeof( byte ) );
 	hl_allocatedbspmem += HL_MAX_MAP_VISIBILITY * sizeof( byte );
-	//light data
+	// light data
 	hl_lightdatasize = 0;
-	hl_dlightdata    = ( byte* )GetMemory( HL_MAX_MAP_LIGHTING * sizeof( byte ) );
+	hl_dlightdata	 = ( byte* )GetMemory( HL_MAX_MAP_LIGHTING * sizeof( byte ) );
 	hl_allocatedbspmem += HL_MAX_MAP_LIGHTING * sizeof( byte );
-	//texture data
+	// texture data
 	hl_texdatasize = 0;
-	hl_dtexdata    = ( byte* )GetMemory( HL_MAX_MAP_MIPTEX * sizeof( byte ) ); // (dmiptexlump_t)
+	hl_dtexdata	   = ( byte* )GetMemory( HL_MAX_MAP_MIPTEX * sizeof( byte ) ); // (dmiptexlump_t)
 	hl_allocatedbspmem += HL_MAX_MAP_MIPTEX * sizeof( byte );
-	//entities
+	// entities
 	hl_entdatasize = 0;
-	hl_dentdata    = ( char* )GetMemory( HL_MAX_MAP_ENTSTRING * sizeof( char ) );
+	hl_dentdata	   = ( char* )GetMemory( HL_MAX_MAP_ENTSTRING * sizeof( char ) );
 	hl_allocatedbspmem += HL_MAX_MAP_ENTSTRING * sizeof( char );
-	//leaves
+	// leaves
 	hl_numleafs = 0;
-	hl_dleafs   = ( hl_dleaf_t* )GetMemory( HL_MAX_MAP_LEAFS * sizeof( hl_dleaf_t ) );
+	hl_dleafs	= ( hl_dleaf_t* )GetMemory( HL_MAX_MAP_LEAFS * sizeof( hl_dleaf_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_LEAFS * sizeof( hl_dleaf_t );
-	//planes
+	// planes
 	hl_numplanes = 0;
-	hl_dplanes   = ( hl_dplane_t* )GetMemory( HL_MAX_MAP_PLANES * sizeof( hl_dplane_t ) );
+	hl_dplanes	 = ( hl_dplane_t* )GetMemory( HL_MAX_MAP_PLANES * sizeof( hl_dplane_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_PLANES * sizeof( hl_dplane_t );
-	//vertexes
+	// vertexes
 	hl_numvertexes = 0;
 	hl_dvertexes   = ( hl_dvertex_t* )GetMemory( HL_MAX_MAP_VERTS * sizeof( hl_dvertex_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_VERTS * sizeof( hl_dvertex_t );
-	//nodes
+	// nodes
 	hl_numnodes = 0;
-	hl_dnodes   = ( hl_dnode_t* )GetMemory( HL_MAX_MAP_NODES * sizeof( hl_dnode_t ) );
+	hl_dnodes	= ( hl_dnode_t* )GetMemory( HL_MAX_MAP_NODES * sizeof( hl_dnode_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_NODES * sizeof( hl_dnode_t );
-	//texture info
+	// texture info
 	hl_numtexinfo = 0;
-	hl_texinfo    = ( hl_texinfo_t* )GetMemory( HL_MAX_MAP_TEXINFO * sizeof( hl_texinfo_t ) );
+	hl_texinfo	  = ( hl_texinfo_t* )GetMemory( HL_MAX_MAP_TEXINFO * sizeof( hl_texinfo_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_TEXINFO * sizeof( hl_texinfo_t );
-	//faces
+	// faces
 	hl_numfaces = 0;
-	hl_dfaces   = ( hl_dface_t* )GetMemory( HL_MAX_MAP_FACES * sizeof( hl_dface_t ) );
+	hl_dfaces	= ( hl_dface_t* )GetMemory( HL_MAX_MAP_FACES * sizeof( hl_dface_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_FACES * sizeof( hl_dface_t );
-	//clip nodes
+	// clip nodes
 	hl_numclipnodes = 0;
-	hl_dclipnodes   = ( hl_dclipnode_t* )GetMemory( HL_MAX_MAP_CLIPNODES * sizeof( hl_dclipnode_t ) );
+	hl_dclipnodes	= ( hl_dclipnode_t* )GetMemory( HL_MAX_MAP_CLIPNODES * sizeof( hl_dclipnode_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_CLIPNODES * sizeof( hl_dclipnode_t );
-	//edges
+	// edges
 	hl_numedges = 0;
-	hl_dedges   = ( hl_dedge_t* )GetMemory( HL_MAX_MAP_EDGES * sizeof( hl_dedge_t ) );
+	hl_dedges	= ( hl_dedge_t* )GetMemory( HL_MAX_MAP_EDGES * sizeof( hl_dedge_t ) );
 	hl_allocatedbspmem += HL_MAX_MAP_EDGES, sizeof( hl_dedge_t );
-	//mark surfaces
+	// mark surfaces
 	hl_nummarksurfaces = 0;
 	hl_dmarksurfaces   = ( unsigned short* )GetMemory( HL_MAX_MAP_MARKSURFACES * sizeof( unsigned short ) );
 	hl_allocatedbspmem += HL_MAX_MAP_MARKSURFACES * sizeof( unsigned short );
-	//surface edges
+	// surface edges
 	hl_numsurfedges = 0;
-	hl_dsurfedges   = ( int* )GetMemory( HL_MAX_MAP_SURFEDGES * sizeof( int ) );
+	hl_dsurfedges	= ( int* )GetMemory( HL_MAX_MAP_SURFEDGES * sizeof( int ) );
 	hl_allocatedbspmem += HL_MAX_MAP_SURFEDGES * sizeof( int );
-	//print allocated memory
+	// print allocated memory
 	Log_Print( "allocated " );
 	PrintMemorySize( hl_allocatedbspmem );
 	Log_Print( " of BSP memory\n" );
-} //end of the function HL_AllocMaxBSP
+} // end of the function HL_AllocMaxBSP
 
 void HL_FreeMaxBSP( void )
 {
-	//models
+	// models
 	hl_nummodels = 0;
 	FreeMemory( hl_dmodels );
 	hl_dmodels = NULL;
-	//visibility
+	// visibility
 	hl_visdatasize = 0;
 	FreeMemory( hl_dvisdata );
 	hl_dvisdata = NULL;
-	//light data
+	// light data
 	hl_lightdatasize = 0;
 	FreeMemory( hl_dlightdata );
 	hl_dlightdata = NULL;
-	//texture data
+	// texture data
 	hl_texdatasize = 0;
 	FreeMemory( hl_dtexdata );
 	hl_dtexdata = NULL;
-	//entities
+	// entities
 	hl_entdatasize = 0;
 	FreeMemory( hl_dentdata );
 	hl_dentdata = NULL;
-	//leaves
+	// leaves
 	hl_numleafs = 0;
 	FreeMemory( hl_dleafs );
 	hl_dleafs = NULL;
-	//planes
+	// planes
 	hl_numplanes = 0;
 	FreeMemory( hl_dplanes );
 	hl_dplanes = NULL;
-	//vertexes
+	// vertexes
 	hl_numvertexes = 0;
 	FreeMemory( hl_dvertexes );
 	hl_dvertexes = NULL;
-	//nodes
+	// nodes
 	hl_numnodes = 0;
 	FreeMemory( hl_dnodes );
 	hl_dnodes = NULL;
-	//texture info
+	// texture info
 	hl_numtexinfo = 0;
 	FreeMemory( hl_texinfo );
 	hl_texinfo = NULL;
-	//faces
+	// faces
 	hl_numfaces = 0;
 	FreeMemory( hl_dfaces );
 	hl_dfaces = NULL;
-	//clip nodes
+	// clip nodes
 	hl_numclipnodes = 0;
 	FreeMemory( hl_dclipnodes );
 	hl_dclipnodes = NULL;
-	//edges
+	// edges
 	hl_numedges = 0;
 	FreeMemory( hl_dedges );
 	hl_dedges = NULL;
-	//mark surfaces
+	// mark surfaces
 	hl_nummarksurfaces = 0;
 	FreeMemory( hl_dmarksurfaces );
 	hl_dmarksurfaces = NULL;
-	//surface edges
+	// surface edges
 	hl_numsurfedges = 0;
 	FreeMemory( hl_dsurfedges );
 	hl_dsurfedges = NULL;
@@ -232,8 +232,8 @@ void HL_FreeMaxBSP( void )
 	PrintMemorySize( hl_allocatedbspmem );
 	Log_Print( " of BSP memory\n" );
 	hl_allocatedbspmem = 0;
-} //end of the function HL_FreeMaxBSP
-//#endif //ME
+} // end of the function HL_FreeMaxBSP
+// #endif //ME
 
 /*
 ===============
@@ -258,9 +258,9 @@ HL_CompressVis
 */
 int HL_CompressVis( byte* vis, byte* dest )
 {
-	int   j;
-	int   rep;
-	int   visrow;
+	int	  j;
+	int	  rep;
+	int	  visrow;
 	byte* dest_p;
 
 	dest_p = dest;
@@ -268,13 +268,13 @@ int HL_CompressVis( byte* vis, byte* dest )
 
 	for( j = 0; j < visrow; j++ )
 	{
-		*dest_p++ = vis[ j ];
-		if( vis[ j ] )
+		*dest_p++ = vis[j];
+		if( vis[j] )
 			continue;
 
 		rep = 1;
 		for( j++; j < visrow; j++ )
-			if( vis[ j ] || rep == 255 )
+			if( vis[j] || rep == 255 )
 				break;
 			else
 				rep++;
@@ -292,9 +292,9 @@ HL_DecompressVis
 */
 void HL_DecompressVis( byte* in, byte* decompressed )
 {
-	int   c;
+	int	  c;
 	byte* out;
-	int   row;
+	int	  row;
 
 	row = ( hl_numleafs + 7 ) >> 3;
 	out = decompressed;
@@ -307,7 +307,7 @@ void HL_DecompressVis( byte* in, byte* decompressed )
 			continue;
 		}
 
-		c = in[ 1 ];
+		c = in[1];
 		in += 2;
 		while( c )
 		{
@@ -328,27 +328,27 @@ Byte swaps all data in a bsp file.
 */
 void HL_SwapBSPFile( qboolean todisk )
 {
-	int               i, j, c;
-	hl_dmodel_t*      d;
+	int				  i, j, c;
+	hl_dmodel_t*	  d;
 	hl_dmiptexlump_t* mtl;
 
 	// models
 	for( i = 0; i < hl_nummodels; i++ )
 	{
-		d = &hl_dmodels[ i ];
+		d = &hl_dmodels[i];
 
 		for( j = 0; j < HL_MAX_MAP_HULLS; j++ )
-			d->headnode[ j ] = LittleLong( d->headnode[ j ] );
+			d->headnode[j] = LittleLong( d->headnode[j] );
 
-		d->visleafs  = LittleLong( d->visleafs );
+		d->visleafs	 = LittleLong( d->visleafs );
 		d->firstface = LittleLong( d->firstface );
-		d->numfaces  = LittleLong( d->numfaces );
+		d->numfaces	 = LittleLong( d->numfaces );
 
 		for( j = 0; j < 3; j++ )
 		{
-			d->mins[ j ]   = LittleFloat( d->mins[ j ] );
-			d->maxs[ j ]   = LittleFloat( d->maxs[ j ] );
-			d->origin[ j ] = LittleFloat( d->origin[ j ] );
+			d->mins[j]	 = LittleFloat( d->mins[j] );
+			d->maxs[j]	 = LittleFloat( d->maxs[j] );
+			d->origin[j] = LittleFloat( d->origin[j] );
 		}
 	}
 
@@ -358,7 +358,7 @@ void HL_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < hl_numvertexes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
-			hl_dvertexes[ i ].point[ j ] = LittleFloat( hl_dvertexes[ i ].point[ j ] );
+			hl_dvertexes[i].point[j] = LittleFloat( hl_dvertexes[i].point[j] );
 	}
 
 	//
@@ -367,9 +367,9 @@ void HL_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < hl_numplanes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
-			hl_dplanes[ i ].normal[ j ] = LittleFloat( hl_dplanes[ i ].normal[ j ] );
-		hl_dplanes[ i ].dist = LittleFloat( hl_dplanes[ i ].dist );
-		hl_dplanes[ i ].type = LittleLong( hl_dplanes[ i ].type );
+			hl_dplanes[i].normal[j] = LittleFloat( hl_dplanes[i].normal[j] );
+		hl_dplanes[i].dist = LittleFloat( hl_dplanes[i].dist );
+		hl_dplanes[i].type = LittleLong( hl_dplanes[i].type );
 	}
 
 	//
@@ -378,9 +378,9 @@ void HL_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < hl_numtexinfo; i++ )
 	{
 		for( j = 0; j < 8; j++ )
-			hl_texinfo[ i ].vecs[ 0 ][ j ] = LittleFloat( hl_texinfo[ i ].vecs[ 0 ][ j ] );
-		hl_texinfo[ i ].miptex = LittleLong( hl_texinfo[ i ].miptex );
-		hl_texinfo[ i ].flags  = LittleLong( hl_texinfo[ i ].flags );
+			hl_texinfo[i].vecs[0][j] = LittleFloat( hl_texinfo[i].vecs[0][j] );
+		hl_texinfo[i].miptex = LittleLong( hl_texinfo[i].miptex );
+		hl_texinfo[i].flags	 = LittleLong( hl_texinfo[i].flags );
 	}
 
 	//
@@ -388,12 +388,12 @@ void HL_SwapBSPFile( qboolean todisk )
 	//
 	for( i = 0; i < hl_numfaces; i++ )
 	{
-		hl_dfaces[ i ].texinfo   = LittleShort( hl_dfaces[ i ].texinfo );
-		hl_dfaces[ i ].planenum  = LittleShort( hl_dfaces[ i ].planenum );
-		hl_dfaces[ i ].side      = LittleShort( hl_dfaces[ i ].side );
-		hl_dfaces[ i ].lightofs  = LittleLong( hl_dfaces[ i ].lightofs );
-		hl_dfaces[ i ].firstedge = LittleLong( hl_dfaces[ i ].firstedge );
-		hl_dfaces[ i ].numedges  = LittleShort( hl_dfaces[ i ].numedges );
+		hl_dfaces[i].texinfo   = LittleShort( hl_dfaces[i].texinfo );
+		hl_dfaces[i].planenum  = LittleShort( hl_dfaces[i].planenum );
+		hl_dfaces[i].side	   = LittleShort( hl_dfaces[i].side );
+		hl_dfaces[i].lightofs  = LittleLong( hl_dfaces[i].lightofs );
+		hl_dfaces[i].firstedge = LittleLong( hl_dfaces[i].firstedge );
+		hl_dfaces[i].numedges  = LittleShort( hl_dfaces[i].numedges );
 	}
 
 	//
@@ -401,16 +401,16 @@ void HL_SwapBSPFile( qboolean todisk )
 	//
 	for( i = 0; i < hl_numnodes; i++ )
 	{
-		hl_dnodes[ i ].planenum = LittleLong( hl_dnodes[ i ].planenum );
+		hl_dnodes[i].planenum = LittleLong( hl_dnodes[i].planenum );
 		for( j = 0; j < 3; j++ )
 		{
-			hl_dnodes[ i ].mins[ j ] = LittleShort( hl_dnodes[ i ].mins[ j ] );
-			hl_dnodes[ i ].maxs[ j ] = LittleShort( hl_dnodes[ i ].maxs[ j ] );
+			hl_dnodes[i].mins[j] = LittleShort( hl_dnodes[i].mins[j] );
+			hl_dnodes[i].maxs[j] = LittleShort( hl_dnodes[i].maxs[j] );
 		}
-		hl_dnodes[ i ].children[ 0 ] = LittleShort( hl_dnodes[ i ].children[ 0 ] );
-		hl_dnodes[ i ].children[ 1 ] = LittleShort( hl_dnodes[ i ].children[ 1 ] );
-		hl_dnodes[ i ].firstface     = LittleShort( hl_dnodes[ i ].firstface );
-		hl_dnodes[ i ].numfaces      = LittleShort( hl_dnodes[ i ].numfaces );
+		hl_dnodes[i].children[0] = LittleShort( hl_dnodes[i].children[0] );
+		hl_dnodes[i].children[1] = LittleShort( hl_dnodes[i].children[1] );
+		hl_dnodes[i].firstface	 = LittleShort( hl_dnodes[i].firstface );
+		hl_dnodes[i].numfaces	 = LittleShort( hl_dnodes[i].numfaces );
 	}
 
 	//
@@ -418,16 +418,16 @@ void HL_SwapBSPFile( qboolean todisk )
 	//
 	for( i = 0; i < hl_numleafs; i++ )
 	{
-		hl_dleafs[ i ].contents = LittleLong( hl_dleafs[ i ].contents );
+		hl_dleafs[i].contents = LittleLong( hl_dleafs[i].contents );
 		for( j = 0; j < 3; j++ )
 		{
-			hl_dleafs[ i ].mins[ j ] = LittleShort( hl_dleafs[ i ].mins[ j ] );
-			hl_dleafs[ i ].maxs[ j ] = LittleShort( hl_dleafs[ i ].maxs[ j ] );
+			hl_dleafs[i].mins[j] = LittleShort( hl_dleafs[i].mins[j] );
+			hl_dleafs[i].maxs[j] = LittleShort( hl_dleafs[i].maxs[j] );
 		}
 
-		hl_dleafs[ i ].firstmarksurface = LittleShort( hl_dleafs[ i ].firstmarksurface );
-		hl_dleafs[ i ].nummarksurfaces  = LittleShort( hl_dleafs[ i ].nummarksurfaces );
-		hl_dleafs[ i ].visofs           = LittleLong( hl_dleafs[ i ].visofs );
+		hl_dleafs[i].firstmarksurface = LittleShort( hl_dleafs[i].firstmarksurface );
+		hl_dleafs[i].nummarksurfaces  = LittleShort( hl_dleafs[i].nummarksurfaces );
+		hl_dleafs[i].visofs			  = LittleLong( hl_dleafs[i].visofs );
 	}
 
 	//
@@ -435,9 +435,9 @@ void HL_SwapBSPFile( qboolean todisk )
 	//
 	for( i = 0; i < hl_numclipnodes; i++ )
 	{
-		hl_dclipnodes[ i ].planenum      = LittleLong( hl_dclipnodes[ i ].planenum );
-		hl_dclipnodes[ i ].children[ 0 ] = LittleShort( hl_dclipnodes[ i ].children[ 0 ] );
-		hl_dclipnodes[ i ].children[ 1 ] = LittleShort( hl_dclipnodes[ i ].children[ 1 ] );
+		hl_dclipnodes[i].planenum	 = LittleLong( hl_dclipnodes[i].planenum );
+		hl_dclipnodes[i].children[0] = LittleShort( hl_dclipnodes[i].children[0] );
+		hl_dclipnodes[i].children[1] = LittleShort( hl_dclipnodes[i].children[1] );
 	}
 
 	//
@@ -452,40 +452,40 @@ void HL_SwapBSPFile( qboolean todisk )
 			c = LittleLong( mtl->nummiptex );
 		mtl->nummiptex = LittleLong( mtl->nummiptex );
 		for( i = 0; i < c; i++ )
-			mtl->dataofs[ i ] = LittleLong( mtl->dataofs[ i ] );
+			mtl->dataofs[i] = LittleLong( mtl->dataofs[i] );
 	}
 
 	//
 	// marksurfaces
 	//
 	for( i = 0; i < hl_nummarksurfaces; i++ )
-		hl_dmarksurfaces[ i ] = LittleShort( hl_dmarksurfaces[ i ] );
+		hl_dmarksurfaces[i] = LittleShort( hl_dmarksurfaces[i] );
 
 	//
 	// surfedges
 	//
 	for( i = 0; i < hl_numsurfedges; i++ )
-		hl_dsurfedges[ i ] = LittleLong( hl_dsurfedges[ i ] );
+		hl_dsurfedges[i] = LittleLong( hl_dsurfedges[i] );
 
 	//
 	// edges
 	//
 	for( i = 0; i < hl_numedges; i++ )
 	{
-		hl_dedges[ i ].v[ 0 ] = LittleShort( hl_dedges[ i ].v[ 0 ] );
-		hl_dedges[ i ].v[ 1 ] = LittleShort( hl_dedges[ i ].v[ 1 ] );
+		hl_dedges[i].v[0] = LittleShort( hl_dedges[i].v[0] );
+		hl_dedges[i].v[1] = LittleShort( hl_dedges[i].v[1] );
 	}
-} //end of the function HL_SwapBSPFile
+} // end of the function HL_SwapBSPFile
 
 hl_dheader_t* hl_header;
-int           hl_fileLength;
+int			  hl_fileLength;
 
-int HL_CopyLump( int lump, void* dest, int size, int maxsize )
+int			  HL_CopyLump( int lump, void* dest, int size, int maxsize )
 {
 	int length, ofs;
 
-	length = hl_header->lumps[ lump ].filelen;
-	ofs    = hl_header->lumps[ lump ].fileofs;
+	length = hl_header->lumps[lump].filelen;
+	ofs	   = hl_header->lumps[lump].fileofs;
 
 	if( length % size )
 	{
@@ -528,27 +528,27 @@ void HL_LoadBSPFile( char* filename, int offset, int length )
 
 	// swap the header
 	for( i = 0; i < sizeof( hl_dheader_t ) / 4; i++ )
-		( ( int* )hl_header )[ i ] = LittleLong( ( ( int* )hl_header )[ i ] );
+		( ( int* )hl_header )[i] = LittleLong( ( ( int* )hl_header )[i] );
 
 	if( hl_header->version != HL_BSPVERSION )
 		Error( "%s is version %i, not %i", filename, hl_header->version, HL_BSPVERSION );
 
-	hl_nummodels       = HL_CopyLump( HL_LUMP_MODELS, hl_dmodels, sizeof( hl_dmodel_t ), HL_MAX_MAP_MODELS );
-	hl_numvertexes     = HL_CopyLump( HL_LUMP_VERTEXES, hl_dvertexes, sizeof( hl_dvertex_t ), HL_MAX_MAP_VERTS );
-	hl_numplanes       = HL_CopyLump( HL_LUMP_PLANES, hl_dplanes, sizeof( hl_dplane_t ), HL_MAX_MAP_PLANES );
-	hl_numleafs        = HL_CopyLump( HL_LUMP_LEAFS, hl_dleafs, sizeof( hl_dleaf_t ), HL_MAX_MAP_LEAFS );
-	hl_numnodes        = HL_CopyLump( HL_LUMP_NODES, hl_dnodes, sizeof( hl_dnode_t ), HL_MAX_MAP_NODES );
-	hl_numtexinfo      = HL_CopyLump( HL_LUMP_TEXINFO, hl_texinfo, sizeof( hl_texinfo_t ), HL_MAX_MAP_TEXINFO );
-	hl_numclipnodes    = HL_CopyLump( HL_LUMP_CLIPNODES, hl_dclipnodes, sizeof( hl_dclipnode_t ), HL_MAX_MAP_CLIPNODES );
-	hl_numfaces        = HL_CopyLump( HL_LUMP_FACES, hl_dfaces, sizeof( hl_dface_t ), HL_MAX_MAP_FACES );
-	hl_nummarksurfaces = HL_CopyLump( HL_LUMP_MARKSURFACES, hl_dmarksurfaces, sizeof( hl_dmarksurfaces[ 0 ] ), HL_MAX_MAP_MARKSURFACES );
-	hl_numsurfedges    = HL_CopyLump( HL_LUMP_SURFEDGES, hl_dsurfedges, sizeof( hl_dsurfedges[ 0 ] ), HL_MAX_MAP_SURFEDGES );
-	hl_numedges        = HL_CopyLump( HL_LUMP_EDGES, hl_dedges, sizeof( hl_dedge_t ), HL_MAX_MAP_EDGES );
+	hl_nummodels	   = HL_CopyLump( HL_LUMP_MODELS, hl_dmodels, sizeof( hl_dmodel_t ), HL_MAX_MAP_MODELS );
+	hl_numvertexes	   = HL_CopyLump( HL_LUMP_VERTEXES, hl_dvertexes, sizeof( hl_dvertex_t ), HL_MAX_MAP_VERTS );
+	hl_numplanes	   = HL_CopyLump( HL_LUMP_PLANES, hl_dplanes, sizeof( hl_dplane_t ), HL_MAX_MAP_PLANES );
+	hl_numleafs		   = HL_CopyLump( HL_LUMP_LEAFS, hl_dleafs, sizeof( hl_dleaf_t ), HL_MAX_MAP_LEAFS );
+	hl_numnodes		   = HL_CopyLump( HL_LUMP_NODES, hl_dnodes, sizeof( hl_dnode_t ), HL_MAX_MAP_NODES );
+	hl_numtexinfo	   = HL_CopyLump( HL_LUMP_TEXINFO, hl_texinfo, sizeof( hl_texinfo_t ), HL_MAX_MAP_TEXINFO );
+	hl_numclipnodes	   = HL_CopyLump( HL_LUMP_CLIPNODES, hl_dclipnodes, sizeof( hl_dclipnode_t ), HL_MAX_MAP_CLIPNODES );
+	hl_numfaces		   = HL_CopyLump( HL_LUMP_FACES, hl_dfaces, sizeof( hl_dface_t ), HL_MAX_MAP_FACES );
+	hl_nummarksurfaces = HL_CopyLump( HL_LUMP_MARKSURFACES, hl_dmarksurfaces, sizeof( hl_dmarksurfaces[0] ), HL_MAX_MAP_MARKSURFACES );
+	hl_numsurfedges	   = HL_CopyLump( HL_LUMP_SURFEDGES, hl_dsurfedges, sizeof( hl_dsurfedges[0] ), HL_MAX_MAP_SURFEDGES );
+	hl_numedges		   = HL_CopyLump( HL_LUMP_EDGES, hl_dedges, sizeof( hl_dedge_t ), HL_MAX_MAP_EDGES );
 
-	hl_texdatasize   = HL_CopyLump( HL_LUMP_TEXTURES, hl_dtexdata, 1, HL_MAX_MAP_MIPTEX );
-	hl_visdatasize   = HL_CopyLump( HL_LUMP_VISIBILITY, hl_dvisdata, 1, HL_MAX_MAP_VISIBILITY );
+	hl_texdatasize	 = HL_CopyLump( HL_LUMP_TEXTURES, hl_dtexdata, 1, HL_MAX_MAP_MIPTEX );
+	hl_visdatasize	 = HL_CopyLump( HL_LUMP_VISIBILITY, hl_dvisdata, 1, HL_MAX_MAP_VISIBILITY );
 	hl_lightdatasize = HL_CopyLump( HL_LUMP_LIGHTING, hl_dlightdata, 1, HL_MAX_MAP_LIGHTING );
-	hl_entdatasize   = HL_CopyLump( HL_LUMP_ENTITIES, hl_dentdata, 1, HL_MAX_MAP_ENTSTRING );
+	hl_entdatasize	 = HL_CopyLump( HL_LUMP_ENTITIES, hl_dentdata, 1, HL_MAX_MAP_ENTSTRING );
 
 	FreeMemory( hl_header ); // everything has been copied out
 
@@ -557,33 +557,33 @@ void HL_LoadBSPFile( char* filename, int offset, int length )
 	//
 	HL_SwapBSPFile( false );
 
-	hl_dmodels_checksum       = FastChecksum( hl_dmodels, hl_nummodels * sizeof( hl_dmodels[ 0 ] ) );
-	hl_dvertexes_checksum     = FastChecksum( hl_dvertexes, hl_numvertexes * sizeof( hl_dvertexes[ 0 ] ) );
-	hl_dplanes_checksum       = FastChecksum( hl_dplanes, hl_numplanes * sizeof( hl_dplanes[ 0 ] ) );
-	hl_dleafs_checksum        = FastChecksum( hl_dleafs, hl_numleafs * sizeof( hl_dleafs[ 0 ] ) );
-	hl_dnodes_checksum        = FastChecksum( hl_dnodes, hl_numnodes * sizeof( hl_dnodes[ 0 ] ) );
-	hl_texinfo_checksum       = FastChecksum( hl_texinfo, hl_numtexinfo * sizeof( hl_texinfo[ 0 ] ) );
-	hl_dclipnodes_checksum    = FastChecksum( hl_dclipnodes, hl_numclipnodes * sizeof( hl_dclipnodes[ 0 ] ) );
-	hl_dfaces_checksum        = FastChecksum( hl_dfaces, hl_numfaces * sizeof( hl_dfaces[ 0 ] ) );
-	hl_dmarksurfaces_checksum = FastChecksum( hl_dmarksurfaces, hl_nummarksurfaces * sizeof( hl_dmarksurfaces[ 0 ] ) );
-	hl_dsurfedges_checksum    = FastChecksum( hl_dsurfedges, hl_numsurfedges * sizeof( hl_dsurfedges[ 0 ] ) );
-	hl_dedges_checksum        = FastChecksum( hl_dedges, hl_numedges * sizeof( hl_dedges[ 0 ] ) );
-	hl_dtexdata_checksum      = FastChecksum( hl_dtexdata, hl_numedges * sizeof( hl_dtexdata[ 0 ] ) );
-	hl_dvisdata_checksum      = FastChecksum( hl_dvisdata, hl_visdatasize * sizeof( hl_dvisdata[ 0 ] ) );
-	hl_dlightdata_checksum    = FastChecksum( hl_dlightdata, hl_lightdatasize * sizeof( hl_dlightdata[ 0 ] ) );
-	hl_dentdata_checksum      = FastChecksum( hl_dentdata, hl_entdatasize * sizeof( hl_dentdata[ 0 ] ) );
+	hl_dmodels_checksum		  = FastChecksum( hl_dmodels, hl_nummodels * sizeof( hl_dmodels[0] ) );
+	hl_dvertexes_checksum	  = FastChecksum( hl_dvertexes, hl_numvertexes * sizeof( hl_dvertexes[0] ) );
+	hl_dplanes_checksum		  = FastChecksum( hl_dplanes, hl_numplanes * sizeof( hl_dplanes[0] ) );
+	hl_dleafs_checksum		  = FastChecksum( hl_dleafs, hl_numleafs * sizeof( hl_dleafs[0] ) );
+	hl_dnodes_checksum		  = FastChecksum( hl_dnodes, hl_numnodes * sizeof( hl_dnodes[0] ) );
+	hl_texinfo_checksum		  = FastChecksum( hl_texinfo, hl_numtexinfo * sizeof( hl_texinfo[0] ) );
+	hl_dclipnodes_checksum	  = FastChecksum( hl_dclipnodes, hl_numclipnodes * sizeof( hl_dclipnodes[0] ) );
+	hl_dfaces_checksum		  = FastChecksum( hl_dfaces, hl_numfaces * sizeof( hl_dfaces[0] ) );
+	hl_dmarksurfaces_checksum = FastChecksum( hl_dmarksurfaces, hl_nummarksurfaces * sizeof( hl_dmarksurfaces[0] ) );
+	hl_dsurfedges_checksum	  = FastChecksum( hl_dsurfedges, hl_numsurfedges * sizeof( hl_dsurfedges[0] ) );
+	hl_dedges_checksum		  = FastChecksum( hl_dedges, hl_numedges * sizeof( hl_dedges[0] ) );
+	hl_dtexdata_checksum	  = FastChecksum( hl_dtexdata, hl_numedges * sizeof( hl_dtexdata[0] ) );
+	hl_dvisdata_checksum	  = FastChecksum( hl_dvisdata, hl_visdatasize * sizeof( hl_dvisdata[0] ) );
+	hl_dlightdata_checksum	  = FastChecksum( hl_dlightdata, hl_lightdatasize * sizeof( hl_dlightdata[0] ) );
+	hl_dentdata_checksum	  = FastChecksum( hl_dentdata, hl_entdatasize * sizeof( hl_dentdata[0] ) );
 }
 
 //============================================================================
 
-FILE*        wadfile;
+FILE*		 wadfile;
 hl_dheader_t outheader;
 
-void HL_AddLump( int lumpnum, void* data, int len )
+void		 HL_AddLump( int lumpnum, void* data, int len )
 {
 	hl_lump_t* lump;
 
-	lump = &hl_header->lumps[ lumpnum ];
+	lump = &hl_header->lumps[lumpnum];
 
 	lump->fileofs = LittleLong( ftell( wadfile ) );
 	lump->filelen = LittleLong( len );
@@ -616,8 +616,8 @@ void HL_WriteBSPFile( char* filename )
 	HL_AddLump( HL_LUMP_TEXINFO, hl_texinfo, hl_numtexinfo * sizeof( hl_texinfo_t ) );
 	HL_AddLump( HL_LUMP_FACES, hl_dfaces, hl_numfaces * sizeof( hl_dface_t ) );
 	HL_AddLump( HL_LUMP_CLIPNODES, hl_dclipnodes, hl_numclipnodes * sizeof( hl_dclipnode_t ) );
-	HL_AddLump( HL_LUMP_MARKSURFACES, hl_dmarksurfaces, hl_nummarksurfaces * sizeof( hl_dmarksurfaces[ 0 ] ) );
-	HL_AddLump( HL_LUMP_SURFEDGES, hl_dsurfedges, hl_numsurfedges * sizeof( hl_dsurfedges[ 0 ] ) );
+	HL_AddLump( HL_LUMP_MARKSURFACES, hl_dmarksurfaces, hl_nummarksurfaces * sizeof( hl_dmarksurfaces[0] ) );
+	HL_AddLump( HL_LUMP_SURFEDGES, hl_dsurfedges, hl_numsurfedges * sizeof( hl_dsurfedges[0] ) );
 	HL_AddLump( HL_LUMP_EDGES, hl_dedges, hl_numedges * sizeof( hl_dedge_t ) );
 	HL_AddLump( HL_LUMP_MODELS, hl_dmodels, hl_nummodels * sizeof( hl_dmodel_t ) );
 
@@ -640,13 +640,7 @@ ArrayUsage( char* szItem, int items, int maxitems, int itemsize )
 {
 	float percentage = maxitems ? items * 100.0 / maxitems : 0.0;
 
-	qprintf( "%-12s  %7i/%-7i  %7i/%-7i  (%4.1f%%)",
-		szItem,
-		items,
-		maxitems,
-		items * itemsize,
-		maxitems * itemsize,
-		percentage );
+	qprintf( "%-12s  %7i/%-7i  %7i/%-7i  (%4.1f%%)", szItem, items, maxitems, items * itemsize, maxitems * itemsize, percentage );
 	if( percentage > 80.0 )
 		qprintf( "VERY FULL!\n" );
 	else if( percentage > 95.0 )
@@ -662,11 +656,7 @@ GlobUsage( char* szItem, int itemstorage, int maxstorage )
 {
 	float percentage = maxstorage ? itemstorage * 100.0 / maxstorage : 0.0;
 
-	qprintf( "%-12s     [variable]    %7i/%-7i  (%4.1f%%)",
-		szItem,
-		itemstorage,
-		maxstorage,
-		percentage );
+	qprintf( "%-12s     [variable]    %7i/%-7i  (%4.1f%%)", szItem, itemstorage, maxstorage, percentage );
 	if( percentage > 80.0 )
 		qprintf( "VERY FULL!\n" );
 	else if( percentage > 95.0 )
@@ -722,10 +712,10 @@ ParseEpair
 epair_t *ParseEpair (void)
 {
 	epair_t	*e;
-	
+
 	e = malloc (sizeof(epair_t));
 	memset (e, 0, sizeof(epair_t));
-	
+
 	if (strlen(token) >= MAX_KEY-1)
 		Error ("ParseEpar: token too long");
 	e->key = copystring(token);
@@ -752,7 +742,7 @@ qboolean	ParseEntity (void)
 
 	if (strcmp (token, "{") )
 		Error ("ParseEntity: { not found");
-	
+
 	if (num_entities == HL_MAX_MAP_ENTITIES)
 		Error ("num_entities == HL_MAX_MAP_ENTITIES");
 
@@ -769,7 +759,7 @@ qboolean	ParseEntity (void)
 		e->next = mapent->epairs;
 		mapent->epairs = e;
 	} while (1);
-	
+
 	return true;
 } //*/
 
@@ -785,15 +775,15 @@ void HL_ParseEntities( void )
 	script_t* script;
 
 	num_entities = 0;
-	script       = LoadScriptMemory( hl_dentdata, hl_entdatasize, "*Half-Life bsp file" );
+	script		 = LoadScriptMemory( hl_dentdata, hl_entdatasize, "*Half-Life bsp file" );
 	SetScriptFlags( script, SCFL_NOSTRINGWHITESPACES | SCFL_NOSTRINGESCAPECHARS );
 
 	while( ParseEntity( script ) )
 	{
-	} //end while
+	} // end while
 
 	FreeScript( script );
-} //end of the function HL_ParseEntities
+} // end of the function HL_ParseEntities
 
 /*
 ================
@@ -804,25 +794,25 @@ Generates the dentdata string from all the entities
 */
 void HL_UnparseEntities( void )
 {
-	char *   buf, *end;
+	char *	 buf, *end;
 	epair_t* ep;
-	char     line[ 2048 ];
-	int      i;
+	char	 line[2048];
+	int		 i;
 
-	buf  = hl_dentdata;
-	end  = buf;
+	buf	 = hl_dentdata;
+	end	 = buf;
 	*end = 0;
 
 	for( i = 0; i < num_entities; i++ )
 	{
-		ep = entities[ i ].epairs;
+		ep = entities[i].epairs;
 		if( !ep )
 			continue; // ent got removed
 
 		strcat( end, "{\n" );
 		end += 2;
 
-		for( ep = entities[ i ].epairs; ep; ep = ep->next )
+		for( ep = entities[i].epairs; ep; ep = ep->next )
 		{
 			sprintf( line, "\"%s\" \"%s\"\n", ep->key, ep->value );
 			strcat( end, line );
@@ -835,13 +825,13 @@ void HL_UnparseEntities( void )
 			Error( "Entity text too long" );
 	}
 	hl_entdatasize = end - buf + 1;
-} //end of the function HL_UnparseEntities
+} // end of the function HL_UnparseEntities
 
 /*
 void 	SetKeyValue (entity_t *ent, char *key, char *value)
 {
 	epair_t	*ep;
-	
+
 	for (ep=ent->epairs ; ep ; ep=ep->next)
 		if (!strcmp (ep->key, key) )
 		{
@@ -859,7 +849,7 @@ void 	SetKeyValue (entity_t *ent, char *key, char *value)
 char 	*ValueForKey (entity_t *ent, char *key)
 {
 	epair_t	*ep;
-	
+
 	for (ep=ent->epairs ; ep ; ep=ep->next)
 		if (!strcmp (ep->key, key) )
 			return ep->value;
@@ -869,7 +859,7 @@ char 	*ValueForKey (entity_t *ent, char *key)
 vec_t	FloatForKey (entity_t *ent, char *key)
 {
 	char	*k;
-	
+
 	k = ValueForKey (ent, key);
 	return atof(k);
 }

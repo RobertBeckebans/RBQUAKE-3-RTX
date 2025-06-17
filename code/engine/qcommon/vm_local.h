@@ -115,13 +115,13 @@ typedef int vmptr_t;
 typedef struct vmSymbol_s
 {
 	struct vmSymbol_s* next;
-	int                symValue;
-	int                profileCount;
-	char               symName[ 1 ]; // variable sized
+	int				   symValue;
+	int				   profileCount;
+	char			   symName[1]; // variable sized
 } vmSymbol_t;
 
 #define VM_OFFSET_PROGRAM_STACK 0
-#define VM_OFFSET_SYSTEM_CALL   4
+#define VM_OFFSET_SYSTEM_CALL	4
 
 struct vm_s
 {
@@ -132,48 +132,48 @@ struct vm_s
 
 	//------------------------------------
 
-	char name[ MAX_QPATH ];
+	char  name[MAX_QPATH];
 
 	// for dynamic linked modules
 	void* dllHandle;
 	int( QDECL* entryPoint )( int callNum, ... );
 
 	// for interpreted modules
-	qboolean currentlyInterpreting;
+	qboolean		   currentlyInterpreting;
 
-	qboolean compiled;
-	byte*    codeBase;
-	int      codeLength;
+	qboolean		   compiled;
+	byte*			   codeBase;
+	int				   codeLength;
 
-	int* instructionPointers;
-	int  instructionPointersLength;
+	int*			   instructionPointers;
+	int				   instructionPointersLength;
 
-	byte* dataBase;
-	int   dataMask;
+	byte*			   dataBase;
+	int				   dataMask;
 
-	int stackBottom; // if programStack < stackBottom, error
+	int				   stackBottom; // if programStack < stackBottom, error
 
-	int                numSymbols;
+	int				   numSymbols;
 	struct vmSymbol_s* symbols;
 
-	int callLevel;     // for debug indenting
-	int breakFunction; // increment breakCount on function entry to this
-	int breakCount;
+	int				   callLevel;	  // for debug indenting
+	int				   breakFunction; // increment breakCount on function entry to this
+	int				   breakCount;
 
 	// fqpath member added 7/20/02 by T.Ray
-	char fqpath[ MAX_QPATH + 1 ];
+	char			   fqpath[MAX_QPATH + 1];
 };
 
 extern vm_t* currentVM;
-extern int   vm_debugLevel;
+extern int	 vm_debugLevel;
 
-void VM_Compile( vm_t* vm, vmHeader_t* header );
-int  VM_CallCompiled( vm_t* vm, int* args );
+void		 VM_Compile( vm_t* vm, vmHeader_t* header );
+int			 VM_CallCompiled( vm_t* vm, int* args );
 
-void VM_PrepareInterpreter( vm_t* vm, vmHeader_t* header );
-int  VM_CallInterpreted( vm_t* vm, int* args );
+void		 VM_PrepareInterpreter( vm_t* vm, vmHeader_t* header );
+int			 VM_CallInterpreted( vm_t* vm, int* args );
 
-vmSymbol_t* VM_ValueToFunctionSymbol( vm_t* vm, int value );
-int         VM_SymbolToValue( vm_t* vm, const char* symbol );
-const char* VM_ValueToSymbol( vm_t* vm, int value );
-void        VM_LogSyscalls( int* args );
+vmSymbol_t*	 VM_ValueToFunctionSymbol( vm_t* vm, int value );
+int			 VM_SymbolToValue( vm_t* vm, const char* symbol );
+const char*	 VM_ValueToSymbol( vm_t* vm, int value );
+void		 VM_LogSyscalls( int* args );

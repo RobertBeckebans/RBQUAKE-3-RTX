@@ -41,13 +41,13 @@ Sys_Milliseconds
 int sys_timeBase;
 int Sys_Milliseconds( void )
 {
-	int             sys_curtime;
+	int				sys_curtime;
 	static qboolean initialized = qfalse;
 
 	if( !initialized )
 	{
 		sys_timeBase = timeGetTime();
-		initialized  = qtrue;
+		initialized	 = qtrue;
 	}
 	sys_curtime = timeGetTime() - sys_timeBase;
 
@@ -66,9 +66,9 @@ long fastftol( float f )
 
 void Sys_SnapVector( float* v )
 {
-	v[ 0 ] = rint( v[ 0 ] );
-	v[ 1 ] = rint( v[ 1 ] );
-	v[ 2 ] = rint( v[ 2 ] );
+	v[0] = rint( v[0] );
+	v[1] = rint( v[1] );
+	v[2] = rint( v[2] );
 }
 
 /*
@@ -101,13 +101,13 @@ int Sys_GetProcessorId( void )
 
 char* Sys_GetCurrentUser( void )
 {
-	static char   s_userName[ 1024 ];
+	static char	  s_userName[1024];
 	unsigned long size = sizeof( s_userName );
 
 	if( !GetUserName( s_userName, &size ) )
 		strcpy( s_userName, "player" );
 
-	if( !s_userName[ 0 ] )
+	if( !s_userName[0] )
 	{
 		strcpy( s_userName, "player" );
 	}

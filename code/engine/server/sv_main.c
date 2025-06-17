@@ -22,36 +22,36 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "server.h"
 
-serverStatic_t svs;        // persistant server info
-server_t       sv;         // local server
-vm_t*          gvm = NULL; // game virtual machine // bk001212 init
+serverStatic_t svs;		   // persistant server info
+server_t	   sv;		   // local server
+vm_t*		   gvm = NULL; // game virtual machine // bk001212 init
 
-cvar_t* sv_fps;             // time rate for running non-clients
-cvar_t* sv_timeout;         // seconds without any message
-cvar_t* sv_zombietime;      // seconds to sink messages after disconnect
-cvar_t* sv_rconPassword;    // password for remote server commands
-cvar_t* sv_privatePassword; // password for the privateClient slots
-cvar_t* sv_allowDownload;
-cvar_t* sv_maxclients;
+cvar_t*		   sv_fps;			   // time rate for running non-clients
+cvar_t*		   sv_timeout;		   // seconds without any message
+cvar_t*		   sv_zombietime;	   // seconds to sink messages after disconnect
+cvar_t*		   sv_rconPassword;	   // password for remote server commands
+cvar_t*		   sv_privatePassword; // password for the privateClient slots
+cvar_t*		   sv_allowDownload;
+cvar_t*		   sv_maxclients;
 
-cvar_t* sv_privateClients; // number of clients reserved for password
-cvar_t* sv_hostname;
-cvar_t* sv_master[ MAX_MASTER_SERVERS ]; // master server ip address
-cvar_t* sv_reconnectlimit;               // minimum seconds between connect messages
-cvar_t* sv_showloss;                     // report when usercmds are lost
-cvar_t* sv_padPackets;                   // add nop bytes to messages
-cvar_t* sv_killserver;                   // menu system can set to 1 to shut server down
-cvar_t* sv_mapname;
-cvar_t* sv_mapChecksum;
-cvar_t* sv_serverid;
-cvar_t* sv_maxRate;
-cvar_t* sv_minPing;
-cvar_t* sv_maxPing;
-cvar_t* sv_gametype;
-cvar_t* sv_pure;
-cvar_t* sv_floodProtect;
-cvar_t* sv_lanForceRate; // dedicated 1 (LAN) server forces local client rates to 99999 (bug #491)
-cvar_t* sv_strictAuth;
+cvar_t*		   sv_privateClients; // number of clients reserved for password
+cvar_t*		   sv_hostname;
+cvar_t*		   sv_master[MAX_MASTER_SERVERS]; // master server ip address
+cvar_t*		   sv_reconnectlimit;			  // minimum seconds between connect messages
+cvar_t*		   sv_showloss;					  // report when usercmds are lost
+cvar_t*		   sv_padPackets;				  // add nop bytes to messages
+cvar_t*		   sv_killserver;				  // menu system can set to 1 to shut server down
+cvar_t*		   sv_mapname;
+cvar_t*		   sv_mapChecksum;
+cvar_t*		   sv_serverid;
+cvar_t*		   sv_maxRate;
+cvar_t*		   sv_minPing;
+cvar_t*		   sv_maxPing;
+cvar_t*		   sv_gametype;
+cvar_t*		   sv_pure;
+cvar_t*		   sv_floodProtect;
+cvar_t*		   sv_lanForceRate; // dedicated 1 (LAN) server forces local client rates to 99999 (bug #491)
+cvar_t*		   sv_strictAuth;
 
 /*
 =============================================================================
@@ -68,26 +68,26 @@ SV_ExpandNewlines
 Converts newlines to "\n" so a line prints nicer
 ===============
 */
-char* SV_ExpandNewlines( char* in )
+char*		   SV_ExpandNewlines( char* in )
 {
-	static char string[ 1024 ];
-	int         l;
+	static char string[1024];
+	int			l;
 
 	l = 0;
 	while( *in && l < sizeof( string ) - 3 )
 	{
 		if( *in == '\n' )
 		{
-			string[ l++ ] = '\\';
-			string[ l++ ] = 'n';
+			string[l++] = '\\';
+			string[l++] = 'n';
 		}
 		else
 		{
-			string[ l++ ] = *in;
+			string[l++] = *in;
 		}
 		in++;
 	}
-	string[ l ] = 0;
+	string[l] = 0;
 
 	return string;
 }
@@ -107,13 +107,13 @@ int SV_ReplacePendingServerCommands( client_t* client, const char* cmd )
 	{
 		index = i & ( MAX_RELIABLE_COMMANDS - 1 );
 		//
-		if( !Q_strncmp( cmd, client->reliableCommands[ index ], strlen( "cs" ) ) )
+		if( !Q_strncmp( cmd, client->reliableCommands[index], strlen( "cs" ) ) )
 		{
 			sscanf( cmd, "cs %i", &csnum1 );
-			sscanf( client->reliableCommands[ index ], "cs %i", &csnum2 );
+			sscanf( client->reliableCommands[index], "cs %i", &csnum2 );
 			if( csnum1 == csnum2 )
 			{
-				Q_strncpyz( client->reliableCommands[ index ], cmd, sizeof( client->reliableCommands[ index ] ) );
+				Q_strncpyz( client->reliableCommands[index], cmd, sizeof( client->reliableCommands[index] ) );
 				/*
 				if ( client->netchan.remoteAddress.type != NA_BOT ) {
 					Com_Printf( "WARNING: client %i removed double pending config string %i: %s\n", client-svs.clients, csnum1, cmd );
@@ -154,31 +154,31 @@ void SV_AddServerCommand( client_t* client, const char* cmd )
 		Com_Printf( "===== pending server commands =====\n" );
 		for( i = client->reliableAcknowledge + 1; i <= client->reliableSequence; i++ )
 		{
-			Com_Printf( "cmd %5d: %s\n", i, client->reliableCommands[ i & ( MAX_RELIABLE_COMMANDS - 1 ) ] );
+			Com_Printf( "cmd %5d: %s\n", i, client->reliableCommands[i & ( MAX_RELIABLE_COMMANDS - 1 )] );
 		}
 		Com_Printf( "cmd %5d: %s\n", i, cmd );
 		SV_DropClient( client, "Server command overflow" );
 		return;
 	}
 	index = client->reliableSequence & ( MAX_RELIABLE_COMMANDS - 1 );
-	Q_strncpyz( client->reliableCommands[ index ], cmd, sizeof( client->reliableCommands[ index ] ) );
+	Q_strncpyz( client->reliableCommands[index], cmd, sizeof( client->reliableCommands[index] ) );
 }
 
 /*
 =================
 SV_SendServerCommand
 
-Sends a reliable command string to be interpreted by 
+Sends a reliable command string to be interpreted by
 the client game module: "cp", "print", "chat", etc
 A NULL client will broadcast to all clients
 =================
 */
 void QDECL SV_SendServerCommand( client_t* cl, const char* fmt, ... )
 {
-	va_list   argptr;
-	byte      message[ MAX_MSGLEN ];
+	va_list	  argptr;
+	byte	  message[MAX_MSGLEN];
 	client_t* client;
-	int       j;
+	int		  j;
 
 	va_start( argptr, fmt );
 	Q_vsnprintf( ( char* )message, sizeof( message ), fmt, argptr );
@@ -230,8 +230,8 @@ but not on every player enter or exit.
 #define HEARTBEAT_GAME "QuakeArena-1"
 void SV_MasterHeartbeat( void )
 {
-	static netadr_t adr[ MAX_MASTER_SERVERS ];
-	int             i;
+	static netadr_t adr[MAX_MASTER_SERVERS];
+	int				i;
 
 	// "dedicated 1" is for lan play, "dedicated 2" is for inet public play
 	if( !com_dedicated || com_dedicated->integer != 2 )
@@ -249,7 +249,7 @@ void SV_MasterHeartbeat( void )
 	// send to group masters
 	for( i = 0; i < MAX_MASTER_SERVERS; i++ )
 	{
-		if( !sv_master[ i ]->string[ 0 ] )
+		if( !sv_master[i]->string[0] )
 		{
 			continue;
 		}
@@ -257,31 +257,31 @@ void SV_MasterHeartbeat( void )
 		// see if we haven't already resolved the name
 		// resolving usually causes hitches on win95, so only
 		// do it when needed
-		if( sv_master[ i ]->modified )
+		if( sv_master[i]->modified )
 		{
-			sv_master[ i ]->modified = qfalse;
+			sv_master[i]->modified = qfalse;
 
-			Com_Printf( "Resolving %s\n", sv_master[ i ]->string );
-			if( !NET_StringToAdr( sv_master[ i ]->string, &adr[ i ] ) )
+			Com_Printf( "Resolving %s\n", sv_master[i]->string );
+			if( !NET_StringToAdr( sv_master[i]->string, &adr[i] ) )
 			{
 				// if the address failed to resolve, clear it
 				// so we don't take repeated dns hits
-				Com_Printf( "Couldn't resolve address: %s\n", sv_master[ i ]->string );
-				Cvar_Set( sv_master[ i ]->name, "" );
-				sv_master[ i ]->modified = qfalse;
+				Com_Printf( "Couldn't resolve address: %s\n", sv_master[i]->string );
+				Cvar_Set( sv_master[i]->name, "" );
+				sv_master[i]->modified = qfalse;
 				continue;
 			}
-			if( !strstr( ":", sv_master[ i ]->string ) )
+			if( !strstr( ":", sv_master[i]->string ) )
 			{
-				adr[ i ].port = BigShort( PORT_MASTER );
+				adr[i].port = BigShort( PORT_MASTER );
 			}
-			Com_Printf( "%s resolved to %i.%i.%i.%i:%i\n", sv_master[ i ]->string, adr[ i ].ip[ 0 ], adr[ i ].ip[ 1 ], adr[ i ].ip[ 2 ], adr[ i ].ip[ 3 ], BigShort( adr[ i ].port ) );
+			Com_Printf( "%s resolved to %i.%i.%i.%i:%i\n", sv_master[i]->string, adr[i].ip[0], adr[i].ip[1], adr[i].ip[2], adr[i].ip[3], BigShort( adr[i].port ) );
 		}
 
-		Com_Printf( "Sending heartbeat to %s\n", sv_master[ i ]->string );
+		Com_Printf( "Sending heartbeat to %s\n", sv_master[i]->string );
 		// this command should be changed if the server info / status format
 		// ever incompatably changes
-		NET_OutOfBandPrint( NS_SERVER, adr[ i ], "heartbeat %s\n", HEARTBEAT_GAME );
+		NET_OutOfBandPrint( NS_SERVER, adr[i], "heartbeat %s\n", HEARTBEAT_GAME );
 	}
 }
 
@@ -325,14 +325,14 @@ the simple info query.
 */
 void SVC_Status( netadr_t from )
 {
-	char           player[ 1024 ];
-	char           status[ MAX_MSGLEN ];
-	int            i;
-	client_t*      cl;
+	char		   player[1024];
+	char		   status[MAX_MSGLEN];
+	int			   i;
+	client_t*	   cl;
 	playerState_t* ps;
-	int            statusLength;
-	int            playerLength;
-	char           infostring[ MAX_INFO_STRING ];
+	int			   statusLength;
+	int			   playerLength;
+	char		   infostring[MAX_INFO_STRING];
 
 	// ignore if we are in single player
 	if( Cvar_VariableValue( "g_gametype" ) == GT_SINGLE_PLAYER )
@@ -349,22 +349,22 @@ void SVC_Status( netadr_t from )
 	// add "demo" to the sv_keywords if restricted
 	if( Cvar_VariableValue( "fs_restrict" ) )
 	{
-		char keywords[ MAX_INFO_STRING ];
+		char keywords[MAX_INFO_STRING];
 
 		Com_sprintf( keywords, sizeof( keywords ), "demo %s", Info_ValueForKey( infostring, "sv_keywords" ) );
 		Info_SetValueForKey( infostring, "sv_keywords", keywords );
 	}
 
-	status[ 0 ]  = 0;
+	status[0]	 = 0;
 	statusLength = 0;
 
 	for( i = 0; i < sv_maxclients->integer; i++ )
 	{
-		cl = &svs.clients[ i ];
+		cl = &svs.clients[i];
 		if( cl->state >= CS_CONNECTED )
 		{
 			ps = SV_GameClientNum( i );
-			Com_sprintf( player, sizeof( player ), "%i %i \"%s\"\n", ps->persistant[ PERS_SCORE ], cl->ping, cl->name );
+			Com_sprintf( player, sizeof( player ), "%i %i \"%s\"\n", ps->persistant[PERS_SCORE], cl->ping, cl->name );
 			playerLength = strlen( player );
 			if( statusLength + playerLength >= sizeof( status ) )
 			{
@@ -388,9 +388,9 @@ if a user is interested in a server to do a full status
 */
 void SVC_Info( netadr_t from )
 {
-	int   i, count;
+	int	  i, count;
 	char* gamedir;
-	char  infostring[ MAX_INFO_STRING ];
+	char  infostring[MAX_INFO_STRING];
 
 	// ignore if we are in single player
 	if( Cvar_VariableValue( "g_gametype" ) == GT_SINGLE_PLAYER || Cvar_VariableValue( "ui_singlePlayerActive" ) )
@@ -402,13 +402,13 @@ void SVC_Info( netadr_t from )
 	count = 0;
 	for( i = sv_privateClients->integer; i < sv_maxclients->integer; i++ )
 	{
-		if( svs.clients[ i ].state >= CS_CONNECTED )
+		if( svs.clients[i].state >= CS_CONNECTED )
 		{
 			count++;
 		}
 	}
 
-	infostring[ 0 ] = 0;
+	infostring[0] = 0;
 
 	// echo back the parameter to status. so servers can use it as a challenge
 	// to prevent timed spoofed reply packets that add ghost servers
@@ -461,15 +461,15 @@ Redirect all printfs
 */
 void SVC_RemoteCommand( netadr_t from, msg_t* msg )
 {
-	qboolean     valid;
+	qboolean	 valid;
 	unsigned int time;
-	char         remaining[ 1024 ];
+	char		 remaining[1024];
 	// TTimo - scaled down to accumulate, but not overflow anything network wise, print wise etc.
 	// (OOB messages are the bottleneck here)
 #define SV_OUTPUTBUF_LENGTH ( 1024 - 16 )
-	char                sv_outputbuf[ SV_OUTPUTBUF_LENGTH ];
+	char				sv_outputbuf[SV_OUTPUTBUF_LENGTH];
 	static unsigned int lasttime = 0;
-	char*               cmd_aux;
+	char*				cmd_aux;
 
 	// TTimo - https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=534
 	time = Com_Milliseconds();
@@ -479,8 +479,7 @@ void SVC_RemoteCommand( netadr_t from, msg_t* msg )
 	}
 	lasttime = time;
 
-	if( !strlen( sv_rconPassword->string ) ||
-		strcmp( Cmd_Argv( 1 ), sv_rconPassword->string ) )
+	if( !strlen( sv_rconPassword->string ) || strcmp( Cmd_Argv( 1 ), sv_rconPassword->string ) )
 	{
 		valid = qfalse;
 		Com_Printf( "Bad rcon from %s:\n%s\n", NET_AdrToString( from ), Cmd_Argv( 2 ) );
@@ -505,7 +504,7 @@ void SVC_RemoteCommand( netadr_t from, msg_t* msg )
 	}
 	else
 	{
-		remaining[ 0 ] = 0;
+		remaining[0] = 0;
 
 		// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=543
 		// get the command directly, "rcon <pass> <command>" to avoid quoting issues
@@ -513,11 +512,11 @@ void SVC_RemoteCommand( netadr_t from, msg_t* msg )
 		// since the cmd formatting can fuckup (amount of spaces), using a dumb step by step parsing
 		cmd_aux = Cmd_Cmd();
 		cmd_aux += 4;
-		while( cmd_aux[ 0 ] == ' ' )
+		while( cmd_aux[0] == ' ' )
 			cmd_aux++;
-		while( cmd_aux[ 0 ] && cmd_aux[ 0 ] != ' ' ) // password
+		while( cmd_aux[0] && cmd_aux[0] != ' ' ) // password
 			cmd_aux++;
-		while( cmd_aux[ 0 ] == ' ' )
+		while( cmd_aux[0] == ' ' )
 			cmd_aux++;
 
 		Q_strcat( remaining, sizeof( remaining ), cmd_aux );
@@ -546,7 +545,7 @@ void SV_ConnectionlessPacket( netadr_t from, msg_t* msg )
 	MSG_BeginReadingOOB( msg );
 	MSG_ReadLong( msg ); // skip the -1 marker
 
-	if( !Q_strncmp( "connect", &msg->data[ 4 ], 7 ) )
+	if( !Q_strncmp( "connect", &msg->data[4], 7 ) )
 	{
 		Huff_Decompress( msg, 12 );
 	}
@@ -602,9 +601,9 @@ SV_ReadPackets
 */
 void SV_PacketEvent( netadr_t from, msg_t* msg )
 {
-	int       i;
+	int		  i;
 	client_t* cl;
-	int       qport;
+	int		  qport;
 
 	// check for connectionless packet (0xffffffff) first
 	if( msg->cursize >= 4 && *( int* )msg->data == -1 )
@@ -675,15 +674,15 @@ Updates the cl->ping variables
 */
 void SV_CalcPings( void )
 {
-	int            i, j;
-	client_t*      cl;
-	int            total, count;
-	int            delta;
+	int			   i, j;
+	client_t*	   cl;
+	int			   total, count;
+	int			   delta;
 	playerState_t* ps;
 
 	for( i = 0; i < sv_maxclients->integer; i++ )
 	{
-		cl = &svs.clients[ i ];
+		cl = &svs.clients[i];
 		if( cl->state != CS_ACTIVE )
 		{
 			cl->ping = 999;
@@ -704,11 +703,11 @@ void SV_CalcPings( void )
 		count = 0;
 		for( j = 0; j < PACKET_BACKUP; j++ )
 		{
-			if( cl->frames[ j ].messageAcked <= 0 )
+			if( cl->frames[j].messageAcked <= 0 )
 			{
 				continue;
 			}
-			delta = cl->frames[ j ].messageAcked - cl->frames[ j ].messageSent;
+			delta = cl->frames[j].messageAcked - cl->frames[j].messageSent;
 			count++;
 			total += delta;
 		}
@@ -726,7 +725,7 @@ void SV_CalcPings( void )
 		}
 
 		// let the game dll know about the ping
-		ps       = SV_GameClientNum( i );
+		ps		 = SV_GameClientNum( i );
 		ps->ping = cl->ping;
 	}
 }
@@ -735,7 +734,7 @@ void SV_CalcPings( void )
 ==================
 SV_CheckTimeouts
 
-If a packet has not been received from a client for timeout->integer 
+If a packet has not been received from a client for timeout->integer
 seconds, drop the conneciton.  Server time is used instead of
 realtime to avoid dropping the local client while debugging.
 
@@ -746,12 +745,12 @@ if necessary
 */
 void SV_CheckTimeouts( void )
 {
-	int       i;
+	int		  i;
 	client_t* cl;
-	int       droppoint;
-	int       zombiepoint;
+	int		  droppoint;
+	int		  zombiepoint;
 
-	droppoint   = svs.time - 1000 * sv_timeout->integer;
+	droppoint	= svs.time - 1000 * sv_timeout->integer;
 	zombiepoint = svs.time - 1000 * sv_zombietime->integer;
 
 	for( i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++ )
@@ -793,9 +792,9 @@ SV_CheckPaused
 */
 qboolean SV_CheckPaused( void )
 {
-	int       count;
+	int		  count;
 	client_t* cl;
-	int       i;
+	int		  i;
 
 	if( !cl_paused->integer )
 	{

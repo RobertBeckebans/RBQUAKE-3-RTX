@@ -42,11 +42,11 @@ occupied leaf
 */
 void LeakFile( tree_t* tree )
 {
-	vec3_t  mid;
-	FILE*   linefile;
-	char    filename[ 1024 ];
+	vec3_t	mid;
+	FILE*	linefile;
+	char	filename[1024];
 	node_t* node;
-	int     count;
+	int		count;
 
 	if( !tree->outside_node.occupied )
 		return;
@@ -66,32 +66,32 @@ void LeakFile( tree_t* tree )
 	node  = &tree->outside_node;
 	while( node->occupied > 1 )
 	{
-		int       next;
+		int		  next;
 		portal_t *p, *nextportal;
-		node_t*   nextnode;
-		int       s;
+		node_t*	  nextnode;
+		int		  s;
 
 		// find the best portal exit
 		next = node->occupied;
-		for( p = node->portals; p; p = p->next[ !s ] )
+		for( p = node->portals; p; p = p->next[!s] )
 		{
-			s = ( p->nodes[ 0 ] == node );
-			if( p->nodes[ s ]->occupied && p->nodes[ s ]->occupied < next )
+			s = ( p->nodes[0] == node );
+			if( p->nodes[s]->occupied && p->nodes[s]->occupied < next )
 			{
 				nextportal = p;
-				nextnode   = p->nodes[ s ];
-				next       = nextnode->occupied;
+				nextnode   = p->nodes[s];
+				next	   = nextnode->occupied;
 			}
 		}
 		node = nextnode;
 		WindingCenter( nextportal->winding, mid );
-		fprintf( linefile, "%f %f %f\n", mid[ 0 ], mid[ 1 ], mid[ 2 ] );
+		fprintf( linefile, "%f %f %f\n", mid[0], mid[1], mid[2] );
 		count++;
 	}
 	// add the occupant center
 	GetVectorForKey( node->occupant, "origin", mid );
 
-	fprintf( linefile, "%f %f %f\n", mid[ 0 ], mid[ 1 ], mid[ 2 ] );
+	fprintf( linefile, "%f %f %f\n", mid[0], mid[1], mid[2] );
 	qprintf( "%5i point linefile\n", count + 1 );
 
 	fclose( linefile );

@@ -64,16 +64,16 @@ void QGL_EnableLogging( qboolean enable )
 /*
 ** QGL_Init
 **
-** This is responsible for binding our qgl function pointers to 
-** the appropriate GL stuff.  In Windows this means doing a 
+** This is responsible for binding our qgl function pointers to
+** the appropriate GL stuff.  In Windows this means doing a
 ** LoadLibrary and a bunch of calls to GetProcAddress.  On other
 ** operating systems we need to do the right thing, whatever that
 ** might be.
 */
 qboolean QGL_Init( const char* dllname )
 {
-	char systemDir[ 1024 ];
-	char libName[ 1024 ];
+	char systemDir[1024];
+	char libName[1024];
 
 	GetSystemDirectory( systemDir, sizeof( systemDir ) );
 
@@ -81,7 +81,7 @@ qboolean QGL_Init( const char* dllname )
 
 	ri.Printf( PRINT_ALL, "...initializing QGL\n" );
 
-	if( dllname[ 0 ] != '!' )
+	if( dllname[0] != '!' )
 	{
 		Com_sprintf( libName, sizeof( libName ), "%s\\%s", systemDir, dllname );
 	}

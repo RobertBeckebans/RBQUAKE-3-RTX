@@ -41,9 +41,9 @@ Returns the player with name from Cmd_Argv(1)
 static client_t* SV_GetPlayerByName( void )
 {
 	client_t* cl;
-	int       i;
-	char*     s;
-	char      cleanName[ 64 ];
+	int		  i;
+	char*	  s;
+	char	  cleanName[64];
 
 	// make sure server is running
 	if( !com_sv_running->integer )
@@ -94,9 +94,9 @@ Returns the player with idnum from Cmd_Argv(1)
 static client_t* SV_GetPlayerByNum( void )
 {
 	client_t* cl;
-	int       i;
-	int       idnum;
-	char*     s;
+	int		  i;
+	int		  idnum;
+	char*	  s;
 
 	// make sure server is running
 	if( !com_sv_running->integer )
@@ -112,9 +112,9 @@ static client_t* SV_GetPlayerByNum( void )
 
 	s = Cmd_Argv( 1 );
 
-	for( i = 0; s[ i ]; i++ )
+	for( i = 0; s[i]; i++ )
 	{
-		if( s[ i ] < '0' || s[ i ] > '9' )
+		if( s[i] < '0' || s[i] > '9' )
 		{
 			Com_Printf( "Bad slot number: %s\n", s );
 			return NULL;
@@ -127,7 +127,7 @@ static client_t* SV_GetPlayerByNum( void )
 		return NULL;
 	}
 
-	cl = &svs.clients[ idnum ];
+	cl = &svs.clients[idnum];
 	if( !cl->state )
 	{
 		Com_Printf( "Client %i is not active\n", idnum );
@@ -149,11 +149,11 @@ Restart the server on a different map
 */
 static void SV_Map_f( void )
 {
-	char*    cmd;
-	char*    map;
+	char*	 cmd;
+	char*	 map;
 	qboolean killBots, cheat;
-	char     expanded[ MAX_QPATH ];
-	char     mapname[ MAX_QPATH ];
+	char	 expanded[MAX_QPATH];
+	char	 mapname[MAX_QPATH];
 
 	map = Cmd_Argv( 1 );
 	if( !map )
@@ -181,19 +181,19 @@ static void SV_Map_f( void )
 		// may not set sv_maxclients directly, always set latched
 		Cvar_SetLatched( "sv_maxclients", "8" );
 		cmd += 2;
-		cheat    = qfalse;
+		cheat	 = qfalse;
 		killBots = qtrue;
 	}
 	else
 	{
 		if( !Q_stricmp( cmd, "devmap" ) || !Q_stricmp( cmd, "spdevmap" ) )
 		{
-			cheat    = qtrue;
+			cheat	 = qtrue;
 			killBots = qtrue;
 		}
 		else
 		{
-			cheat    = qfalse;
+			cheat	 = qfalse;
 			killBots = qfalse;
 		}
 		if( sv_gametype->integer == GT_SINGLE_PLAYER )
@@ -233,11 +233,11 @@ This allows fair starts with variable load times.
 */
 static void SV_MapRestart_f( void )
 {
-	int       i;
+	int		  i;
 	client_t* client;
-	char*     denied;
+	char*	  denied;
 	qboolean  isBot;
-	int       delay;
+	int		  delay;
 
 	// make sure we aren't restarting twice in the same frame
 	if( com_frameTime == sv.serverId )
@@ -276,7 +276,7 @@ static void SV_MapRestart_f( void )
 	// check for maxclients change
 	if( sv_maxclients->modified || sv_gametype->modified )
 	{
-		char mapname[ MAX_QPATH ];
+		char mapname[MAX_QPATH];
 
 		Com_Printf( "variable change -- restarting.\n" );
 		// restart the map the slow way
@@ -298,7 +298,7 @@ static void SV_MapRestart_f( void )
 	// reset all the vm data in place without changing memory allocation
 	// note that we do NOT set sv.state = SS_LOADING, so configstrings that
 	// had been changed from their default values will generate broadcast updates
-	sv.state      = SS_LOADING;
+	sv.state	  = SS_LOADING;
 	sv.restarting = qtrue;
 
 	SV_RestartGameProgs();
@@ -310,13 +310,13 @@ static void SV_MapRestart_f( void )
 		svs.time += 100;
 	}
 
-	sv.state      = SS_GAME;
+	sv.state	  = SS_GAME;
 	sv.restarting = qfalse;
 
 	// connect and begin all the clients
 	for( i = 0; i < sv_maxclients->integer; i++ )
 	{
-		client = &svs.clients[ i ];
+		client = &svs.clients[i];
 
 		// send the new gamestate to all connected clients
 		if( client->state < CS_CONNECTED )
@@ -369,7 +369,7 @@ Kick a user off of the server  FIXME: move to game
 static void SV_Kick_f( void )
 {
 	client_t* cl;
-	int       i;
+	int		  i;
 
 	// make sure server is running
 	if( !com_sv_running->integer )
@@ -470,7 +470,7 @@ static void SV_Ban_f( void )
 	}
 
 	// look up the authorize server's IP
-	if( !svs.authorizeAddress.ip[ 0 ] && svs.authorizeAddress.type != NA_BAD )
+	if( !svs.authorizeAddress.ip[0] && svs.authorizeAddress.type != NA_BAD )
 	{
 		Com_Printf( "Resolving %s\n", AUTHORIZE_SERVER_NAME );
 		if( !NET_StringToAdr( AUTHORIZE_SERVER_NAME, &svs.authorizeAddress ) )
@@ -479,13 +479,25 @@ static void SV_Ban_f( void )
 			return;
 		}
 		svs.authorizeAddress.port = BigShort( PORT_AUTHORIZE );
-		Com_Printf( "%s resolved to %i.%i.%i.%i:%i\n", AUTHORIZE_SERVER_NAME, svs.authorizeAddress.ip[ 0 ], svs.authorizeAddress.ip[ 1 ], svs.authorizeAddress.ip[ 2 ], svs.authorizeAddress.ip[ 3 ], BigShort( svs.authorizeAddress.port ) );
+		Com_Printf( "%s resolved to %i.%i.%i.%i:%i\n",
+			AUTHORIZE_SERVER_NAME,
+			svs.authorizeAddress.ip[0],
+			svs.authorizeAddress.ip[1],
+			svs.authorizeAddress.ip[2],
+			svs.authorizeAddress.ip[3],
+			BigShort( svs.authorizeAddress.port ) );
 	}
 
 	// otherwise send their ip to the authorize server
 	if( svs.authorizeAddress.type != NA_BAD )
 	{
-		NET_OutOfBandPrint( NS_SERVER, svs.authorizeAddress, "banUser %i.%i.%i.%i", cl->netchan.remoteAddress.ip[ 0 ], cl->netchan.remoteAddress.ip[ 1 ], cl->netchan.remoteAddress.ip[ 2 ], cl->netchan.remoteAddress.ip[ 3 ] );
+		NET_OutOfBandPrint( NS_SERVER,
+			svs.authorizeAddress,
+			"banUser %i.%i.%i.%i",
+			cl->netchan.remoteAddress.ip[0],
+			cl->netchan.remoteAddress.ip[1],
+			cl->netchan.remoteAddress.ip[2],
+			cl->netchan.remoteAddress.ip[3] );
 		Com_Printf( "%s was banned from coming back\n", cl->name );
 	}
 }
@@ -527,7 +539,7 @@ static void SV_BanNum_f( void )
 	}
 
 	// look up the authorize server's IP
-	if( !svs.authorizeAddress.ip[ 0 ] && svs.authorizeAddress.type != NA_BAD )
+	if( !svs.authorizeAddress.ip[0] && svs.authorizeAddress.type != NA_BAD )
 	{
 		Com_Printf( "Resolving %s\n", AUTHORIZE_SERVER_NAME );
 		if( !NET_StringToAdr( AUTHORIZE_SERVER_NAME, &svs.authorizeAddress ) )
@@ -536,13 +548,25 @@ static void SV_BanNum_f( void )
 			return;
 		}
 		svs.authorizeAddress.port = BigShort( PORT_AUTHORIZE );
-		Com_Printf( "%s resolved to %i.%i.%i.%i:%i\n", AUTHORIZE_SERVER_NAME, svs.authorizeAddress.ip[ 0 ], svs.authorizeAddress.ip[ 1 ], svs.authorizeAddress.ip[ 2 ], svs.authorizeAddress.ip[ 3 ], BigShort( svs.authorizeAddress.port ) );
+		Com_Printf( "%s resolved to %i.%i.%i.%i:%i\n",
+			AUTHORIZE_SERVER_NAME,
+			svs.authorizeAddress.ip[0],
+			svs.authorizeAddress.ip[1],
+			svs.authorizeAddress.ip[2],
+			svs.authorizeAddress.ip[3],
+			BigShort( svs.authorizeAddress.port ) );
 	}
 
 	// otherwise send their ip to the authorize server
 	if( svs.authorizeAddress.type != NA_BAD )
 	{
-		NET_OutOfBandPrint( NS_SERVER, svs.authorizeAddress, "banUser %i.%i.%i.%i", cl->netchan.remoteAddress.ip[ 0 ], cl->netchan.remoteAddress.ip[ 1 ], cl->netchan.remoteAddress.ip[ 2 ], cl->netchan.remoteAddress.ip[ 3 ] );
+		NET_OutOfBandPrint( NS_SERVER,
+			svs.authorizeAddress,
+			"banUser %i.%i.%i.%i",
+			cl->netchan.remoteAddress.ip[0],
+			cl->netchan.remoteAddress.ip[1],
+			cl->netchan.remoteAddress.ip[2],
+			cl->netchan.remoteAddress.ip[3] );
 		Com_Printf( "%s was banned from coming back\n", cl->name );
 	}
 }
@@ -593,11 +617,11 @@ SV_Status_f
 */
 static void SV_Status_f( void )
 {
-	int            i, j, l;
-	client_t*      cl;
+	int			   i, j, l;
+	client_t*	   cl;
 	playerState_t* ps;
-	const char*    s;
-	int            ping;
+	const char*	   s;
+	int			   ping;
 
 	// make sure server is running
 	if( !com_sv_running->integer )
@@ -616,7 +640,7 @@ static void SV_Status_f( void )
 			continue;
 		Com_Printf( "%3i ", i );
 		ps = SV_GameClientNum( i );
-		Com_Printf( "%5i ", ps->persistant[ PERS_SCORE ] );
+		Com_Printf( "%5i ", ps->persistant[PERS_SCORE] );
 
 		if( cl->state == CS_CONNECTED )
 			Com_Printf( "CNCT " );
@@ -661,7 +685,7 @@ SV_ConSay_f
 static void SV_ConSay_f( void )
 {
 	char* p;
-	char  text[ 1024 ];
+	char  text[1024];
 
 	// make sure server is running
 	if( !com_sv_running->integer )
@@ -681,7 +705,7 @@ static void SV_ConSay_f( void )
 	if( *p == '"' )
 	{
 		p++;
-		p[ strlen( p ) - 1 ] = 0;
+		p[strlen( p ) - 1] = 0;
 	}
 
 	strcat( text, p );

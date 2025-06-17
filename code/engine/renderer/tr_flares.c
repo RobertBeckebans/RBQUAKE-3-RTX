@@ -60,27 +60,27 @@ typedef struct flare_s
 {
 	struct flare_s* next; // for active chain
 
-	int addedFrame;
+	int				addedFrame;
 
-	qboolean inPortal; // true if in a portal view of the scene
-	int      frameSceneNum;
-	void*    surface;
-	int      fogNum;
+	qboolean		inPortal; // true if in a portal view of the scene
+	int				frameSceneNum;
+	void*			surface;
+	int				fogNum;
 
-	int fadeTime;
+	int				fadeTime;
 
-	qboolean visible;       // state of last test
-	float    drawIntensity; // may be non 0 even if !visible due to fading
+	qboolean		visible;	   // state of last test
+	float			drawIntensity; // may be non 0 even if !visible due to fading
 
-	int   windowX, windowY;
-	float eyeZ;
+	int				windowX, windowY;
+	float			eyeZ;
 
-	vec3_t color;
+	vec3_t			color;
 } flare_t;
 
 #define MAX_FLARES 128
 
-flare_t  r_flareStructs[ MAX_FLARES ];
+flare_t	 r_flareStructs[MAX_FLARES];
 flare_t *r_activeFlares, *r_inactiveFlares;
 
 /*
@@ -88,18 +88,18 @@ flare_t *r_activeFlares, *r_inactiveFlares;
 R_ClearFlares
 ==================
 */
-void R_ClearFlares( void )
+void	 R_ClearFlares( void )
 {
 	int i;
 
 	Com_Memset( r_flareStructs, 0, sizeof( r_flareStructs ) );
-	r_activeFlares   = NULL;
+	r_activeFlares	 = NULL;
 	r_inactiveFlares = NULL;
 
 	for( i = 0; i < MAX_FLARES; i++ )
 	{
-		r_flareStructs[ i ].next = r_inactiveFlares;
-		r_inactiveFlares         = &r_flareStructs[ i ];
+		r_flareStructs[i].next = r_inactiveFlares;
+		r_inactiveFlares	   = &r_flareStructs[i];
 	}
 }
 
@@ -112,11 +112,11 @@ This is called at surface tesselation time
 */
 void RB_AddFlare( void* surface, int fogNum, vec3_t point, vec3_t color, vec3_t normal )
 {
-	int      i;
+	int		 i;
 	flare_t *f, *oldest;
-	vec3_t   local;
-	float    d;
-	vec4_t   eye, clip, normalized, window;
+	vec3_t	 local;
+	float	 d;
+	vec4_t	 eye, clip, normalized, window;
 
 	backEnd.pc.c_flareAdds++;
 
@@ -127,7 +127,7 @@ void RB_AddFlare( void* surface, int fogNum, vec3_t point, vec3_t color, vec3_t 
 	// check to see if the point is completely off screen
 	for( i = 0; i < 3; i++ )
 	{
-		if( clip[ i ] >= clip[ 3 ] || clip[ i ] <= -clip[ 3 ] )
+		if( clip[i] >= clip[3] || clip[i] <= -clip[3] )
 		{
 			return;
 		}
@@ -135,7 +135,7 @@ void RB_AddFlare( void* surface, int fogNum, vec3_t point, vec3_t color, vec3_t 
 
 	R_TransformClipToWindow( clip, &backEnd.viewParms, normalized, window );
 
-	if( window[ 0 ] < 0 || window[ 0 ] >= backEnd.viewParms.viewportWidth || window[ 1 ] < 0 || window[ 1 ] >= backEnd.viewParms.viewportHeight )
+	if( window[0] < 0 || window[0] >= backEnd.viewParms.viewportWidth || window[1] < 0 || window[1] >= backEnd.viewParms.viewportHeight )
 	{
 		return; // shouldn't happen, since we check the clip[] above, except for FP rounding
 	}
@@ -158,25 +158,25 @@ void RB_AddFlare( void* surface, int fogNum, vec3_t point, vec3_t color, vec3_t 
 			// the list is completely full
 			return;
 		}
-		f                = r_inactiveFlares;
+		f				 = r_inactiveFlares;
 		r_inactiveFlares = r_inactiveFlares->next;
-		f->next          = r_activeFlares;
-		r_activeFlares   = f;
+		f->next			 = r_activeFlares;
+		r_activeFlares	 = f;
 
-		f->surface       = surface;
+		f->surface		 = surface;
 		f->frameSceneNum = backEnd.viewParms.frameSceneNum;
-		f->inPortal      = backEnd.viewParms.isPortal;
-		f->addedFrame    = -1;
+		f->inPortal		 = backEnd.viewParms.isPortal;
+		f->addedFrame	 = -1;
 	}
 
 	if( f->addedFrame != backEnd.viewParms.frameCount - 1 )
 	{
-		f->visible  = qfalse;
+		f->visible	= qfalse;
 		f->fadeTime = backEnd.refdef.time - 2000;
 	}
 
 	f->addedFrame = backEnd.viewParms.frameCount;
-	f->fogNum     = fogNum;
+	f->fogNum	  = fogNum;
 
 	VectorCopy( color, f->color );
 
@@ -191,10 +191,10 @@ void RB_AddFlare( void* surface, int fogNum, vec3_t point, vec3_t color, vec3_t 
 	}
 
 	// save info needed to test
-	f->windowX = backEnd.viewParms.viewportX + window[ 0 ];
-	f->windowY = backEnd.viewParms.viewportY + window[ 1 ];
+	f->windowX = backEnd.viewParms.viewportX + window[0];
+	f->windowY = backEnd.viewParms.viewportY + window[1];
 
-	f->eyeZ = eye[ 2 ];
+	f->eyeZ = eye[2];
 }
 
 /*
@@ -205,25 +205,25 @@ RB_AddDlightFlares
 void RB_AddDlightFlares( void )
 {
 	dlight_t* l;
-	int       i, j, k;
-	fog_t*    fog;
+	int		  i, j, k;
+	fog_t*	  fog;
 
 	if( !r_flares->integer )
 	{
 		return;
 	}
 
-	l   = backEnd.refdef.dlights;
+	l	= backEnd.refdef.dlights;
 	fog = tr.world->fogs;
 	for( i = 0; i < backEnd.refdef.num_dlights; i++, l++ )
 	{
 		// find which fog volume the light is in
 		for( j = 1; j < tr.world->numfogs; j++ )
 		{
-			fog = &tr.world->fogs[ j ];
+			fog = &tr.world->fogs[j];
 			for( k = 0; k < 3; k++ )
 			{
-				if( l->origin[ k ] < fog->bounds[ 0 ][ k ] || l->origin[ k ] > fog->bounds[ 1 ][ k ] )
+				if( l->origin[k] < fog->bounds[0][k] || l->origin[k] > fog->bounds[1][k] )
 				{
 					break;
 				}
@@ -257,10 +257,10 @@ RB_TestFlare
 */
 void RB_TestFlare( flare_t* f )
 {
-	float    depth;
+	float	 depth;
 	qboolean visible;
-	float    fade;
-	float    screenZ;
+	float	 fade;
+	float	 screenZ;
 
 	backEnd.pc.c_flareTests++;
 
@@ -269,10 +269,9 @@ void RB_TestFlare( flare_t* f )
 	glState.finishCalled = qfalse;
 
 	// read back the z buffer contents
-	//qglReadPixels( f->windowX, f->windowY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth );
+	// qglReadPixels( f->windowX, f->windowY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth );
 
-	screenZ = backEnd.viewParms.projectionMatrix[ 14 ] /
-		( ( 2 * depth - 1 ) * backEnd.viewParms.projectionMatrix[ 11 ] - backEnd.viewParms.projectionMatrix[ 10 ] );
+	screenZ = backEnd.viewParms.projectionMatrix[14] / ( ( 2 * depth - 1 ) * backEnd.viewParms.projectionMatrix[11] - backEnd.viewParms.projectionMatrix[10] );
 
 	visible = ( -f->eyeZ - -screenZ ) < 24;
 
@@ -280,7 +279,7 @@ void RB_TestFlare( flare_t* f )
 	{
 		if( !f->visible )
 		{
-			f->visible  = qtrue;
+			f->visible	= qtrue;
 			f->fadeTime = backEnd.refdef.time - 1;
 		}
 		fade = ( ( backEnd.refdef.time - f->fadeTime ) / 1000.0f ) * r_flareFade->value;
@@ -289,7 +288,7 @@ void RB_TestFlare( flare_t* f )
 	{
 		if( f->visible )
 		{
-			f->visible  = qfalse;
+			f->visible	= qfalse;
 			f->fadeTime = backEnd.refdef.time - 1;
 		}
 		fade = 1.0f - ( ( backEnd.refdef.time - f->fadeTime ) / 1000.0f ) * r_flareFade->value;
@@ -316,66 +315,66 @@ void RB_RenderFlare( flare_t* f )
 {
 	float  size;
 	vec3_t color;
-	int    iColor[ 3 ];
+	int	   iColor[3];
 
 	backEnd.pc.c_flareRenders++;
 
 	VectorScale( f->color, f->drawIntensity * tr.identityLight, color );
-	iColor[ 0 ] = color[ 0 ] * 255;
-	iColor[ 1 ] = color[ 1 ] * 255;
-	iColor[ 2 ] = color[ 2 ] * 255;
+	iColor[0] = color[0] * 255;
+	iColor[1] = color[1] * 255;
+	iColor[2] = color[2] * 255;
 
 	size = backEnd.viewParms.viewportWidth * ( r_flareSize->value / 640.0f + 8 / -f->eyeZ );
 
 	RB_BeginSurface( tr.flareShader, f->fogNum );
 
 	// FIXME: use quadstamp?
-	tess.xyz[ tess.numVertexes ][ 0 ]            = f->windowX - size;
-	tess.xyz[ tess.numVertexes ][ 1 ]            = f->windowY - size;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 0 ] = 0;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 1 ] = 0;
-	tess.vertexColors[ tess.numVertexes ][ 0 ]   = iColor[ 0 ];
-	tess.vertexColors[ tess.numVertexes ][ 1 ]   = iColor[ 1 ];
-	tess.vertexColors[ tess.numVertexes ][ 2 ]   = iColor[ 2 ];
-	tess.vertexColors[ tess.numVertexes ][ 3 ]   = 255;
+	tess.xyz[tess.numVertexes][0]		   = f->windowX - size;
+	tess.xyz[tess.numVertexes][1]		   = f->windowY - size;
+	tess.texCoords[tess.numVertexes][0][0] = 0;
+	tess.texCoords[tess.numVertexes][0][1] = 0;
+	tess.vertexColors[tess.numVertexes][0] = iColor[0];
+	tess.vertexColors[tess.numVertexes][1] = iColor[1];
+	tess.vertexColors[tess.numVertexes][2] = iColor[2];
+	tess.vertexColors[tess.numVertexes][3] = 255;
 	tess.numVertexes++;
 
-	tess.xyz[ tess.numVertexes ][ 0 ]            = f->windowX - size;
-	tess.xyz[ tess.numVertexes ][ 1 ]            = f->windowY + size;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 0 ] = 0;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 1 ] = 1;
-	tess.vertexColors[ tess.numVertexes ][ 0 ]   = iColor[ 0 ];
-	tess.vertexColors[ tess.numVertexes ][ 1 ]   = iColor[ 1 ];
-	tess.vertexColors[ tess.numVertexes ][ 2 ]   = iColor[ 2 ];
-	tess.vertexColors[ tess.numVertexes ][ 3 ]   = 255;
+	tess.xyz[tess.numVertexes][0]		   = f->windowX - size;
+	tess.xyz[tess.numVertexes][1]		   = f->windowY + size;
+	tess.texCoords[tess.numVertexes][0][0] = 0;
+	tess.texCoords[tess.numVertexes][0][1] = 1;
+	tess.vertexColors[tess.numVertexes][0] = iColor[0];
+	tess.vertexColors[tess.numVertexes][1] = iColor[1];
+	tess.vertexColors[tess.numVertexes][2] = iColor[2];
+	tess.vertexColors[tess.numVertexes][3] = 255;
 	tess.numVertexes++;
 
-	tess.xyz[ tess.numVertexes ][ 0 ]            = f->windowX + size;
-	tess.xyz[ tess.numVertexes ][ 1 ]            = f->windowY + size;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 0 ] = 1;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 1 ] = 1;
-	tess.vertexColors[ tess.numVertexes ][ 0 ]   = iColor[ 0 ];
-	tess.vertexColors[ tess.numVertexes ][ 1 ]   = iColor[ 1 ];
-	tess.vertexColors[ tess.numVertexes ][ 2 ]   = iColor[ 2 ];
-	tess.vertexColors[ tess.numVertexes ][ 3 ]   = 255;
+	tess.xyz[tess.numVertexes][0]		   = f->windowX + size;
+	tess.xyz[tess.numVertexes][1]		   = f->windowY + size;
+	tess.texCoords[tess.numVertexes][0][0] = 1;
+	tess.texCoords[tess.numVertexes][0][1] = 1;
+	tess.vertexColors[tess.numVertexes][0] = iColor[0];
+	tess.vertexColors[tess.numVertexes][1] = iColor[1];
+	tess.vertexColors[tess.numVertexes][2] = iColor[2];
+	tess.vertexColors[tess.numVertexes][3] = 255;
 	tess.numVertexes++;
 
-	tess.xyz[ tess.numVertexes ][ 0 ]            = f->windowX + size;
-	tess.xyz[ tess.numVertexes ][ 1 ]            = f->windowY - size;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 0 ] = 1;
-	tess.texCoords[ tess.numVertexes ][ 0 ][ 1 ] = 0;
-	tess.vertexColors[ tess.numVertexes ][ 0 ]   = iColor[ 0 ];
-	tess.vertexColors[ tess.numVertexes ][ 1 ]   = iColor[ 1 ];
-	tess.vertexColors[ tess.numVertexes ][ 2 ]   = iColor[ 2 ];
-	tess.vertexColors[ tess.numVertexes ][ 3 ]   = 255;
+	tess.xyz[tess.numVertexes][0]		   = f->windowX + size;
+	tess.xyz[tess.numVertexes][1]		   = f->windowY - size;
+	tess.texCoords[tess.numVertexes][0][0] = 1;
+	tess.texCoords[tess.numVertexes][0][1] = 0;
+	tess.vertexColors[tess.numVertexes][0] = iColor[0];
+	tess.vertexColors[tess.numVertexes][1] = iColor[1];
+	tess.vertexColors[tess.numVertexes][2] = iColor[2];
+	tess.vertexColors[tess.numVertexes][3] = 255;
 	tess.numVertexes++;
 
-	tess.indexes[ tess.numIndexes++ ] = 0;
-	tess.indexes[ tess.numIndexes++ ] = 1;
-	tess.indexes[ tess.numIndexes++ ] = 2;
-	tess.indexes[ tess.numIndexes++ ] = 0;
-	tess.indexes[ tess.numIndexes++ ] = 2;
-	tess.indexes[ tess.numIndexes++ ] = 3;
+	tess.indexes[tess.numIndexes++] = 0;
+	tess.indexes[tess.numIndexes++] = 1;
+	tess.indexes[tess.numIndexes++] = 2;
+	tess.indexes[tess.numIndexes++] = 0;
+	tess.indexes[tess.numIndexes++] = 2;
+	tess.indexes[tess.numIndexes++] = 3;
 
 	RB_EndSurface();
 }

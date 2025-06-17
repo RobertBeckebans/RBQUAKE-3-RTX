@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ==============================================================================
 
 PACKET FILTERING
- 
+
 
 You can add or remove addresses from the filter list with:
 
@@ -66,25 +66,25 @@ typedef struct ipFilter_s
 
 #define MAX_IPFILTERS 1024
 
-static ipFilter_t ipFilters[ MAX_IPFILTERS ];
-static int        numIPFilters;
+static ipFilter_t ipFilters[MAX_IPFILTERS];
+static int		  numIPFilters;
 
 /*
 =================
 StringToFilter
 =================
 */
-static qboolean StringToFilter( char* s, ipFilter_t* f )
+static qboolean	  StringToFilter( char* s, ipFilter_t* f )
 {
-	char num[ 128 ];
-	int  i, j;
-	byte b[ 4 ];
-	byte m[ 4 ];
+	char num[128];
+	int	 i, j;
+	byte b[4];
+	byte m[4];
 
 	for( i = 0; i < 4; i++ )
 	{
-		b[ i ] = 0;
-		m[ i ] = 0;
+		b[i] = 0;
+		m[i] = 0;
 	}
 
 	for( i = 0; i < 4; i++ )
@@ -107,18 +107,18 @@ static qboolean StringToFilter( char* s, ipFilter_t* f )
 		j = 0;
 		while( *s >= '0' && *s <= '9' )
 		{
-			num[ j++ ] = *s++;
+			num[j++] = *s++;
 		}
-		num[ j ] = 0;
-		b[ i ]   = atoi( num );
-		m[ i ]   = 255;
+		num[j] = 0;
+		b[i]   = atoi( num );
+		m[i]   = 255;
 
 		if( !*s )
 			break;
 		s++;
 	}
 
-	f->mask    = *( unsigned* )m;
+	f->mask	   = *( unsigned* )m;
 	f->compare = *( unsigned* )b;
 
 	return qtrue;
@@ -131,27 +131,27 @@ UpdateIPBans
 */
 static void UpdateIPBans( void )
 {
-	byte b[ 4 ];
-	byte m[ 4 ];
-	int  i, j;
-	char iplist_final[ MAX_CVAR_VALUE_STRING ];
-	char ip[ 64 ];
+	byte b[4];
+	byte m[4];
+	int	 i, j;
+	char iplist_final[MAX_CVAR_VALUE_STRING];
+	char ip[64];
 
 	*iplist_final = 0;
 	for( i = 0; i < numIPFilters; i++ )
 	{
-		if( ipFilters[ i ].compare == 0xffffffff )
+		if( ipFilters[i].compare == 0xffffffff )
 			continue;
 
-		*( unsigned* )b = ipFilters[ i ].compare;
-		*( unsigned* )m = ipFilters[ i ].mask;
-		*ip             = 0;
+		*( unsigned* )b = ipFilters[i].compare;
+		*( unsigned* )m = ipFilters[i].mask;
+		*ip				= 0;
 		for( j = 0; j < 4; j++ )
 		{
-			if( m[ j ] != 255 )
+			if( m[j] != 255 )
 				Q_strcat( ip, sizeof( ip ), "*" );
 			else
-				Q_strcat( ip, sizeof( ip ), va( "%i", b[ j ] ) );
+				Q_strcat( ip, sizeof( ip ), va( "%i", b[j] ) );
 			Q_strcat( ip, sizeof( ip ), ( j < 3 ) ? "." : " " );
 		}
 		if( strlen( iplist_final ) + strlen( ip ) < MAX_CVAR_VALUE_STRING )
@@ -175,19 +175,19 @@ G_FilterPacket
 */
 qboolean G_FilterPacket( char* from )
 {
-	int      i;
+	int		 i;
 	unsigned in;
-	byte     m[ 4 ];
-	char*    p;
+	byte	 m[4];
+	char*	 p;
 
 	i = 0;
 	p = from;
 	while( *p && i < 4 )
 	{
-		m[ i ] = 0;
+		m[i] = 0;
 		while( *p >= '0' && *p <= '9' )
 		{
-			m[ i ] = m[ i ] * 10 + ( *p - '0' );
+			m[i] = m[i] * 10 + ( *p - '0' );
 			p++;
 		}
 		if( !*p || *p == ':' )
@@ -198,7 +198,7 @@ qboolean G_FilterPacket( char* from )
 	in = *( unsigned* )m;
 
 	for( i = 0; i < numIPFilters; i++ )
-		if( ( in & ipFilters[ i ].mask ) == ipFilters[ i ].compare )
+		if( ( in & ipFilters[i].mask ) == ipFilters[i].compare )
 			return g_filterBan.integer != 0;
 
 	return g_filterBan.integer == 0;
@@ -214,7 +214,7 @@ static void AddIP( char* str )
 	int i;
 
 	for( i = 0; i < numIPFilters; i++ )
-		if( ipFilters[ i ].compare == 0xffffffff )
+		if( ipFilters[i].compare == 0xffffffff )
 			break; // free spot
 	if( i == numIPFilters )
 	{
@@ -226,8 +226,8 @@ static void AddIP( char* str )
 		numIPFilters++;
 	}
 
-	if( !StringToFilter( str, &ipFilters[ i ] ) )
-		ipFilters[ i ].compare = 0xffffffffu;
+	if( !StringToFilter( str, &ipFilters[i] ) )
+		ipFilters[i].compare = 0xffffffffu;
 
 	UpdateIPBans();
 }
@@ -240,7 +240,7 @@ G_ProcessIPBans
 void G_ProcessIPBans( void )
 {
 	char *s, *t;
-	char  str[ MAX_CVAR_VALUE_STRING ];
+	char  str[MAX_CVAR_VALUE_STRING];
 
 	Q_strncpyz( str, g_banIPs.string, sizeof( str ) );
 
@@ -264,7 +264,7 @@ Svcmd_AddIP_f
 */
 void Svcmd_AddIP_f( void )
 {
-	char str[ MAX_TOKEN_CHARS ];
+	char str[MAX_TOKEN_CHARS];
 
 	if( trap_Argc() < 2 )
 	{
@@ -285,8 +285,8 @@ Svcmd_RemoveIP_f
 void Svcmd_RemoveIP_f( void )
 {
 	ipFilter_t f;
-	int        i;
-	char       str[ MAX_TOKEN_CHARS ];
+	int		   i;
+	char	   str[MAX_TOKEN_CHARS];
 
 	if( trap_Argc() < 2 )
 	{
@@ -301,10 +301,9 @@ void Svcmd_RemoveIP_f( void )
 
 	for( i = 0; i < numIPFilters; i++ )
 	{
-		if( ipFilters[ i ].mask == f.mask &&
-			ipFilters[ i ].compare == f.compare )
+		if( ipFilters[i].mask == f.mask && ipFilters[i].compare == f.compare )
 		{
-			ipFilters[ i ].compare = 0xffffffffu;
+			ipFilters[i].compare = 0xffffffffu;
 			G_Printf( "Removed.\n" );
 
 			UpdateIPBans();
@@ -322,7 +321,7 @@ Svcmd_EntityList_f
 */
 void Svcmd_EntityList_f( void )
 {
-	int        e;
+	int		   e;
 	gentity_t* check;
 
 	check = g_entities + 1;
@@ -387,11 +386,11 @@ void Svcmd_EntityList_f( void )
 gclient_t* ClientForString( const char* s )
 {
 	gclient_t* cl;
-	int        i;
-	int        idnum;
+	int		   i;
+	int		   idnum;
 
 	// numeric values are just slot numbers
-	if( s[ 0 ] >= '0' && s[ 0 ] <= '9' )
+	if( s[0] >= '0' && s[0] <= '9' )
 	{
 		idnum = atoi( s );
 		if( idnum < 0 || idnum >= level.maxclients )
@@ -400,7 +399,7 @@ gclient_t* ClientForString( const char* s )
 			return NULL;
 		}
 
-		cl = &level.clients[ idnum ];
+		cl = &level.clients[idnum];
 		if( cl->pers.connected == CON_DISCONNECTED )
 		{
 			G_Printf( "Client %i is not connected\n", idnum );
@@ -412,7 +411,7 @@ gclient_t* ClientForString( const char* s )
 	// check for a name match
 	for( i = 0; i < level.maxclients; i++ )
 	{
-		cl = &level.clients[ i ];
+		cl = &level.clients[i];
 		if( cl->pers.connected == CON_DISCONNECTED )
 		{
 			continue;
@@ -438,7 +437,7 @@ forceteam <player> <team>
 void Svcmd_ForceTeam_f( void )
 {
 	gclient_t* cl;
-	char       str[ MAX_TOKEN_CHARS ];
+	char	   str[MAX_TOKEN_CHARS];
 
 	// find the player
 	trap_Argv( 1, str, sizeof( str ) );
@@ -450,10 +449,10 @@ void Svcmd_ForceTeam_f( void )
 
 	// set the team
 	trap_Argv( 2, str, sizeof( str ) );
-	SetTeam( &g_entities[ cl - level.clients ], str );
+	SetTeam( &g_entities[cl - level.clients], str );
 }
 
-char* ConcatArgs( int start );
+char*	 ConcatArgs( int start );
 
 /*
 =================
@@ -463,7 +462,7 @@ ConsoleCommand
 */
 qboolean ConsoleCommand( void )
 {
-	char cmd[ MAX_TOKEN_CHARS ];
+	char cmd[MAX_TOKEN_CHARS];
 
 	trap_Argv( 0, cmd, sizeof( cmd ) );
 

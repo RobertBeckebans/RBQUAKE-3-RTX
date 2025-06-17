@@ -35,9 +35,9 @@ qboolean G_SpawnString( const char* key, const char* defaultString, char** out )
 
 	for( i = 0; i < level.numSpawnVars; i++ )
 	{
-		if( !Q_stricmp( key, level.spawnVars[ i ][ 0 ] ) )
+		if( !Q_stricmp( key, level.spawnVars[i][0] ) )
 		{
-			*out = level.spawnVars[ i ][ 1 ];
+			*out = level.spawnVars[i][1];
 			return qtrue;
 		}
 	}
@@ -48,31 +48,31 @@ qboolean G_SpawnString( const char* key, const char* defaultString, char** out )
 
 qboolean G_SpawnFloat( const char* key, const char* defaultString, float* out )
 {
-	char*    s;
+	char*	 s;
 	qboolean present;
 
 	present = G_SpawnString( key, defaultString, &s );
-	*out    = atof( s );
+	*out	= atof( s );
 	return present;
 }
 
 qboolean G_SpawnInt( const char* key, const char* defaultString, int* out )
 {
-	char*    s;
+	char*	 s;
 	qboolean present;
 
 	present = G_SpawnString( key, defaultString, &s );
-	*out    = atoi( s );
+	*out	= atoi( s );
 	return present;
 }
 
 qboolean G_SpawnVector( const char* key, const char* defaultString, float* out )
 {
-	char*    s;
+	char*	 s;
 	qboolean present;
 
 	present = G_SpawnString( key, defaultString, &s );
-	sscanf( s, "%f %f %f", &out[ 0 ], &out[ 1 ], &out[ 2 ] );
+	sscanf( s, "%f %f %f", &out[0], &out[1], &out[2] );
 	return present;
 }
 
@@ -88,21 +88,20 @@ typedef enum
 	F_VECTOR,
 	F_ANGLEHACK,
 	F_ENTITY, // index on disk, pointer in memory
-	F_ITEM,   // index on disk, pointer in memory
+	F_ITEM,	  // index on disk, pointer in memory
 	F_CLIENT, // index on disk, pointer in memory
 	F_IGNORE
 } fieldtype_t;
 
 typedef struct
 {
-	char*       name;
-	int         ofs;
+	char*		name;
+	int			ofs;
 	fieldtype_t type;
-	int         flags;
+	int			flags;
 } field_t;
 
-field_t fields[] = {
-	{ "classname", FOFS( classname ), F_LSTRING },
+field_t fields[] = { { "classname", FOFS( classname ), F_LSTRING },
 	{ "origin", FOFS( s.origin ), F_VECTOR },
 	{ "_color", FOFS( color ), F_VECTOR },
 	{ "model", FOFS( model ), F_LSTRING },
@@ -124,8 +123,7 @@ field_t fields[] = {
 	{ "targetShaderName", FOFS( targetShaderName ), F_LSTRING },
 	{ "targetShaderNewName", FOFS( targetShaderNewName ), F_LSTRING },
 
-	{ NULL }
-};
+	{ NULL } };
 
 typedef struct
 {
@@ -198,7 +196,7 @@ void SP_team_blueobelisk( gentity_t* ent );
 void SP_team_redobelisk( gentity_t* ent );
 void SP_team_neutralobelisk( gentity_t* ent );
 #endif
-void SP_item_botroam( gentity_t* ent ) {};
+void	SP_item_botroam( gentity_t* ent ) {};
 
 spawn_t spawns[] = {
 	// info entities don't do anything at all, but provide positional
@@ -330,7 +328,7 @@ so message texts can be multi-line
 char* G_NewString( const char* string )
 {
 	char *newb, *new_p;
-	int   i, l;
+	int	  i, l;
 
 	l = strlen( string ) + 1;
 
@@ -341,10 +339,10 @@ char* G_NewString( const char* string )
 	// turn \n into a real linefeed
 	for( i = 0; i < l; i++ )
 	{
-		if( string[ i ] == '\\' && i < l - 1 )
+		if( string[i] == '\\' && i < l - 1 )
 		{
 			i++;
-			if( string[ i ] == 'n' )
+			if( string[i] == 'n' )
 			{
 				*new_p++ = '\n';
 			}
@@ -355,7 +353,7 @@ char* G_NewString( const char* string )
 		}
 		else
 		{
-			*new_p++ = string[ i ];
+			*new_p++ = string[i];
 		}
 	}
 
@@ -373,9 +371,9 @@ in a gentity
 void G_ParseField( const char* key, const char* value, gentity_t* ent )
 {
 	field_t* f;
-	byte*    b;
-	float    v;
-	vec3_t   vec;
+	byte*	 b;
+	float	 v;
+	vec3_t	 vec;
 
 	for( f = fields; f->name; f++ )
 	{
@@ -390,10 +388,10 @@ void G_ParseField( const char* key, const char* value, gentity_t* ent )
 					*( char** )( b + f->ofs ) = G_NewString( value );
 					break;
 				case F_VECTOR:
-					sscanf( value, "%f %f %f", &vec[ 0 ], &vec[ 1 ], &vec[ 2 ] );
-					( ( float* )( b + f->ofs ) )[ 0 ] = vec[ 0 ];
-					( ( float* )( b + f->ofs ) )[ 1 ] = vec[ 1 ];
-					( ( float* )( b + f->ofs ) )[ 2 ] = vec[ 2 ];
+					sscanf( value, "%f %f %f", &vec[0], &vec[1], &vec[2] );
+					( ( float* )( b + f->ofs ) )[0] = vec[0];
+					( ( float* )( b + f->ofs ) )[1] = vec[1];
+					( ( float* )( b + f->ofs ) )[2] = vec[2];
 					break;
 				case F_INT:
 					*( int* )( b + f->ofs ) = atoi( value );
@@ -402,10 +400,10 @@ void G_ParseField( const char* key, const char* value, gentity_t* ent )
 					*( float* )( b + f->ofs ) = atof( value );
 					break;
 				case F_ANGLEHACK:
-					v                                 = atof( value );
-					( ( float* )( b + f->ofs ) )[ 0 ] = 0;
-					( ( float* )( b + f->ofs ) )[ 1 ] = v;
-					( ( float* )( b + f->ofs ) )[ 2 ] = 0;
+					v								= atof( value );
+					( ( float* )( b + f->ofs ) )[0] = 0;
+					( ( float* )( b + f->ofs ) )[1] = v;
+					( ( float* )( b + f->ofs ) )[2] = 0;
 					break;
 				default:
 				case F_IGNORE:
@@ -426,9 +424,9 @@ level.spawnVars[], then call the class specfic spawn function
 */
 void G_SpawnGEntityFromSpawnVars( void )
 {
-	int          i;
-	gentity_t*   ent;
-	char *       s, *value, *gametypeName;
+	int			 i;
+	gentity_t*	 ent;
+	char *		 s, *value, *gametypeName;
 	static char* gametypeNames[] = { "ffa", "tournament", "single", "team", "ctf", "oneflag", "obelisk", "harvester", "teamtournament" };
 
 	// get the next free entity
@@ -436,7 +434,7 @@ void G_SpawnGEntityFromSpawnVars( void )
 
 	for( i = 0; i < level.numSpawnVars; i++ )
 	{
-		G_ParseField( level.spawnVars[ i ][ 0 ], level.spawnVars[ i ][ 1 ], ent );
+		G_ParseField( level.spawnVars[i][0], level.spawnVars[i][1], ent );
 	}
 
 	// check for "notsingle" flag
@@ -489,7 +487,7 @@ void G_SpawnGEntityFromSpawnVars( void )
 	{
 		if( g_gametype.integer >= GT_FFA && g_gametype.integer < GT_MAX_GAME_TYPE )
 		{
-			gametypeName = gametypeNames[ g_gametype.integer ];
+			gametypeName = gametypeNames[g_gametype.integer];
 
 			s = strstr( value, gametypeName );
 			if( !s )
@@ -518,7 +516,7 @@ G_AddSpawnVarToken
 */
 char* G_AddSpawnVarToken( const char* string )
 {
-	int   l;
+	int	  l;
 	char* dest;
 
 	l = strlen( string );
@@ -547,10 +545,10 @@ This does not actually spawn an entity.
 */
 qboolean G_ParseSpawnVars( void )
 {
-	char keyname[ MAX_TOKEN_CHARS ];
-	char com_token[ MAX_TOKEN_CHARS ];
+	char keyname[MAX_TOKEN_CHARS];
+	char com_token[MAX_TOKEN_CHARS];
 
-	level.numSpawnVars     = 0;
+	level.numSpawnVars	   = 0;
 	level.numSpawnVarChars = 0;
 
 	// parse the opening brace
@@ -559,7 +557,7 @@ qboolean G_ParseSpawnVars( void )
 		// end of spawn string
 		return qfalse;
 	}
-	if( com_token[ 0 ] != '{' )
+	if( com_token[0] != '{' )
 	{
 		G_Error( "G_ParseSpawnVars: found %s when expecting {", com_token );
 	}
@@ -573,7 +571,7 @@ qboolean G_ParseSpawnVars( void )
 			G_Error( "G_ParseSpawnVars: EOF without closing brace" );
 		}
 
-		if( keyname[ 0 ] == '}' )
+		if( keyname[0] == '}' )
 		{
 			break;
 		}
@@ -584,7 +582,7 @@ qboolean G_ParseSpawnVars( void )
 			G_Error( "G_ParseSpawnVars: EOF without closing brace" );
 		}
 
-		if( com_token[ 0 ] == '}' )
+		if( com_token[0] == '}' )
 		{
 			G_Error( "G_ParseSpawnVars: closing brace without data" );
 		}
@@ -592,8 +590,8 @@ qboolean G_ParseSpawnVars( void )
 		{
 			G_Error( "G_ParseSpawnVars: MAX_SPAWN_VARS" );
 		}
-		level.spawnVars[ level.numSpawnVars ][ 0 ] = G_AddSpawnVarToken( keyname );
-		level.spawnVars[ level.numSpawnVars ][ 1 ] = G_AddSpawnVarToken( com_token );
+		level.spawnVars[level.numSpawnVars][0] = G_AddSpawnVarToken( keyname );
+		level.spawnVars[level.numSpawnVars][1] = G_AddSpawnVarToken( com_token );
 		level.numSpawnVars++;
 	}
 
@@ -639,8 +637,8 @@ void SP_worldspawn( void )
 	G_SpawnString( "enableBreath", "0", &s );
 	trap_Cvar_Set( "g_enableBreath", s );
 
-	g_entities[ ENTITYNUM_WORLD ].s.number  = ENTITYNUM_WORLD;
-	g_entities[ ENTITYNUM_WORLD ].classname = "worldspawn";
+	g_entities[ENTITYNUM_WORLD].s.number  = ENTITYNUM_WORLD;
+	g_entities[ENTITYNUM_WORLD].classname = "worldspawn";
 
 	// see if we want a warmup time
 	trap_SetConfigstring( CS_WARMUP, "" );
@@ -667,7 +665,7 @@ Parses textual entity definitions out of an entstring and spawns gentities.
 void G_SpawnEntitiesFromString( void )
 {
 	// allow calls to G_Spawn*()
-	level.spawning     = qtrue;
+	level.spawning	   = qtrue;
 	level.numSpawnVars = 0;
 
 	// the worldspawn is not an actual entity, but it still

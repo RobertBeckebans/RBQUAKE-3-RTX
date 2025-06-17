@@ -28,22 +28,22 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 static qboolean R_LoadMD3( model_t* mod, int lod, void* buffer, const char* name );
 static qboolean R_LoadMD4( model_t* mod, void* buffer, const char* name );
 
-model_t* loadmodel;
+model_t*		loadmodel;
 
 /*
 ** R_GetModelByHandle
 */
-model_t* R_GetModelByHandle( qhandle_t index )
+model_t*		R_GetModelByHandle( qhandle_t index )
 {
 	model_t* mod;
 
 	// out of range gets the defualt model
 	if( index < 1 || index >= tr.numModels )
 	{
-		return tr.models[ 0 ];
+		return tr.models[0];
 	}
 
-	mod = tr.models[ index ];
+	mod = tr.models[index];
 
 	return mod;
 }
@@ -62,9 +62,9 @@ model_t* R_AllocModel( void )
 		return NULL;
 	}
 
-	mod                       = ri.Hunk_Alloc( sizeof( *tr.models[ tr.numModels ] ), h_low );
-	mod->index                = tr.numModels;
-	tr.models[ tr.numModels ] = mod;
+	mod						= ri.Hunk_Alloc( sizeof( *tr.models[tr.numModels] ), h_low );
+	mod->index				= tr.numModels;
+	tr.models[tr.numModels] = mod;
 	tr.numModels++;
 
 	return mod;
@@ -80,7 +80,7 @@ qhandle_t RE_RegisterCustomModel( const char* name, qhandle_t shader, polyVert_t
 	model_t*  mod = NULL;
 	qhandle_t hModel;
 
-	if( !name || !name[ 0 ] )
+	if( !name || !name[0] )
 	{
 		ri.Printf( PRINT_ALL, "RE_RegisterCustomModel: NULL name\n" );
 		return 0;
@@ -97,7 +97,7 @@ qhandle_t RE_RegisterCustomModel( const char* name, qhandle_t shader, polyVert_t
 	//
 	for( hModel = 1; hModel < tr.numModels; hModel++ )
 	{
-		model_t* _mod = tr.models[ hModel ];
+		model_t* _mod = tr.models[hModel];
 		if( !strcmp( _mod->name, name ) )
 		{
 			if( _mod->type == MOD_BAD )
@@ -123,14 +123,14 @@ qhandle_t RE_RegisterCustomModel( const char* name, qhandle_t shader, polyVert_t
 		Q_strncpyz( mod->name, name, sizeof( mod->name ) );
 	}
 
-	mod->type     = MOD_POLY;
+	mod->type	  = MOD_POLY;
 	mod->polymesh = ri.Hunk_Alloc( sizeof( polyModel_t ) + ( sizeof( polyVert_t ) * numVertexes ), h_low );
 
 	mod->polymesh->numVerts = numVertexes;
-	mod->polymesh->shader   = tr.shaders[ shader ];
+	mod->polymesh->shader	= tr.shaders[shader];
 	memcpy( mod->polymesh->verts, verts, numVertexes * sizeof( polyVert_t ) );
 
-	mod->dxrMesh[ 0 ] = GL_LoadPolyRaytracedMesh( mod->polymesh->shader, verts, numVertexes );
+	mod->dxrMesh[0] = GL_LoadPolyRaytracedMesh( mod->polymesh->shader, verts, numVertexes );
 	return hModel;
 }
 
@@ -150,13 +150,13 @@ qhandle_t RE_RegisterModel( const char* name )
 {
 	model_t*  mod;
 	unsigned* buf;
-	int       lod;
-	int       ident;
+	int		  lod;
+	int		  ident;
 	qboolean  loaded;
 	qhandle_t hModel;
-	int       numLoaded;
+	int		  numLoaded;
 
-	if( !name || !name[ 0 ] )
+	if( !name || !name[0] )
 	{
 		ri.Printf( PRINT_ALL, "RE_RegisterModel: NULL name\n" );
 		return 0;
@@ -173,7 +173,7 @@ qhandle_t RE_RegisterModel( const char* name )
 	//
 	for( hModel = 1; hModel < tr.numModels; hModel++ )
 	{
-		mod = tr.models[ hModel ];
+		mod = tr.models[hModel];
 		if( !strcmp( mod->name, name ) )
 		{
 			if( mod->type == MOD_BAD )
@@ -207,13 +207,13 @@ qhandle_t RE_RegisterModel( const char* name )
 
 	for( lod = MD3_MAX_LODS - 1; lod >= 0; lod-- )
 	{
-		char filename[ 1024 ];
+		char filename[1024];
 
 		strcpy( filename, name );
 
 		if( lod != 0 )
 		{
-			char namebuf[ 80 ];
+			char namebuf[80];
 
 			if( strrchr( filename, '.' ) )
 			{
@@ -280,7 +280,7 @@ qhandle_t RE_RegisterModel( const char* name )
 		for( lod--; lod >= 0; lod-- )
 		{
 			mod->numLods++;
-			mod->md3[ lod ] = mod->md3[ lod + 1 ];
+			mod->md3[lod] = mod->md3[lod + 1];
 		}
 
 		return mod->index;
@@ -306,17 +306,17 @@ R_LoadMD3
 */
 static qboolean R_LoadMD3( model_t* mod, int lod, void* buffer, const char* mod_name )
 {
-	int             i, j;
-	md3Header_t*    pinmodel;
-	md3Frame_t*     frame;
-	md3Surface_t*   surf;
-	md3Shader_t*    shader;
-	md3Triangle_t*  tri;
-	md3St_t*        st;
+	int				i, j;
+	md3Header_t*	pinmodel;
+	md3Frame_t*		frame;
+	md3Surface_t*	surf;
+	md3Shader_t*	shader;
+	md3Triangle_t*	tri;
+	md3St_t*		st;
 	md3XyzNormal_t* xyz;
-	md3Tag_t*       tag;
-	int             version;
-	int             size;
+	md3Tag_t*		tag;
+	int				version;
+	int				size;
 
 	pinmodel = ( md3Header_t* )buffer;
 
@@ -328,57 +328,57 @@ static qboolean R_LoadMD3( model_t* mod, int lod, void* buffer, const char* mod_
 	}
 
 	mod->type = MOD_MESH;
-	size      = LittleLong( pinmodel->ofsEnd );
+	size	  = LittleLong( pinmodel->ofsEnd );
 	mod->dataSize += size;
-	mod->md3[ lod ] = ri.Hunk_Alloc( size, h_low );
+	mod->md3[lod] = ri.Hunk_Alloc( size, h_low );
 
-	Com_Memcpy( mod->md3[ lod ], buffer, LittleLong( pinmodel->ofsEnd ) );
+	Com_Memcpy( mod->md3[lod], buffer, LittleLong( pinmodel->ofsEnd ) );
 
-	LL( mod->md3[ lod ]->ident );
-	LL( mod->md3[ lod ]->version );
-	LL( mod->md3[ lod ]->numFrames );
-	LL( mod->md3[ lod ]->numTags );
-	LL( mod->md3[ lod ]->numSurfaces );
-	LL( mod->md3[ lod ]->ofsFrames );
-	LL( mod->md3[ lod ]->ofsTags );
-	LL( mod->md3[ lod ]->ofsSurfaces );
-	LL( mod->md3[ lod ]->ofsEnd );
+	LL( mod->md3[lod]->ident );
+	LL( mod->md3[lod]->version );
+	LL( mod->md3[lod]->numFrames );
+	LL( mod->md3[lod]->numTags );
+	LL( mod->md3[lod]->numSurfaces );
+	LL( mod->md3[lod]->ofsFrames );
+	LL( mod->md3[lod]->ofsTags );
+	LL( mod->md3[lod]->ofsSurfaces );
+	LL( mod->md3[lod]->ofsEnd );
 
-	if( mod->md3[ lod ]->numFrames < 1 )
+	if( mod->md3[lod]->numFrames < 1 )
 	{
 		ri.Printf( PRINT_WARNING, "R_LoadMD3: %s has no frames\n", mod_name );
 		return qfalse;
 	}
 
 	// swap all the frames
-	frame = ( md3Frame_t* )( ( byte* )mod->md3[ lod ] + mod->md3[ lod ]->ofsFrames );
-	for( i = 0; i < mod->md3[ lod ]->numFrames; i++, frame++ )
+	frame = ( md3Frame_t* )( ( byte* )mod->md3[lod] + mod->md3[lod]->ofsFrames );
+	for( i = 0; i < mod->md3[lod]->numFrames; i++, frame++ )
 	{
 		frame->radius = LittleFloat( frame->radius );
 		for( j = 0; j < 3; j++ )
 		{
-			frame->bounds[ 0 ][ j ] = LittleFloat( frame->bounds[ 0 ][ j ] );
-			frame->bounds[ 1 ][ j ] = LittleFloat( frame->bounds[ 1 ][ j ] );
-			frame->localOrigin[ j ] = LittleFloat( frame->localOrigin[ j ] );
+			frame->bounds[0][j]	  = LittleFloat( frame->bounds[0][j] );
+			frame->bounds[1][j]	  = LittleFloat( frame->bounds[1][j] );
+			frame->localOrigin[j] = LittleFloat( frame->localOrigin[j] );
 		}
 	}
 
 	// swap all the tags
-	tag = ( md3Tag_t* )( ( byte* )mod->md3[ lod ] + mod->md3[ lod ]->ofsTags );
-	for( i = 0; i < mod->md3[ lod ]->numTags * mod->md3[ lod ]->numFrames; i++, tag++ )
+	tag = ( md3Tag_t* )( ( byte* )mod->md3[lod] + mod->md3[lod]->ofsTags );
+	for( i = 0; i < mod->md3[lod]->numTags * mod->md3[lod]->numFrames; i++, tag++ )
 	{
 		for( j = 0; j < 3; j++ )
 		{
-			tag->origin[ j ]    = LittleFloat( tag->origin[ j ] );
-			tag->axis[ 0 ][ j ] = LittleFloat( tag->axis[ 0 ][ j ] );
-			tag->axis[ 1 ][ j ] = LittleFloat( tag->axis[ 1 ][ j ] );
-			tag->axis[ 2 ][ j ] = LittleFloat( tag->axis[ 2 ][ j ] );
+			tag->origin[j]	= LittleFloat( tag->origin[j] );
+			tag->axis[0][j] = LittleFloat( tag->axis[0][j] );
+			tag->axis[1][j] = LittleFloat( tag->axis[1][j] );
+			tag->axis[2][j] = LittleFloat( tag->axis[2][j] );
 		}
 	}
 
 	// swap all the surfaces
-	surf = ( md3Surface_t* )( ( byte* )mod->md3[ lod ] + mod->md3[ lod ]->ofsSurfaces );
-	for( i = 0; i < mod->md3[ lod ]->numSurfaces; i++ )
+	surf = ( md3Surface_t* )( ( byte* )mod->md3[lod] + mod->md3[lod]->ofsSurfaces );
+	for( i = 0; i < mod->md3[lod]->numSurfaces; i++ )
 	{
 		LL( surf->ident );
 		LL( surf->flags );
@@ -410,9 +410,9 @@ static qboolean R_LoadMD3( model_t* mod, int lod, void* buffer, const char* mod_
 		// strip off a trailing _1 or _2
 		// this is a crutch for q3data being a mess
 		j = strlen( surf->name );
-		if( j > 2 && surf->name[ j - 2 ] == '_' )
+		if( j > 2 && surf->name[j - 2] == '_' )
 		{
-			surf->name[ j - 2 ] = 0;
+			surf->name[j - 2] = 0;
 		}
 
 		// register the shaders
@@ -436,26 +436,26 @@ static qboolean R_LoadMD3( model_t* mod, int lod, void* buffer, const char* mod_
 		tri = ( md3Triangle_t* )( ( byte* )surf + surf->ofsTriangles );
 		for( j = 0; j < surf->numTriangles; j++, tri++ )
 		{
-			LL( tri->indexes[ 0 ] );
-			LL( tri->indexes[ 1 ] );
-			LL( tri->indexes[ 2 ] );
+			LL( tri->indexes[0] );
+			LL( tri->indexes[1] );
+			LL( tri->indexes[2] );
 		}
 
 		// swap all the ST
 		st = ( md3St_t* )( ( byte* )surf + surf->ofsSt );
 		for( j = 0; j < surf->numVerts; j++, st++ )
 		{
-			st->st[ 0 ] = LittleFloat( st->st[ 0 ] );
-			st->st[ 1 ] = LittleFloat( st->st[ 1 ] );
+			st->st[0] = LittleFloat( st->st[0] );
+			st->st[1] = LittleFloat( st->st[1] );
 		}
 
 		// swap all the XyzNormals
 		xyz = ( md3XyzNormal_t* )( ( byte* )surf + surf->ofsXyzNormals );
 		for( j = 0; j < surf->numVerts * surf->numFrames; j++, xyz++ )
 		{
-			xyz->xyz[ 0 ] = LittleShort( xyz->xyz[ 0 ] );
-			xyz->xyz[ 1 ] = LittleShort( xyz->xyz[ 1 ] );
-			xyz->xyz[ 2 ] = LittleShort( xyz->xyz[ 2 ] );
+			xyz->xyz[0] = LittleShort( xyz->xyz[0] );
+			xyz->xyz[1] = LittleShort( xyz->xyz[1] );
+			xyz->xyz[2] = LittleShort( xyz->xyz[2] );
 
 			xyz->normal = LittleShort( xyz->normal );
 		}
@@ -464,9 +464,9 @@ static qboolean R_LoadMD3( model_t* mod, int lod, void* buffer, const char* mod_
 		surf = ( md3Surface_t* )( ( byte* )surf + surf->ofsEnd );
 	}
 
-	for( int i = 0; i < mod->md3[ lod ]->numFrames; i++ )
+	for( int i = 0; i < mod->md3[lod]->numFrames; i++ )
 	{
-		mod->dxrMesh[ i ] = GL_LoadMD3RaytracedMesh( mod->md3[ lod ], i );
+		mod->dxrMesh[i] = GL_LoadMD3RaytracedMesh( mod->md3[lod], i );
 	}
 
 	return qtrue;
@@ -479,17 +479,17 @@ R_LoadMD4
 */
 static qboolean R_LoadMD4( model_t* mod, void* buffer, const char* mod_name )
 {
-	int            i, j, k, lodindex;
+	int			   i, j, k, lodindex;
 	md4Header_t *  pinmodel, *md4;
-	md4Frame_t*    frame;
-	md4LOD_t*      lod;
+	md4Frame_t*	   frame;
+	md4LOD_t*	   lod;
 	md4Surface_t*  surf;
 	md4Triangle_t* tri;
 	md4Vertex_t*   v;
-	int            version;
-	int            size;
-	shader_t*      sh;
-	int            frameSize;
+	int			   version;
+	int			   size;
+	shader_t*	   sh;
+	int			   frameSize;
 
 	pinmodel = ( md4Header_t* )buffer;
 
@@ -501,7 +501,7 @@ static qboolean R_LoadMD4( model_t* mod, void* buffer, const char* mod_name )
 	}
 
 	mod->type = MOD_MD4;
-	size      = LittleLong( pinmodel->ofsEnd );
+	size	  = LittleLong( pinmodel->ofsEnd );
 	mod->dataSize += size;
 	md4 = mod->md4 = ri.Hunk_Alloc( size, h_low );
 
@@ -525,20 +525,20 @@ static qboolean R_LoadMD4( model_t* mod, void* buffer, const char* mod_name )
 	// we don't need to swap tags in the renderer, they aren't used
 
 	// swap all the frames
-	frameSize = ( int )( &( ( md4Frame_t* )0 )->bones[ md4->numBones ] );
+	frameSize = ( int )( &( ( md4Frame_t* )0 )->bones[md4->numBones] );
 	for( i = 0; i < md4->numFrames; i++, frame++ )
 	{
-		frame         = ( md4Frame_t* )( ( byte* )md4 + md4->ofsFrames + i * frameSize );
+		frame		  = ( md4Frame_t* )( ( byte* )md4 + md4->ofsFrames + i * frameSize );
 		frame->radius = LittleFloat( frame->radius );
 		for( j = 0; j < 3; j++ )
 		{
-			frame->bounds[ 0 ][ j ] = LittleFloat( frame->bounds[ 0 ][ j ] );
-			frame->bounds[ 1 ][ j ] = LittleFloat( frame->bounds[ 1 ][ j ] );
-			frame->localOrigin[ j ] = LittleFloat( frame->localOrigin[ j ] );
+			frame->bounds[0][j]	  = LittleFloat( frame->bounds[0][j] );
+			frame->bounds[1][j]	  = LittleFloat( frame->bounds[1][j] );
+			frame->localOrigin[j] = LittleFloat( frame->localOrigin[j] );
 		}
 		for( j = 0; j < md4->numBones * sizeof( md4Bone_t ) / 4; j++ )
 		{
-			( ( float* )frame->bones )[ j ] = LittleFloat( ( ( float* )frame->bones )[ j ] );
+			( ( float* )frame->bones )[j] = LittleFloat( ( ( float* )frame->bones )[j] );
 		}
 	}
 
@@ -587,41 +587,41 @@ static qboolean R_LoadMD4( model_t* mod, void* buffer, const char* mod_name )
 			tri = ( md4Triangle_t* )( ( byte* )surf + surf->ofsTriangles );
 			for( j = 0; j < surf->numTriangles; j++, tri++ )
 			{
-				LL( tri->indexes[ 0 ] );
-				LL( tri->indexes[ 1 ] );
-				LL( tri->indexes[ 2 ] );
+				LL( tri->indexes[0] );
+				LL( tri->indexes[1] );
+				LL( tri->indexes[2] );
 			}
 
 			// swap all the vertexes
 			// FIXME
 			// This makes TFC's skeletons work.  Shouldn't be necessary anymore, but left
 			// in for reference.
-			//v = (md4Vertex_t *) ( (byte *)surf + surf->ofsVerts + 12);
+			// v = (md4Vertex_t *) ( (byte *)surf + surf->ofsVerts + 12);
 			v = ( md4Vertex_t* )( ( byte* )surf + surf->ofsVerts );
 			for( j = 0; j < surf->numVerts; j++ )
 			{
-				v->normal[ 0 ] = LittleFloat( v->normal[ 0 ] );
-				v->normal[ 1 ] = LittleFloat( v->normal[ 1 ] );
-				v->normal[ 2 ] = LittleFloat( v->normal[ 2 ] );
+				v->normal[0] = LittleFloat( v->normal[0] );
+				v->normal[1] = LittleFloat( v->normal[1] );
+				v->normal[2] = LittleFloat( v->normal[2] );
 
-				v->texCoords[ 0 ] = LittleFloat( v->texCoords[ 0 ] );
-				v->texCoords[ 1 ] = LittleFloat( v->texCoords[ 1 ] );
+				v->texCoords[0] = LittleFloat( v->texCoords[0] );
+				v->texCoords[1] = LittleFloat( v->texCoords[1] );
 
 				v->numWeights = LittleLong( v->numWeights );
 
 				for( k = 0; k < v->numWeights; k++ )
 				{
-					v->weights[ k ].boneIndex   = LittleLong( v->weights[ k ].boneIndex );
-					v->weights[ k ].boneWeight  = LittleFloat( v->weights[ k ].boneWeight );
-					v->weights[ k ].offset[ 0 ] = LittleFloat( v->weights[ k ].offset[ 0 ] );
-					v->weights[ k ].offset[ 1 ] = LittleFloat( v->weights[ k ].offset[ 1 ] );
-					v->weights[ k ].offset[ 2 ] = LittleFloat( v->weights[ k ].offset[ 2 ] );
+					v->weights[k].boneIndex	 = LittleLong( v->weights[k].boneIndex );
+					v->weights[k].boneWeight = LittleFloat( v->weights[k].boneWeight );
+					v->weights[k].offset[0]	 = LittleFloat( v->weights[k].offset[0] );
+					v->weights[k].offset[1]	 = LittleFloat( v->weights[k].offset[1] );
+					v->weights[k].offset[2]	 = LittleFloat( v->weights[k].offset[2] );
 				}
 				// FIXME
 				// This makes TFC's skeletons work.  Shouldn't be necessary anymore, but left
 				// in for reference.
-				//v = (md4Vertex_t *)( ( byte * )&v->weights[v->numWeights] + 12 );
-				v = ( md4Vertex_t* )( ( byte* )&v->weights[ v->numWeights ] );
+				// v = (md4Vertex_t *)( ( byte * )&v->weights[v->numWeights] + 12 );
+				v = ( md4Vertex_t* )( ( byte* )&v->weights[v->numWeights] );
 			}
 
 			// find the next surface
@@ -674,7 +674,7 @@ void R_ModelInit( void )
 	// leave a space for NULL model
 	tr.numModels = 0;
 
-	mod       = R_AllocModel();
+	mod		  = R_AllocModel();
 	mod->type = MOD_BAD;
 }
 
@@ -685,19 +685,19 @@ R_Modellist_f
 */
 void R_Modellist_f( void )
 {
-	int      i, j;
+	int		 i, j;
 	model_t* mod;
-	int      total;
-	int      lods;
+	int		 total;
+	int		 lods;
 
 	total = 0;
 	for( i = 1; i < tr.numModels; i++ )
 	{
-		mod  = tr.models[ i ];
+		mod	 = tr.models[i];
 		lods = 1;
 		for( j = 1; j < MD3_MAX_LODS; j++ )
 		{
-			if( mod->md3[ j ] && mod->md3[ j ] != mod->md3[ j - 1 ] )
+			if( mod->md3[j] && mod->md3[j] != mod->md3[j - 1] )
 			{
 				lods++;
 			}
@@ -724,7 +724,7 @@ R_GetTag
 static md3Tag_t* R_GetTag( md3Header_t* mod, int frame, const char* tagName )
 {
 	md3Tag_t* tag;
-	int       i;
+	int		  i;
 
 	if( frame >= mod->numFrames )
 	{
@@ -752,20 +752,20 @@ R_LerpTag
 int R_LerpTag( orientation_t* tag, qhandle_t handle, int startFrame, int endFrame, float frac, const char* tagName )
 {
 	md3Tag_t *start, *end;
-	int       i;
-	float     frontLerp, backLerp;
+	int		  i;
+	float	  frontLerp, backLerp;
 	model_t*  model;
 
 	model = R_GetModelByHandle( handle );
-	if( !model->md3[ 0 ] )
+	if( !model->md3[0] )
 	{
 		AxisClear( tag->axis );
 		VectorClear( tag->origin );
 		return qfalse;
 	}
 
-	start = R_GetTag( model->md3[ 0 ], startFrame, tagName );
-	end   = R_GetTag( model->md3[ 0 ], endFrame, tagName );
+	start = R_GetTag( model->md3[0], startFrame, tagName );
+	end	  = R_GetTag( model->md3[0], endFrame, tagName );
 	if( !start || !end )
 	{
 		AxisClear( tag->axis );
@@ -778,14 +778,14 @@ int R_LerpTag( orientation_t* tag, qhandle_t handle, int startFrame, int endFram
 
 	for( i = 0; i < 3; i++ )
 	{
-		tag->origin[ i ]    = start->origin[ i ] * backLerp + end->origin[ i ] * frontLerp;
-		tag->axis[ 0 ][ i ] = start->axis[ 0 ][ i ] * backLerp + end->axis[ 0 ][ i ] * frontLerp;
-		tag->axis[ 1 ][ i ] = start->axis[ 1 ][ i ] * backLerp + end->axis[ 1 ][ i ] * frontLerp;
-		tag->axis[ 2 ][ i ] = start->axis[ 2 ][ i ] * backLerp + end->axis[ 2 ][ i ] * frontLerp;
+		tag->origin[i]	= start->origin[i] * backLerp + end->origin[i] * frontLerp;
+		tag->axis[0][i] = start->axis[0][i] * backLerp + end->axis[0][i] * frontLerp;
+		tag->axis[1][i] = start->axis[1][i] * backLerp + end->axis[1][i] * frontLerp;
+		tag->axis[2][i] = start->axis[2][i] * backLerp + end->axis[2][i] * frontLerp;
 	}
-	VectorNormalize( tag->axis[ 0 ] );
-	VectorNormalize( tag->axis[ 1 ] );
-	VectorNormalize( tag->axis[ 2 ] );
+	VectorNormalize( tag->axis[0] );
+	VectorNormalize( tag->axis[1] );
+	VectorNormalize( tag->axis[2] );
 	return qtrue;
 }
 
@@ -796,32 +796,32 @@ R_ModelBounds
 */
 void R_ModelBounds( qhandle_t handle, vec3_t mins, vec3_t maxs )
 {
-	model_t*     model;
+	model_t*	 model;
 	md3Header_t* header;
-	md3Frame_t*  frame;
+	md3Frame_t*	 frame;
 
 	model = R_GetModelByHandle( handle );
 
 	if( model->bmodel )
 	{
-		VectorCopy( model->bmodel->bounds[ 0 ], mins );
-		VectorCopy( model->bmodel->bounds[ 1 ], maxs );
+		VectorCopy( model->bmodel->bounds[0], mins );
+		VectorCopy( model->bmodel->bounds[1], maxs );
 		return;
 	}
 
-	if( !model->md3[ 0 ] )
+	if( !model->md3[0] )
 	{
 		VectorClear( mins );
 		VectorClear( maxs );
 		return;
 	}
 
-	header = model->md3[ 0 ];
+	header = model->md3[0];
 
 	frame = ( md3Frame_t* )( ( byte* )header + header->ofsFrames );
 
-	VectorCopy( frame->bounds[ 0 ], mins );
-	VectorCopy( frame->bounds[ 1 ], maxs );
+	VectorCopy( frame->bounds[0], mins );
+	VectorCopy( frame->bounds[1], maxs );
 }
 
 /*
@@ -831,9 +831,9 @@ Mod_Free
 */
 void Mod_Free( model_t* mod )
 {
-	//if (mod->md3[0] != NULL) {
+	// if (mod->md3[0] != NULL) {
 	//	Hunk_Free(mod->md3[0]);
-	//}
+	// }
 
 	memset( mod, 0, sizeof( *mod ) );
 }
@@ -849,7 +849,7 @@ void Mod_FreeAll( void )
 
 	for( i = 0; i < tr.numModels; i++ )
 	{
-		Mod_Free( tr.models[ i ] );
+		Mod_Free( tr.models[i] );
 	}
 
 	tr.numModels = 0;

@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "qbsp.h"
 
-vec3_t   draw_mins, draw_maxs;
+vec3_t	 draw_mins, draw_maxs;
 qboolean drawflag;
 
-void Draw_ClearWindow( void )
+void	 Draw_ClearWindow( void )
 {
 }
 

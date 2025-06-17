@@ -25,11 +25,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 qboolean scr_initialized; // ready to draw
 
-cvar_t* cl_timegraph;
-cvar_t* cl_debuggraph;
-cvar_t* cl_graphheight;
-cvar_t* cl_graphscale;
-cvar_t* cl_graphshift;
+cvar_t*	 cl_timegraph;
+cvar_t*	 cl_debuggraph;
+cvar_t*	 cl_graphheight;
+cvar_t*	 cl_graphscale;
+cvar_t*	 cl_graphshift;
 
 /*
 ================
@@ -38,7 +38,7 @@ SCR_DrawNamedPic
 Coordinates are 640*480 virtual values
 =================
 */
-void SCR_DrawNamedPic( float x, float y, float width, float height, const char* picname )
+void	 SCR_DrawNamedPic( float x, float y, float width, float height, const char* picname )
 {
 	qhandle_t hShader;
 
@@ -125,7 +125,7 @@ void SCR_DrawPic( float x, float y, float width, float height, qhandle_t hShader
 */
 static void SCR_DrawChar( int x, int y, float size, int ch )
 {
-	int   row, col;
+	int	  row, col;
 	float frow, fcol;
 	float ax, ay, aw, ah;
 
@@ -163,7 +163,7 @@ static void SCR_DrawChar( int x, int y, float size, int ch )
 */
 void SCR_DrawSmallChar( int x, int y, int ch )
 {
-	int   row, col;
+	int	  row, col;
 	float frow, fcol;
 	float size;
 
@@ -201,13 +201,13 @@ Coordinates are at 640 by 480 virtual resolution
 */
 void SCR_DrawStringExt( int x, int y, float size, const char* string, float* setColor, qboolean forceColor )
 {
-	vec4_t      color;
+	vec4_t		color;
 	const char* s;
-	int         xx;
+	int			xx;
 
 	// draw the drop shadow
-	color[ 0 ] = color[ 1 ] = color[ 2 ] = 0;
-	color[ 3 ]                           = setColor[ 3 ];
+	color[0] = color[1] = color[2] = 0;
+	color[3]					   = setColor[3];
 	re.SetColor( color );
 	s  = string;
 	xx = x;
@@ -233,8 +233,8 @@ void SCR_DrawStringExt( int x, int y, float size, const char* string, float* set
 		{
 			if( !forceColor )
 			{
-				Com_Memcpy( color, g_color_table[ ColorIndex( *( s + 1 ) ) ], sizeof( color ) );
-				color[ 3 ] = setColor[ 3 ];
+				Com_Memcpy( color, g_color_table[ColorIndex( *( s + 1 ) )], sizeof( color ) );
+				color[3] = setColor[3];
 				re.SetColor( color );
 			}
 			s += 2;
@@ -249,10 +249,10 @@ void SCR_DrawStringExt( int x, int y, float size, const char* string, float* set
 
 void SCR_DrawBigString( int x, int y, const char* s, float alpha )
 {
-	float color[ 4 ];
+	float color[4];
 
-	color[ 0 ] = color[ 1 ] = color[ 2 ] = 1.0;
-	color[ 3 ]                           = alpha;
+	color[0] = color[1] = color[2] = 1.0;
+	color[3]					   = alpha;
 	SCR_DrawStringExt( x, y, BIGCHAR_WIDTH, s, color, qfalse );
 }
 
@@ -273,9 +273,9 @@ Coordinates are at 640 by 480 virtual resolution
 */
 void SCR_DrawSmallStringExt( int x, int y, const char* string, float* setColor, qboolean forceColor )
 {
-	vec4_t      color;
+	vec4_t		color;
 	const char* s;
-	int         xx;
+	int			xx;
 
 	// draw the colored text
 	s  = string;
@@ -287,8 +287,8 @@ void SCR_DrawSmallStringExt( int x, int y, const char* string, float* setColor, 
 		{
 			if( !forceColor )
 			{
-				Com_Memcpy( color, g_color_table[ ColorIndex( *( s + 1 ) ) ], sizeof( color ) );
-				color[ 3 ] = setColor[ 3 ];
+				Com_Memcpy( color, g_color_table[ColorIndex( *( s + 1 ) )], sizeof( color ) );
+				color[3] = setColor[3];
 				re.SetColor( color );
 			}
 			s += 2;
@@ -306,8 +306,8 @@ void SCR_DrawSmallStringExt( int x, int y, const char* string, float* setColor, 
 */
 static int SCR_Strlen( const char* str )
 {
-	const char* s     = str;
-	int         count = 0;
+	const char* s	  = str;
+	int			count = 0;
 
 	while( *s )
 	{
@@ -342,8 +342,8 @@ SCR_DrawDemoRecording
 */
 void SCR_DrawDemoRecording( void )
 {
-	char string[ 1024 ];
-	int  pos;
+	char string[1024];
+	int	 pos;
 
 	if( !clc.demorecording )
 	{
@@ -357,7 +357,7 @@ void SCR_DrawDemoRecording( void )
 	pos = FS_FTell( clc.demofile );
 	sprintf( string, "RECORDING %s: %ik", clc.demoName, pos / 1024 );
 
-	SCR_DrawStringExt( 320 - strlen( string ) * 4, 20, 8, string, g_color_table[ 7 ], qtrue );
+	SCR_DrawStringExt( 320 - strlen( string ) * 4, 20, 8, string, g_color_table[7], qtrue );
 }
 
 /*
@@ -371,21 +371,21 @@ DEBUG GRAPH
 typedef struct
 {
 	float value;
-	int   color;
+	int	  color;
 } graphsamp_t;
 
-static int         current;
-static graphsamp_t values[ 1024 ];
+static int		   current;
+static graphsamp_t values[1024];
 
 /*
 ==============
 SCR_DebugGraph
 ==============
 */
-void SCR_DebugGraph( float value, int color )
+void			   SCR_DebugGraph( float value, int color )
 {
-	values[ current & 1023 ].value = value;
-	values[ current & 1023 ].color = color;
+	values[current & 1023].value = value;
+	values[current & 1023].color = color;
 	current++;
 }
 
@@ -396,9 +396,9 @@ SCR_DrawDebugGraph
 */
 void SCR_DrawDebugGraph( void )
 {
-	int   a, x, y, w, i, h;
+	int	  a, x, y, w, i, h;
 	float v;
-	int   color;
+	int	  color;
 
 	//
 	// draw the graph
@@ -406,16 +406,16 @@ void SCR_DrawDebugGraph( void )
 	w = cls.glconfig.vidWidth;
 	x = 0;
 	y = cls.glconfig.vidHeight;
-	re.SetColor( g_color_table[ 0 ] );
+	re.SetColor( g_color_table[0] );
 	re.DrawStretchPic( x, y - cl_graphheight->integer, w, cl_graphheight->integer, 0, 0, 0, 0, cls.whiteShader );
 	re.SetColor( NULL );
 
 	for( a = 0; a < w; a++ )
 	{
-		i     = ( current - 1 - a + 1024 ) & 1023;
-		v     = values[ i ].value;
-		color = values[ i ].color;
-		v     = v * cl_graphscale->integer + cl_graphshift->integer;
+		i	  = ( current - 1 - a + 1024 ) & 1023;
+		v	  = values[i].value;
+		color = values[i].color;
+		v	  = v * cl_graphscale->integer + cl_graphshift->integer;
 
 		if( v < 0 )
 			v += cl_graphheight->integer * ( 1 + ( int )( -v / cl_graphheight->integer ) );
@@ -461,7 +461,7 @@ void SCR_DrawScreenField( stereoFrame_t stereoFrame )
 	{
 		if( cls.glconfig.vidWidth * 480 > cls.glconfig.vidHeight * 640 )
 		{
-			re.SetColor( g_color_table[ 0 ] );
+			re.SetColor( g_color_table[0] );
 			re.DrawStretchPic( 0, 0, cls.glconfig.vidWidth, cls.glconfig.vidHeight, 0, 0, 0, 0, cls.whiteShader );
 			re.SetColor( NULL );
 		}

@@ -36,80 +36,80 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 int demo_protocols[] = { 66, 67, 68, 0 };
 
-#define MAX_NUM_ARGVS 50
+#define MAX_NUM_ARGVS			  50
 
 #define MIN_DEDICATED_COMHUNKMEGS 1
-#define MIN_COMHUNKMEGS           56
-#define DEF_COMHUNKMEGS           "512"
-#define DEF_COMZONEMEGS           "512"
+#define MIN_COMHUNKMEGS			  56
+#define DEF_COMHUNKMEGS			  "512"
+#define DEF_COMZONEMEGS			  "512"
 
-#define PAD( x, y ) ( ( ( x ) + ( y )-1 ) & ~( ( y )-1 ) )
+#define PAD( x, y )				  ( ( ( x ) + ( y ) - 1 ) & ~( ( y ) - 1 ) )
 
-int   com_argc;
-char* com_argv[ MAX_NUM_ARGVS + 1 ];
+int					com_argc;
+char*				com_argv[MAX_NUM_ARGVS + 1];
 
-jmp_buf abortframe; // an ERR_DROP occured, exit the entire frame
+jmp_buf				abortframe; // an ERR_DROP occured, exit the entire frame
 
-FILE*               debuglogfile;
+FILE*				debuglogfile;
 static fileHandle_t logfile;
-fileHandle_t        com_journalFile;     // events are written here
-fileHandle_t        com_journalDataFile; // config files are written here
+fileHandle_t		com_journalFile;	 // events are written here
+fileHandle_t		com_journalDataFile; // config files are written here
 
-cvar_t* com_viewlog;
-cvar_t* com_speeds;
-cvar_t* com_developer;
-cvar_t* com_dedicated;
-cvar_t* com_timescale;
-cvar_t* com_fixedtime;
-cvar_t* com_dropsim; // 0.0 to 1.0, simulated packet drops
-cvar_t* com_journal;
-cvar_t* com_maxfps;
-cvar_t* com_timedemo;
-cvar_t* com_sv_running;
-cvar_t* com_cl_running;
-cvar_t* com_logfile; // 1 = buffer log, 2 = flush after each print
-cvar_t* com_showtrace;
-cvar_t* com_version;
-cvar_t* com_blood;
-cvar_t* com_buildScript; // for automated data building scripts
-cvar_t* com_introPlayed;
-cvar_t* cl_paused;
-cvar_t* sv_paused;
-cvar_t* com_cameraMode;
+cvar_t*				com_viewlog;
+cvar_t*				com_speeds;
+cvar_t*				com_developer;
+cvar_t*				com_dedicated;
+cvar_t*				com_timescale;
+cvar_t*				com_fixedtime;
+cvar_t*				com_dropsim; // 0.0 to 1.0, simulated packet drops
+cvar_t*				com_journal;
+cvar_t*				com_maxfps;
+cvar_t*				com_timedemo;
+cvar_t*				com_sv_running;
+cvar_t*				com_cl_running;
+cvar_t*				com_logfile; // 1 = buffer log, 2 = flush after each print
+cvar_t*				com_showtrace;
+cvar_t*				com_version;
+cvar_t*				com_blood;
+cvar_t*				com_buildScript; // for automated data building scripts
+cvar_t*				com_introPlayed;
+cvar_t*				cl_paused;
+cvar_t*				sv_paused;
+cvar_t*				com_cameraMode;
 #if defined( _WIN32 ) && defined( _DEBUG )
 cvar_t* com_noErrorInterrupt;
 #endif
 
 // com_speeds times
-int time_game;
-int time_frontend; // renderer frontend time
-int time_backend;  // renderer backend time
+int			 time_game;
+int			 time_frontend; // renderer frontend time
+int			 time_backend;	// renderer backend time
 
-int com_frameTime;
-int com_frameMsec;
-int com_frameNumber;
+int			 com_frameTime;
+int			 com_frameMsec;
+int			 com_frameNumber;
 
-qboolean com_errorEntered;
-qboolean com_fullyInitialized;
+qboolean	 com_errorEntered;
+qboolean	 com_fullyInitialized;
 
-char com_errorMessage[ MAXPRINTMSG ];
+char		 com_errorMessage[MAXPRINTMSG];
 
-void Com_WriteConfig_f( void );
-void CIN_CloseAllVideos();
+void		 Com_WriteConfig_f( void );
+void		 CIN_CloseAllVideos();
 
 //============================================================================
 
 static char* rd_buffer;
-static int   rd_buffersize;
+static int	 rd_buffersize;
 static void ( *rd_flush )( char* buffer );
 
 void Com_BeginRedirect( char* buffer, int buffersize, void ( *flush )( char* ) )
 {
 	if( !buffer || !buffersize || !flush )
 		return;
-	rd_buffer     = buffer;
+	rd_buffer	  = buffer;
 	rd_buffersize = buffersize;
-	rd_flush      = flush;
+	rd_flush	  = flush;
 
 	*rd_buffer = 0;
 }
@@ -121,9 +121,9 @@ void Com_EndRedirect( void )
 		rd_flush( rd_buffer );
 	}
 
-	rd_buffer     = NULL;
+	rd_buffer	  = NULL;
 	rd_buffersize = 0;
-	rd_flush      = NULL;
+	rd_flush	  = NULL;
 }
 
 /*
@@ -138,8 +138,8 @@ A raw string should NEVER be passed as fmt, because of "%f" type crashers.
 */
 void QDECL Com_Printf( const char* fmt, ... )
 {
-	va_list         argptr;
-	char            msg[ MAXPRINTMSG ];
+	va_list			argptr;
+	char			msg[MAXPRINTMSG];
 	static qboolean opening_qconsole = qfalse;
 
 	va_start( argptr, fmt );
@@ -155,7 +155,7 @@ void QDECL Com_Printf( const char* fmt, ... )
 		}
 		Q_strcat( rd_buffer, rd_buffersize, msg );
 		// TTimo nooo .. that would defeat the purpose
-		//rd_flush(rd_buffer);
+		// rd_flush(rd_buffer);
 		//*rd_buffer = 0;
 		return;
 	}
@@ -177,7 +177,7 @@ void QDECL Com_Printf( const char* fmt, ... )
 		if( !logfile && FS_Initialized() && !opening_qconsole )
 		{
 			struct tm* newtime;
-			time_t     aclock;
+			time_t	   aclock;
 
 			opening_qconsole = qtrue;
 
@@ -212,7 +212,7 @@ A Com_Printf that only shows up if the "developer" cvar is set
 void QDECL Com_DPrintf( const char* fmt, ... )
 {
 	va_list argptr;
-	char    msg[ MAXPRINTMSG ];
+	char	msg[MAXPRINTMSG];
 
 	if( !com_developer || !com_developer->integer )
 	{
@@ -236,10 +236,10 @@ do the apropriate things.
 */
 void QDECL Com_Error( int code, const char* fmt, ... )
 {
-	va_list    argptr;
+	va_list	   argptr;
 	static int lastErrorTime;
 	static int errorCount;
-	int        currentTime;
+	int		   currentTime;
 
 #if defined( _WIN32 ) && defined( _DEBUG )
 	if( code != ERR_DISCONNECT && code != ERR_NEED_CD )
@@ -373,8 +373,8 @@ quake3 set test blah + map test
 */
 
 #define MAX_CONSOLE_LINES 32
-int   com_numConsoleLines;
-char* com_consoleLines[ MAX_CONSOLE_LINES ];
+int	  com_numConsoleLines;
+char* com_consoleLines[MAX_CONSOLE_LINES];
 
 /*
 ==================
@@ -383,11 +383,11 @@ Com_ParseCommandLine
 Break it up into multiple console lines
 ==================
 */
-void Com_ParseCommandLine( char* commandLine )
+void  Com_ParseCommandLine( char* commandLine )
 {
-	int inq               = 0;
-	com_consoleLines[ 0 ] = commandLine;
-	com_numConsoleLines   = 1;
+	int inq				= 0;
+	com_consoleLines[0] = commandLine;
+	com_numConsoleLines = 1;
 
 	while( *commandLine )
 	{
@@ -403,7 +403,7 @@ void Com_ParseCommandLine( char* commandLine )
 			{
 				return;
 			}
-			com_consoleLines[ com_numConsoleLines ] = commandLine + 1;
+			com_consoleLines[com_numConsoleLines] = commandLine + 1;
 			com_numConsoleLines++;
 			*commandLine = 0;
 		}
@@ -425,10 +425,10 @@ qboolean Com_SafeMode( void )
 
 	for( i = 0; i < com_numConsoleLines; i++ )
 	{
-		Cmd_TokenizeString( com_consoleLines[ i ] );
+		Cmd_TokenizeString( com_consoleLines[i] );
 		if( !Q_stricmp( Cmd_Argv( 0 ), "safe" ) || !Q_stricmp( Cmd_Argv( 0 ), "cvar_restart" ) )
 		{
-			com_consoleLines[ i ][ 0 ] = 0;
+			com_consoleLines[i][0] = 0;
 			return qtrue;
 		}
 	}
@@ -448,13 +448,13 @@ be after execing the config and default.
 */
 void Com_StartupVariable( const char* match )
 {
-	int     i;
-	char*   s;
+	int		i;
+	char*	s;
 	cvar_t* cv;
 
 	for( i = 0; i < com_numConsoleLines; i++ )
 	{
-		Cmd_TokenizeString( com_consoleLines[ i ] );
+		Cmd_TokenizeString( com_consoleLines[i] );
 		if( strcmp( Cmd_Argv( 0 ), "set" ) )
 		{
 			continue;
@@ -484,24 +484,24 @@ will keep the demoloop from immediately starting
 */
 qboolean Com_AddStartupCommands( void )
 {
-	int      i;
+	int		 i;
 	qboolean added;
 
 	added = qfalse;
 	// quote every token, so args with semicolons can work
 	for( i = 0; i < com_numConsoleLines; i++ )
 	{
-		if( !com_consoleLines[ i ] || !com_consoleLines[ i ][ 0 ] )
+		if( !com_consoleLines[i] || !com_consoleLines[i][0] )
 		{
 			continue;
 		}
 
 		// set commands won't override menu startup
-		if( Q_stricmpn( com_consoleLines[ i ], "set", 3 ) )
+		if( Q_stricmpn( com_consoleLines[i], "set", 3 ) )
 		{
 			added = qtrue;
 		}
-		Cbuf_AddText( com_consoleLines[ i ] );
+		Cbuf_AddText( com_consoleLines[i] );
 		Cbuf_AddText( "\n" );
 	}
 
@@ -512,10 +512,10 @@ qboolean Com_AddStartupCommands( void )
 
 void Info_Print( const char* s )
 {
-	char  key[ 512 ];
-	char  value[ 512 ];
+	char  key[512];
+	char  value[512];
 	char* o;
-	int   l;
+	int	  l;
 
 	if( *s == '\\' )
 		s++;
@@ -529,7 +529,7 @@ void Info_Print( const char* s )
 		if( l < 20 )
 		{
 			Com_Memset( o, ' ', 20 - l );
-			key[ 20 ] = 0;
+			key[20] = 0;
 		}
 		else
 			*o = 0;
@@ -565,24 +565,24 @@ char* Com_StringContains( char* str1, char* str2, int casesensitive )
 	len = strlen( str1 ) - strlen( str2 );
 	for( i = 0; i <= len; i++, str1++ )
 	{
-		for( j = 0; str2[ j ]; j++ )
+		for( j = 0; str2[j]; j++ )
 		{
 			if( casesensitive )
 			{
-				if( str1[ j ] != str2[ j ] )
+				if( str1[j] != str2[j] )
 				{
 					break;
 				}
 			}
 			else
 			{
-				if( toupper( str1[ j ] ) != toupper( str2[ j ] ) )
+				if( toupper( str1[j] ) != toupper( str2[j] ) )
 				{
 					break;
 				}
 			}
 		}
-		if( !str2[ j ] )
+		if( !str2[j] )
 		{
 			return str1;
 		}
@@ -597,9 +597,9 @@ Com_Filter
 */
 int Com_Filter( char* filter, char* name, int casesensitive )
 {
-	char  buf[ MAX_TOKEN_CHARS ];
+	char  buf[MAX_TOKEN_CHARS];
 	char* ptr;
-	int   i, found;
+	int	  i, found;
 
 	while( *filter )
 	{
@@ -610,10 +610,10 @@ int Com_Filter( char* filter, char* name, int casesensitive )
 			{
 				if( *filter == '*' || *filter == '?' )
 					break;
-				buf[ i ] = *filter;
+				buf[i] = *filter;
 				filter++;
 			}
-			buf[ i ] = '\0';
+			buf[i] = '\0';
 			if( strlen( buf ) )
 			{
 				ptr = Com_StringContains( name, buf, casesensitive );
@@ -648,8 +648,7 @@ int Com_Filter( char* filter, char* name, int casesensitive )
 					}
 					else
 					{
-						if( toupper( *name ) >= toupper( *filter ) &&
-							toupper( *name ) <= toupper( *( filter + 2 ) ) )
+						if( toupper( *name ) >= toupper( *filter ) && toupper( *name ) <= toupper( *( filter + 2 ) ) )
 							found = qtrue;
 					}
 					filter += 3;
@@ -706,34 +705,34 @@ Com_FilterPath
 */
 int Com_FilterPath( char* filter, char* name, int casesensitive )
 {
-	int  i;
-	char new_filter[ MAX_QPATH ];
-	char new_name[ MAX_QPATH ];
+	int	 i;
+	char new_filter[MAX_QPATH];
+	char new_name[MAX_QPATH];
 
-	for( i = 0; i < MAX_QPATH - 1 && filter[ i ]; i++ )
+	for( i = 0; i < MAX_QPATH - 1 && filter[i]; i++ )
 	{
-		if( filter[ i ] == '\\' || filter[ i ] == ':' )
+		if( filter[i] == '\\' || filter[i] == ':' )
 		{
-			new_filter[ i ] = '/';
+			new_filter[i] = '/';
 		}
 		else
 		{
-			new_filter[ i ] = filter[ i ];
+			new_filter[i] = filter[i];
 		}
 	}
-	new_filter[ i ] = '\0';
-	for( i = 0; i < MAX_QPATH - 1 && name[ i ]; i++ )
+	new_filter[i] = '\0';
+	for( i = 0; i < MAX_QPATH - 1 && name[i]; i++ )
 	{
-		if( name[ i ] == '\\' || name[ i ] == ':' )
+		if( name[i] == '\\' || name[i] == ':' )
 		{
-			new_name[ i ] = '/';
+			new_name[i] = '/';
 		}
 		else
 		{
-			new_name[ i ] = name[ i ];
+			new_name[i] = name[i];
 		}
 	}
-	new_name[ i ] = '\0';
+	new_name[i] = '\0';
 	return Com_Filter( new_filter, new_name, casesensitive );
 }
 
@@ -747,9 +746,9 @@ int Com_HashKey( char* string, int maxlen )
 	int register hash, i;
 
 	hash = 0;
-	for( i = 0; i < maxlen && string[ i ] != '\0'; i++ )
+	for( i = 0; i < maxlen && string[i] != '\0'; i++ )
 	{
-		hash += string[ i ] * ( 119 + i );
+		hash += string[i] * ( 119 + i );
 	}
 	hash = ( hash ^ ( hash >> 10 ) ^ ( hash >> 20 ) );
 	return hash;
@@ -762,7 +761,7 @@ Com_RealTime
 */
 int Com_RealTime( qtime_t* qtime )
 {
-	time_t     t;
+	time_t	   t;
 	struct tm* tms;
 
 	t = time( NULL );
@@ -771,14 +770,14 @@ int Com_RealTime( qtime_t* qtime )
 	tms = localtime( &t );
 	if( tms )
 	{
-		qtime->tm_sec   = tms->tm_sec;
-		qtime->tm_min   = tms->tm_min;
-		qtime->tm_hour  = tms->tm_hour;
-		qtime->tm_mday  = tms->tm_mday;
-		qtime->tm_mon   = tms->tm_mon;
-		qtime->tm_year  = tms->tm_year;
-		qtime->tm_wday  = tms->tm_wday;
-		qtime->tm_yday  = tms->tm_yday;
+		qtime->tm_sec	= tms->tm_sec;
+		qtime->tm_min	= tms->tm_min;
+		qtime->tm_hour	= tms->tm_hour;
+		qtime->tm_mday	= tms->tm_mday;
+		qtime->tm_mon	= tms->tm_mon;
+		qtime->tm_year	= tms->tm_year;
+		qtime->tm_wday	= tms->tm_wday;
+		qtime->tm_yday	= tms->tm_yday;
 		qtime->tm_isdst = tms->tm_isdst;
 	}
 	return t;
@@ -799,23 +798,23 @@ all big things are allocated on the hunk.
 ==============================================================================
 */
 
-#define ZONEID      0x1d4a11
+#define ZONEID		0x1d4a11
 #define MINFRAGMENT 64
 
 typedef struct zonedebug_s
 {
 	char* label;
 	char* file;
-	int   line;
-	int   allocSize;
+	int	  line;
+	int	  allocSize;
 } zonedebug_t;
 
 typedef struct memblock_s
 {
-	int                size; // including the header and possibly tiny fragments
-	int                tag;  // a tag of 0 is a free block
+	int				   size; // including the header and possibly tiny fragments
+	int				   tag;	 // a tag of 0 is a free block
 	struct memblock_s *next, *prev;
-	int                id; // should be ZONEID
+	int				   id; // should be ZONEID
 #ifdef ZONE_DEBUG
 	zonedebug_t d;
 #endif
@@ -823,9 +822,9 @@ typedef struct memblock_s
 
 typedef struct
 {
-	int         size;      // total bytes malloced, including header
-	int         used;      // total bytes used
-	memblock_t  blocklist; // start / end cap for linked list
+	int			size;	   // total bytes malloced, including header
+	int			used;	   // total bytes used
+	memblock_t	blocklist; // start / end cap for linked list
 	memblock_t* rover;
 } memzone_t;
 
@@ -835,32 +834,31 @@ memzone_t* mainzone;
 // fragment the main zone (think of cvar and cmd strings)
 memzone_t* smallzone;
 
-void Z_CheckHeap( void );
+void	   Z_CheckHeap( void );
 
 /*
 ========================
 Z_ClearZone
 ========================
 */
-void Z_ClearZone( memzone_t* zone, int size )
+void	   Z_ClearZone( memzone_t* zone, int size )
 {
 	memblock_t* block;
 
 	// set the entire zone to one free block
 
-	zone->blocklist.next = zone->blocklist.prev = block =
-		( memblock_t* )( ( byte* )zone + sizeof( memzone_t ) );
-	zone->blocklist.tag  = 1; // in use block
-	zone->blocklist.id   = 0;
-	zone->blocklist.size = 0;
-	zone->rover          = block;
-	zone->size           = size;
-	zone->used           = 0;
+	zone->blocklist.next = zone->blocklist.prev = block = ( memblock_t* )( ( byte* )zone + sizeof( memzone_t ) );
+	zone->blocklist.tag									= 1; // in use block
+	zone->blocklist.id									= 0;
+	zone->blocklist.size								= 0;
+	zone->rover											= block;
+	zone->size											= size;
+	zone->used											= 0;
 
 	block->prev = block->next = &zone->blocklist;
-	block->tag                = 0; // free block
-	block->id                 = ZONEID;
-	block->size               = size - sizeof( memzone_t );
+	block->tag				  = 0; // free block
+	block->id				  = ZONEID;
+	block->size				  = size - sizeof( memzone_t );
 }
 
 /*
@@ -891,7 +889,7 @@ Z_Free
 void Z_Free( void* ptr )
 {
 	memblock_t *block, *other;
-	memzone_t*  zone;
+	memzone_t*	zone;
 
 	if( !ptr )
 	{
@@ -940,7 +938,7 @@ void Z_Free( void* ptr )
 	{
 		// merge with previous free block
 		other->size += block->size;
-		other->next       = block->next;
+		other->next		  = block->next;
 		other->next->prev = other;
 		if( block == zone->rover )
 		{
@@ -956,7 +954,7 @@ void Z_Free( void* ptr )
 	{
 		// merge the next free block onto the end
 		block->size += other->size;
-		block->next       = other->next;
+		block->next		  = other->next;
 		block->next->prev = block;
 		if( other == zone->rover )
 		{
@@ -972,7 +970,7 @@ Z_FreeTags
 */
 void Z_FreeTags( int tag )
 {
-	int        count;
+	int		   count;
 	memzone_t* zone;
 
 	if( tag == TAG_SMALL )
@@ -1011,9 +1009,9 @@ void* Z_TagMallocDebug( int size, int tag, char* label, char* file, int line )
 void* Z_TagMalloc( int size, int tag )
 {
 #endif
-	int         extra, allocSize;
+	int			extra, allocSize;
 	memblock_t *start, *rover, *new, *base;
-	memzone_t*  zone;
+	memzone_t*	zone;
 
 	if( !tag )
 	{
@@ -1035,11 +1033,11 @@ void* Z_TagMalloc( int size, int tag )
 	// of sufficient size
 	//
 	size += sizeof( memblock_t ); // account for size of block header
-	size += 4;                    // space for memory trash tester
-	size = ( size + 3 ) & ~3;     // align to 32 bit boundary
+	size += 4;					  // space for memory trash tester
+	size = ( size + 3 ) & ~3;	  // align to 32 bit boundary
 
 	base = rover = zone->rover;
-	start        = base->prev;
+	start		 = base->prev;
 
 	do
 	{
@@ -1069,15 +1067,15 @@ void* Z_TagMalloc( int size, int tag )
 	if( extra > MINFRAGMENT )
 	{
 		// there will be a free fragment after the allocated block
-		new             = ( memblock_t* )( ( byte* )base + size );
-		new->size       = extra;
-		new->tag        = 0; // free block
-		new->prev       = base;
-		new->id         = ZONEID;
-		new->next       = base->next;
+		new				= ( memblock_t* )( ( byte* )base + size );
+		new->size		= extra;
+		new->tag		= 0; // free block
+		new->prev		= base;
+		new->id			= ZONEID;
+		new->next		= base->next;
 		new->next->prev = new;
-		base->next      = new;
-		base->size      = size;
+		base->next		= new;
+		base->size		= size;
 	}
 
 	base->tag = tag; // no longer a free block
@@ -1088,9 +1086,9 @@ void* Z_TagMalloc( int size, int tag )
 	base->id = ZONEID;
 
 #ifdef ZONE_DEBUG
-	base->d.label     = label;
-	base->d.file      = file;
-	base->d.line      = line;
+	base->d.label	  = label;
+	base->d.file	  = file;
+	base->d.line	  = line;
 	base->d.allocSize = allocSize;
 #endif
 
@@ -1114,7 +1112,7 @@ void* Z_Malloc( int size )
 #endif
 	void* buf;
 
-	//Z_CheckHeap ();	// DEBUG
+	// Z_CheckHeap ();	// DEBUG
 
 #ifdef ZONE_DEBUG
 	buf = Z_TagMallocDebug( size, TAG_GENERAL, label, file, line );
@@ -1174,12 +1172,12 @@ Z_LogZoneHeap
 void Z_LogZoneHeap( memzone_t* zone, char* name )
 {
 #ifdef ZONE_DEBUG
-	char dump[ 32 ], *ptr;
-	int  i, j;
+	char dump[32], *ptr;
+	int	 i, j;
 #endif
 	memblock_t* block;
-	char        buf[ 4096 ];
-	int         size, allocSize, numBlocks;
+	char		buf[4096];
+	int			size, allocSize, numBlocks;
 
 	if( !logfile || !FS_Initialized() )
 		return;
@@ -1192,19 +1190,19 @@ void Z_LogZoneHeap( memzone_t* zone, char* name )
 		{
 #ifdef ZONE_DEBUG
 			ptr = ( ( char* )block ) + sizeof( memblock_t );
-			j   = 0;
+			j	= 0;
 			for( i = 0; i < 20 && i < block->d.allocSize; i++ )
 			{
-				if( ptr[ i ] >= 32 && ptr[ i ] < 127 )
+				if( ptr[i] >= 32 && ptr[i] < 127 )
 				{
-					dump[ j++ ] = ptr[ i ];
+					dump[j++] = ptr[i];
 				}
 				else
 				{
-					dump[ j++ ] = '_';
+					dump[j++] = '_';
 				}
 			}
-			dump[ j ] = '\0';
+			dump[j] = '\0';
 			Com_sprintf( buf, sizeof( buf ), "size = %8d: %s, line: %d (%s) [%s]\r\n", block->d.allocSize, block->d.file, block->d.line, block->d.label, dump );
 			FS_Write( buf, strlen( buf ), logfile );
 			allocSize += block->d.allocSize;
@@ -1240,13 +1238,12 @@ void Z_LogHeap( void )
 typedef struct memstatic_s
 {
 	memblock_t b;
-	byte       mem[ 2 ];
+	byte	   mem[2];
 } memstatic_t;
 
 // bk001204 - initializer brackets
-memstatic_t emptystring    = { { ( sizeof( memblock_t ) + 2 + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '\0', '\0' } };
-memstatic_t numberstring[] = {
-	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '0', '\0' } },
+memstatic_t emptystring	   = { { ( sizeof( memblock_t ) + 2 + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '\0', '\0' } };
+memstatic_t numberstring[] = { { { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '0', '\0' } },
 	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '1', '\0' } },
 	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '2', '\0' } },
 	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '3', '\0' } },
@@ -1255,8 +1252,7 @@ memstatic_t numberstring[] = {
 	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '6', '\0' } },
 	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '7', '\0' } },
 	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '8', '\0' } },
-	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '9', '\0' } }
-};
+	{ { ( sizeof( memstatic_t ) + 3 ) & ~3, TAG_STATIC, NULL, NULL, ZONEID }, { '9', '\0' } } };
 
 /*
 ========================
@@ -1266,19 +1262,19 @@ CopyString
 		memory from a memstatic_t might be returned
 ========================
 */
-char* CopyString( const char* in )
+char*		CopyString( const char* in )
 {
 	char* out;
 
-	if( !in[ 0 ] )
+	if( !in[0] )
 	{
 		return ( ( char* )&emptystring ) + sizeof( memblock_t );
 	}
-	else if( !in[ 1 ] )
+	else if( !in[1] )
 	{
-		if( in[ 0 ] >= '0' && in[ 0 ] <= '9' )
+		if( in[0] >= '0' && in[0] <= '9' )
 		{
-			return ( ( char* )&numberstring[ in[ 0 ] - '0' ] ) + sizeof( memblock_t );
+			return ( ( char* )&numberstring[in[0] - '0'] ) + sizeof( memblock_t );
 		}
 	}
 	out = S_Malloc( strlen( in ) + 1 );
@@ -1320,7 +1316,7 @@ Goals:
 ==============================================================================
 */
 
-#define HUNK_MAGIC      0x89537892
+#define HUNK_MAGIC		0x89537892
 #define HUNK_FREE_MAGIC 0x89537893
 
 typedef struct
@@ -1339,50 +1335,47 @@ typedef struct
 
 typedef struct hunkblock_s
 {
-	int                 size;
-	byte                printed;
+	int					size;
+	byte				printed;
 	struct hunkblock_s* next;
-	char*               label;
-	char*               file;
-	int                 line;
+	char*				label;
+	char*				file;
+	int					line;
 } hunkblock_t;
 
 static hunkblock_t* hunkblocks;
 
-static hunkUsed_t  hunk_low, hunk_high;
-static hunkUsed_t *hunk_permanent, *hunk_temp;
+static hunkUsed_t	hunk_low, hunk_high;
+static hunkUsed_t * hunk_permanent, *hunk_temp;
 
-static byte* s_hunkData = NULL;
-static int   s_hunkTotal;
+static byte*		s_hunkData = NULL;
+static int			s_hunkTotal;
 
-static int s_zoneTotal;
-static int s_smallZoneTotal;
+static int			s_zoneTotal;
+static int			s_smallZoneTotal;
 
 /*
 =================
 Com_Meminfo_f
 =================
 */
-void Com_Meminfo_f( void )
+void				Com_Meminfo_f( void )
 {
 	memblock_t* block;
-	int         zoneBytes, zoneBlocks;
-	int         smallZoneBytes, smallZoneBlocks;
-	int         botlibBytes, rendererBytes;
-	int         unused;
+	int			zoneBytes, zoneBlocks;
+	int			smallZoneBytes, smallZoneBlocks;
+	int			botlibBytes, rendererBytes;
+	int			unused;
 
-	zoneBytes     = 0;
-	botlibBytes   = 0;
+	zoneBytes	  = 0;
+	botlibBytes	  = 0;
 	rendererBytes = 0;
-	zoneBlocks    = 0;
+	zoneBlocks	  = 0;
 	for( block = mainzone->blocklist.next;; block = block->next )
 	{
 		if( Cmd_Argc() != 1 )
 		{
-			Com_Printf( "block:%p    size:%7i    tag:%3i\n",
-				block,
-				block->size,
-				block->tag );
+			Com_Printf( "block:%p    size:%7i    tag:%3i\n", block, block->size, block->tag );
 		}
 		if( block->tag )
 		{
@@ -1416,7 +1409,7 @@ void Com_Meminfo_f( void )
 		}
 	}
 
-	smallZoneBytes  = 0;
+	smallZoneBytes	= 0;
 	smallZoneBlocks = 0;
 	for( block = smallzone->blocklist.next;; block = block->next )
 	{
@@ -1479,9 +1472,9 @@ Touch all known used data to make sure it is paged in
 */
 void Com_TouchMemory( void )
 {
-	int         start, end;
-	int         i, j;
-	int         sum;
+	int			start, end;
+	int			i, j;
+	int			sum;
 	memblock_t* block;
 
 	Z_CheckHeap();
@@ -1493,14 +1486,14 @@ void Com_TouchMemory( void )
 	j = hunk_low.permanent >> 2;
 	for( i = 0; i < j; i += 64 )
 	{ // only need to touch each page
-		sum += ( ( int* )s_hunkData )[ i ];
+		sum += ( ( int* )s_hunkData )[i];
 	}
 
 	i = ( s_hunkTotal - hunk_high.permanent ) >> 2;
 	j = hunk_high.permanent >> 2;
 	for( ; i < j; i += 64 )
 	{ // only need to touch each page
-		sum += ( ( int* )s_hunkData )[ i ];
+		sum += ( ( int* )s_hunkData )[i];
 	}
 
 	for( block = mainzone->blocklist.next;; block = block->next )
@@ -1510,7 +1503,7 @@ void Com_TouchMemory( void )
 			j = block->size >> 2;
 			for( i = 0; i < j; i += 64 )
 			{ // only need to touch each page
-				sum += ( ( int* )block )[ i ];
+				sum += ( ( int* )block )[i];
 			}
 		}
 		if( block->next == &mainzone->blocklist )
@@ -1575,12 +1568,12 @@ Hunk_Log
 void Hunk_Log( void )
 {
 	hunkblock_t* block;
-	char         buf[ 4096 ];
-	int          size, numBlocks;
+	char		 buf[4096];
+	int			 size, numBlocks;
 
 	if( !logfile || !FS_Initialized() )
 		return;
-	size      = 0;
+	size	  = 0;
 	numBlocks = 0;
 	Com_sprintf( buf, sizeof( buf ), "\r\n================\r\nHunk log\r\n================\r\n" );
 	FS_Write( buf, strlen( buf ), logfile );
@@ -1607,8 +1600,8 @@ Hunk_SmallLog
 void Hunk_SmallLog( void )
 {
 	hunkblock_t *block, *block2;
-	char         buf[ 4096 ];
-	int          size, locsize, numBlocks;
+	char		 buf[4096];
+	int			 size, locsize, numBlocks;
 
 	if( !logfile || !FS_Initialized() )
 		return;
@@ -1616,7 +1609,7 @@ void Hunk_SmallLog( void )
 	{
 		block->printed = qfalse;
 	}
-	size      = 0;
+	size	  = 0;
 	numBlocks = 0;
 	Com_sprintf( buf, sizeof( buf ), "\r\n================\r\nHunk Small log\r\n================\r\n" );
 	FS_Write( buf, strlen( buf ), logfile );
@@ -1662,8 +1655,8 @@ Com_InitZoneMemory
 void Com_InitHunkMemory( void )
 {
 	cvar_t* cv;
-	int     nMinAlloc;
-	char*   pMsg = NULL;
+	int		nMinAlloc;
+	char*	pMsg = NULL;
 
 	// make sure the file system has allocated and "not" freed any temp blocks
 	// this allows the config and product id files ( journal files too ) to be loaded
@@ -1681,12 +1674,12 @@ void Com_InitHunkMemory( void )
 	if( com_dedicated && com_dedicated->integer )
 	{
 		nMinAlloc = MIN_DEDICATED_COMHUNKMEGS;
-		pMsg      = "Minimum com_hunkMegs for a dedicated server is %i, allocating %i megs.\n";
+		pMsg	  = "Minimum com_hunkMegs for a dedicated server is %i, allocating %i megs.\n";
 	}
 	else
 	{
 		nMinAlloc = MIN_COMHUNKMEGS;
-		pMsg      = "Minimum com_hunkMegs is %i, allocating %i megs.\n";
+		pMsg	  = "Minimum com_hunkMegs is %i, allocating %i megs.\n";
 	}
 
 	if( cv->integer < nMinAlloc )
@@ -1728,7 +1721,7 @@ int Hunk_MemoryRemaining( void )
 {
 	int low, high;
 
-	low  = hunk_low.permanent > hunk_low.temp ? hunk_low.permanent : hunk_low.temp;
+	low	 = hunk_low.permanent > hunk_low.temp ? hunk_low.permanent : hunk_low.temp;
 	high = hunk_high.permanent > hunk_high.temp ? hunk_high.permanent : hunk_high.temp;
 
 	return s_hunkTotal - ( low + high );
@@ -1795,18 +1788,18 @@ void Hunk_Clear( void )
 #ifndef DEDICATED
 	CIN_CloseAllVideos();
 #endif
-	hunk_low.mark          = 0;
-	hunk_low.permanent     = 0;
-	hunk_low.temp          = 0;
+	hunk_low.mark		   = 0;
+	hunk_low.permanent	   = 0;
+	hunk_low.temp		   = 0;
 	hunk_low.tempHighwater = 0;
 
-	hunk_high.mark          = 0;
-	hunk_high.permanent     = 0;
-	hunk_high.temp          = 0;
+	hunk_high.mark			= 0;
+	hunk_high.permanent		= 0;
+	hunk_high.temp			= 0;
 	hunk_high.tempHighwater = 0;
 
 	hunk_permanent = &hunk_low;
-	hunk_temp      = &hunk_high;
+	hunk_temp	   = &hunk_high;
 
 	Com_Printf( "Hunk_Clear: reset the hunk ok\n" );
 	VM_Clear();
@@ -1827,11 +1820,10 @@ static void Hunk_SwapBanks( void )
 
 	// if we have a larger highwater mark on this side, start making
 	// our permanent allocations here and use the other side for temp
-	if( hunk_temp->tempHighwater - hunk_temp->permanent >
-		hunk_permanent->tempHighwater - hunk_permanent->permanent )
+	if( hunk_temp->tempHighwater - hunk_temp->permanent > hunk_permanent->tempHighwater - hunk_permanent->permanent )
 	{
-		swap           = hunk_temp;
-		hunk_temp      = hunk_permanent;
+		swap		   = hunk_temp;
+		hunk_temp	   = hunk_permanent;
 		hunk_permanent = swap;
 	}
 }
@@ -1912,14 +1904,14 @@ void* Hunk_Alloc( int size, ha_pref preference )
 	{
 		hunkblock_t* block;
 
-		block        = ( hunkblock_t* )buf;
-		block->size  = size - sizeof( hunkblock_t );
-		block->file  = file;
+		block		 = ( hunkblock_t* )buf;
+		block->size	 = size - sizeof( hunkblock_t );
+		block->file	 = file;
 		block->label = label;
-		block->line  = line;
-		block->next  = hunkblocks;
-		hunkblocks   = block;
-		buf          = ( ( byte* )buf ) + sizeof( hunkblock_t );
+		block->line	 = line;
+		block->next	 = hunkblocks;
+		hunkblocks	 = block;
+		buf			 = ( ( byte* )buf ) + sizeof( hunkblock_t );
 	}
 #endif
 	return buf;
@@ -1936,7 +1928,7 @@ When the files-in-use count reaches zero, all temp memory will be deleted
 */
 void* Hunk_AllocateTempMemory( int size )
 {
-	void*         buf;
+	void*		  buf;
 	hunkHeader_t* hdr;
 
 	// return a Z_Malloc'd block if the hunk has not been initialized
@@ -2060,7 +2052,7 @@ Hunk_Trash
 */
 void Hunk_Trash( void )
 {
-	int   length, i, rnd;
+	int	  length, i, rnd;
 	char *buf, value;
 
 	return;
@@ -2088,13 +2080,13 @@ void Hunk_Trash( void )
 
 	if( length > 0x7FFFF )
 	{
-		//randomly trash data within buf
-		rnd   = random() * ( length - 0x7FFFF );
+		// randomly trash data within buf
+		rnd	  = random() * ( length - 0x7FFFF );
 		value = 31;
 		for( i = 0; i < 0x7FFFF; i++ )
 		{
 			value *= 109;
-			buf[ rnd + i ] ^= value;
+			buf[rnd + i] ^= value;
 		}
 	}
 }
@@ -2114,17 +2106,17 @@ journaled file
 // https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=5
 #define MAX_PUSHED_EVENTS 1024
 // bk001129 - init, also static
-static int com_pushedEventsHead = 0;
-static int com_pushedEventsTail = 0;
+static int		  com_pushedEventsHead = 0;
+static int		  com_pushedEventsTail = 0;
 // bk001129 - static
-static sysEvent_t com_pushedEvents[ MAX_PUSHED_EVENTS ];
+static sysEvent_t com_pushedEvents[MAX_PUSHED_EVENTS];
 
 /*
 =================
 Com_InitJournaling
 =================
 */
-void Com_InitJournaling( void )
+void			  Com_InitJournaling( void )
 {
 	Com_StartupVariable( "journal" );
 	com_journal = Cvar_Get( "journal", "0", CVAR_INIT );
@@ -2136,7 +2128,7 @@ void Com_InitJournaling( void )
 	if( com_journal->integer == 1 )
 	{
 		Com_Printf( "Journaling events\n" );
-		com_journalFile     = FS_FOpenFileWrite( "journal.dat" );
+		com_journalFile		= FS_FOpenFileWrite( "journal.dat" );
 		com_journalDataFile = FS_FOpenFileWrite( "journaldata.dat" );
 	}
 	else if( com_journal->integer == 2 )
@@ -2149,7 +2141,7 @@ void Com_InitJournaling( void )
 	if( !com_journalFile || !com_journalDataFile )
 	{
 		Cvar_Set( "com_journal", "0" );
-		com_journalFile     = 0;
+		com_journalFile		= 0;
 		com_journalDataFile = 0;
 		Com_Printf( "Couldn't open journal files\n" );
 	}
@@ -2162,7 +2154,7 @@ Com_GetRealEvent
 */
 sysEvent_t Com_GetRealEvent( void )
 {
-	int        r;
+	int		   r;
 	sysEvent_t ev;
 
 	// either get an event from the system or the journal file
@@ -2176,7 +2168,7 @@ sysEvent_t Com_GetRealEvent( void )
 		if( ev.evPtrLength )
 		{
 			ev.evPtr = Z_Malloc( ev.evPtrLength );
-			r        = FS_Read( ev.evPtr, ev.evPtrLength, com_journalFile );
+			r		 = FS_Read( ev.evPtr, ev.evPtrLength, com_journalFile );
 			if( r != ev.evPtrLength )
 			{
 				Com_Error( ERR_FATAL, "Error reading from journal file" );
@@ -2234,9 +2226,9 @@ Com_PushEvent
 void Com_PushEvent( sysEvent_t* event )
 {
 	sysEvent_t* ev;
-	static int  printedWarning = 0; // bk001129 - init, bk001204 - explicit int
+	static int	printedWarning = 0; // bk001129 - init, bk001204 - explicit int
 
-	ev = &com_pushedEvents[ com_pushedEventsHead & ( MAX_PUSHED_EVENTS - 1 ) ];
+	ev = &com_pushedEvents[com_pushedEventsHead & ( MAX_PUSHED_EVENTS - 1 )];
 
 	if( com_pushedEventsHead - com_pushedEventsTail >= MAX_PUSHED_EVENTS )
 	{
@@ -2272,7 +2264,7 @@ sysEvent_t Com_GetEvent( void )
 	if( com_pushedEventsHead > com_pushedEventsTail )
 	{
 		com_pushedEventsTail++;
-		return com_pushedEvents[ ( com_pushedEventsTail - 1 ) & ( MAX_PUSHED_EVENTS - 1 ) ];
+		return com_pushedEvents[( com_pushedEventsTail - 1 ) & ( MAX_PUSHED_EVENTS - 1 )];
 	}
 	return Com_GetRealEvent();
 }
@@ -2297,7 +2289,7 @@ void Com_RunAndTimeServerPacket( netadr_t* evFrom, msg_t* buf )
 
 	if( com_speeds->integer )
 	{
-		t2   = Sys_Milliseconds();
+		t2	 = Sys_Milliseconds();
 		msec = t2 - t1;
 		if( com_speeds->integer == 3 )
 		{
@@ -2317,8 +2309,8 @@ int Com_EventLoop( void )
 {
 	sysEvent_t ev;
 	netadr_t   evFrom;
-	byte       bufData[ MAX_MSGLEN ];
-	msg_t      buf;
+	byte	   bufData[MAX_MSGLEN];
+	msg_t	   buf;
 
 	MSG_Init( &buf, bufData, sizeof( bufData ) );
 
@@ -2385,7 +2377,7 @@ int Com_EventLoop( void )
 					}
 				}
 
-				evFrom      = *( netadr_t* )ev.evPtr;
+				evFrom		= *( netadr_t* )ev.evPtr;
 				buf.cursize = ev.evPtrLength - sizeof( evFrom );
 
 				// we must copy the contents of the message out, because
@@ -2476,7 +2468,7 @@ error recovery
 static void Com_Freeze_f( void )
 {
 	float s;
-	int   start, now;
+	int	  start, now;
 
 	if( Cmd_Argc() != 2 )
 	{
@@ -2513,9 +2505,9 @@ static void Com_Crash_f( void )
 //   not sure it's necessary to have different defaults for regular and dedicated, but I don't want to risk it
 //   https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=470
 #ifndef DEDICATED
-char cl_cdkey[ 34 ] = "                                ";
+char cl_cdkey[34] = "                                ";
 #else
-char cl_cdkey[ 34 ] = "123456789";
+char cl_cdkey[34] = "123456789";
 #endif
 
 /*
@@ -2524,11 +2516,11 @@ Com_ReadCDKey
 =================
 */
 qboolean CL_CDKeyValidate( const char* key, const char* checksum );
-void     Com_ReadCDKey( const char* filename )
+void	 Com_ReadCDKey( const char* filename )
 {
 	fileHandle_t f;
-	char         buffer[ 33 ];
-	char         fbuffer[ MAX_OSPATH ];
+	char		 buffer[33];
+	char		 fbuffer[MAX_OSPATH];
 
 	sprintf( fbuffer, "%s/q3key", filename );
 
@@ -2562,15 +2554,15 @@ Com_AppendCDKey
 void Com_AppendCDKey( const char* filename )
 {
 	fileHandle_t f;
-	char         buffer[ 33 ];
-	char         fbuffer[ MAX_OSPATH ];
+	char		 buffer[33];
+	char		 fbuffer[MAX_OSPATH];
 
 	sprintf( fbuffer, "%s/q3key", filename );
 
 	FS_SV_FOpenFileRead( fbuffer, &f );
 	if( !f )
 	{
-		Q_strncpyz( &cl_cdkey[ 16 ], "                ", 17 );
+		Q_strncpyz( &cl_cdkey[16], "                ", 17 );
 		return;
 	}
 
@@ -2581,11 +2573,11 @@ void Com_AppendCDKey( const char* filename )
 
 	if( CL_CDKeyValidate( buffer, NULL ) )
 	{
-		strcat( &cl_cdkey[ 16 ], buffer );
+		strcat( &cl_cdkey[16], buffer );
 	}
 	else
 	{
-		Q_strncpyz( &cl_cdkey[ 16 ], "                ", 17 );
+		Q_strncpyz( &cl_cdkey[16], "                ", 17 );
 	}
 }
 
@@ -2598,8 +2590,8 @@ Com_WriteCDKey
 static void Com_WriteCDKey( const char* filename, const char* ikey )
 {
 	fileHandle_t f;
-	char         fbuffer[ MAX_OSPATH ];
-	char         key[ 17 ];
+	char		 fbuffer[MAX_OSPATH];
+	char		 key[17];
 
 	sprintf( fbuffer, "%s/q3key", filename );
 
@@ -2707,21 +2699,21 @@ void Com_Init( char* commandLine )
 	com_blood  = Cvar_Get( "com_blood", "1", CVAR_ARCHIVE );
 
 	com_developer = Cvar_Get( "developer", "0", CVAR_TEMP );
-	com_logfile   = Cvar_Get( "logfile", "0", CVAR_TEMP );
+	com_logfile	  = Cvar_Get( "logfile", "0", CVAR_TEMP );
 
 	com_timescale  = Cvar_Get( "timescale", "1", CVAR_CHEAT | CVAR_SYSTEMINFO );
 	com_fixedtime  = Cvar_Get( "fixedtime", "0", CVAR_CHEAT );
 	com_showtrace  = Cvar_Get( "com_showtrace", "0", CVAR_CHEAT );
-	com_dropsim    = Cvar_Get( "com_dropsim", "0", CVAR_CHEAT );
-	com_viewlog    = Cvar_Get( "viewlog", "0", CVAR_CHEAT );
-	com_speeds     = Cvar_Get( "com_speeds", "0", 0 );
+	com_dropsim	   = Cvar_Get( "com_dropsim", "0", CVAR_CHEAT );
+	com_viewlog	   = Cvar_Get( "viewlog", "0", CVAR_CHEAT );
+	com_speeds	   = Cvar_Get( "com_speeds", "0", 0 );
 	com_timedemo   = Cvar_Get( "timedemo", "0", CVAR_CHEAT );
 	com_cameraMode = Cvar_Get( "com_cameraMode", "0", CVAR_CHEAT );
 
-	cl_paused       = Cvar_Get( "cl_paused", "0", CVAR_ROM );
-	sv_paused       = Cvar_Get( "sv_paused", "0", CVAR_ROM );
-	com_sv_running  = Cvar_Get( "sv_running", "0", CVAR_ROM );
-	com_cl_running  = Cvar_Get( "cl_running", "0", CVAR_ROM );
+	cl_paused		= Cvar_Get( "cl_paused", "0", CVAR_ROM );
+	sv_paused		= Cvar_Get( "sv_paused", "0", CVAR_ROM );
+	com_sv_running	= Cvar_Get( "sv_running", "0", CVAR_ROM );
+	com_cl_running	= Cvar_Get( "cl_running", "0", CVAR_ROM );
 	com_buildScript = Cvar_Get( "com_buildScript", "0", 0 );
 
 	com_introPlayed = Cvar_Get( "com_introplayed", "0", CVAR_ARCHIVE );
@@ -2748,7 +2740,7 @@ void Com_Init( char* commandLine )
 	Cmd_AddCommand( "changeVectors", MSG_ReportChangeVectors_f );
 	Cmd_AddCommand( "writeconfig", Com_WriteConfig_f );
 
-	s           = va( "%s %s %s", Q3_VERSION, CPUSTRING, __DATE__ );
+	s			= va( "%s %s %s", Q3_VERSION, CPUSTRING, __DATE__ );
 	com_version = Cvar_Get( "version", s, CVAR_ROM | CVAR_SERVERINFO );
 
 	Sys_Init();
@@ -2772,7 +2764,7 @@ void Com_Init( char* commandLine )
 	if( !Com_AddStartupCommands() )
 	{
 		// if the user didn't give any commands, run default action
-		//if ( !com_dedicated->integer ) {
+		// if ( !com_dedicated->integer ) {
 		//	Cbuf_AddText ("cinematic idlogo.RoQ\n");
 		//	if( !com_introPlayed->integer ) {
 		//		Cvar_Set( com_introPlayed->name, "1" );
@@ -2842,9 +2834,9 @@ void Com_WriteConfiguration( void )
 	// bk001119 - tentative "not needed for dedicated"
 #ifndef DEDICATED
 	fs = Cvar_Get( "fs_game", "", CVAR_INIT | CVAR_SYSTEMINFO );
-	if( UI_usesUniqueCDKey() && fs && fs->string[ 0 ] != 0 )
+	if( UI_usesUniqueCDKey() && fs && fs->string[0] != 0 )
 	{
-		Com_WriteCDKey( fs->string, &cl_cdkey[ 16 ] );
+		Com_WriteCDKey( fs->string, &cl_cdkey[16] );
 	}
 	else
 	{
@@ -2862,7 +2854,7 @@ Write the config file to a specific name
 */
 void Com_WriteConfig_f( void )
 {
-	char filename[ MAX_QPATH ];
+	char filename[MAX_QPATH];
 
 	if( Cmd_Argc() != 2 )
 	{
@@ -2947,15 +2939,15 @@ Com_Frame
 */
 void Com_Frame( void )
 {
-	int        msec, minMsec;
+	int		   msec, minMsec;
 	static int lastTime;
-	int        key;
+	int		   key;
 
-	int timeBeforeFirstEvents;
-	int timeBeforeServer;
-	int timeBeforeEvents;
-	int timeBeforeClient;
-	int timeAfter;
+	int		   timeBeforeFirstEvents;
+	int		   timeBeforeServer;
+	int		   timeBeforeEvents;
+	int		   timeBeforeClient;
+	int		   timeAfter;
 
 	if( setjmp( abortframe ) )
 	{
@@ -2965,10 +2957,10 @@ void Com_Frame( void )
 	// bk001204 - init to zero.
 	//  also:  might be clobbered by `longjmp' or `vfork'
 	timeBeforeFirstEvents = 0;
-	timeBeforeServer      = 0;
-	timeBeforeEvents      = 0;
-	timeBeforeClient      = 0;
-	timeAfter             = 0;
+	timeBeforeServer	  = 0;
+	timeBeforeEvents	  = 0;
+	timeBeforeClient	  = 0;
+	timeAfter			  = 0;
 
 	// old net chan encryption key
 	key = 0x87243987;
@@ -3018,7 +3010,7 @@ void Com_Frame( void )
 
 	// mess with msec if needed
 	com_frameMsec = msec;
-	msec          = Com_ModifyMsec( msec );
+	msec		  = Com_ModifyMsec( msec );
 
 	//
 	// server side
@@ -3091,21 +3083,13 @@ void Com_Frame( void )
 		int all, sv, ev, cl;
 
 		all = timeAfter - timeBeforeServer;
-		sv  = timeBeforeEvents - timeBeforeServer;
-		ev  = timeBeforeServer - timeBeforeFirstEvents + timeBeforeClient - timeBeforeEvents;
-		cl  = timeAfter - timeBeforeClient;
+		sv	= timeBeforeEvents - timeBeforeServer;
+		ev	= timeBeforeServer - timeBeforeFirstEvents + timeBeforeClient - timeBeforeEvents;
+		cl	= timeAfter - timeBeforeClient;
 		sv -= time_game;
 		cl -= time_frontend + time_backend;
 
-		Com_Printf( "frame:%i all:%3i sv:%3i ev:%3i cl:%3i gm:%3i rf:%3i bk:%3i\n",
-			com_frameNumber,
-			all,
-			sv,
-			ev,
-			cl,
-			time_game,
-			time_frontend,
-			time_backend );
+		Com_Printf( "frame:%i all:%3i sv:%3i ev:%3i cl:%3i gm:%3i rf:%3i bk:%3i\n", com_frameNumber, all, sv, ev, cl, time_game, time_frontend, time_backend );
 	}
 
 	//
@@ -3117,9 +3101,9 @@ void Com_Frame( void )
 		extern int c_pointcontents;
 
 		Com_Printf( "%4i traces  (%ib %ip) %4i points\n", c_traces, c_brush_traces, c_patch_traces, c_pointcontents );
-		c_traces        = 0;
-		c_brush_traces  = 0;
-		c_patch_traces  = 0;
+		c_traces		= 0;
+		c_brush_traces	= 0;
+		c_patch_traces	= 0;
 		c_pointcontents = 0;
 	}
 
@@ -3211,10 +3195,10 @@ void Field_Clear( field_t* edit )
 }
 
 static const char* completionString;
-static char        shortestMatch[ MAX_TOKEN_CHARS ];
-static int         matchCount;
+static char		   shortestMatch[MAX_TOKEN_CHARS];
+static int		   matchCount;
 // field we are working on, passed to Field_CompleteCommand (&g_consoleCommand for instance)
-static field_t* completionField;
+static field_t*	   completionField;
 
 /*
 ===============
@@ -3222,7 +3206,7 @@ FindMatches
 
 ===============
 */
-static void FindMatches( const char* s )
+static void		   FindMatches( const char* s )
 {
 	int i;
 
@@ -3238,11 +3222,11 @@ static void FindMatches( const char* s )
 	}
 
 	// cut shortestMatch to the amount common with s
-	for( i = 0; s[ i ]; i++ )
+	for( i = 0; s[i]; i++ )
 	{
-		if( tolower( shortestMatch[ i ] ) != tolower( s[ i ] ) )
+		if( tolower( shortestMatch[i] ) != tolower( s[i] ) )
 		{
-			shortestMatch[ i ] = 0;
+			shortestMatch[i] = 0;
 		}
 	}
 }
@@ -3263,7 +3247,7 @@ static void PrintMatches( const char* s )
 
 static void keyConcatArgs( void )
 {
-	int   i;
+	int	  i;
 	char* arg;
 
 	for( i = 1; i < Cmd_Argc(); i++ )
@@ -3321,12 +3305,12 @@ void Field_CompleteCommand( field_t* field )
 	Cmd_TokenizeString( completionField->buffer );
 
 	completionString = Cmd_Argv( 0 );
-	if( completionString[ 0 ] == '\\' || completionString[ 0 ] == '/' )
+	if( completionString[0] == '\\' || completionString[0] == '/' )
 	{
 		completionString++;
 	}
-	matchCount         = 0;
-	shortestMatch[ 0 ] = 0;
+	matchCount		 = 0;
+	shortestMatch[0] = 0;
 
 	if( strlen( completionString ) == 0 )
 	{

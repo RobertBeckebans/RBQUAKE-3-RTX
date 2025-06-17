@@ -27,77 +27,77 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 **********************************************************************/
 #include "ui_local.h"
 
-sfxHandle_t menu_in_sound;
-sfxHandle_t menu_move_sound;
-sfxHandle_t menu_out_sound;
-sfxHandle_t menu_buzz_sound;
-sfxHandle_t menu_null_sound;
-sfxHandle_t weaponChangeSound;
+sfxHandle_t		   menu_in_sound;
+sfxHandle_t		   menu_move_sound;
+sfxHandle_t		   menu_out_sound;
+sfxHandle_t		   menu_buzz_sound;
+sfxHandle_t		   menu_null_sound;
+sfxHandle_t		   weaponChangeSound;
 
-static qhandle_t sliderBar;
-static qhandle_t sliderButton_0;
-static qhandle_t sliderButton_1;
+static qhandle_t   sliderBar;
+static qhandle_t   sliderButton_0;
+static qhandle_t   sliderButton_1;
 
-vec4_t menu_text_color   = { 1.0f, 1.0f, 1.0f, 1.0f };
-vec4_t menu_dim_color    = { 0.0f, 0.0f, 0.0f, 0.75f };
-vec4_t color_black       = { 0.00f, 0.00f, 0.00f, 1.00f };
-vec4_t color_white       = { 1.00f, 1.00f, 1.00f, 1.00f };
-vec4_t color_yellow      = { 1.00f, 1.00f, 0.00f, 1.00f };
-vec4_t color_blue        = { 0.00f, 0.00f, 1.00f, 1.00f };
-vec4_t color_lightOrange = { 1.00f, 0.68f, 0.00f, 1.00f };
-vec4_t color_orange      = { 1.00f, 0.43f, 0.00f, 1.00f };
-vec4_t color_red         = { 1.00f, 0.00f, 0.00f, 1.00f };
-vec4_t color_dim         = { 0.00f, 0.00f, 0.00f, 0.25f };
+vec4_t			   menu_text_color	 = { 1.0f, 1.0f, 1.0f, 1.0f };
+vec4_t			   menu_dim_color	 = { 0.0f, 0.0f, 0.0f, 0.75f };
+vec4_t			   color_black		 = { 0.00f, 0.00f, 0.00f, 1.00f };
+vec4_t			   color_white		 = { 1.00f, 1.00f, 1.00f, 1.00f };
+vec4_t			   color_yellow		 = { 1.00f, 1.00f, 0.00f, 1.00f };
+vec4_t			   color_blue		 = { 0.00f, 0.00f, 1.00f, 1.00f };
+vec4_t			   color_lightOrange = { 1.00f, 0.68f, 0.00f, 1.00f };
+vec4_t			   color_orange		 = { 1.00f, 0.43f, 0.00f, 1.00f };
+vec4_t			   color_red		 = { 1.00f, 0.00f, 0.00f, 1.00f };
+vec4_t			   color_dim		 = { 0.00f, 0.00f, 0.00f, 0.25f };
 
 // current color scheme
-vec4_t pulse_color          = { 1.00f, 1.00f, 1.00f, 1.00f };
-vec4_t text_color_disabled  = { 0.50f, 0.50f, 0.50f, 1.00f }; // light gray
-vec4_t text_color_normal    = { 1.00f, 0.43f, 0.00f, 1.00f }; // light orange
-vec4_t text_color_highlight = { 1.00f, 1.00f, 0.00f, 1.00f }; // bright yellow
-vec4_t listbar_color        = { 1.00f, 0.43f, 0.00f, 0.30f }; // transluscent orange
-vec4_t text_color_status    = { 1.00f, 1.00f, 1.00f, 1.00f }; // bright white
+vec4_t			   pulse_color			= { 1.00f, 1.00f, 1.00f, 1.00f };
+vec4_t			   text_color_disabled	= { 0.50f, 0.50f, 0.50f, 1.00f }; // light gray
+vec4_t			   text_color_normal	= { 1.00f, 0.43f, 0.00f, 1.00f }; // light orange
+vec4_t			   text_color_highlight = { 1.00f, 1.00f, 0.00f, 1.00f }; // bright yellow
+vec4_t			   listbar_color		= { 1.00f, 0.43f, 0.00f, 0.30f }; // transluscent orange
+vec4_t			   text_color_status	= { 1.00f, 1.00f, 1.00f, 1.00f }; // bright white
 
 // action widget
-static void Action_Init( menuaction_s* a );
-static void Action_Draw( menuaction_s* a );
+static void		   Action_Init( menuaction_s* a );
+static void		   Action_Draw( menuaction_s* a );
 
 // radio button widget
-static void        RadioButton_Init( menuradiobutton_s* rb );
-static void        RadioButton_Draw( menuradiobutton_s* rb );
+static void		   RadioButton_Init( menuradiobutton_s* rb );
+static void		   RadioButton_Draw( menuradiobutton_s* rb );
 static sfxHandle_t RadioButton_Key( menuradiobutton_s* rb, int key );
 
 // slider widget
-static void        Slider_Init( menuslider_s* s );
+static void		   Slider_Init( menuslider_s* s );
 static sfxHandle_t Slider_Key( menuslider_s* s, int key );
-static void        Slider_Draw( menuslider_s* s );
+static void		   Slider_Draw( menuslider_s* s );
 
 // spin control widget
-static void        SpinControl_Init( menulist_s* s );
-static void        SpinControl_Draw( menulist_s* s );
+static void		   SpinControl_Init( menulist_s* s );
+static void		   SpinControl_Draw( menulist_s* s );
 static sfxHandle_t SpinControl_Key( menulist_s* l, int key );
 
 // text widget
-static void Text_Init( menutext_s* b );
-static void Text_Draw( menutext_s* b );
+static void		   Text_Init( menutext_s* b );
+static void		   Text_Draw( menutext_s* b );
 
 // scrolllist widget
-static void ScrollList_Init( menulist_s* l );
-sfxHandle_t ScrollList_Key( menulist_s* l, int key );
+static void		   ScrollList_Init( menulist_s* l );
+sfxHandle_t		   ScrollList_Key( menulist_s* l, int key );
 
 // proportional text widget
-static void PText_Init( menutext_s* b );
-static void PText_Draw( menutext_s* b );
+static void		   PText_Init( menutext_s* b );
+static void		   PText_Draw( menutext_s* b );
 
 // proportional banner text widget
-static void BText_Init( menutext_s* b );
-static void BText_Draw( menutext_s* b );
+static void		   BText_Init( menutext_s* b );
+static void		   BText_Draw( menutext_s* b );
 
 /*
 =================
 Text_Init
 =================
 */
-static void Text_Init( menutext_s* t )
+static void		   Text_Init( menutext_s* t )
 {
 	t->generic.flags |= QMF_INACTIVE;
 }
@@ -109,15 +109,15 @@ Text_Draw
 */
 static void Text_Draw( menutext_s* t )
 {
-	int    x;
-	int    y;
-	char   buff[ 512 ];
+	int	   x;
+	int	   y;
+	char   buff[512];
 	float* color;
 
 	x = t->generic.x;
 	y = t->generic.y;
 
-	buff[ 0 ] = '\0';
+	buff[0] = '\0';
 
 	// possible label
 	if( t->generic.name )
@@ -152,8 +152,8 @@ BText_Draw
 */
 static void BText_Draw( menutext_s* t )
 {
-	int    x;
-	int    y;
+	int	   x;
+	int	   y;
 	float* color;
 
 	x = t->generic.x;
@@ -174,10 +174,10 @@ PText_Init
 */
 static void PText_Init( menutext_s* t )
 {
-	int   x;
-	int   y;
-	int   w;
-	int   h;
+	int	  x;
+	int	  y;
+	int	  w;
+	int	  h;
 	float sizeScale;
 
 	sizeScale = UI_ProportionalSizeScale( t->style );
@@ -196,9 +196,9 @@ static void PText_Init( menutext_s* t )
 		x -= w / 2;
 	}
 
-	t->generic.left   = x - PROP_GAP_WIDTH * sizeScale;
+	t->generic.left	  = x - PROP_GAP_WIDTH * sizeScale;
 	t->generic.right  = x + w + PROP_GAP_WIDTH * sizeScale;
-	t->generic.top    = y;
+	t->generic.top	  = y;
 	t->generic.bottom = y + h;
 }
 
@@ -209,10 +209,10 @@ PText_Draw
 */
 static void PText_Draw( menutext_s* t )
 {
-	int    x;
-	int    y;
+	int	   x;
+	int	   y;
 	float* color;
-	int    style;
+	int	   style;
 
 	x = t->generic.x;
 	y = t->generic.y;
@@ -272,12 +272,12 @@ void Bitmap_Init( menubitmap_s* b )
 		x = x - w / 2;
 	}
 
-	b->generic.left   = x;
+	b->generic.left	  = x;
 	b->generic.right  = x + w;
-	b->generic.top    = y;
+	b->generic.top	  = y;
 	b->generic.bottom = y + h;
 
-	b->shader      = 0;
+	b->shader	   = 0;
 	b->focusshader = 0;
 }
 
@@ -339,14 +339,14 @@ void Bitmap_Draw( menubitmap_s* b )
 		{
 			if( b->focuscolor )
 			{
-				tempcolor[ 0 ] = b->focuscolor[ 0 ];
-				tempcolor[ 1 ] = b->focuscolor[ 1 ];
-				tempcolor[ 2 ] = b->focuscolor[ 2 ];
-				color          = tempcolor;
+				tempcolor[0] = b->focuscolor[0];
+				tempcolor[1] = b->focuscolor[1];
+				tempcolor[2] = b->focuscolor[2];
+				color		 = tempcolor;
 			}
 			else
 				color = pulse_color;
-			color[ 3 ] = 0.5 + 0.5 * sin( uis.realtime / PULSE_DIVISOR );
+			color[3] = 0.5 + 0.5 * sin( uis.realtime / PULSE_DIVISOR );
 
 			trap_R_SetColor( color );
 			UI_DrawHandlePic( x, y, w, h, b->focusshader );
@@ -382,9 +382,9 @@ static void Action_Init( menuaction_s* a )
 		len = 0;
 
 	// left justify text
-	a->generic.left   = a->generic.x;
+	a->generic.left	  = a->generic.x;
 	a->generic.right  = a->generic.x + len * BIGCHAR_WIDTH;
-	a->generic.top    = a->generic.y;
+	a->generic.top	  = a->generic.y;
 	a->generic.bottom = a->generic.y + BIGCHAR_HEIGHT;
 }
 
@@ -395,8 +395,8 @@ Action_Draw
 */
 static void Action_Draw( menuaction_s* a )
 {
-	int    x, y;
-	int    style;
+	int	   x, y;
+	int	   style;
 	float* color;
 
 	style = 0;
@@ -449,7 +449,7 @@ static void RadioButton_Init( menuradiobutton_s* rb )
 
 	rb->generic.left   = rb->generic.x - ( len + 1 ) * SMALLCHAR_WIDTH;
 	rb->generic.right  = rb->generic.x + 6 * SMALLCHAR_WIDTH;
-	rb->generic.top    = rb->generic.y;
+	rb->generic.top	   = rb->generic.y;
 	rb->generic.bottom = rb->generic.y + SMALLCHAR_HEIGHT;
 }
 
@@ -494,10 +494,10 @@ RadioButton_Draw
 */
 static void RadioButton_Draw( menuradiobutton_s* rb )
 {
-	int      x;
-	int      y;
-	float*   color;
-	int      style;
+	int		 x;
+	int		 y;
+	float*	 color;
+	int		 style;
 	qboolean focus;
 
 	x = rb->generic.x;
@@ -558,9 +558,9 @@ static void Slider_Init( menuslider_s* s )
 	else
 		len = 0;
 
-	s->generic.left   = s->generic.x - ( len + 1 ) * SMALLCHAR_WIDTH;
+	s->generic.left	  = s->generic.x - ( len + 1 ) * SMALLCHAR_WIDTH;
 	s->generic.right  = s->generic.x + ( SLIDER_RANGE + 2 + 1 ) * SMALLCHAR_WIDTH;
-	s->generic.top    = s->generic.y;
+	s->generic.top	  = s->generic.y;
 	s->generic.bottom = s->generic.y + SMALLCHAR_HEIGHT;
 }
 
@@ -572,14 +572,14 @@ Slider_Key
 static sfxHandle_t Slider_Key( menuslider_s* s, int key )
 {
 	sfxHandle_t sound;
-	int         x;
-	int         oldvalue;
+	int			x;
+	int			oldvalue;
 
 	switch( key )
 	{
 		case K_MOUSE1:
-			x           = uis.cursorx - s->generic.x - 2 * SMALLCHAR_WIDTH;
-			oldvalue    = s->curvalue;
+			x			= uis.cursorx - s->generic.x - 2 * SMALLCHAR_WIDTH;
+			oldvalue	= s->curvalue;
 			s->curvalue = ( x / ( float )( SLIDER_RANGE * SMALLCHAR_WIDTH ) ) * ( s->maxvalue - s->minvalue ) + s->minvalue;
 
 			if( s->curvalue < s->minvalue )
@@ -634,15 +634,15 @@ Slider_Draw
 */
 static void Slider_Draw( menuslider_s* s )
 {
-	int      x;
-	int      y;
-	int      style;
-	float*   color;
-	int      button;
+	int		 x;
+	int		 y;
+	int		 style;
+	float*	 color;
+	int		 button;
 	qboolean focus;
 
-	x     = s->generic.x;
-	y     = s->generic.y;
+	x	  = s->generic.x;
+	y	  = s->generic.y;
 	focus = ( s->generic.parent->cursor == s->generic.menuPosition );
 
 	if( s->generic.flags & QMF_GRAYED )
@@ -707,15 +707,15 @@ Slider_Draw
 */
 static void Slider_Draw( menuslider_s* s )
 {
-	float*   color;
-	int      style;
-	int      i;
-	int      x;
-	int      y;
+	float*	 color;
+	int		 style;
+	int		 i;
+	int		 x;
+	int		 y;
 	qboolean focus;
 
-	x     = s->generic.x;
-	y     = s->generic.y;
+	x	  = s->generic.x;
+	y	  = s->generic.y;
 	focus = ( s->generic.parent->cursor == s->generic.menuPosition );
 
 	style = UI_SMALLFONT;
@@ -778,8 +778,8 @@ SpinControl_Init
 */
 static void SpinControl_Init( menulist_s* s )
 {
-	int         len;
-	int         l;
+	int			len;
+	int			l;
 	const char* str;
 
 	if( s->generic.name )
@@ -790,7 +790,7 @@ static void SpinControl_Init( menulist_s* s )
 	s->generic.left = s->generic.x - SMALLCHAR_WIDTH - len;
 
 	len = s->numitems = 0;
-	while( ( str = s->itemnames[ s->numitems ] ) != 0 )
+	while( ( str = s->itemnames[s->numitems] ) != 0 )
 	{
 		l = strlen( str );
 		if( l > len )
@@ -799,7 +799,7 @@ static void SpinControl_Init( menulist_s* s )
 		s->numitems++;
 	}
 
-	s->generic.top    = s->generic.y;
+	s->generic.top	  = s->generic.y;
 	s->generic.right  = s->generic.x + ( len + 1 ) * SMALLCHAR_WIDTH;
 	s->generic.bottom = s->generic.y + SMALLCHAR_HEIGHT;
 }
@@ -859,9 +859,9 @@ SpinControl_Draw
 */
 static void SpinControl_Draw( menulist_s* s )
 {
-	float*   color;
-	int      x, y;
-	int      style;
+	float*	 color;
+	int		 x, y;
+	int		 style;
 	qboolean focus;
 
 	x = s->generic.x;
@@ -893,7 +893,7 @@ static void SpinControl_Draw( menulist_s* s )
 	}
 
 	UI_DrawString( x - SMALLCHAR_WIDTH, y, s->generic.name, style | UI_RIGHT, color );
-	UI_DrawString( x + SMALLCHAR_WIDTH, y, s->itemnames[ s->curvalue ], style | UI_LEFT, color );
+	UI_DrawString( x + SMALLCHAR_WIDTH, y, s->itemnames[s->curvalue], style | UI_LEFT, color );
 }
 
 /*
@@ -907,11 +907,11 @@ static void ScrollList_Init( menulist_s* l )
 
 	l->oldvalue = 0;
 	l->curvalue = 0;
-	l->top      = 0;
+	l->top		= 0;
 
 	if( !l->columns )
 	{
-		l->columns    = 1;
+		l->columns	  = 1;
 		l->seperation = 0;
 	}
 	else if( !l->seperation )
@@ -921,8 +921,8 @@ static void ScrollList_Init( menulist_s* l )
 
 	w = ( ( l->width + l->seperation ) * l->columns - l->seperation ) * SMALLCHAR_WIDTH;
 
-	l->generic.left   = l->generic.x;
-	l->generic.top    = l->generic.y;
+	l->generic.left	  = l->generic.x;
+	l->generic.top	  = l->generic.y;
 	l->generic.right  = l->generic.x + w;
 	l->generic.bottom = l->generic.y + l->height * SMALLCHAR_HEIGHT;
 
@@ -967,9 +967,9 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 				if( UI_CursorInRect( x, y, w, l->height * SMALLCHAR_HEIGHT ) )
 				{
 					cursorx = ( uis.cursorx - x ) / SMALLCHAR_WIDTH;
-					column  = cursorx / ( l->width + l->seperation );
+					column	= cursorx / ( l->width + l->seperation );
 					cursory = ( uis.cursory - y ) / SMALLCHAR_HEIGHT;
-					index   = column * l->height + cursory;
+					index	= column * l->height + cursory;
 					if( l->top + index < l->numitems )
 					{
 						l->oldvalue = l->curvalue;
@@ -992,7 +992,7 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 		case K_HOME:
 			l->oldvalue = l->curvalue;
 			l->curvalue = 0;
-			l->top      = 0;
+			l->top		= 0;
 
 			if( l->oldvalue != l->curvalue && l->generic.callback )
 			{
@@ -1007,7 +1007,7 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 			l->curvalue = l->numitems - 1;
 			if( l->columns > 1 )
 			{
-				c      = ( l->curvalue / l->height + 1 ) * l->height;
+				c	   = ( l->curvalue / l->height + 1 ) * l->height;
 				l->top = c - ( l->columns * l->height );
 			}
 			else
@@ -1201,7 +1201,7 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 	for( i = 1; i <= l->numitems; i++ )
 	{
 		j = ( l->curvalue + i ) % l->numitems;
-		c = l->itemnames[ j ][ 0 ];
+		c = l->itemnames[j][0];
 		if( Q_isupper( c ) )
 		{
 			c -= 'A' - 'a';
@@ -1244,22 +1244,22 @@ ScrollList_Draw
 */
 void ScrollList_Draw( menulist_s* l )
 {
-	int      x;
-	int      u;
-	int      y;
-	int      i;
-	int      base;
-	int      column;
-	float*   color;
+	int		 x;
+	int		 u;
+	int		 y;
+	int		 i;
+	int		 base;
+	int		 column;
+	float*	 color;
 	qboolean hasfocus;
-	int      style;
+	int		 style;
 
 	hasfocus = ( l->generic.parent->cursor == l->generic.menuPosition );
 
 	x = l->generic.x;
 	for( column = 0; column < l->columns; column++ )
 	{
-		y    = l->generic.y;
+		y	 = l->generic.y;
 		base = l->top + column * l->height;
 		for( i = base; i < base + l->height; i++ )
 		{
@@ -1292,12 +1292,7 @@ void ScrollList_Draw( menulist_s* l )
 				style |= UI_CENTER;
 			}
 
-			UI_DrawString(
-				x,
-				y,
-				l->itemnames[ i ],
-				style,
-				color );
+			UI_DrawString( x, y, l->itemnames[i], style, color );
 
 			y += SMALLCHAR_HEIGHT;
 		}
@@ -1317,10 +1312,10 @@ void Menu_AddItem( menuframework_s* menu, void* item )
 	if( menu->nitems >= MAX_MENUITEMS )
 		trap_Error( "Menu_AddItem: excessive items" );
 
-	menu->items[ menu->nitems ]                                    = item;
-	( ( menucommon_s* )menu->items[ menu->nitems ] )->parent       = menu;
-	( ( menucommon_s* )menu->items[ menu->nitems ] )->menuPosition = menu->nitems;
-	( ( menucommon_s* )menu->items[ menu->nitems ] )->flags &= ~QMF_HASMOUSEFOCUS;
+	menu->items[menu->nitems]									 = item;
+	( ( menucommon_s* )menu->items[menu->nitems] )->parent		 = menu;
+	( ( menucommon_s* )menu->items[menu->nitems] )->menuPosition = menu->nitems;
+	( ( menucommon_s* )menu->items[menu->nitems] )->flags &= ~QMF_HASMOUSEFOCUS;
 
 	// perform any item specific initializations
 	itemptr = ( menucommon_s* )item;
@@ -1390,16 +1385,16 @@ void Menu_CursorMoved( menuframework_s* m )
 
 	if( m->cursor_prev >= 0 && m->cursor_prev < m->nitems )
 	{
-		callback = ( ( menucommon_s* )( m->items[ m->cursor_prev ] ) )->callback;
+		callback = ( ( menucommon_s* )( m->items[m->cursor_prev] ) )->callback;
 		if( callback )
-			callback( m->items[ m->cursor_prev ], QM_LOSTFOCUS );
+			callback( m->items[m->cursor_prev], QM_LOSTFOCUS );
 	}
 
 	if( m->cursor >= 0 && m->cursor < m->nitems )
 	{
-		callback = ( ( menucommon_s* )( m->items[ m->cursor ] ) )->callback;
+		callback = ( ( menucommon_s* )( m->items[m->cursor] ) )->callback;
 		if( callback )
-			callback( m->items[ m->cursor ], QM_GOTFOCUS );
+			callback( m->items[m->cursor], QM_GOTFOCUS );
 	}
 }
 
@@ -1410,14 +1405,14 @@ Menu_SetCursor
 */
 void Menu_SetCursor( menuframework_s* m, int cursor )
 {
-	if( ( ( menucommon_s* )( m->items[ cursor ] ) )->flags & ( QMF_GRAYED | QMF_INACTIVE ) )
+	if( ( ( menucommon_s* )( m->items[cursor] ) )->flags & ( QMF_GRAYED | QMF_INACTIVE ) )
 	{
 		// cursor can't go there
 		return;
 	}
 
 	m->cursor_prev = m->cursor;
-	m->cursor      = cursor;
+	m->cursor	   = cursor;
 
 	Menu_CursorMoved( m );
 }
@@ -1433,7 +1428,7 @@ void Menu_SetCursorToItem( menuframework_s* m, void* ptr )
 
 	for( i = 0; i < m->nitems; i++ )
 	{
-		if( m->items[ i ] == ptr )
+		if( m->items[i] == ptr )
 		{
 			Menu_SetCursor( m, i );
 			return;
@@ -1450,13 +1445,13 @@ void Menu_SetCursorToItem( menuframework_s* m, void* ptr )
 */
 void Menu_AdjustCursor( menuframework_s* m, int dir )
 {
-	menucommon_s* item    = NULL;
-	qboolean      wrapped = qfalse;
+	menucommon_s* item	  = NULL;
+	qboolean	  wrapped = qfalse;
 
 wrap:
 	while( m->cursor >= 0 && m->cursor < m->nitems )
 	{
-		item = ( menucommon_s* )m->items[ m->cursor ];
+		item = ( menucommon_s* )m->items[m->cursor];
 		if( ( item->flags & ( QMF_GRAYED | QMF_MOUSEONLY | QMF_INACTIVE ) ) )
 		{
 			m->cursor += dir;
@@ -1479,7 +1474,7 @@ wrap:
 					return;
 				}
 				m->cursor = 0;
-				wrapped   = qtrue;
+				wrapped	  = qtrue;
 				goto wrap;
 			}
 			m->cursor = m->cursor_prev;
@@ -1497,7 +1492,7 @@ wrap:
 					return;
 				}
 				m->cursor = m->nitems - 1;
-				wrapped   = qtrue;
+				wrapped	  = qtrue;
 				goto wrap;
 			}
 			m->cursor = m->cursor_prev;
@@ -1512,13 +1507,13 @@ Menu_Draw
 */
 void Menu_Draw( menuframework_s* menu )
 {
-	int           i;
+	int			  i;
 	menucommon_s* itemptr;
 
 	// draw menu
 	for( i = 0; i < menu->nitems; i++ )
 	{
-		itemptr = ( menucommon_s* )menu->items[ i ];
+		itemptr = ( menucommon_s* )menu->items[i];
 
 		if( itemptr->flags & QMF_HIDDEN )
 			continue;
@@ -1619,7 +1614,7 @@ void* Menu_ItemAtCursor( menuframework_s* m )
 	if( m->cursor < 0 || m->cursor >= m->nitems )
 		return 0;
 
-	return m->items[ m->cursor ];
+	return m->items[m->cursor];
 }
 
 /*
@@ -1648,9 +1643,9 @@ Menu_DefaultKey
 */
 sfxHandle_t Menu_DefaultKey( menuframework_s* m, int key )
 {
-	sfxHandle_t   sound = 0;
+	sfxHandle_t	  sound = 0;
 	menucommon_s* item;
-	int           cursor_prev;
+	int			  cursor_prev;
 
 	// menu system keys
 	switch( key )
@@ -1712,7 +1707,7 @@ sfxHandle_t Menu_DefaultKey( menuframework_s* m, int key )
 #endif
 		case K_KP_UPARROW:
 		case K_UPARROW:
-			cursor_prev    = m->cursor;
+			cursor_prev	   = m->cursor;
 			m->cursor_prev = m->cursor;
 			m->cursor--;
 			Menu_AdjustCursor( m, -1 );
@@ -1726,7 +1721,7 @@ sfxHandle_t Menu_DefaultKey( menuframework_s* m, int key )
 		case K_TAB:
 		case K_KP_DOWNARROW:
 		case K_DOWNARROW:
-			cursor_prev    = m->cursor;
+			cursor_prev	   = m->cursor;
 			m->cursor_prev = m->cursor;
 			m->cursor++;
 			Menu_AdjustCursor( m, 1 );
@@ -1782,13 +1777,13 @@ Menu_Cache
 */
 void Menu_Cache( void )
 {
-	uis.charset         = trap_R_RegisterShaderNoMip( "gfx/2d/bigchars" );
-	uis.charsetProp     = trap_R_RegisterShaderNoMip( "menu/art/font1_prop.tga" );
+	uis.charset			= trap_R_RegisterShaderNoMip( "gfx/2d/bigchars" );
+	uis.charsetProp		= trap_R_RegisterShaderNoMip( "menu/art/font1_prop.tga" );
 	uis.charsetPropGlow = trap_R_RegisterShaderNoMip( "menu/art/font1_prop_glo.tga" );
-	uis.charsetPropB    = trap_R_RegisterShaderNoMip( "menu/art/font2_prop.tga" );
-	uis.cursor          = trap_R_RegisterShaderNoMip( "menu/art/3_cursor2" );
-	uis.rb_on           = trap_R_RegisterShaderNoMip( "menu/art/switch_on" );
-	uis.rb_off          = trap_R_RegisterShaderNoMip( "menu/art/switch_off" );
+	uis.charsetPropB	= trap_R_RegisterShaderNoMip( "menu/art/font2_prop.tga" );
+	uis.cursor			= trap_R_RegisterShaderNoMip( "menu/art/3_cursor2" );
+	uis.rb_on			= trap_R_RegisterShaderNoMip( "menu/art/switch_on" );
+	uis.rb_off			= trap_R_RegisterShaderNoMip( "menu/art/switch_off" );
 
 	uis.whiteShader = trap_R_RegisterShaderNoMip( "white" );
 	if( uis.glconfig.hardwareType == GLHW_RAGEPRO )
@@ -1802,16 +1797,16 @@ void Menu_Cache( void )
 	}
 	uis.menuBackNoLogoShader = trap_R_RegisterShaderNoMip( "menubacknologo" );
 
-	menu_in_sound     = trap_S_RegisterSound( "sound/misc/menu1.wav", qfalse );
-	menu_move_sound   = trap_S_RegisterSound( "sound/misc/menu2.wav", qfalse );
-	menu_out_sound    = trap_S_RegisterSound( "sound/misc/menu3.wav", qfalse );
-	menu_buzz_sound   = trap_S_RegisterSound( "sound/misc/menu4.wav", qfalse );
+	menu_in_sound	  = trap_S_RegisterSound( "sound/misc/menu1.wav", qfalse );
+	menu_move_sound	  = trap_S_RegisterSound( "sound/misc/menu2.wav", qfalse );
+	menu_out_sound	  = trap_S_RegisterSound( "sound/misc/menu3.wav", qfalse );
+	menu_buzz_sound	  = trap_S_RegisterSound( "sound/misc/menu4.wav", qfalse );
 	weaponChangeSound = trap_S_RegisterSound( "sound/weapons/change.wav", qfalse );
 
 	// need a nonzero sound, make an empty sound for this
 	menu_null_sound = -1;
 
-	sliderBar      = trap_R_RegisterShaderNoMip( "menu/art/slider2" );
+	sliderBar	   = trap_R_RegisterShaderNoMip( "menu/art/slider2" );
 	sliderButton_0 = trap_R_RegisterShaderNoMip( "menu/art/sliderbutt_0" );
 	sliderButton_1 = trap_R_RegisterShaderNoMip( "menu/art/sliderbutt_1" );
 }
