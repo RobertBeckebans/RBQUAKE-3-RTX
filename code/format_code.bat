@@ -22,5 +22,7 @@ if %ERRORLEVEL% neq 0 (
 astyle.exe -v --formatted --options=astyle-header.ini shared\q_shared.h
 astyle.exe -v --formatted --options=astyle-header.ini engine\renderer\tr_local.h
 
+astyle.exe -v --formatted --options=astyle-options.ini --recursive ../baseq3/*.hlsl
+
 echo Done!
 endlocal
