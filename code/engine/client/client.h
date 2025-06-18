@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "../renderer/tr_public.h"
 #include <ui_public.h>
 #include "keys.h"
-#include "snd_public.h"
+#include "../sound/snd_public.h"
 #include <cg_public.h>
 #include <bg_public.h>
 
