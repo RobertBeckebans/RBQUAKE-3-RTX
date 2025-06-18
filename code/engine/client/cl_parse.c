@@ -557,7 +557,9 @@ void CL_ParseDownload( msg_t* msg )
 
 	size = MSG_ReadShort( msg );
 	if( size > 0 )
+	{
 		MSG_ReadData( msg, data, size );
+	}
 
 	if( clc.downloadBlock != block )
 	{
@@ -587,7 +589,9 @@ void CL_ParseDownload( msg_t* msg )
 	}
 
 	if( size )
+	{
 		FS_Write( data, size, clc.download );
+	}
 
 	CL_AddReliableCommand( va( "nextdl %d", clc.downloadBlock ) );
 	clc.downloadBlock++;
@@ -598,7 +602,8 @@ void CL_ParseDownload( msg_t* msg )
 	Cvar_SetValue( "cl_downloadCount", clc.downloadCount );
 
 	if( !size )
-	{ // A zero length block means EOF
+	{
+		// A zero length block means EOF
 		if( clc.download )
 		{
 			FS_FCloseFile( clc.download );

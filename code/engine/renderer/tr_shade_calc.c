@@ -622,7 +622,9 @@ void RB_CalcColorFromEntity( unsigned char* dstColors )
 	int	 c;
 
 	if( !backEnd.currentEntity )
+	{
 		return;
+	}
 
 	c = *( int* )backEnd.currentEntity->e.shaderRGBA;
 
@@ -643,7 +645,9 @@ void RB_CalcColorFromOneMinusEntity( unsigned char* dstColors )
 	int			  c;
 
 	if( !backEnd.currentEntity )
+	{
 		return;
+	}
 
 	invModulate[0] = 255 - backEnd.currentEntity->e.shaderRGBA[0];
 	invModulate[1] = 255 - backEnd.currentEntity->e.shaderRGBA[1];
@@ -666,7 +670,9 @@ void RB_CalcAlphaFromEntity( unsigned char* dstColors )
 	int i;
 
 	if( !backEnd.currentEntity )
+	{
 		return;
+	}
 
 	dstColors += 3;
 
@@ -684,7 +690,9 @@ void RB_CalcAlphaFromOneMinusEntity( unsigned char* dstColors )
 	int i;
 
 	if( !backEnd.currentEntity )
+	{
 		return;
+	}
 
 	dstColors += 3;
 

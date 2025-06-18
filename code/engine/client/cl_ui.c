@@ -522,9 +522,13 @@ static int LAN_CompareServers( int source, int sortKey, int sortDir, int s1, int
 	if( sortDir )
 	{
 		if( res < 0 )
+		{
 			return 1;
+		}
 		if( res > 0 )
+		{
 			return -1;
+		}
 		return 0;
 	}
 	return res;
@@ -843,7 +847,9 @@ static int GetConfigString( int index, char* buf, int size )
 	int offset;
 
 	if( index < 0 || index >= MAX_CONFIGSTRINGS )
+	{
 		return qfalse;
+	}
 
 	offset = cl.gameState.stringOffsets[index];
 	if( !offset )

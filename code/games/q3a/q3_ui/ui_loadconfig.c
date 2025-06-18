@@ -219,7 +219,9 @@ static void LoadConfig_MenuInit()
 		s_configs.go.generic.flags |= ( QMF_INACTIVE | QMF_HIDDEN );
 	}
 	else if( s_configs.list.numitems > MAX_CONFIGS )
+	{
 		s_configs.list.numitems = MAX_CONFIGS;
+	}
 
 	configname = s_configs.names;
 	for( i = 0; i < s_configs.list.numitems; i++ )
@@ -229,7 +231,9 @@ static void LoadConfig_MenuInit()
 		// strip extension
 		len = strlen( configname );
 		if( !Q_stricmp( configname + len - 4, ".cfg" ) )
+		{
 			configname[len - 4] = '\0';
+		}
 
 		Q_strupr( configname );
 

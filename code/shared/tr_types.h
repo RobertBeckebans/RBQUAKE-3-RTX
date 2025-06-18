@@ -35,13 +35,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define RF_LIGHTING_ORIGIN \
 	128						// use refEntity->lightingOrigin instead of refEntity->origin \
-							   // for lighting.  This allows entities to sink into the floor \
-							   // with their origin going solid, and allows all parts of a   \
-							   // player to get the same lighting
+// for lighting.  This allows entities to sink into the floor \
+// with their origin going solid, and allows all parts of a   \
+// player to get the same lighting
 #define RF_SHADOW_PLANE 256 // use refEntity->shadowPlane
 #define RF_WRAP_FRAMES \
 	512 // mod the model frames by the maxframes to allow continuous \
-							   // animation without needing to know the frame count
+// animation without needing to know the frame count
 
 // refdef flags
 #define RDF_NOWORLDMODEL 1 // used for player configuration screen
@@ -157,11 +157,11 @@ typedef enum
 
 typedef enum
 {
-	GLDRV_ICD,		  // driver is integrated with window system
-					  // WARNING: there are tests that check for
-					  // > GLDRV_ICD for minidriverness, so this
-					  // should always be the lowest value in this
-					  // enum set
+	GLDRV_ICD, // driver is integrated with window system
+	// WARNING: there are tests that check for
+	// > GLDRV_ICD for minidriverness, so this
+	// should always be the lowest value in this
+	// enum set
 	GLDRV_STANDALONE, // driver is a non-3Dfx standalone driver
 	GLDRV_VOODOO	  // driver is a 3Dfx standalone driver
 } glDriverType_t;

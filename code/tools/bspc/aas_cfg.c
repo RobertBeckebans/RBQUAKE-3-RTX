@@ -99,7 +99,9 @@ void		DefaultCfg()
 	for( i = 0; cfg_fields[i].name; i++ )
 	{
 		if( ( cfg_fields[i].type & FT_TYPE ) == FT_FLOAT )
+		{
 			*( float* )( ( ( char* )&cfg ) + cfg_fields[i].offset ) = FLT_MAX;
+		}
 	} // end for
 	//
 	cfg.numbboxes = 2;

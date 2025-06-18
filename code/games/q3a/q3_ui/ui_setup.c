@@ -244,22 +244,22 @@ static void UI_SetupMenu_Init()
 #if 0
 		y += SETUP_MENU_VERTICAL_SPACING;
 		setupMenuInfo.load.generic.type					= MTYPE_PTEXT;
-		setupMenuInfo.load.generic.flags				= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+		setupMenuInfo.load.generic.flags				= QMF_CENTER_JUSTIFY | QMF_PULSEIFFOCUS;
 		setupMenuInfo.load.generic.x					= 320;
 		setupMenuInfo.load.generic.y					= y;
 		setupMenuInfo.load.generic.id					= ID_LOAD;
-		setupMenuInfo.load.generic.callback				= UI_SetupMenu_Event; 
+		setupMenuInfo.load.generic.callback				= UI_SetupMenu_Event;
 		setupMenuInfo.load.string						= "LOAD";
 		setupMenuInfo.load.color						= color_red;
 		setupMenuInfo.load.style						= UI_CENTER;
 
 		y += SETUP_MENU_VERTICAL_SPACING;
 		setupMenuInfo.save.generic.type					= MTYPE_PTEXT;
-		setupMenuInfo.save.generic.flags				= QMF_CENTER_JUSTIFY|QMF_PULSEIFFOCUS;
+		setupMenuInfo.save.generic.flags				= QMF_CENTER_JUSTIFY | QMF_PULSEIFFOCUS;
 		setupMenuInfo.save.generic.x					= 320;
 		setupMenuInfo.save.generic.y					= y;
 		setupMenuInfo.save.generic.id					= ID_SAVE;
-		setupMenuInfo.save.generic.callback				= UI_SetupMenu_Event; 
+		setupMenuInfo.save.generic.callback				= UI_SetupMenu_Event;
 		setupMenuInfo.save.string						= "SAVE";
 		setupMenuInfo.save.color						= color_red;
 		setupMenuInfo.save.style						= UI_CENTER;

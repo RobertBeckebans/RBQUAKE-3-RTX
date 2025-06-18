@@ -33,7 +33,7 @@ LOCAL void transdecode_master_selection JPP( ( j_decompress_ptr cinfo ) );
  */
 
 GLOBAL jvirt_barray_ptr*
-	   jpeg_read_coefficients( j_decompress_ptr cinfo )
+jpeg_read_coefficients( j_decompress_ptr cinfo )
 {
 	if( cinfo->global_state == DSTATE_READY )
 	{
@@ -42,23 +42,31 @@ GLOBAL jvirt_barray_ptr*
 		cinfo->global_state = DSTATE_RDCOEFS;
 	}
 	else if( cinfo->global_state != DSTATE_RDCOEFS )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 	/* Absorb whole file into the coef buffer */
 	for( ;; )
 	{
 		int retcode;
 		/* Call progress monitor hook if present */
 		if( cinfo->progress != NULL )
+		{
 			( *cinfo->progress->progress_monitor )( ( j_common_ptr )cinfo );
+		}
 		/* Absorb some more input */
 		retcode = ( *cinfo->inputctl->consume_input )( cinfo );
 		if( retcode == JPEG_SUSPENDED )
+		{
 			return NULL;
+		}
 		if( retcode == JPEG_REACHED_EOI )
+		{
 			break;
+		}
 		/* Advance progress counter if appropriate */
 		if( cinfo->progress != NULL &&
-			( retcode == JPEG_ROW_COMPLETED || retcode == JPEG_REACHED_SOS ) )
+				( retcode == JPEG_ROW_COMPLETED || retcode == JPEG_REACHED_SOS ) )
 		{
 			if( ++cinfo->progress->pass_counter >= cinfo->progress->pass_limit )
 			{
@@ -78,7 +86,7 @@ GLOBAL jvirt_barray_ptr*
  */
 
 LOCAL void
-	transdecode_master_selection( j_decompress_ptr cinfo )
+transdecode_master_selection( j_decompress_ptr cinfo )
 {
 	/* Entropy decoding: either Huffman or arithmetic coding. */
 	if( cinfo->arith_code )
@@ -96,7 +104,9 @@ LOCAL void
 #endif
 		}
 		else
+		{
 			jinit_huff_decoder( cinfo );
+		}
 	}
 
 	/* Always get a full-image coefficient buffer. */

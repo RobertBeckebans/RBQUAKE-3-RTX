@@ -144,11 +144,11 @@ void RE_AddPolyToScene( qhandle_t hShader, int numVerts, const polyVert_t* verts
 		if( r_numpolyverts + numVerts > max_polyverts || r_numpolys >= max_polys )
 		{
 			/*
-	  NOTE TTimo this was initially a PRINT_WARNING
-	  but it happens a lot with high fighting scenes and particles
-	  since we don't plan on changing the const and making for room for those effects
-	  simply cut this message to developer only
-	  */
+			NOTE TTimo this was initially a PRINT_WARNING
+			but it happens a lot with high fighting scenes and particles
+			since we don't plan on changing the const and making for room for those effects
+			simply cut this message to developer only
+			*/
 			ri.Printf( PRINT_DEVELOPER, "WARNING: RE_AddPolyToScene: r_max_polys or r_max_polyverts reached\n" );
 			return;
 		}

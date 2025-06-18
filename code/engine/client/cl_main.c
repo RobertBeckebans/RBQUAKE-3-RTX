@@ -514,7 +514,9 @@ static void CL_WalkDemoExt( char* arg, char* name, int* demofile )
 			break;
 		}
 		else
+		{
 			Com_Printf( "Not found: %s\n", name );
+		}
 		i++;
 	}
 }
@@ -557,7 +559,9 @@ void CL_PlayDemo_f()
 		while( demo_protocols[i] )
 		{
 			if( demo_protocols[i] == protocol )
+			{
 				break;
+			}
 			i++;
 		}
 		if( demo_protocols[i] )
@@ -1531,7 +1535,9 @@ void CL_NextDownload()
 		//  @remotename@localname@remotename@localname, etc.
 
 		if( *s == '@' )
+		{
 			s++;
+		}
 		remoteName = s;
 
 		if( ( s = strchr( s, '@' ) ) == NULL )
@@ -1543,9 +1549,13 @@ void CL_NextDownload()
 		*s++	  = 0;
 		localName = s;
 		if( ( s = strchr( s, '@' ) ) != NULL )
+		{
 			*s++ = 0;
+		}
 		else
+		{
 			s = localName + strlen( localName ); // point at the nul byte
+		}
 
 		CL_BeginDownload( localName, remoteName );
 
@@ -1811,7 +1821,9 @@ void CL_ServersResponsePacket( netadr_t from, msg_t* msg )
 		do
 		{
 			if( *buffptr++ == '\\' )
+			{
 				break;
+			}
 		} while( buffptr < buffend );
 
 		if( buffptr >= buffend - 6 )
@@ -2125,7 +2137,8 @@ void CL_CheckTimeout()
 	if( ( !cl_paused->integer || !sv_paused->integer ) && cls.state >= CA_CONNECTED && cls.state != CA_CINEMATIC && cls.realtime - clc.lastPacketTime > cl_timeout->value * 1000 )
 	{
 		if( ++cl.timeoutcount > 5 )
-		{ // timeoutcount saves debugger
+		{
+			// timeoutcount saves debugger
 			Com_Printf( "\nServer connection timed out.\n" );
 			CL_Disconnect( qtrue );
 			return;
@@ -2991,13 +3004,17 @@ void CL_ServerStatusResponse( netadr_t from, msg_t* msg )
 			for( i = 0; i < 2 && *s; i++ )
 			{
 				if( *s == '\\' )
+				{
 					s++;
+				}
 				l = 0;
 				while( *s )
 				{
 					info[l++] = *s;
 					if( l >= MAX_INFO_STRING - 1 )
+					{
 						break;
+					}
 					s++;
 					if( *s == '\\' )
 					{
@@ -3036,11 +3053,17 @@ void CL_ServerStatusResponse( netadr_t from, msg_t* msg )
 			sscanf( s, "%d %d", &score, &ping );
 			s = strchr( s, ' ' );
 			if( s )
+			{
 				s = strchr( s + 1, ' ' );
+			}
 			if( s )
+			{
 				s++;
+			}
 			else
+			{
 				s = "unknown";
+			}
 			Com_Printf( "%-2d   %-3d    %-3d   %s\n", i, score, ping, s );
 		}
 	}
@@ -3152,7 +3175,9 @@ void CL_GlobalServers_f()
 	buffptr = command + strlen( command );
 	count	= Cmd_Argc();
 	for( i = 3; i < count; i++ )
+	{
 		buffptr += sprintf( buffptr, " %s", Cmd_Argv( i ) );
+	}
 
 	// if we are a demo, automatically add a "demo" keyword
 	if( Cvar_VariableValue( "fs_restrict" ) )
@@ -3233,7 +3258,9 @@ void CL_GetPingInfo( int n, char* buf, int buflen )
 	{
 		// empty slot
 		if( buflen )
+		{
 			buf[0] = '\0';
+		}
 		return;
 	}
 
@@ -3248,7 +3275,9 @@ CL_ClearPing
 void CL_ClearPing( int n )
 {
 	if( n < 0 || n >= MAX_PINGREQUESTS )
+	{
 		return;
+	}
 
 	cl_pinglist[n].adr.port = 0;
 }

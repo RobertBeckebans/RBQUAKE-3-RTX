@@ -111,9 +111,13 @@ int AAS_UpdateEntity( int entnum, bot_entitystate_t* state )
 	ent->i.valid = qtrue;
 	// link everything the first frame
 	if( aasworld.numframes == 1 )
+	{
 		relink = qtrue;
+	}
 	else
+	{
 		relink = qfalse;
+	}
 	//
 	if( ent->i.solid == SOLID_BSP )
 	{
@@ -230,7 +234,9 @@ int AAS_EntityModelindex( int entnum )
 int AAS_EntityType( int entnum )
 {
 	if( !aasworld.initialized )
+	{
 		return 0;
+	}
 
 	if( entnum < 0 || entnum >= aasworld.maxentities )
 	{
@@ -248,7 +254,9 @@ int AAS_EntityType( int entnum )
 int AAS_EntityModelNum( int entnum )
 {
 	if( !aasworld.initialized )
+	{
 		return 0;
+	}
 
 	if( entnum < 0 || entnum >= aasworld.maxentities )
 	{
@@ -293,7 +301,9 @@ void AAS_EntitySize( int entnum, vec3_t mins, vec3_t maxs )
 	aas_entity_t* ent;
 
 	if( !aasworld.initialized )
+	{
 		return;
+	}
 
 	if( entnum < 0 || entnum >= aasworld.maxentities )
 	{
@@ -395,7 +405,9 @@ int AAS_NearestEntity( vec3_t origin, int modelindex )
 	{
 		ent = &aasworld.entities[i];
 		if( ent->i.modelindex != modelindex )
+		{
 			continue;
+		}
 		VectorSubtract( ent->i.origin, origin, dir );
 		if( abs( dir[0] ) < 40 )
 		{
@@ -434,14 +446,20 @@ int AAS_BestReachableEntityArea( int entnum )
 int AAS_NextEntity( int entnum )
 {
 	if( !aasworld.loaded )
+	{
 		return 0;
+	}
 
 	if( entnum < 0 )
+	{
 		entnum = -1;
+	}
 	while( ++entnum < aasworld.maxentities )
 	{
 		if( aasworld.entities[entnum].i.valid )
+		{
 			return entnum;
+		}
 	} // end while
 	return 0;
 } // end of the function AAS_NextEntity

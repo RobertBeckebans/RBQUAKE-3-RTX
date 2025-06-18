@@ -2256,7 +2256,7 @@ bool tr_vertex_layout_support_format( tr_format format )
 	bool result = false;
 	switch( format )
 	{
-			// 1 channel
+		// 1 channel
 		case tr_format_r8_unorm:
 			result = true;
 			break;
@@ -2272,7 +2272,7 @@ bool tr_vertex_layout_support_format( tr_format format )
 		case tr_format_r32_float:
 			result = true;
 			break;
-			// 2 channel
+		// 2 channel
 		case tr_format_r8g8_unorm:
 			result = true;
 			break;
@@ -2288,7 +2288,7 @@ bool tr_vertex_layout_support_format( tr_format format )
 		case tr_format_r32g32_float:
 			result = true;
 			break;
-			// 3 channel
+		// 3 channel
 		case tr_format_r8g8b8_unorm:
 			result = true;
 			break;
@@ -2304,7 +2304,7 @@ bool tr_vertex_layout_support_format( tr_format format )
 		case tr_format_r32g32b32_float:
 			result = true;
 			break;
-			// 4 channel
+		// 4 channel
 		case tr_format_r8g8b8a8_unorm:
 			result = true;
 			break;
@@ -2348,7 +2348,7 @@ uint64_t tr_util_calc_storage_counter_offset( uint64_t buffer_size )
 
 uint32_t tr_util_calc_mip_levels( uint32_t width, uint32_t height )
 {
-	if( width == 0 || height == 0 ) return 0;
+	if( width == 0 || height == 0 ) { return 0; }
 
 	uint32_t result = 1;
 	while( width > 1 || height > 1 )
@@ -2365,7 +2365,7 @@ DXGI_FORMAT tr_util_to_dx_format( tr_format format )
 	DXGI_FORMAT result = DXGI_FORMAT_UNKNOWN;
 	switch( format )
 	{
-			// 1 channel
+		// 1 channel
 		case tr_format_r8_unorm:
 			result = DXGI_FORMAT_R8_UNORM;
 			break;
@@ -2381,7 +2381,7 @@ DXGI_FORMAT tr_util_to_dx_format( tr_format format )
 		case tr_format_r32_float:
 			result = DXGI_FORMAT_R32_FLOAT;
 			break;
-			// 2 channel
+		// 2 channel
 		case tr_format_r8g8_unorm:
 			result = DXGI_FORMAT_R8G8_UNORM;
 			break;
@@ -2397,14 +2397,14 @@ DXGI_FORMAT tr_util_to_dx_format( tr_format format )
 		case tr_format_r32g32_float:
 			result = DXGI_FORMAT_R32G32_FLOAT;
 			break;
-			// 3 channel
+		// 3 channel
 		case tr_format_r32g32b32_uint:
 			result = DXGI_FORMAT_R32G32B32_UINT;
 			break;
 		case tr_format_r32g32b32_float:
 			result = DXGI_FORMAT_R32G32B32_FLOAT;
 			break;
-			// 4 channel
+		// 4 channel
 		case tr_format_b8g8r8a8_unorm:
 			result = DXGI_FORMAT_B8G8R8A8_UNORM;
 			break;
@@ -2423,7 +2423,7 @@ DXGI_FORMAT tr_util_to_dx_format( tr_format format )
 		case tr_format_r32g32b32a32_float:
 			result = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			break;
-			// Depth/stencil
+		// Depth/stencil
 		case tr_format_d16_unorm:
 			result = DXGI_FORMAT_D16_UNORM;
 			break;
@@ -2448,7 +2448,7 @@ tr_format tr_util_from_dx_format( DXGI_FORMAT format )
 	tr_format result = tr_format_undefined;
 	switch( format )
 	{
-			// 1 channel
+		// 1 channel
 		case DXGI_FORMAT_R8_UNORM:
 			result = tr_format_r8_unorm;
 			break;
@@ -2464,7 +2464,7 @@ tr_format tr_util_from_dx_format( DXGI_FORMAT format )
 		case DXGI_FORMAT_R32_FLOAT:
 			result = tr_format_r32_float;
 			break;
-			// 2 channel
+		// 2 channel
 		case DXGI_FORMAT_R8G8_UNORM:
 			result = tr_format_r8g8_unorm;
 			break;
@@ -2480,14 +2480,14 @@ tr_format tr_util_from_dx_format( DXGI_FORMAT format )
 		case DXGI_FORMAT_R32G32_FLOAT:
 			result = tr_format_r32g32_float;
 			break;
-			// 3 channel
+		// 3 channel
 		case DXGI_FORMAT_R32G32B32_UINT:
 			result = tr_format_r32g32b32_uint;
 			break;
 		case DXGI_FORMAT_R32G32B32_FLOAT:
 			result = tr_format_r32g32b32_float;
 			break;
-			// 4 channel
+		// 4 channel
 		case DXGI_FORMAT_B8G8R8A8_UNORM:
 			result = tr_format_b8g8r8a8_unorm;
 			break;
@@ -2506,7 +2506,7 @@ tr_format tr_util_from_dx_format( DXGI_FORMAT format )
 		case DXGI_FORMAT_R32G32B32A32_FLOAT:
 			result = tr_format_r32g32b32a32_float;
 			break;
-			// Depth/stencil
+		// Depth/stencil
 		case DXGI_FORMAT_D16_UNORM:
 			result = tr_format_d16_unorm;
 			break;
@@ -2531,7 +2531,7 @@ uint32_t tr_util_format_stride( tr_format format )
 	uint32_t result = 0;
 	switch( format )
 	{
-			// 1 channel
+		// 1 channel
 		case tr_format_r8_unorm:
 			result = 1;
 			break;
@@ -2547,7 +2547,7 @@ uint32_t tr_util_format_stride( tr_format format )
 		case tr_format_r32_float:
 			result = 4;
 			break;
-			// 2 channel
+		// 2 channel
 		case tr_format_r8g8_unorm:
 			result = 2;
 			break;
@@ -2563,7 +2563,7 @@ uint32_t tr_util_format_stride( tr_format format )
 		case tr_format_r32g32_float:
 			result = 8;
 			break;
-			// 3 channel
+		// 3 channel
 		case tr_format_r8g8b8_unorm:
 			result = 3;
 			break;
@@ -2579,7 +2579,7 @@ uint32_t tr_util_format_stride( tr_format format )
 		case tr_format_r32g32b32_float:
 			result = 12;
 			break;
-			// 4 channel
+		// 4 channel
 		case tr_format_b8g8r8a8_unorm:
 			result = 4;
 			break;
@@ -2598,7 +2598,7 @@ uint32_t tr_util_format_stride( tr_format format )
 		case tr_format_r32g32b32a32_float:
 			result = 16;
 			break;
-			// Depth/stencil
+		// Depth/stencil
 		case tr_format_d16_unorm:
 			result = 0;
 			break;
@@ -2629,7 +2629,7 @@ uint32_t tr_util_format_channel_count( tr_format format )
 	uint32_t result = 0;
 	switch( format )
 	{
-			// 1 channel
+		// 1 channel
 		case tr_format_r8_unorm:
 			result = 1;
 			break;
@@ -2645,7 +2645,7 @@ uint32_t tr_util_format_channel_count( tr_format format )
 		case tr_format_r32_float:
 			result = 1;
 			break;
-			// 2 channel
+		// 2 channel
 		case tr_format_r8g8_unorm:
 			result = 2;
 			break;
@@ -2661,7 +2661,7 @@ uint32_t tr_util_format_channel_count( tr_format format )
 		case tr_format_r32g32_float:
 			result = 2;
 			break;
-			// 3 channel
+		// 3 channel
 		case tr_format_r8g8b8_unorm:
 			result = 3;
 			break;
@@ -2677,7 +2677,7 @@ uint32_t tr_util_format_channel_count( tr_format format )
 		case tr_format_r32g32b32_float:
 			result = 3;
 			break;
-			// 4 channel
+		// 4 channel
 		case tr_format_b8g8r8a8_unorm:
 			result = 4;
 			break;
@@ -2696,7 +2696,7 @@ uint32_t tr_util_format_channel_count( tr_format format )
 		case tr_format_r32g32b32a32_float:
 			result = 4;
 			break;
-			// Depth/stencil
+		// Depth/stencil
 		case tr_format_d16_unorm:
 			result = 0;
 			break;

@@ -120,7 +120,9 @@ float Cvar_VariableValue( const char* var_name )
 
 	var = Cvar_FindVar( var_name );
 	if( !var )
+	{
 		return 0;
+	}
 	return var->value;
 }
 
@@ -135,7 +137,9 @@ int Cvar_VariableIntegerValue( const char* var_name )
 
 	var = Cvar_FindVar( var_name );
 	if( !var )
+	{
 		return 0;
+	}
 	return var->integer;
 }
 
@@ -150,7 +154,9 @@ char* Cvar_VariableString( const char* var_name )
 
 	var = Cvar_FindVar( var_name );
 	if( !var )
+	{
 		return "";
+	}
 	return var->string;
 }
 
@@ -214,8 +220,9 @@ cvar_t* Cvar_Get( const char* var_name, const char* var_value, int flags )
 	}
 
 #if 0 // FIXME: values with backslash happen
-	if ( !Cvar_ValidateString( var_value ) ) {
-		Com_Printf("invalid cvar value string: %s\n", var_value );
+	if( !Cvar_ValidateString( var_value ) )
+	{
+		Com_Printf( "invalid cvar value string: %s\n", var_value );
 		var_value = "BADVALUE";
 	}
 #endif
@@ -259,10 +266,11 @@ cvar_t* Cvar_Get( const char* var_name, const char* var_value, int flags )
 			Z_Free( s );
 		}
 
-// use a CVAR_SET for rom sets, get won't override
+		// use a CVAR_SET for rom sets, get won't override
 #if 0
 		// CVAR_ROM always overrides
-		if ( flags & CVAR_ROM ) {
+		if( flags & CVAR_ROM )
+		{
 			Cvar_Set2( var_name, var_value, qtrue );
 		}
 #endif
@@ -317,8 +325,9 @@ cvar_t* Cvar_Set2( const char* var_name, const char* value, qboolean force )
 	}
 
 #if 0 // FIXME
-	if ( value && !Cvar_ValidateString( value ) ) {
-		Com_Printf("invalid cvar value string: %s\n", value );
+	if( value && !Cvar_ValidateString( value ) )
+	{
+		Com_Printf( "invalid cvar value string: %s\n", value );
 		var_value = "BADVALUE";
 	}
 #endif
@@ -372,13 +381,17 @@ cvar_t* Cvar_Set2( const char* var_name, const char* value, qboolean force )
 			if( var->latchedString )
 			{
 				if( strcmp( value, var->latchedString ) == 0 )
+				{
 					return var;
+				}
 				Z_Free( var->latchedString );
 			}
 			else
 			{
 				if( strcmp( value, var->string ) == 0 )
+				{
 					return var;
+				}
 			}
 
 			Com_Printf( "%s will be changed upon restarting.\n", var_name );
@@ -404,7 +417,9 @@ cvar_t* Cvar_Set2( const char* var_name, const char* value, qboolean force )
 	}
 
 	if( !strcmp( value, var->string ) )
+	{
 		return var; // not changed
+	}
 
 	var->modified = qtrue;
 	var->modificationCount++;
@@ -744,7 +759,9 @@ void Cvar_List_f()
 	for( var = cvar_vars; var; var = var->next, i++ )
 	{
 		if( match && !Com_Filter( match, var->name, qfalse ) )
+		{
 			continue;
+		}
 
 		if( var->flags & CVAR_SERVERINFO )
 		{
@@ -978,7 +995,9 @@ void Cvar_Update( vmCvar_t* vmCvar )
 	vmCvar->modificationCount = cv->modificationCount;
 	// bk001129 - mismatches.
 	if( strlen( cv->string ) + 1 > MAX_CVAR_VALUE_STRING )
+	{
 		Com_Error( ERR_DROP, "Cvar_Update: src %s length %d exceeds MAX_CVAR_VALUE_STRING", cv->string, strlen( cv->string ), sizeof( vmCvar->string ) );
+	}
 	// bk001212 - Q_strncpyz guarantees zero padding and dest[MAX_CVAR_VALUE_STRING-1]==0
 	// bk001129 - paranoia. Never trust the destination string.
 	// bk001129 - beware, sizeof(char*) is always 4 (for cv->string).

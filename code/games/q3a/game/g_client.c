@@ -166,7 +166,8 @@ gentity_t* SelectRandomDeathmatchSpawnPoint()
 	}
 
 	if( !count )
-	{ // no spots that won't telefrag
+	{
+		// no spots that won't telefrag
 		return G_Find( NULL, FOFS( classname ), "info_player_deathmatch" );
 	}
 
@@ -206,7 +207,9 @@ gentity_t* SelectRandomFurthestSpawnPoint( vec3_t avoidPoint, vec3_t origin, vec
 			if( dist > list_dist[i] )
 			{
 				if( numSpots >= 64 )
+				{
 					numSpots = 64 - 1;
+				}
 				for( j = numSpots; j > i; j-- )
 				{
 					list_dist[j] = list_dist[j - 1];
@@ -216,7 +219,9 @@ gentity_t* SelectRandomFurthestSpawnPoint( vec3_t avoidPoint, vec3_t origin, vec
 				list_spot[i] = spot;
 				numSpots++;
 				if( numSpots > 64 )
+				{
 					numSpots = 64;
+				}
 				break;
 			}
 		}
@@ -231,7 +236,9 @@ gentity_t* SelectRandomFurthestSpawnPoint( vec3_t avoidPoint, vec3_t origin, vec
 	{
 		spot = G_Find( NULL, FOFS( classname ), "info_player_deathmatch" );
 		if( !spot )
+		{
 			G_Error( "Couldn't find a spawn point" );
+		}
 		VectorCopy( spot->s.origin, origin );
 		origin[2] += 9;
 		VectorCopy( spot->s.angles, angles );
@@ -429,11 +436,17 @@ void CopyToBodyQue( gentity_t* ent )
 		{
 			e = &g_entities[i];
 			if( !e->inuse )
+			{
 				continue;
+			}
 			if( e->activator != ent )
+			{
 				continue;
+			}
 			if( strcmp( e->classname, "kamikaze timer" ) )
+			{
 				continue;
+			}
 			e->activator = body;
 			break;
 		}
@@ -597,7 +610,9 @@ int TeamLeader( int team )
 		if( level.clients[i].sess.sessionTeam == team )
 		{
 			if( level.clients[i].sess.teamLeader )
+			{
 				return i;
+			}
 		}
 	}
 
@@ -890,20 +905,20 @@ void ClientUserinfoChanged( int clientNum )
 	switch( team ) {
 	case TEAM_RED:
 		ForceClientSkin(client, model, "red");
-//		ForceClientSkin(client, headModel, "red");
+	//		ForceClientSkin(client, headModel, "red");
 		break;
 	case TEAM_BLUE:
 		ForceClientSkin(client, model, "blue");
-//		ForceClientSkin(client, headModel, "blue");
+	//		ForceClientSkin(client, headModel, "blue");
 		break;
 	}
 	// don't ever use a default skin in teamplay, it would just waste memory
 	// however bots will always join a team but they spawn in as spectator
 	if ( g_gametype.integer >= GT_TEAM && team == TEAM_SPECTATOR) {
 		ForceClientSkin(client, model, "red");
-//		ForceClientSkin(client, headModel, "red");
+	//		ForceClientSkin(client, headModel, "red");
 	}
-*/
+	*/
 
 #ifdef MISSIONPACK
 	if( g_gametype.integer >= GT_TEAM )

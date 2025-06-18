@@ -349,7 +349,9 @@ static void Controls_InitCvars()
 	for( i = 0;; i++, cvarptr++ )
 	{
 		if( !cvarptr->name )
+		{
 			break;
+		}
 
 		// get current value
 		cvarptr->value = trap_Cvar_VariableValue( cvarptr->name );
@@ -377,10 +379,14 @@ static float Controls_GetCvarDefault( char* name )
 	for( i = 0;; i++, cvarptr++ )
 	{
 		if( !cvarptr->name )
+		{
 			return ( 0 );
+		}
 
 		if( !strcmp( cvarptr->name, name ) )
+		{
 			break;
+		}
 	}
 
 	return ( cvarptr->defaultvalue );
@@ -400,10 +406,14 @@ static float Controls_GetCvarValue( char* name )
 	for( i = 0;; i++, cvarptr++ )
 	{
 		if( !cvarptr->name )
+		{
 			return ( 0 );
+		}
 
 		if( !strcmp( cvarptr->name, name ) )
+		{
 			break;
+		}
 	}
 
 	return ( cvarptr->value );
@@ -669,7 +679,9 @@ static void Controls_DrawKeyBinding( void* self )
 
 	b1 = g_bindings[a->generic.id].bind1;
 	if( b1 == -1 )
+	{
 		strcpy( name, "???" );
+	}
 	else
 	{
 		trap_Key_KeynumToStringBuf( b1, name, 32 );
@@ -778,7 +790,9 @@ static void Controls_GetKeyAssignment( char* command, int* twokeys )
 			twokeys[count] = j;
 			count++;
 			if( count == 2 )
+			{
 				break;
+			}
 		}
 	}
 }
@@ -801,7 +815,9 @@ static void Controls_GetConfig()
 	for( i = 0;; i++, bindptr++ )
 	{
 		if( !bindptr->label )
+		{
 			break;
+		}
 
 		Controls_GetKeyAssignment( bindptr->command, twokeys );
 
@@ -836,21 +852,29 @@ static void Controls_SetConfig()
 	for( i = 0;; i++, bindptr++ )
 	{
 		if( !bindptr->label )
+		{
 			break;
+		}
 
 		if( bindptr->bind1 != -1 )
 		{
 			trap_Key_SetBinding( bindptr->bind1, bindptr->command );
 
 			if( bindptr->bind2 != -1 )
+			{
 				trap_Key_SetBinding( bindptr->bind2, bindptr->command );
+			}
 		}
 	}
 
 	if( s_controls.invertmouse.curvalue )
+	{
 		trap_Cvar_SetValue( "m_pitch", -fabs( trap_Cvar_VariableValue( "m_pitch" ) ) );
+	}
 	else
+	{
 		trap_Cvar_SetValue( "m_pitch", fabs( trap_Cvar_VariableValue( "m_pitch" ) ) );
+	}
 
 	trap_Cvar_SetValue( "m_filter", s_controls.smoothmouse.curvalue );
 	trap_Cvar_SetValue( "cl_run", s_controls.alwaysrun.curvalue );
@@ -879,7 +903,9 @@ static void Controls_SetDefaults()
 	for( i = 0;; i++, bindptr++ )
 	{
 		if( !bindptr->label )
+		{
 			break;
+		}
 
 		bindptr->bind1 = bindptr->defaultbind1;
 		bindptr->bind2 = bindptr->defaultbind2;
@@ -921,7 +947,9 @@ static sfxHandle_t Controls_MenuKey( int key )
 			case K_MOUSE2:
 			case K_ESCAPE:
 				if( s_controls.changesmade )
+				{
 					Controls_SetConfig();
+				}
 				goto ignorekey;
 
 			default:
@@ -931,7 +959,9 @@ static sfxHandle_t Controls_MenuKey( int key )
 	else
 	{
 		if( key & K_CHAR_FLAG )
+		{
 			goto ignorekey;
+		}
 
 		switch( key )
 		{
@@ -954,10 +984,14 @@ static sfxHandle_t Controls_MenuKey( int key )
 		for( i = 0;; i++, bindptr++ )
 		{
 			if( !bindptr->label )
+			{
 				break;
+			}
 
 			if( bindptr->bind2 == key )
+			{
 				bindptr->bind2 = -1;
+			}
 
 			if( bindptr->bind1 == key )
 			{
@@ -973,7 +1007,9 @@ static sfxHandle_t Controls_MenuKey( int key )
 	for( i = 0;; i++, bindptr++ )
 	{
 		if( !bindptr->label )
+		{
 			break;
+		}
 
 		if( bindptr->id == id )
 		{
@@ -1102,7 +1138,9 @@ static void Controls_MenuEvent( void* ptr, int event )
 			if( event == QM_ACTIVATED )
 			{
 				if( s_controls.changesmade )
+				{
 					Controls_SetConfig();
+				}
 				UI_PopMenu();
 			}
 			break;

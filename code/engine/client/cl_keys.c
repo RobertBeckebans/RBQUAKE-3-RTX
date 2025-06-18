@@ -31,7 +31,7 @@ field_t	 historyEditLines[COMMAND_HISTORY];
 
 int		 nextHistoryLine; // the last line in the history buffer, not masked
 int		 historyLine;	  // the line being displayed from history buffer
-						  // will be <= nextHistoryLine
+// will be <= nextHistoryLine
 
 field_t	 g_consoleField;
 field_t	 chatField;
@@ -224,7 +224,7 @@ void	  Field_VariableSizeDraw( field_t* edit, int x, int y, int width, int size,
 		} else {
 			prestep = len - drawLen;
 		}
-*/
+		*/
 	}
 
 	if( prestep + drawLen > len )
@@ -414,13 +414,15 @@ void Field_CharEvent( field_t* edit, int ch )
 	int len;
 
 	if( ch == 'v' - 'a' + 1 )
-	{ // ctrl-v is paste
+	{
+		// ctrl-v is paste
 		Field_Paste( edit );
 		return;
 	}
 
 	if( ch == 'c' - 'a' + 1 )
-	{ // ctrl-c clears the field
+	{
+		// ctrl-c clears the field
 		Field_Clear( edit );
 		return;
 	}
@@ -428,7 +430,8 @@ void Field_CharEvent( field_t* edit, int ch )
 	len = strlen( edit->buffer );
 
 	if( ch == 'h' - 'a' + 1 )
-	{ // ctrl-h is backspace
+	{
+		// ctrl-h is backspace
 		if( edit->cursor > 0 )
 		{
 			memmove( edit->buffer + edit->cursor - 1, edit->buffer + edit->cursor, len + 1 - edit->cursor );
@@ -442,14 +445,16 @@ void Field_CharEvent( field_t* edit, int ch )
 	}
 
 	if( ch == 'a' - 'a' + 1 )
-	{ // ctrl-a is home
+	{
+		// ctrl-a is home
 		edit->cursor = 0;
 		edit->scroll = 0;
 		return;
 	}
 
 	if( ch == 'e' - 'a' + 1 )
-	{ // ctrl-e is end
+	{
+		// ctrl-e is end
 		edit->cursor = len;
 		edit->scroll = edit->cursor - edit->widthInChars;
 		return;
@@ -466,12 +471,15 @@ void Field_CharEvent( field_t* edit, int ch )
 	if( key_overstrikeMode )
 	{
 		if( edit->cursor == MAX_EDIT_LINE - 1 )
+		{
 			return;
+		}
 		edit->buffer[edit->cursor] = ch;
 		edit->cursor++;
 	}
 	else
-	{ // insert mode
+	{
+		// insert mode
 		if( len == MAX_EDIT_LINE - 1 )
 		{
 			return; // all full
@@ -591,7 +599,9 @@ void Console_Key( int key )
 	if( ( key == K_MWHEELDOWN && keys[K_SHIFT].down ) || ( key == K_DOWNARROW ) || ( key == K_KP_DOWNARROW ) || ( ( tolower( key ) == 'n' ) && keys[K_CTRL].down ) )
 	{
 		if( historyLine == nextHistoryLine )
+		{
 			return;
+		}
 		historyLine++;
 		g_consoleField = historyEditLines[historyLine % COMMAND_HISTORY];
 		return;
@@ -611,10 +621,12 @@ void Console_Key( int key )
 	}
 
 	if( key == K_MWHEELUP )
-	{ //----(SA)	added some mousewheel functionality to the console
+	{
+		//----(SA)	added some mousewheel functionality to the console
 		Con_PageUp();
 		if( keys[K_CTRL].down )
-		{ // hold <ctrl> to accelerate scrolling
+		{
+			// hold <ctrl> to accelerate scrolling
 			Con_PageUp();
 			Con_PageUp();
 		}
@@ -622,10 +634,12 @@ void Console_Key( int key )
 	}
 
 	if( key == K_MWHEELDOWN )
-	{ //----(SA)	added some mousewheel functionality to the console
+	{
+		//----(SA)	added some mousewheel functionality to the console
 		Con_PageDown();
 		if( keys[K_CTRL].down )
-		{ // hold <ctrl> to accelerate scrolling
+		{
+			// hold <ctrl> to accelerate scrolling
 			Con_PageDown();
 			Con_PageDown();
 		}
@@ -676,13 +690,19 @@ void Message_Key( int key )
 		{
 			if( chat_playerNum != -1 )
 
+			{
 				Com_sprintf( buffer, sizeof( buffer ), "tell %i \"%s\"\n", chat_playerNum, chatField.buffer );
+			}
 
 			else if( chat_team )
 
+			{
 				Com_sprintf( buffer, sizeof( buffer ), "say_team \"%s\"\n", chatField.buffer );
+			}
 			else
+			{
 				Com_sprintf( buffer, sizeof( buffer ), "say \"%s\"\n", chatField.buffer );
+			}
 
 			CL_AddReliableCommand( buffer );
 		}
@@ -787,7 +807,9 @@ int Key_StringToKeynum( char* str )
 	for( kn = keynames; kn->name; kn++ )
 	{
 		if( !Q_stricmp( str, kn->name ) )
+		{
 			return kn->keynum;
+		}
 	}
 
 	return -1;
@@ -947,7 +969,9 @@ void Key_Unbindall_f()
 
 	for( i = 0; i < 256; i++ )
 		if( keys[i].binding )
+		{
 			Key_SetBinding( i, "" );
+		}
 }
 
 /*
@@ -977,9 +1001,13 @@ void Key_Bind_f()
 	if( c == 2 )
 	{
 		if( keys[b].binding )
+		{
 			Com_Printf( "\"%s\" = \"%s\"\n", Cmd_Argv( 1 ), keys[b].binding );
+		}
 		else
+		{
 			Com_Printf( "\"%s\" is not bound\n", Cmd_Argv( 1 ) );
+		}
 		return;
 	}
 
@@ -989,7 +1017,9 @@ void Key_Bind_f()
 	{
 		strcat( cmd, Cmd_Argv( i ) );
 		if( i != ( c - 1 ) )
+		{
 			strcat( cmd, " " );
+		}
 	}
 
 	Key_SetBinding( b, cmd );

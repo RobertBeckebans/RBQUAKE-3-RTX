@@ -134,14 +134,22 @@ static void			 PlayerModel_UpdateGrid()
 	if( s_playermodel.numpages > 1 )
 	{
 		if( s_playermodel.modelpage > 0 )
+		{
 			s_playermodel.left.generic.flags &= ~QMF_INACTIVE;
+		}
 		else
+		{
 			s_playermodel.left.generic.flags |= QMF_INACTIVE;
+		}
 
 		if( s_playermodel.modelpage < s_playermodel.numpages - 1 )
+		{
 			s_playermodel.right.generic.flags &= ~QMF_INACTIVE;
+		}
 		else
+		{
 			s_playermodel.right.generic.flags |= QMF_INACTIVE;
+		}
 	}
 	else
 	{
@@ -193,7 +201,9 @@ PlayerModel_MenuEvent
 static void PlayerModel_MenuEvent( void* ptr, int event )
 {
 	if( event != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	switch( ( ( menucommon_s* )ptr )->id )
 	{
@@ -251,7 +261,9 @@ static sfxHandle_t PlayerModel_MenuKey( int key )
 					return ( menu_move_sound );
 				}
 				else
+				{
 					return ( menu_buzz_sound );
+				}
 			}
 			break;
 
@@ -274,7 +286,9 @@ static sfxHandle_t PlayerModel_MenuKey( int key )
 					return ( menu_move_sound );
 				}
 				else
+				{
 					return ( menu_buzz_sound );
+				}
 			}
 			break;
 
@@ -301,7 +315,9 @@ static void PlayerModel_PicEvent( void* ptr, int event )
 	int	  i;
 
 	if( event != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	for( i = 0; i < PLAYERGRID_ROWS * PLAYERGRID_COLS; i++ )
 	{
@@ -328,14 +344,18 @@ static void PlayerModel_PicEvent( void* ptr, int event )
 		// seperate the model name
 		maxlen = pdest - buffptr;
 		if( maxlen > 16 )
+		{
 			maxlen = 16;
+		}
 		Q_strncpyz( s_playermodel.modelname.string, buffptr, maxlen );
 		Q_strupr( s_playermodel.modelname.string );
 
 		// seperate the skin name
 		maxlen = strlen( pdest + 5 ) + 1;
 		if( maxlen > 16 )
+		{
 			maxlen = 16;
+		}
 		Q_strncpyz( s_playermodel.skinname.string, pdest + 5, maxlen );
 		Q_strupr( s_playermodel.skinname.string );
 
@@ -401,10 +421,14 @@ static void PlayerModel_BuildList()
 		dirlen = strlen( dirptr );
 
 		if( dirlen && dirptr[dirlen - 1] == '/' )
+		{
 			dirptr[dirlen - 1] = '\0';
+		}
 
 		if( !strcmp( dirptr, "." ) || !strcmp( dirptr, ".." ) )
+		{
 			continue;
+		}
 
 		// iterate all skin files in directory
 		numfiles = trap_FS_GetFileList( va( "models/players/%s", dirptr ), "tga", filelist, 2048 );
@@ -434,7 +458,9 @@ static void PlayerModel_BuildList()
 
 	s_playermodel.numpages = s_playermodel.nummodels / MAX_MODELSPERPAGE;
 	if( s_playermodel.nummodels % MAX_MODELSPERPAGE )
+	{
 		s_playermodel.numpages++;
+	}
 }
 
 /*
@@ -469,7 +495,9 @@ static void PlayerModel_SetMenuItems()
 			strcat( modelskin, pdest + 5 );
 		}
 		else
+		{
 			continue;
+		}
 
 		if( !Q_stricmp( s_playermodel.modelskin, modelskin ) )
 		{
@@ -480,14 +508,18 @@ static void PlayerModel_SetMenuItems()
 			// seperate the model name
 			maxlen = pdest - buffptr;
 			if( maxlen > 16 )
+			{
 				maxlen = 16;
+			}
 			Q_strncpyz( s_playermodel.modelname.string, buffptr, maxlen );
 			Q_strupr( s_playermodel.modelname.string );
 
 			// seperate the skin name
 			maxlen = strlen( pdest + 5 ) + 1;
 			if( maxlen > 16 )
+			{
 				maxlen = 16;
+			}
 			Q_strncpyz( s_playermodel.skinname.string, pdest + 5, maxlen );
 			Q_strupr( s_playermodel.skinname.string );
 			break;

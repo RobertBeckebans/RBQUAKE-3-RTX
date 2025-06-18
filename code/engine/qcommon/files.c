@@ -535,11 +535,17 @@ static long FS_HashFileName( const char* fname, int hashSize )
 	{
 		letter = tolower( fname[i] );
 		if( letter == '.' )
+		{
 			break; // don't include extension
+		}
 		if( letter == '\\' )
+		{
 			letter = '/'; // damn path names
+		}
 		if( letter == PATH_SEP )
+		{
 			letter = '/'; // damn path names
+		}
 		hash += ( long )( letter ) * ( i + 119 );
 		i++;
 	}
@@ -726,7 +732,9 @@ static void FS_CopyFile( char* fromOSPath, char* toOSPath )
 	// probably won't work on a mac... Its only for developers anyway...
 	buf = malloc( len );
 	if( fread( buf, 1, len, f ) != len )
+	{
 		Com_Error( ERR_FATAL, "Short read in FS_Copyfiles()\n" );
+	}
 	fclose( f );
 
 	if( FS_CreatePath( toOSPath ) )
@@ -740,7 +748,9 @@ static void FS_CopyFile( char* fromOSPath, char* toOSPath )
 		return;
 	}
 	if( fwrite( buf, 1, len, f ) != len )
+	{
 		Com_Error( ERR_FATAL, "Short write in FS_Copyfiles()\n" );
+	}
 	fclose( f );
 	free( buf );
 }
@@ -1430,7 +1440,8 @@ int				FS_FOpenFileRead( const char* filename, fileHandle_t* file, qboolean uniq
 					&& Q_stricmp( filename + l - 5, ".game" )				  // menu files
 					&& Q_stricmp( filename + l - strlen( demoExt ), demoExt ) // menu files
 					&& Q_stricmp( filename + l - 4, ".dat" ) )
-				{ // for journal files
+				{
+					// for journal files
 					continue;
 				}
 			}
@@ -1449,7 +1460,8 @@ int				FS_FOpenFileRead( const char* filename, fileHandle_t* file, qboolean uniq
 				&& Q_stricmp( filename + l - 5, ".game" )				  // menu files
 				&& Q_stricmp( filename + l - strlen( demoExt ), demoExt ) // menu files
 				&& Q_stricmp( filename + l - 4, ".dat" ) )
-			{ // for journal files
+			{
+				// for journal files
 				fs_fakeChkSum = random();
 			}
 
@@ -1841,7 +1853,9 @@ int FS_ReadFile( const char* qpath, void** buffer )
 			if( r != sizeof( len ) )
 			{
 				if( buffer != NULL )
+				{
 					*buffer = NULL;
+				}
 				return -1;
 			}
 			// if the file didn't exist when the journal was created
@@ -2032,7 +2046,9 @@ static pack_t* FS_LoadZipFile( char* zipfile, const char* basename )
 	err = unzGetGlobalInfo( uf, &gi );
 
 	if( err != UNZ_OK )
+	{
 		return NULL;
+	}
 
 	fs_packFiles += gi.number_entry;
 
@@ -2256,7 +2272,9 @@ char** FS_ListFilteredFiles( const char* path, const char* extension, char* filt
 				{
 					// case insensitive
 					if( !Com_FilterPath( filter, name, qfalse ) )
+					{
 						continue;
+					}
 					// unique the match
 					nfiles = FS_AddFileToList( name, list, nfiles );
 				}
@@ -2292,7 +2310,8 @@ char** FS_ListFilteredFiles( const char* path, const char* extension, char* filt
 			}
 		}
 		else if( search->dir )
-		{ // scan for files in the filesystem
+		{
+			// scan for files in the filesystem
 			char*  netpath;
 			int	   numSysFiles;
 			char** sysFiles;
@@ -2457,17 +2476,23 @@ static char** Sys_ConcatenateFileLists( char** list0, char** list1, char** list2
 	if( list0 )
 	{
 		for( src = list0; *src; src++, dst++ )
+		{
 			*dst = *src;
+		}
 	}
 	if( list1 )
 	{
 		for( src = list1; *src; src++, dst++ )
+		{
 			*dst = *src;
+		}
 	}
 	if( list2 )
 	{
 		for( src = list2; *src; src++, dst++ )
+		{
 			*dst = *src;
+		}
 	}
 
 	// Terminate the list
@@ -2476,11 +2501,17 @@ static char** Sys_ConcatenateFileLists( char** list0, char** list1, char** list2
 	// Free our old lists.
 	// NOTE: not freeing their content, it's been merged in dst and still being used
 	if( list0 )
+	{
 		Z_Free( list0 );
+	}
 	if( list1 )
+	{
 		Z_Free( list1 );
+	}
 	if( list2 )
+	{
 		Z_Free( list2 );
+	}
 
 	return cat;
 }
@@ -2946,7 +2977,9 @@ static void FS_AddGameDirectory( const char* path, const char* dir )
 	{
 		pakfile = FS_BuildOSPath( path, dir, sorted[i] );
 		if( ( pak = FS_LoadZipFile( pakfile, sorted[i] ) ) == 0 )
+		{
 			continue;
+		}
 		// store the game name for downloading
 		strcpy( pak->pakGamename, dir );
 
@@ -3166,7 +3199,9 @@ static void FS_ReorderPurePaks()
 
 	// only relevant when connected to pure server
 	if( !fs_numServerPaks )
+	{
 		return;
+	}
 
 	fs_reordered = qfalse;
 

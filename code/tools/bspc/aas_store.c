@@ -91,7 +91,9 @@ max_aas_t max_aas;
 int		  AAS_CountTmpNodes( tmp_node_t* tmpnode )
 {
 	if( !tmpnode )
+	{
 		return 0;
+	}
 	return AAS_CountTmpNodes( tmpnode->children[0] ) + AAS_CountTmpNodes( tmpnode->children[1] ) + 1;
 } // end of the function AAS_CountTmpNodes
 //===========================================================================
@@ -112,7 +114,9 @@ void AAS_InitMaxAAS()
 	{
 		numfaces++;
 		if( f->winding )
+		{
 			numpoints += f->winding->numpoints;
+		}
 	} // end for
 	//
 	numareas = 0;
@@ -212,19 +216,31 @@ void AAS_AllocMaxAAS()
 	aas_edgechain	= ( int* )GetClearedMemory( max_aas.max_edges * sizeof( int ) );
 	//
 	for( i = 0; i < max_aas.max_vertexes; i++ )
+	{
 		aas_vertexchain[i] = -1;
+	}
 	for( i = 0; i < VERTEX_HASH_SIZE * VERTEX_HASH_SIZE; i++ )
+	{
 		aas_hashverts[i] = -1;
+	}
 	//
 	for( i = 0; i < max_aas.max_planes; i++ )
+	{
 		aas_planechain[i] = -1;
+	}
 	for( i = 0; i < PLANE_HASH_SIZE; i++ )
+	{
 		aas_hashplanes[i] = -1;
+	}
 	//
 	for( i = 0; i < max_aas.max_edges; i++ )
+	{
 		aas_edgechain[i] = -1;
+	}
 	for( i = 0; i < EDGE_HASH_SIZE; i++ )
+	{
 		aas_hashedges[i] = -1;
+	}
 } // end of the function AAS_AllocMaxAAS
 //===========================================================================
 //
@@ -236,72 +252,100 @@ void AAS_FreeMaxAAS()
 {
 	// bounding boxes
 	if( aasworld.bboxes )
+	{
 		FreeMemory( aasworld.bboxes );
+	}
 	aasworld.bboxes	   = NULL;
 	aasworld.numbboxes = 0;
 	// vertexes
 	if( aasworld.vertexes )
+	{
 		FreeMemory( aasworld.vertexes );
+	}
 	aasworld.vertexes	 = NULL;
 	aasworld.numvertexes = 0;
 	// planes
 	if( aasworld.planes )
+	{
 		FreeMemory( aasworld.planes );
+	}
 	aasworld.planes	   = NULL;
 	aasworld.numplanes = 0;
 	// edges
 	if( aasworld.edges )
+	{
 		FreeMemory( aasworld.edges );
+	}
 	aasworld.edges	  = NULL;
 	aasworld.numedges = 0;
 	// edge index
 	if( aasworld.edgeindex )
+	{
 		FreeMemory( aasworld.edgeindex );
+	}
 	aasworld.edgeindex	   = NULL;
 	aasworld.edgeindexsize = 0;
 	// faces
 	if( aasworld.faces )
+	{
 		FreeMemory( aasworld.faces );
+	}
 	aasworld.faces	  = NULL;
 	aasworld.numfaces = 0;
 	// face index
 	if( aasworld.faceindex )
+	{
 		FreeMemory( aasworld.faceindex );
+	}
 	aasworld.faceindex	   = NULL;
 	aasworld.faceindexsize = 0;
 	// convex areas
 	if( aasworld.areas )
+	{
 		FreeMemory( aasworld.areas );
+	}
 	aasworld.areas	  = NULL;
 	aasworld.numareas = 0;
 	// convex area settings
 	if( aasworld.areasettings )
+	{
 		FreeMemory( aasworld.areasettings );
+	}
 	aasworld.areasettings	 = NULL;
 	aasworld.numareasettings = 0;
 	// reachablity list
 	if( aasworld.reachability )
+	{
 		FreeMemory( aasworld.reachability );
+	}
 	aasworld.reachability	  = NULL;
 	aasworld.reachabilitysize = 0;
 	// nodes of the bsp tree
 	if( aasworld.nodes )
+	{
 		FreeMemory( aasworld.nodes );
+	}
 	aasworld.nodes	  = NULL;
 	aasworld.numnodes = 0;
 	// cluster portals
 	if( aasworld.portals )
+	{
 		FreeMemory( aasworld.portals );
+	}
 	aasworld.portals	= NULL;
 	aasworld.numportals = 0;
 	// cluster portal index
 	if( aasworld.portalindex )
+	{
 		FreeMemory( aasworld.portalindex );
+	}
 	aasworld.portalindex	 = NULL;
 	aasworld.portalindexsize = 0;
 	// clusters
 	if( aasworld.clusters )
+	{
 		FreeMemory( aasworld.clusters );
+	}
 	aasworld.clusters	 = NULL;
 	aasworld.numclusters = 0;
 
@@ -311,13 +355,19 @@ void AAS_FreeMaxAAS()
 	allocatedaasmem = 0;
 	//
 	if( aas_vertexchain )
+	{
 		FreeMemory( aas_vertexchain );
+	}
 	aas_vertexchain = NULL;
 	if( aas_planechain )
+	{
 		FreeMemory( aas_planechain );
+	}
 	aas_planechain = NULL;
 	if( aas_edgechain )
+	{
 		FreeMemory( aas_edgechain );
+	}
 	aas_edgechain = NULL;
 } // end of the function AAS_FreeMaxAAS
 //===========================================================================
@@ -365,9 +415,13 @@ qboolean AAS_GetVertex( vec3_t v, int* vnum )
 	for( i = 0; i < 3; i++ )
 	{
 		if( fabs( v[i] - Q_rint( v[i] ) ) < INTEGRAL_EPSILON )
+		{
 			vert[i] = Q_rint( v[i] );
+		}
 		else
+		{
 			vert[i] = v[i];
+		}
 	} // end for
 
 	h = AAS_HashVec( vert );
@@ -515,7 +569,9 @@ qboolean AAS_GetEdge( vec3_t v1, vec3_t v2, int* edgenum )
 
 	// the first edge is a dummy
 	if( aasworld.numedges == 0 )
+	{
 		aasworld.numedges = 1;
+	}
 
 	found = AAS_GetVertex( v1, &v1num );
 	found &= AAS_GetVertex( v2, &v2num );
@@ -536,7 +592,9 @@ qboolean AAS_GetEdge( vec3_t v1, vec3_t v2, int* edgenum )
 	{
 #ifdef EDGE_HASHING
 		if( AAS_FindHashedEdge( v1num, v2num, edgenum ) )
+		{
 			return true;
+		}
 #else
 		int i;
 		for( i = 1; i < aasworld.numedges; i++ )
@@ -586,20 +644,30 @@ int AAS_PlaneTypeForNormal( vec3_t normal )
 
 	// NOTE: epsilon used
 	if( ( normal[0] >= 1.0 - NORMAL_EPSILON ) || ( normal[0] <= -1.0 + NORMAL_EPSILON ) )
+	{
 		return PLANE_X;
+	}
 	if( ( normal[1] >= 1.0 - NORMAL_EPSILON ) || ( normal[1] <= -1.0 + NORMAL_EPSILON ) )
+	{
 		return PLANE_Y;
+	}
 	if( ( normal[2] >= 1.0 - NORMAL_EPSILON ) || ( normal[2] <= -1.0 + NORMAL_EPSILON ) )
+	{
 		return PLANE_Z;
+	}
 
 	ax = fabs( normal[0] );
 	ay = fabs( normal[1] );
 	az = fabs( normal[2] );
 
 	if( ax >= ay && ax >= az )
+	{
 		return PLANE_ANYX;
+	}
 	if( ay >= ax && ay >= az )
+	{
 		return PLANE_ANYY;
+	}
 	return PLANE_ANYZ;
 } // end of the function AAS_PlaneTypeForNormal
 //===========================================================================
@@ -713,7 +781,9 @@ qboolean AAS_GetPlane( vec3_t normal, vec_t dist, int* planenum )
 
 	// if (AAS_FindPlane(normal, dist, planenum)) return true;
 	if( AAS_FindHashedPlane( normal, dist, planenum ) )
+	{
 		return true;
+	}
 
 	if( aasworld.numplanes >= max_aas.max_planes - 1 )
 	{
@@ -776,7 +846,9 @@ qboolean AAS_GetFace( winding_t* w, plane_t* p, int side, int* facenum )
 
 	// face zero is a dummy, because of the face index with negative numbers
 	if( aasworld.numfaces == 0 )
+	{
 		aasworld.numfaces = 1;
+	}
 
 	if( aasworld.numfaces >= max_aas.max_faces )
 	{
@@ -910,13 +982,17 @@ void AAS_StoreAreaSettings( tmp_areasettings_t* tmpareasettings )
 	aas_areasettings_t* areasettings;
 
 	if( aasworld.numareasettings == 0 )
+	{
 		aasworld.numareasettings = 1;
+	}
 	areasettings			   = &aasworld.areasettings[aasworld.numareasettings++];
 	areasettings->areaflags	   = tmpareasettings->areaflags;
 	areasettings->presencetype = tmpareasettings->presencetype;
 	areasettings->contents	   = tmpareasettings->contents;
 	if( tmpareasettings->modelnum > AREACONTENTS_MAXMODELNUM )
+	{
 		Log_Print( "WARNING: more than %d mover models\n", AREACONTENTS_MAXMODELNUM );
+	}
 	areasettings->contents |= ( tmpareasettings->modelnum & AREACONTENTS_MAXMODELNUM ) << AREACONTENTS_MODELNUMSHIFT;
 } // end of the function AAS_StoreAreaSettings
 //===========================================================================
@@ -941,13 +1017,19 @@ int AAS_StoreArea( tmp_area_t* tmparea )
 	// FIXME: this isn't necessary anymore because the tree
 	//			is refreshed after area merging
 	while( tmparea->mergedarea )
+	{
 		tmparea = tmparea->mergedarea;
+	}
 	//
 	if( tmparea->invalid )
+	{
 		Error( "AAS_StoreArea: tried to store invalid area" );
+	}
 	// if there is an aas area already stored for this tmp area
 	if( tmparea->aasareanum )
+	{
 		return -tmparea->aasareanum;
+	}
 	//
 	if( aasworld.numareas >= max_aas.max_areas )
 	{
@@ -955,7 +1037,9 @@ int AAS_StoreArea( tmp_area_t* tmparea )
 	} // end if
 	// area zero is a dummy
 	if( aasworld.numareas == 0 )
+	{
 		aasworld.numareas = 1;
+	}
 	// create an area from this leaf
 	aasarea			   = &aasworld.areas[aasworld.numareas];
 	aasarea->areanum   = aasworld.numareas;
@@ -994,7 +1078,9 @@ int AAS_StoreArea( tmp_area_t* tmparea )
 				tmpface->winding = ReverseWinding( tmpface->winding );
 			} // end if
 			if( !AAS_GetFace( tmpface->winding, plane, 0, &aasfacenum ) )
+			{
 				continue;
+			}
 			if( side )
 			{
 				FreeWinding( tmpface->winding );
@@ -1032,7 +1118,9 @@ int AAS_StoreArea( tmp_area_t* tmparea )
 	} // end for
 	// if the area has no faces at all (return 0, = solid leaf)
 	if( !aasarea->numfaces )
+	{
 		return 0;
+	}
 	//
 	VectorScale( aasarea->center, 1.0 / aasarea->numfaces, aasarea->center );
 	// Log_Write("area %d center %f %f %f\r\n", aasworld.numareas,
@@ -1060,14 +1148,20 @@ int AAS_StoreTree_r( tmp_node_t* tmpnode )
 
 	// if it is a solid leaf
 	if( !tmpnode )
+	{
 		return 0;
+	}
 	// negative so it's an area
 	if( tmpnode->tmparea )
+	{
 		return AAS_StoreArea( tmpnode->tmparea );
+	}
 	// it's another node
 	// the first node is a dummy
 	if( aasworld.numnodes == 0 )
+	{
 		aasworld.numnodes = 1;
+	}
 	if( aasworld.numnodes >= max_aas.max_nodes )
 	{
 		Error( "AAS_MAX_NODES = %d", max_aas.max_nodes );

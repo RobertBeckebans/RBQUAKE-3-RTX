@@ -62,14 +62,14 @@ namespace nv_helpers_dx12
 // geometry within the instance
 void TopLevelASGenerator::AddInstance( ID3D12Resource* bottomLevelAS, // Bottom-level acceleration structure containing the
 																	  // actual geometric data of the instance
-	const DirectX::XMMATRIX&						   transform,	  // Transform matrix to apply to the instance, allowing the
-																	  // same bottom-level AS to be used at several world-space
-																	  // positions
-	UINT											   instanceID,	  // Instance ID, which can be used in the shaders to
-																	  // identify this specific instance
-	UINT											   hitGroupIndex  // Hit group index, corresponding the the index of the
-																	  // hit group in the Shader Binding Table that will be
-																	  // invocated upon hitting the geometry
+	const DirectX::XMMATRIX&						   transform, // Transform matrix to apply to the instance, allowing the
+	// same bottom-level AS to be used at several world-space
+	// positions
+	UINT											   instanceID, // Instance ID, which can be used in the shaders to
+	// identify this specific instance
+	UINT											   hitGroupIndex // Hit group index, corresponding the the index of the
+																	 // hit group in the Shader Binding Table that will be
+																	 // invocated upon hitting the geometry
 )
 {
 	m_instances.emplace_back( Instance( bottomLevelAS, transform, instanceID, hitGroupIndex ) );
@@ -80,13 +80,13 @@ void TopLevelASGenerator::AddInstance( ID3D12Resource* bottomLevelAS, // Bottom-
 // Compute the size of the scratch space required to build the acceleration
 // structure, as well as the size of the resulting structure. The allocation of
 // the buffers is then left to the application
-void TopLevelASGenerator::ComputeASBufferSizes( ID3D12Device5* device,				  // Device on which the build will be performed
-	bool													   allowUpdate,			  // If true, the resulting acceleration structure will
-																					  // allow iterative updates
-	UINT64*													   scratchSizeInBytes,	  // Required scratch memory on the GPU to build
-																					  // the acceleration structure
-	UINT64*													   resultSizeInBytes,	  // Required GPU memory to store the acceleration
-																					  // structure
+void TopLevelASGenerator::ComputeASBufferSizes( ID3D12Device5* device,		// Device on which the build will be performed
+	bool													   allowUpdate, // If true, the resulting acceleration structure will
+	// allow iterative updates
+	UINT64*													   scratchSizeInBytes, // Required scratch memory on the GPU to build
+	// the acceleration structure
+	UINT64*													   resultSizeInBytes, // Required GPU memory to store the acceleration
+	// structure
 	UINT64*													   descriptorsSizeInBytes // Required GPU memory to store instance
 																					  // descriptors, containing the matrices,
 																					  // indices etc.
@@ -137,14 +137,14 @@ void TopLevelASGenerator::ComputeASBufferSizes( ID3D12Device5* device,				  // D
 // using application-provided buffers and possibly a pointer to the previous
 // acceleration structure in case of iterative updates. Note that the update can
 // be done in place: the result and previousResult pointers can be the same.
-void TopLevelASGenerator::Generate( ID3D12GraphicsCommandList4* commandList,				 // Command list on which the build will be enqueued
-	ID3D12Resource*												scratchBuffer,				 // Scratch buffer used by the builder to
-																							 // store temporary data
-	ID3D12Resource*												resultBuffer,				 // Result buffer storing the acceleration structure
-	ID3D12Resource*												descriptorsBuffer,			 // Auxiliary result buffer containing the instance
-																							 // descriptors, has to be in upload heap
-	bool														updateOnly /*= false*/,		 // If true, simply refit the existing
-																							 // acceleration structure
+void TopLevelASGenerator::Generate( ID3D12GraphicsCommandList4* commandList,   // Command list on which the build will be enqueued
+	ID3D12Resource*												scratchBuffer, // Scratch buffer used by the builder to
+	// store temporary data
+	ID3D12Resource*												resultBuffer,	   // Result buffer storing the acceleration structure
+	ID3D12Resource*												descriptorsBuffer, // Auxiliary result buffer containing the instance
+	// descriptors, has to be in upload heap
+	bool														updateOnly /*= false*/, // If true, simply refit the existing
+	// acceleration structure
 	ID3D12Resource*												previousResult /*= nullptr*/ // Optional previous acceleration
 																							 // structure, used if an iterative update
 																							 // is requested

@@ -70,7 +70,9 @@ static void CL_Netchan_Encode( msg_t* msg )
 	{
 		// modify the key with the last received now acknowledged server command
 		if( !string[index] )
+		{
 			index = 0;
+		}
 		if( string[index] > 127 || string[index] == '%' )
 		{
 			key ^= '.' << ( i & 1 );
@@ -120,7 +122,9 @@ static void CL_Netchan_Decode( msg_t* msg )
 	{
 		// modify the key with the last sent and with this message acknowledged client command
 		if( !string[index] )
+		{
 			index = 0;
+		}
 		if( string[index] > 127 || string[index] == '%' )
 		{
 			key ^= '.' << ( i & 1 );
@@ -172,7 +176,9 @@ qboolean   CL_Netchan_Process( netchan_t* chan, msg_t* msg )
 
 	ret = Netchan_Process( chan, msg );
 	if( !ret )
+	{
 		return qfalse;
+	}
 	CL_Netchan_Decode( msg );
 	newsize += msg->cursize;
 	return qtrue;

@@ -196,11 +196,15 @@ int AAS_BestReachableLinkArea( aas_link_t* areas )
 	for( link = areas; link; link = link->next_area )
 	{
 		if( link->areanum )
+		{
 			return link->areanum;
+		}
 		// FIXME: this is a bad idea when the reachability is not yet
 		//  calculated when the level items are loaded
 		if( AAS_AreaReachability( link->areanum ) )
+		{
 			return link->areanum;
+		}
 	} // end for
 	return 0;
 } // end of the function AAS_BestReachableLinkArea
@@ -222,14 +226,20 @@ int AAS_GetJumpPadInfo( int ent, vec3_t areastart, vec3_t absmins, vec3_t absmax
 	//
 	AAS_FloatForBSPEpairKey( ent, "speed", &speed );
 	if( !speed )
+	{
 		speed = 1000;
+	}
 	VectorClear( angles );
 	// get the mins, maxs and origin of the model
 	AAS_ValueForBSPEpairKey( ent, "model", model, MAX_EPAIRKEY );
 	if( model[0] )
+	{
 		modelnum = atoi( model + 1 );
+	}
 	else
+	{
 		modelnum = 0;
+	}
 	AAS_BSPModelMinsMaxsOrigin( modelnum, angles, absmins, absmaxs, origin );
 	VectorAdd( origin, absmins, absmins );
 	VectorAdd( origin, absmaxs, absmaxs );
@@ -257,9 +267,13 @@ int AAS_GetJumpPadInfo( int ent, vec3_t areastart, vec3_t absmins, vec3_t absmax
 	for( ent2 = AAS_NextBSPEntity( 0 ); ent2; ent2 = AAS_NextBSPEntity( ent2 ) )
 	{
 		if( !AAS_ValueForBSPEpairKey( ent2, "targetname", targetname, MAX_EPAIRKEY ) )
+		{
 			continue;
+		}
 		if( !strcmp( targetname, target ) )
+		{
 			break;
+		}
 	} // end for
 	if( !ent2 )
 	{
@@ -312,18 +326,26 @@ int AAS_BestReachableFromJumpPadArea( vec3_t origin, vec3_t mins, vec3_t maxs )
 	for( ent = AAS_NextBSPEntity( 0 ); ent; ent = AAS_NextBSPEntity( ent ) )
 	{
 		if( !AAS_ValueForBSPEpairKey( ent, "classname", classname, MAX_EPAIRKEY ) )
+		{
 			continue;
+		}
 		if( strcmp( classname, "trigger_push" ) )
+		{
 			continue;
+		}
 		//
 		if( !AAS_GetJumpPadInfo( ent, areastart, absmins, absmaxs, velocity ) )
+		{
 			continue;
+		}
 		// get the areas the jump pad brush is in
 		areas = AAS_LinkEntityClientBBox( absmins, absmaxs, -1, PRESENCE_CROUCH );
 		for( link = areas; link; link = link->next_area )
 		{
 			if( AAS_AreaJumpPad( link->areanum ) )
+			{
 				break;
+			}
 		} // end for
 		if( !link )
 		{
@@ -345,7 +367,9 @@ int AAS_BestReachableFromJumpPadArea( vec3_t origin, vec3_t mins, vec3_t maxs )
 			for( link = areas; link; link = link->next_area )
 			{
 				if( !AAS_AreaJumpPad( link->areanum ) )
+				{
 					continue;
+				}
 				volume = AAS_AreaVolume( link->areanum );
 				if( volume >= bestareavolume )
 				{
@@ -418,7 +442,9 @@ int AAS_BestReachableArea( vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalo
 			// if the origin is in an area with reachability
 			// if (AAS_AreaReachability(areanum)) return areanum;
 			if( areanum )
+			{
 				return areanum;
+			}
 		} // end if
 		else
 		{
@@ -426,12 +452,12 @@ int AAS_BestReachableArea( vec3_t origin, vec3_t mins, vec3_t maxs, vec3_t goalo
 			// a point is in an area and that starting a AAS_TraceClientBBox from that
 			// point will return trace.startsolid qtrue
 #if 0
-			if (AAS_PointAreaNum(start))
+			if ( AAS_PointAreaNum( start ) )
 			{
-				Log_Write("point %f %f %f in area %d but trace startsolid", start[0], start[1], start[2], areanum);
-				AAS_DrawPermanentCross(start, 4, LINECOLOR_RED);
+				Log_Write( "point %f %f %f in area %d but trace startsolid", start[0], start[1], start[2], areanum );
+				AAS_DrawPermanentCross( start, 4, LINECOLOR_RED );
 			} //end if
-			botimport.Print(PRT_MESSAGE, "AAS_BestReachableArea: start solid\n");
+			botimport.Print( PRT_MESSAGE, "AAS_BestReachableArea: start solid\n" );
 #endif
 			VectorCopy( start, goalorigin );
 			return areanum;
@@ -499,10 +525,14 @@ aas_lreachability_t* AAS_AllocReachability()
 	aas_lreachability_t* r;
 
 	if( !nextreachability )
+	{
 		return NULL;
+	}
 	// make sure the error message only shows up once
 	if( !nextreachability->next )
+	{
 		AAS_Error( "AAS_MAX_REACHABILITYSIZE" );
+	}
 	//
 	r				 = nextreachability;
 	nextreachability = nextreachability->next;
@@ -560,7 +590,9 @@ float AAS_AreaGroundFaceArea( int areanum )
 	{
 		face = &aasworld.faces[abs( aasworld.faceindex[area->firstface + i] )];
 		if( !( face->faceflags & FACE_GROUND ) )
+		{
 			continue;
+		}
 		//
 		total += AAS_FaceArea( face );
 	} // end for
@@ -669,9 +701,13 @@ float AAS_MaxJumpDistance( float phys_jumpvel )
 int AAS_AreaCrouch( int areanum )
 {
 	if( !( aasworld.areasettings[areanum].presencetype & PRESENCE_NORMAL ) )
+	{
 		return qtrue;
+	}
 	else
+	{
 		return qfalse;
+	}
 } // end of the function AAS_AreaCrouch
 //===========================================================================
 // returns qtrue if it is possible to swim in the area
@@ -683,9 +719,13 @@ int AAS_AreaCrouch( int areanum )
 int AAS_AreaSwim( int areanum )
 {
 	if( aasworld.areasettings[areanum].areaflags & AREA_LIQUID )
+	{
 		return qtrue;
+	}
 	else
+	{
 		return qfalse;
+	}
 } // end of the function AAS_AreaSwim
 //===========================================================================
 // returns qtrue if the area contains a liquid
@@ -697,9 +737,13 @@ int AAS_AreaSwim( int areanum )
 int AAS_AreaLiquid( int areanum )
 {
 	if( aasworld.areasettings[areanum].areaflags & AREA_LIQUID )
+	{
 		return qtrue;
+	}
 	else
+	{
 		return qfalse;
+	}
 } // end of the function AAS_AreaLiquid
 //===========================================================================
 //
@@ -808,7 +852,9 @@ qboolean AAS_ReachabilityExists( int area1num, int area2num )
 	for( r = areareachability[area1num]; r; r = r->next )
 	{
 		if( r->areanum == area2num )
+		{
 			return qtrue;
+		}
 	} // end for
 	return qfalse;
 } // end of the function AAS_ReachabilityExists
@@ -836,14 +882,18 @@ int AAS_NearbySolidOrGap( vec3_t start, vec3_t end )
 		testpoint[2] += 16;
 		areanum = AAS_PointAreaNum( testpoint );
 		if( !areanum )
+		{
 			return qtrue;
+		}
 	} // end if
 	VectorMA( end, 64, dir, testpoint );
 	areanum = AAS_PointAreaNum( testpoint );
 	if( areanum )
 	{
 		if( !AAS_AreaSwim( areanum ) && !AAS_AreaGrounded( areanum ) )
+		{
 			return qtrue;
+		}
 	} // end if
 	return qfalse;
 } // end of the function AAS_SolidGapTime
@@ -865,10 +915,14 @@ int AAS_Reachability_Swim( int area1num, int area2num )
 	vec3_t				 start;
 
 	if( !AAS_AreaSwim( area1num ) || !AAS_AreaSwim( area2num ) )
+	{
 		return qfalse;
+	}
 	// if the second area is crouch only
 	if( !( aasworld.areasettings[area2num].presencetype & PRESENCE_NORMAL ) )
+	{
 		return qfalse;
+	}
 
 	area1 = &aasworld.areas[area1num];
 	area2 = &aasworld.areas[area2num];
@@ -877,9 +931,13 @@ int AAS_Reachability_Swim( int area1num, int area2num )
 	for( i = 0; i < 3; i++ )
 	{
 		if( area1->mins[i] > area2->maxs[i] + 10 )
+		{
 			return qfalse;
+		}
 		if( area1->maxs[i] < area2->mins[i] - 10 )
+		{
 			return qfalse;
+		}
 	} // end for
 	// find a shared face and create a reachability link
 	for( i = 0; i < area1->numfaces; i++ )
@@ -904,7 +962,9 @@ int AAS_Reachability_Swim( int area1num, int area2num )
 					// create a new reachability link
 					lreach = AAS_AllocReachability();
 					if( !lreach )
+					{
 						return qfalse;
+					}
 					lreach->areanum = area2num;
 					lreach->facenum = face1num;
 					lreach->edgenum = 0;
@@ -915,7 +975,9 @@ int AAS_Reachability_Swim( int area1num, int area2num )
 					lreach->traveltime = 1;
 					// if the volume of the area is rather small
 					if( AAS_AreaVolume( area2num ) < 800 )
+					{
 						lreach->traveltime += 200;
+					}
 					// if (!(AAS_PointContents(start) & MASK_WATER)) lreach->traveltime += 500;
 					// link the reachability
 					lreach->next			   = areareachability[area1num];
@@ -949,7 +1011,9 @@ int AAS_Reachability_EqualFloorHeight( int area1num, int area2num )
 	aas_lreachability_t lr, *lreach;
 
 	if( !AAS_AreaGrounded( area1num ) || !AAS_AreaGrounded( area2num ) )
+	{
 		return qfalse;
+	}
 
 	area1 = &aasworld.areas[area1num];
 	area2 = &aasworld.areas[area2num];
@@ -957,13 +1021,19 @@ int AAS_Reachability_EqualFloorHeight( int area1num, int area2num )
 	for( i = 0; i < 2; i++ )
 	{
 		if( area1->mins[i] > area2->maxs[i] + 10 )
+		{
 			return qfalse;
+		}
 		if( area1->maxs[i] < area2->mins[i] - 10 )
+		{
 			return qfalse;
+		}
 	} // end for
 	// if area 2 is too high above area 1
 	if( area2->mins[2] > area1->maxs[2] )
+	{
 		return qfalse;
+	}
 	//
 	VectorCopy( gravitydirection, invgravity );
 	VectorInverse( invgravity );
@@ -979,20 +1049,26 @@ int AAS_Reachability_EqualFloorHeight( int area1num, int area2num )
 	{
 		face1 = &aasworld.faces[abs( aasworld.faceindex[area1->firstface + i] )];
 		if( !( face1->faceflags & FACE_GROUND ) )
+		{
 			continue;
+		}
 		//
 		for( j = 0; j < area2->numfaces; j++ )
 		{
 			face2 = &aasworld.faces[abs( aasworld.faceindex[area2->firstface + j] )];
 			if( !( face2->faceflags & FACE_GROUND ) )
+			{
 				continue;
+			}
 			// if there is a common edge
 			for( edgenum1 = 0; edgenum1 < face1->numedges; edgenum1++ )
 			{
 				for( edgenum2 = 0; edgenum2 < face2->numedges; edgenum2++ )
 				{
 					if( abs( aasworld.edgeindex[face1->firstedge + edgenum1] ) != abs( aasworld.edgeindex[face2->firstedge + edgenum2] ) )
+					{
 						continue;
+					}
 					edgenum = aasworld.edgeindex[face1->firstedge + edgenum1];
 					side	= edgenum < 0;
 					edge	= &aasworld.edges[abs( edgenum )];
@@ -1047,7 +1123,9 @@ int AAS_Reachability_EqualFloorHeight( int area1num, int area2num )
 		// create a new reachability link
 		lreach = AAS_AllocReachability();
 		if( !lreach )
+		{
 			return qfalse;
+		}
 		lreach->areanum = lr.areanum;
 		lreach->facenum = lr.facenum;
 		lreach->edgenum = lr.edgenum;
@@ -1108,10 +1186,14 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 
 	// must be able to walk or swim in the first area
 	if( !AAS_AreaGrounded( area1num ) && !AAS_AreaSwim( area1num ) )
+	{
 		return qfalse;
+	}
 	//
 	if( !AAS_AreaGrounded( area2num ) && !AAS_AreaSwim( area2num ) )
+	{
 		return qfalse;
+	}
 	//
 	area1 = &aasworld.areas[area1num];
 	area2 = &aasworld.areas[area2num];
@@ -1121,9 +1203,13 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 	for( i = 0; i < 2; i++ )
 	{
 		if( area1->mins[i] > area2->maxs[i] + 10 )
+		{
 			return qfalse;
+		}
 		if( area1->maxs[i] < area2->mins[i] - 10 )
+		{
 			return qfalse;
+		}
 	} // end for
 	//
 	ground_foundreach			  = qfalse;
@@ -1150,7 +1236,9 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 				// face plane must be more or less horizontal
 				plane = &aasworld.planes[groundface1->planenum ^ ( !faceside1 )];
 				if( DotProduct( plane->normal, invgravity ) < 0.7 )
+				{
 					continue;
+				}
 			} // end if
 			else
 			{
@@ -1167,7 +1255,9 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 			//  on into account because the face is shared and doesn't
 			//  have to be oriented correctly
 			if( !( groundface1->faceflags & FACE_GROUND ) )
+			{
 				side1 = ( side1 == faceside1 );
+			}
 			edge1num = abs( edge1num );
 			edge1	 = &aasworld.edges[edge1num];
 			// vertexes of the edge
@@ -1186,7 +1276,9 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 				groundface2 = &aasworld.faces[abs( aasworld.faceindex[area2->firstface + j] )];
 				// must be a ground face
 				if( !( groundface2->faceflags & FACE_GROUND ) )
+				{
 					continue;
+				}
 				// check the edges of this ground face
 				for( l = 0; l < groundface2->numedges; l++ )
 				{
@@ -1199,10 +1291,14 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 					// through the edge of area1
 					diff = DotProduct( normal, v3 ) - dist;
 					if( diff < -0.1 || diff > 0.1 )
+					{
 						continue;
+					}
 					diff = DotProduct( normal, v4 ) - dist;
 					if( diff < -0.1 || diff > 0.1 )
+					{
 						continue;
+					}
 					//
 					// project the two ground edges into the step side plane
 					// and calculate the shortest distance between the two
@@ -1412,7 +1508,9 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 			// create walk reachability from area1 to area2
 			lreach = AAS_AllocReachability();
 			if( !lreach )
+			{
 				return qfalse;
+			}
 			lreach->areanum = area2num;
 			lreach->facenum = 0;
 			lreach->edgenum = ground_bestarea2groundedgenum;
@@ -1479,7 +1577,9 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 					// create water jump reachability from area1 to area2
 					lreach = AAS_AllocReachability();
 					if( !lreach )
+					{
 						return qfalse;
+					}
 					lreach->areanum = area2num;
 					lreach->facenum = 0;
 					lreach->edgenum = water_bestarea2groundedgenum;
@@ -1528,7 +1628,9 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 					// create barrier jump reachability from area1 to area2
 					lreach = AAS_AllocReachability();
 					if( !lreach )
+					{
 						return qfalse;
+					}
 					lreach->areanum = area2num;
 					lreach->facenum = 0;
 					lreach->edgenum = ground_bestarea2groundedgenum;
@@ -1576,7 +1678,9 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 				// create walk reachability from area1 to area2
 				lreach = AAS_AllocReachability();
 				if( !lreach )
+				{
 					return qfalse;
+				}
 				lreach->areanum = area2num;
 				lreach->facenum = 0;
 				lreach->edgenum = ground_bestarea2groundedgenum;
@@ -1611,13 +1715,17 @@ int AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( int area1num, int area
 						numareas = AAS_TraceAreas( start, end, areas, NULL, sizeof( areas ) / sizeof( int ) );
 						for( i = 0; i < numareas; i++ )
 							if( AAS_AreaClusterPortal( areas[i] ) )
+							{
 								break;
+							}
 						if( i >= numareas )
 						{
 							// create a walk off ledge reachability from area1 to area2
 							lreach = AAS_AllocReachability();
 							if( !lreach )
+							{
 								return qfalse;
+							}
 							lreach->areanum = area2num;
 							lreach->facenum = 0;
 							lreach->edgenum = ground_bestarea2groundedgenum;
@@ -1965,24 +2073,32 @@ float AAS_ClosestEdgePoints(
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( v1, beststart2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( v1, beststart1 );
+				}
 			} // end else
 			dist1 = VectorDistance( bestend1, p1 );
 			dist2 = VectorDistance( bestend2, p1 );
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( p1, bestend2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( p1, bestend1 );
+				}
 			} // end else
 		} // end if
 		else if( dist < bestdist )
@@ -2005,24 +2121,32 @@ float AAS_ClosestEdgePoints(
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( v2, beststart2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( v2, beststart1 );
+				}
 			} // end else
 			dist1 = VectorDistance( bestend1, p2 );
 			dist2 = VectorDistance( bestend2, p2 );
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( p2, bestend2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( p2, bestend1 );
+				}
 			} // end else
 		} // end if
 		else if( dist < bestdist )
@@ -2045,24 +2169,32 @@ float AAS_ClosestEdgePoints(
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( p3, beststart2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( p3, beststart1 );
+				}
 			} // end else
 			dist1 = VectorDistance( bestend1, v3 );
 			dist2 = VectorDistance( bestend2, v3 );
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( v3, bestend2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( v3, bestend1 );
+				}
 			} // end else
 		} // end if
 		else if( dist < bestdist )
@@ -2085,24 +2217,32 @@ float AAS_ClosestEdgePoints(
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( p4, beststart2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( beststart1, beststart2 ) )
+				{
 					VectorCopy( p4, beststart1 );
+				}
 			} // end else
 			dist1 = VectorDistance( bestend1, v4 );
 			dist2 = VectorDistance( bestend2, v4 );
 			if( dist1 > dist2 )
 			{
 				if( dist1 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( v4, bestend2 );
+				}
 			} // end if
 			else
 			{
 				if( dist2 > VectorDistance( bestend1, bestend2 ) )
+				{
 					VectorCopy( v4, bestend1 );
+				}
 			} // end else
 		} // end if
 		else if( dist < bestdist )
@@ -2190,10 +2330,14 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 	aas_lreachability_t* lreach;
 
 	if( !AAS_AreaGrounded( area1num ) || !AAS_AreaGrounded( area2num ) )
+	{
 		return qfalse;
+	}
 	// cannot jump from or to a crouch area
 	if( AAS_AreaCrouch( area1num ) || AAS_AreaCrouch( area2num ) )
+	{
 		return qfalse;
+	}
 	//
 	area1 = &aasworld.areas[area1num];
 	area2 = &aasworld.areas[area2num];
@@ -2208,13 +2352,19 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 	for( i = 0; i < 2; i++ )
 	{
 		if( area1->mins[i] > area2->maxs[i] + maxjumpdistance )
+		{
 			return qfalse;
+		}
 		if( area1->maxs[i] < area2->mins[i] - maxjumpdistance )
+		{
 			return qfalse;
+		}
 	} // end for
 	// if area2 is way to high to jump up to
 	if( area2->mins[2] > area1->maxs[2] + maxjumpheight )
+	{
 		return qfalse;
+	}
 	//
 	bestdist = 999999;
 	//
@@ -2224,7 +2374,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 		face1	 = &aasworld.faces[abs( face1num )];
 		// if not a ground face
 		if( !( face1->faceflags & FACE_GROUND ) )
+		{
 			continue;
+		}
 		//
 		for( j = 0; j < area2->numfaces; j++ )
 		{
@@ -2232,7 +2384,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 			face2	 = &aasworld.faces[abs( face2num )];
 			// if not a ground face
 			if( !( face2->faceflags & FACE_GROUND ) )
+			{
 				continue;
+			}
 			//
 			for( k = 0; k < face1->numedges; k++ )
 			{
@@ -2278,7 +2432,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 			// get the horizontal speed for the jump, if it isn't possible to calculate this
 			// speed (the jump is not possible) then there's no jump reachability created
 			if( !AAS_HorizontalVelocityForJump( phys_jumpvel, beststart, bestend, &speed ) )
+			{
 				return qfalse;
+			}
 			speed *= 1.05f;
 			traveltype = TRAVEL_JUMP;
 			//
@@ -2286,7 +2442,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 			VectorSubtract( bestend, beststart, dir );
 			dir[2] = 0;
 			if( VectorLength( dir ) < 10 )
+			{
 				return qfalse;
+			}
 		} // end if
 		//
 		VectorSubtract( bestend, beststart, dir );
@@ -2298,7 +2456,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 		trace = AAS_TraceClientBBox( teststart, testend, PRESENCE_NORMAL, -1 );
 		//
 		if( trace.startsolid )
+		{
 			return qfalse;
+		}
 		if( trace.fraction < 1 )
 		{
 			plane = &aasworld.planes[trace.planenum];
@@ -2309,7 +2469,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 				if( !( AAS_PointContents( trace.endpos ) & ( CONTENTS_LAVA | CONTENTS_SLIME ) ) )
 				{
 					if( teststart[2] - trace.endpos[2] <= aassettings.phys_maxbarrier )
+					{
 						return qfalse;
+					}
 				} // end if
 			} // end if
 		} // end if
@@ -2321,7 +2483,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 		trace = AAS_TraceClientBBox( teststart, testend, PRESENCE_NORMAL, -1 );
 		//
 		if( trace.startsolid )
+		{
 			return qfalse;
+		}
 		if( trace.fraction < 1 )
 		{
 			plane = &aasworld.planes[trace.planenum];
@@ -2332,7 +2496,9 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 				if( !( AAS_PointContents( trace.endpos ) & ( CONTENTS_LAVA | CONTENTS_SLIME ) ) )
 				{
 					if( teststart[2] - trace.endpos[2] <= aassettings.phys_maxbarrier )
+					{
 						return qfalse;
+					}
 				} // end if
 			} // end if
 		} // end if
@@ -2340,9 +2506,13 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 		// get command movement
 		VectorClear( cmdmove );
 		if( ( traveltype & TRAVELTYPE_MASK ) == TRAVEL_JUMP )
+		{
 			cmdmove[2] = aassettings.phys_jumpvel;
+		}
 		else
+		{
 			cmdmove[2] = 0;
+		}
 		//
 		VectorSubtract( bestend, beststart, dir );
 		dir[2] = 0;
@@ -2351,17 +2521,25 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 		//
 		stopevent = SE_HITGROUND | SE_ENTERWATER | SE_ENTERSLIME | SE_ENTERLAVA | SE_HITGROUNDDAMAGE;
 		if( !AAS_AreaClusterPortal( area1num ) && !AAS_AreaClusterPortal( area2num ) )
+		{
 			stopevent |= SE_TOUCHCLUSTERPORTAL;
+		}
 		//
 		for( i = 0; i < 3; i++ )
 		{
 			//
 			if( i == 1 )
+			{
 				VectorAdd( testend, sidewards, testend );
+			}
 			else if( i == 2 )
+			{
 				VectorSubtract( bestend, sidewards, testend );
+			}
 			else
+			{
 				VectorCopy( bestend, testend );
+			}
 			VectorSubtract( testend, beststart, dir );
 			dir[2] = 0;
 			VectorNormalize( dir );
@@ -2370,13 +2548,19 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 			AAS_PredictClientMovement( &move, -1, beststart, PRESENCE_NORMAL, qtrue, velocity, cmdmove, 3, 30, 0.1f, stopevent, 0, qfalse );
 			// if prediction time wasn't enough to fully predict the movement
 			if( move.frames >= 30 )
+			{
 				return qfalse;
+			}
 			// don't enter slime or lava and don't fall from too high
 			if( move.stopevent & ( SE_ENTERSLIME | SE_ENTERLAVA ) )
+			{
 				return qfalse;
+			}
 			// never jump or fall through a cluster portal
 			if( move.stopevent & SE_TOUCHCLUSTERPORTAL )
+			{
 				return qfalse;
+			}
 			// the end position should be in area2, also test a little bit back
 			// because the predicted jump could have rushed through the area
 			VectorMA( move.endpos, -64, dir, teststart );
@@ -2385,22 +2569,30 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 			for( j = 0; j < numareas; j++ )
 			{
 				if( areas[j] == area2num )
+				{
 					break;
+				}
 			} // end for
 			if( j < numareas )
+			{
 				break;
+			}
 		}
 		if( i >= 3 )
+		{
 			return qfalse;
-			//
+		}
+		//
 #ifdef REACH_DEBUG
 		// create the reachability
 		Log_Write( "jump reachability between %d and %d\r\n", area1num, area2num );
 #endif //REACH_DEBUG \
-	//create a new reachability link
+//create a new reachability link
 		lreach = AAS_AllocReachability();
 		if( !lreach )
+		{
 			return qfalse;
+		}
 		lreach->areanum = area2num;
 		lreach->facenum = 0;
 		lreach->edgenum = 0;
@@ -2435,9 +2627,13 @@ int AAS_Reachability_Jump( int area1num, int area2num )
 		areareachability[area1num] = lreach;
 		//
 		if( ( traveltype & TRAVELTYPE_MASK ) == TRAVEL_JUMP )
+		{
 			reach_jump++;
+		}
 		else
+		{
 			reach_walkoffledge++;
+		}
 	} // end if
 	return qfalse;
 } // end of the function AAS_Reachability_Jump
@@ -2465,7 +2661,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 	aas_trace_t			 trace;
 
 	if( !AAS_AreaLadder( area1num ) || !AAS_AreaLadder( area2num ) )
+	{
 		return qfalse;
+	}
 	//
 	phys_jumpvel = aassettings.phys_jumpvel;
 	// maximum height a player can jump with the given initial z velocity
@@ -2489,7 +2687,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 		face1	 = &aasworld.faces[abs( face1num )];
 		// if not a ladder face
 		if( !( face1->faceflags & FACE_LADDER ) )
+		{
 			continue;
+		}
 		//
 		for( j = 0; j < area2->numfaces; j++ )
 		{
@@ -2497,7 +2697,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 			face2	 = &aasworld.faces[abs( face2num )];
 			// if not a ladder face
 			if( !( face2->faceflags & FACE_LADDER ) )
+			{
 				continue;
+			}
 			// check if the faces share an edge
 			for( k = 0; k < face1->numedges; k++ )
 			{
@@ -2524,7 +2726,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 					} // end if
 				} // end for
 				if( l != face2->numedges )
+				{
 					break;
+				}
 			} // end for
 		} // end for
 	} // end for
@@ -2557,7 +2761,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 		ladderface2vertical = abs( DotProduct( plane2->normal, up ) ) < 0.1;
 		// there's only reachability between vertical ladder faces
 		if( !ladderface1vertical && !ladderface2vertical )
+		{
 			return qfalse;
+		}
 		// if both vertical ladder faces
 		if( ladderface1vertical &&
 			ladderface2vertical
@@ -2569,7 +2775,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 			// create a new reachability link
 			lreach = AAS_AllocReachability();
 			if( !lreach )
+			{
 				return qfalse;
+			}
 			lreach->areanum = area2num;
 			lreach->facenum = ladderface1num;
 			lreach->edgenum = abs( sharededgenum );
@@ -2585,7 +2793,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 			// create a new reachability link
 			lreach = AAS_AllocReachability();
 			if( !lreach )
+			{
 				return qfalse;
+			}
 			lreach->areanum = area1num;
 			lreach->facenum = ladderface2num;
 			lreach->edgenum = abs( sharededgenum );
@@ -2609,7 +2819,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 			// create a new reachability link
 			lreach = AAS_AllocReachability();
 			if( !lreach )
+			{
 				return qfalse;
+			}
 			lreach->areanum = area2num;
 			lreach->facenum = ladderface1num;
 			lreach->edgenum = abs( sharededgenum );
@@ -2626,7 +2838,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 			// create a new reachability link
 			lreach = AAS_AllocReachability();
 			if( !lreach )
+			{
 				return qfalse;
+			}
 			lreach->areanum = area1num;
 			lreach->facenum = ladderface2num;
 			lreach->edgenum = abs( sharededgenum );
@@ -2680,7 +2894,7 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 				Log_Write( "trace from area %d started in solid\r\n", area1num );
 			} // end if
 #endif //REACH_DEBUG \
-	//
+//
 			trace.endpos[2] += 1;
 			area2num = AAS_PointAreaNum( trace.endpos );
 			//
@@ -2694,7 +2908,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 				{
 					plane2 = &aasworld.planes[face2->planenum];
 					if( abs( DotProduct( plane2->normal, up ) ) < 0.1 )
+					{
 						break;
+					}
 				} // end if
 			} // end for
 			// if from another area without vertical ladder faces
@@ -2708,7 +2924,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 					// create a new reachability link
 					lreach = AAS_AllocReachability();
 					if( !lreach )
+					{
 						return qfalse;
+					}
 					lreach->areanum = area2num;
 					lreach->facenum = ladderface1num;
 					lreach->edgenum = lowestedgenum;
@@ -2723,7 +2941,9 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 					// create a new reachability link
 					lreach = AAS_AllocReachability();
 					if( !lreach )
+					{
 						return qfalse;
+					}
 					lreach->areanum = area1num;
 					lreach->facenum = ladderface1num;
 					lreach->edgenum = lowestedgenum;
@@ -2746,54 +2966,56 @@ int AAS_Reachability_Ladder( int area1num, int area2num )
 				} // end if
 #ifdef REACH_DEBUG
 				else
+				{
 					Log_Write( "jump too high between area %d and %d\r\n", area2num, area1num );
+				}
 #endif // REACH_DEBUG
 			} // end if
 			/*//if slime or lava below the ladder
-		  //try jump reachability from far towards the ladder
-		  if (aasworld.areasettings[area2num].contents & (AREACONTENTS_SLIME
-												  | AREACONTENTS_LAVA))
-		  {
-			  for (i = 20; i <= 120; i += 20)
-			  {
-				  //trace down in the middle of this edge
-				  VectorMA(lowestpoint, i, plane1->normal, start);
-				  VectorCopy(start, end);
-				  start[2] += 5;
-				  end[2] -= 100;
-				  //trace without entity collision
-				  trace = AAS_TraceClientBBox(start, end, PRESENCE_NORMAL, -1);
-				  //
-				  if (trace.startsolid) break;
-				  trace.endpos[2] += 1;
-				  area2num = AAS_PointAreaNum(trace.endpos);
-				  if (area2num == area1num) continue;
-				  //
-				  if (start[2] - trace.endpos[2] > maxjumpheight) continue;
-				  if (aasworld.areasettings[area2num].contents & (AREACONTENTS_SLIME
-											  | AREACONTENTS_LAVA)) continue;
-				  //
-				  //create a new reachability link
-				  lreach = AAS_AllocReachability();
-				  if (!lreach) return qfalse;
-				  lreach->areanum = area1num;
-				  lreach->facenum = ladderface1num;
-				  lreach->edgenum = lowestedgenum;
-				  VectorCopy(trace.endpos, lreach->start);
-				  VectorCopy(lowestpoint, lreach->end);
-				  lreach->end[2] += 5;
-				  lreach->traveltype = TRAVEL_JUMP;
-				  lreach->traveltime = 10;
-				  lreach->next = areareachability[area2num];
-				  areareachability[area2num] = lreach;
-				  //
-				  reach_jump++;
-				  //
-				  Log_Write("jump far to ladder reach between %d and %d\r\n", area2num, area1num);
-				  //
-				  break;
-			  } //end for
-		  } //end if*/
+			//try jump reachability from far towards the ladder
+			if (aasworld.areasettings[area2num].contents & (AREACONTENTS_SLIME
+											  | AREACONTENTS_LAVA))
+			{
+			 for (i = 20; i <= 120; i += 20)
+			 {
+			  //trace down in the middle of this edge
+			  VectorMA(lowestpoint, i, plane1->normal, start);
+			  VectorCopy(start, end);
+			  start[2] += 5;
+			  end[2] -= 100;
+			  //trace without entity collision
+			  trace = AAS_TraceClientBBox(start, end, PRESENCE_NORMAL, -1);
+			  //
+			  if (trace.startsolid) break;
+			  trace.endpos[2] += 1;
+			  area2num = AAS_PointAreaNum(trace.endpos);
+			  if (area2num == area1num) continue;
+			  //
+			  if (start[2] - trace.endpos[2] > maxjumpheight) continue;
+			  if (aasworld.areasettings[area2num].contents & (AREACONTENTS_SLIME
+										  | AREACONTENTS_LAVA)) continue;
+			  //
+			  //create a new reachability link
+			  lreach = AAS_AllocReachability();
+			  if (!lreach) return qfalse;
+			  lreach->areanum = area1num;
+			  lreach->facenum = ladderface1num;
+			  lreach->edgenum = lowestedgenum;
+			  VectorCopy(trace.endpos, lreach->start);
+			  VectorCopy(lowestpoint, lreach->end);
+			  lreach->end[2] += 5;
+			  lreach->traveltype = TRAVEL_JUMP;
+			  lreach->traveltime = 10;
+			  lreach->next = areareachability[area2num];
+			  areareachability[area2num] = lreach;
+			  //
+			  reach_jump++;
+			  //
+			  Log_Write("jump far to ladder reach between %d and %d\r\n", area2num, area1num);
+			  //
+			  break;
+			 } //end for
+			} //end if*/
 		} // end if
 	} // end if
 	return qfalse;
@@ -2809,11 +3031,17 @@ int AAS_TravelFlagsForTeam( int ent )
 	int notteam;
 
 	if( !AAS_IntForBSPEpairKey( ent, "bot_notteam", &notteam ) )
+	{
 		return 0;
+	}
 	if( notteam == 1 )
+	{
 		return TRAVELFLAG_NOTTEAM1;
+	}
 	if( notteam == 2 )
+	{
 		return TRAVELFLAG_NOTTEAM2;
+	}
 	return 0;
 } // end of the function AAS_TravelFlagsForTeam
 //===========================================================================
@@ -2851,7 +3079,9 @@ void AAS_Reachability_Teleport()
 	for( ent = AAS_NextBSPEntity( 0 ); ent; ent = AAS_NextBSPEntity( ent ) )
 	{
 		if( !AAS_ValueForBSPEpairKey( ent, "classname", classname, MAX_EPAIRKEY ) )
+		{
 			continue;
+		}
 		if( !strcmp( classname, "trigger_multiple" ) )
 		{
 			AAS_ValueForBSPEpairKey( ent, "model", model, MAX_EPAIRKEY );
@@ -2869,11 +3099,15 @@ void AAS_Reachability_Teleport()
 			for( dest = AAS_NextBSPEntity( 0 ); dest; dest = AAS_NextBSPEntity( dest ) )
 			{
 				if( !AAS_ValueForBSPEpairKey( dest, "classname", classname, MAX_EPAIRKEY ) )
+				{
 					continue;
+				}
 				if( !strcmp( classname, "target_teleporter" ) )
 				{
 					if( !AAS_ValueForBSPEpairKey( dest, "targetname", targetname, MAX_EPAIRKEY ) )
+					{
 						continue;
+					}
 					if( !strcmp( targetname, target ) )
 					{
 						break;
@@ -3003,19 +3237,25 @@ void AAS_Reachability_Teleport()
 		// link an invalid (-1) entity
 		areas = AAS_LinkEntityClientBBox( mins, maxs, -1, PRESENCE_CROUCH );
 		if( !areas )
+		{
 			botimport.Print( PRT_MESSAGE, "trigger_multiple not in any area\n" );
+		}
 		//
 		for( link = areas; link; link = link->next_area )
 		{
 			// if (!AAS_AreaGrounded(link->areanum)) continue;
 			if( !AAS_AreaTeleporter( link->areanum ) )
+			{
 				continue;
+			}
 			//
 			area1num = link->areanum;
 			// create a new reachability link
 			lreach = AAS_AllocReachability();
 			if( !lreach )
+			{
 				break;
+			}
 			lreach->areanum = area2num;
 			lreach->facenum = 0;
 			lreach->edgenum = 0;
@@ -3060,7 +3300,9 @@ void AAS_Reachability_Elevator()
 	for( ent = AAS_NextBSPEntity( 0 ); ent; ent = AAS_NextBSPEntity( ent ) )
 	{
 		if( !AAS_ValueForBSPEpairKey( ent, "classname", classname, MAX_EPAIRKEY ) )
+		{
 			continue;
+		}
 		if( !strcmp( classname, "func_plat" ) )
 		{
 #ifdef REACH_DEBUG
@@ -3090,15 +3332,21 @@ void AAS_Reachability_Elevator()
 			// get the lip of the plat
 			AAS_FloatForBSPEpairKey( ent, "lip", &lip );
 			if( !lip )
+			{
 				lip = 8;
+			}
 			// get the movement height of the plat
 			AAS_FloatForBSPEpairKey( ent, "height", &height );
 			if( !height )
+			{
 				height = ( maxs[2] - mins[2] ) - lip;
+			}
 			// get the speed of the plat
 			AAS_FloatForBSPEpairKey( ent, "speed", &speed );
 			if( !speed )
+			{
 				speed = 200;
+			}
 			// get bottom position below pos1
 			pos2[2] -= height;
 			//
@@ -3160,7 +3408,9 @@ void AAS_Reachability_Elevator()
 						if( area1num )
 						{
 							if( AAS_AreaGrounded( area1num ) || AAS_AreaSwim( area1num ) )
+							{
 								break;
+							}
 						} // end if
 						bottomorg[2] += 4;
 						area1num = AAS_PointAreaNum( bottomorg );
@@ -3177,7 +3427,9 @@ void AAS_Reachability_Elevator()
 					bottomorg[2] += 24;
 					area1num = AAS_PointAreaNum( bottomorg );
 					if( !area1num )
+					{
 						continue;
+					}
 					VectorCopy( platbottom, bottomorg );
 					bottomorg[2] += 24;
 				} // end else
@@ -3227,7 +3479,9 @@ void AAS_Reachability_Elevator()
 									end[2] += 1;
 									trace = AAS_TraceClientBBox( start, end, PRESENCE_CROUCH, -1 );
 									if( trace.fraction >= 1 )
+									{
 										break;
+									}
 								} // end if
 							} // end if
 							toporg[2] += 4;
@@ -3235,16 +3489,24 @@ void AAS_Reachability_Elevator()
 						} // end if
 						// if in solid
 						if( l >= 16 )
+						{
 							continue;
+						}
 						// never create a reachability in the same area
 						if( area2num == area1num )
+						{
 							continue;
+						}
 						// if the area isn't grounded
 						if( !AAS_AreaGrounded( area2num ) )
+						{
 							continue;
+						}
 						// if there already exists reachability between the areas
 						if( AAS_ReachabilityExists( area1num, area2num ) )
+						{
 							continue;
+						}
 						// if the reachability start is within the elevator bounding box
 						VectorSubtract( bottomorg, platbottom, dir );
 						VectorNormalize( dir );
@@ -3254,13 +3516,19 @@ void AAS_Reachability_Elevator()
 						//
 						for( p = 0; p < 3; p++ )
 							if( dir[p] < origin[p] + mins[p] || dir[p] > origin[p] + maxs[p] )
+							{
 								break;
+							}
 						if( p >= 3 )
+						{
 							continue;
+						}
 						// create a new reachability link
 						lreach = AAS_AllocReachability();
 						if( !lreach )
+						{
 							continue;
+						}
 						lreach->areanum = area2num;
 						// the facenum is the model number
 						lreach->facenum = modelnum;
@@ -3280,7 +3548,7 @@ void AAS_Reachability_Elevator()
 #ifdef REACH_DEBUG
 						Log_Write( "elevator reach from %d to %d\r\n", area1num, area2num );
 #endif //REACH_DEBUG \
-	//
+//
 						reach_elevator++;
 					} // end for
 				} // end for
@@ -3324,7 +3592,9 @@ aas_lreachability_t* AAS_FindFaceReachabilities( vec3_t* facepoints, int numpoin
 			face	= &aasworld.faces[abs( facenum )];
 			// if not a ground face
 			if( !( face->faceflags & FACE_GROUND ) )
+			{
 				continue;
+			}
 			// get the ground planes
 			faceplane = &aasworld.planes[face->planenum];
 			//
@@ -3352,7 +3622,9 @@ aas_lreachability_t* AAS_FindFaceReachabilities( vec3_t* facepoints, int numpoin
 		} // end for
 		//
 		if( bestdist > 192 )
+		{
 			continue;
+		}
 		//
 		VectorMiddle( beststart, beststart2, beststart );
 		VectorMiddle( bestend, bestend2, bestend );
@@ -3369,28 +3641,40 @@ aas_lreachability_t* AAS_FindFaceReachabilities( vec3_t* facepoints, int numpoin
 		hordist	  = VectorLength( hordir );
 		//
 		if( hordist > 2 * AAS_MaxJumpDistance( aassettings.phys_jumpvel ) )
+		{
 			continue;
+		}
 		// the end point should not be significantly higher than the start point
 		if( bestend[2] - 32 > beststart[2] )
+		{
 			continue;
+		}
 		// don't fall down too far
 		if( bestend[2] < beststart[2] - 128 )
+		{
 			continue;
+		}
 		// the distance should not be too far
 		if( hordist > 32 )
 		{
 			// check for walk off ledge
 			if( !AAS_HorizontalVelocityForJump( 0, beststart, bestend, &speed ) )
+			{
 				continue;
+			}
 		} // end if
 		//
 		beststart[2] += 1;
 		bestend[2] += 1;
 		//
 		if( towardsface )
+		{
 			VectorCopy( bestend, testpoint );
+		}
 		else
+		{
 			VectorCopy( beststart, testpoint );
+		}
 		testpoint[2] = 0;
 		testpoint[2] = ( bestfaceplane->dist - DotProduct( bestfaceplane->normal, testpoint ) ) / bestfaceplane->normal[2];
 		//
@@ -3398,11 +3682,15 @@ aas_lreachability_t* AAS_FindFaceReachabilities( vec3_t* facepoints, int numpoin
 		{
 			// if the faces are not overlapping then only go down
 			if( bestend[2] - 16 > beststart[2] )
+			{
 				continue;
+			}
 		} // end if
 		lreach = AAS_AllocReachability();
 		if( !lreach )
+		{
 			return lreachabilities;
+		}
 		lreach->areanum = i;
 		lreach->facenum = 0;
 		lreach->edgenum = 0;
@@ -3414,9 +3702,13 @@ aas_lreachability_t* AAS_FindFaceReachabilities( vec3_t* facepoints, int numpoin
 		lreachabilities	   = lreach;
 #ifndef BSPC
 		if( towardsface )
+		{
 			AAS_PermanentLine( lreach->start, lreach->end, 1 );
+		}
 		else
+		{
 			AAS_PermanentLine( lreach->start, lreach->end, 2 );
+		}
 #endif
 	} // end for
 	return lreachabilities;
@@ -3444,12 +3736,18 @@ void AAS_Reachability_FuncBobbing()
 	for( ent = AAS_NextBSPEntity( 0 ); ent; ent = AAS_NextBSPEntity( ent ) )
 	{
 		if( !AAS_ValueForBSPEpairKey( ent, "classname", classname, MAX_EPAIRKEY ) )
+		{
 			continue;
+		}
 		if( strcmp( classname, "func_bobbing" ) )
+		{
 			continue;
+		}
 		AAS_FloatForBSPEpairKey( ent, "height", &height );
 		if( !height )
+		{
 			height = 32;
+		}
 		//
 		if( !AAS_ValueForBSPEpairKey( ent, "model", model, MAX_EPAIRKEY ) )
 		{
@@ -3465,7 +3763,9 @@ void AAS_Reachability_FuncBobbing()
 		} // end if
 		// if the entity has an origin set then use it
 		if( !AAS_VectorForBSPEpairKey( ent, "origin", origin ) )
+		{
 			VectorSet( origin, 0, 0, 0 );
+		}
 		//
 		AAS_BSPModelMinsMaxsOrigin( modelnum, angles, mins, maxs, NULL );
 		//
@@ -3482,11 +3782,17 @@ void AAS_Reachability_FuncBobbing()
 		AAS_IntForBSPEpairKey( ent, "spawnflags", &spawnflags );
 		// set the axis of bobbing
 		if( spawnflags & 1 )
+		{
 			axis = 0;
+		}
 		else if( spawnflags & 2 )
+		{
 			axis = 1;
+		}
 		else
+		{
 			axis = 2;
+		}
 		//
 		move_start[axis] -= height;
 		move_end[axis] += height;
@@ -3538,10 +3844,10 @@ void AAS_Reachability_FuncBobbing()
 		//
 #ifndef BSPC
 	#if 0
-		for (i = 0; i < 4; i++)
+		for ( i = 0; i < 4; i++ )
 		{
-			AAS_PermanentLine(start_edgeverts[i], start_edgeverts[(i+1)%4], 1);
-			AAS_PermanentLine(end_edgeverts[i], end_edgeverts[(i+1)%4], 1);
+			AAS_PermanentLine( start_edgeverts[i], start_edgeverts[( i + 1 ) % 4], 1 );
+			AAS_PermanentLine( end_edgeverts[i], end_edgeverts[( i + 1 ) % 4], 1 );
 		} //end for
 	#endif
 #endif
@@ -3551,9 +3857,13 @@ void AAS_Reachability_FuncBobbing()
 		move_end_top[2] += maxs[2] - mid[2] + 24; //+ bbox maxs z
 		//
 		if( !AAS_PointAreaNum( move_start_top ) )
+		{
 			continue;
+		}
 		if( !AAS_PointAreaNum( move_end_top ) )
+		{
 			continue;
+		}
 		//
 		for( i = 0; i < 2; i++ )
 		{
@@ -3589,9 +3899,13 @@ void AAS_Reachability_FuncBobbing()
 					//
 					//
 					if( i == 0 )
+					{
 						VectorCopy( move_start_top, org );
+					}
 					else
+					{
 						VectorCopy( move_end_top, org );
+					}
 					VectorSubtract( startreach->start, org, dir );
 					dir[2] = 0;
 					VectorNormalize( dir );
@@ -3603,29 +3917,43 @@ void AAS_Reachability_FuncBobbing()
 					//
 					numareas = AAS_TraceAreas( start, end, areas, points, 10 );
 					if( numareas <= 0 )
+					{
 						continue;
+					}
 					if( numareas > 1 )
+					{
 						VectorCopy( points[1], startreach->start );
+					}
 					else
+					{
 						VectorCopy( end, startreach->start );
+					}
 					//
 					if( !AAS_PointAreaNum( startreach->start ) )
+					{
 						continue;
+					}
 					if( !AAS_PointAreaNum( endreach->end ) )
+					{
 						continue;
+					}
 					//
 					lreach			= AAS_AllocReachability();
 					lreach->areanum = endreach->areanum;
 					if( i == 0 )
+					{
 						lreach->edgenum = ( ( int )move_start[axis] << 16 ) | ( ( int )move_end[axis] & 0x0000ffff );
+					}
 					else
+					{
 						lreach->edgenum = ( ( int )move_end[axis] << 16 ) | ( ( int )move_start[axis] & 0x0000ffff );
+					}
 					lreach->facenum = ( spawnflags << 16 ) | modelnum;
 					VectorCopy( startreach->start, lreach->start );
 					VectorCopy( endreach->end, lreach->end );
 #ifndef BSPC
-//					AAS_DrawArrow(lreach->start, lreach->end, LINECOLOR_BLUE, LINECOLOR_YELLOW);
-//					AAS_PermanentLine(lreach->start, lreach->end, 1);
+					//					AAS_DrawArrow(lreach->start, lreach->end, LINECOLOR_BLUE, LINECOLOR_YELLOW);
+					//					AAS_PermanentLine(lreach->start, lreach->end, 1);
 #endif
 					lreach->traveltype = TRAVEL_FUNCBOB;
 					lreach->traveltype |= AAS_TravelFlagsForTeam( ent );
@@ -3648,7 +3976,9 @@ void AAS_Reachability_FuncBobbing()
 			} // end for
 			// only go up with func_bobbing entities that go up and down
 			if( !( spawnflags & 1 ) && !( spawnflags & 2 ) )
+			{
 				break;
+			}
 		} // end for
 	} // end for
 } // end of the function AAS_Reachability_FuncBobbing
@@ -3684,19 +4014,25 @@ void AAS_Reachability_JumpPad()
 	for( ent = AAS_NextBSPEntity( 0 ); ent; ent = AAS_NextBSPEntity( ent ) )
 	{
 		if( !AAS_ValueForBSPEpairKey( ent, "classname", classname, MAX_EPAIRKEY ) )
+		{
 			continue;
+		}
 		if( strcmp( classname, "trigger_push" ) )
+		{
 			continue;
+		}
 		//
 		if( !AAS_GetJumpPadInfo( ent, areastart, absmins, absmaxs, velocity ) )
+		{
 			continue;
+		}
 		/*
 		//
 		AAS_FloatForBSPEpairKey(ent, "speed", &speed);
 		if (!speed) speed = 1000;
-//		AAS_VectorForBSPEpairKey(ent, "angles", angles);
-//		AAS_SetMovedir(angles, velocity);
-//		VectorScale(velocity, speed, velocity);
+		//		AAS_VectorForBSPEpairKey(ent, "angles", angles);
+		//		AAS_SetMovedir(angles, velocity);
+		//		VectorScale(velocity, speed, velocity);
 		VectorClear(angles);
 		//get the mins, maxs and origin of the model
 		AAS_ValueForBSPEpairKey(ent, "model", model, MAX_EPAIRKEY);
@@ -3706,10 +4042,10 @@ void AAS_Reachability_JumpPad()
 		VectorAdd(origin, absmins, absmins);
 		VectorAdd(origin, absmaxs, absmaxs);
 		//
-#ifdef REACH_DEBUG
+		#ifdef REACH_DEBUG
 		botimport.Print(PRT_MESSAGE, "absmins = %f %f %f\n", absmins[0], absmins[1], absmins[2]);
 		botimport.Print(PRT_MESSAGE, "absmaxs = %f %f %f\n", absmaxs[0], absmaxs[1], absmaxs[2]);
-#endif REACH_DEBUG
+		#endif REACH_DEBUG
 		VectorAdd(absmins, absmaxs, origin);
 		VectorScale (origin, 0.5, origin);
 
@@ -3774,7 +4110,9 @@ void AAS_Reachability_JumpPad()
 		for( link = areas; link; link = link->next_area )
 		{
 			if( AAS_AreaJumpPad( link->areanum ) )
+			{
 				break;
+			}
 		} // end for
 		if( !link )
 		{
@@ -3811,12 +4149,18 @@ void AAS_Reachability_JumpPad()
 				for( link = areas; link; link = link->next_area )
 				{
 					if( !AAS_AreaJumpPad( link->areanum ) )
+					{
 						continue;
+					}
 					if( link->areanum == area2num )
+					{
 						break;
+					}
 				} // end if
 				if( !link )
+				{
 					break;
+				}
 				VectorCopy( move.endpos, areastart );
 				VectorCopy( move.velocity, velocity );
 			} // end for
@@ -3825,9 +4169,13 @@ void AAS_Reachability_JumpPad()
 				for( link = areas; link; link = link->next_area )
 				{
 					if( !AAS_AreaJumpPad( link->areanum ) )
+					{
 						continue;
+					}
 					if( AAS_ReachabilityExists( link->areanum, area2num ) )
+					{
 						continue;
+					}
 					// create a rocket or bfg jump reachability from area1 to area2
 					lreach = AAS_AllocReachability();
 					if( !lreach )
@@ -3854,7 +4202,9 @@ void AAS_Reachability_JumpPad()
 		} // end if
 		//
 		if( fabs( velocity[0] ) > 100 || fabs( velocity[1] ) > 100 )
+		{
 			continue;
+		}
 		// check for areas we can reach with air control
 		for( area2num = 1; area2num < aasworld.numareas; area2num++ )
 		{
@@ -3876,15 +4226,21 @@ void AAS_Reachability_JumpPad()
 			for( link = areas; link; link = link->next_area )
 			{
 				if( AAS_ReachabilityExists( link->areanum, area2num ) )
+				{
 					break;
+				}
 				if( AAS_AreaJumpPad( link->areanum ) )
 				{
 					if( link->areanum == area2num )
+					{
 						break;
+					}
 				} // end if
 			} // end if
 			if( link )
+			{
 				continue;
+			}
 			//
 			area2 = &aasworld.areas[area2num];
 			for( i = 0; i < area2->numfaces; i++ )
@@ -3893,12 +4249,16 @@ void AAS_Reachability_JumpPad()
 				face2	 = &aasworld.faces[abs( face2num )];
 				// if it is not a ground face
 				if( !( face2->faceflags & FACE_GROUND ) )
+				{
 					continue;
+				}
 				// get the center of the face
 				AAS_FaceCenter( face2num, facecenter );
 				// only go higher up
 				if( facecenter[2] < areastart[2] )
+				{
 					continue;
+				}
 				// get the jumppad jump z velocity
 				zvel = velocity[2];
 				// get the horizontal speed for the jump, if it isn't possible to calculate this
@@ -3937,16 +4297,22 @@ void AAS_Reachability_JumpPad()
 							for( link = areas; link; link = link->next_area )
 							{
 								if( link->areanum == move.endarea )
+								{
 									break;
+								}
 							}
 							if( !link )
 							{
 								for( link = areas; link; link = link->next_area )
 								{
 									if( !AAS_AreaJumpPad( link->areanum ) )
+									{
 										continue;
+									}
 									if( AAS_ReachabilityExists( link->areanum, area2num ) )
+									{
 										continue;
+									}
 									// create a jumppad reachability from area1 to area2
 									lreach = AAS_AllocReachability();
 									if( !lreach )
@@ -4000,37 +4366,51 @@ int AAS_Reachability_Grapple( int area1num, int area2num )
 
 	// only grapple when on the ground or swimming
 	if( !AAS_AreaGrounded( area1num ) && !AAS_AreaSwim( area1num ) )
+	{
 		return qfalse;
+	}
 	// don't grapple from a crouch area
 	if( !( AAS_AreaPresenceType( area1num ) & PRESENCE_NORMAL ) )
+	{
 		return qfalse;
+	}
 	// NOTE: disabled area swim it doesn't work right
 	if( AAS_AreaSwim( area1num ) )
+	{
 		return qfalse;
+	}
 	//
 	area1 = &aasworld.areas[area1num];
 	area2 = &aasworld.areas[area2num];
 	// don't grapple towards way lower areas
 	if( area2->maxs[2] < area1->mins[2] )
+	{
 		return qfalse;
+	}
 	//
 	VectorCopy( aasworld.areas[area1num].center, start );
 	// if not a swim area
 	if( !AAS_AreaSwim( area1num ) )
 	{
 		if( !AAS_PointAreaNum( start ) )
+		{
 			Log_Write( "area %d center %f %f %f in solid?\r\n", area1num, start[0], start[1], start[2] );
+		}
 		VectorCopy( start, end );
 		end[2] -= 1000;
 		trace = AAS_TraceClientBBox( start, end, PRESENCE_CROUCH, -1 );
 		if( trace.startsolid )
+		{
 			return qfalse;
+		}
 		VectorCopy( trace.endpos, areastart );
 	} // end if
 	else
 	{
 		if( !( AAS_PointContents( start ) & ( CONTENTS_LAVA | CONTENTS_SLIME | CONTENTS_WATER ) ) )
+		{
 			return qfalse;
+		}
 	} // end else
 	//
 	// start is now the start point
@@ -4041,21 +4421,29 @@ int AAS_Reachability_Grapple( int area1num, int area2num )
 		face2	 = &aasworld.faces[abs( face2num )];
 		// if it is not a solid face
 		if( !( face2->faceflags & FACE_SOLID ) )
+		{
 			continue;
+		}
 		// direction towards the first vertex of the face
 		v = aasworld.vertexes[aasworld.edges[abs( aasworld.edgeindex[face2->firstedge] )].v[0]];
 		VectorSubtract( v, areastart, dir );
 		// if the face plane is facing away
 		if( DotProduct( aasworld.planes[face2->planenum].normal, dir ) > 0 )
+		{
 			continue;
+		}
 		// get the center of the face
 		AAS_FaceCenter( face2num, facecenter );
 		// only go higher up with the grapple
 		if( facecenter[2] < areastart[2] + 64 )
+		{
 			continue;
+		}
 		// only use vertical faces or downward facing faces
 		if( DotProduct( aasworld.planes[face2->planenum].normal, down ) < 0 )
+		{
 			continue;
+		}
 		// direction towards the face center
 		VectorSubtract( facecenter, areastart, dir );
 		//
@@ -4063,14 +4451,20 @@ int AAS_Reachability_Grapple( int area1num, int area2num )
 		dir[2]	= 0;
 		hordist = VectorLength( dir );
 		if( !hordist )
+		{
 			continue;
+		}
 		// if too far
 		if( hordist > 2000 )
+		{
 			continue;
+		}
 		// check the minimal angle of the movement
 		mingrappleangle = 15; // 15 degrees
 		if( z / hordist < tan( 2 * M_PI * mingrappleangle / 360 ) )
+		{
 			continue;
+		}
 		//
 		VectorCopy( facecenter, start );
 		VectorMA( facecenter, -500, aasworld.planes[face2->planenum].normal, end );
@@ -4078,7 +4472,9 @@ int AAS_Reachability_Grapple( int area1num, int area2num )
 		bsptrace = AAS_Trace( start, NULL, NULL, end, 0, CONTENTS_SOLID );
 		// the grapple won't stick to the sky and the grapple point should be near the AAS wall
 		if( ( bsptrace.surface.flags & SURF_SKY ) || ( bsptrace.fraction * 500 > 32 ) )
+		{
 			continue;
+		}
 		// trace a full bounding box from the area center on the ground to
 		// the center of the face
 		VectorSubtract( facecenter, areastart, dir );
@@ -4088,14 +4484,18 @@ int AAS_Reachability_Grapple( int area1num, int area2num )
 		trace = AAS_TraceClientBBox( start, end, PRESENCE_NORMAL, -1 );
 		VectorSubtract( trace.endpos, facecenter, dir );
 		if( VectorLength( dir ) > 24 )
+		{
 			continue;
+		}
 		//
 		VectorCopy( trace.endpos, start );
 		VectorCopy( trace.endpos, end );
 		end[2] -= AAS_FallDamageDistance();
 		trace = AAS_TraceClientBBox( start, end, PRESENCE_NORMAL, -1 );
 		if( trace.fraction >= 1 )
+		{
 			continue;
+		}
 		// area to end in
 		areanum = AAS_PointAreaNum( trace.endpos );
 		// if not in lava or slime
@@ -4105,28 +4505,42 @@ int AAS_Reachability_Grapple( int area1num, int area2num )
 		} // end if
 		// do not go the the source area
 		if( areanum == area1num )
+		{
 			continue;
+		}
 		// don't create reachabilities if they already exist
 		if( AAS_ReachabilityExists( area1num, areanum ) )
+		{
 			continue;
+		}
 		// only end in areas we can stand
 		if( !AAS_AreaGrounded( areanum ) )
+		{
 			continue;
+		}
 		// never go through cluster portals!!
 		numareas = AAS_TraceAreas( areastart, bsptrace.endpos, areas, NULL, 20 );
 		if( numareas >= 20 )
+		{
 			continue;
+		}
 		for( j = 0; j < numareas; j++ )
 		{
 			if( aasworld.areasettings[areas[j]].contents & AREACONTENTS_CLUSTERPORTAL )
+			{
 				break;
+			}
 		} // end for
 		if( j < numareas )
+		{
 			continue;
+		}
 		// create a new reachability link
 		lreach = AAS_AllocReachability();
 		if( !lreach )
+		{
 			return qfalse;
+		}
 		lreach->areanum = areanum;
 		lreach->facenum = face2num;
 		lreach->edgenum = 0;
@@ -4162,7 +4576,9 @@ void AAS_SetWeaponJumpAreaFlags()
 	for( ent = AAS_NextBSPEntity( 0 ); ent; ent = AAS_NextBSPEntity( ent ) )
 	{
 		if( !AAS_ValueForBSPEpairKey( ent, "classname", classname, MAX_EPAIRKEY ) )
+		{
 			continue;
+		}
 		if( !strcmp( classname, "item_armor_body" ) || !strcmp( classname, "item_armor_combat" ) || !strcmp( classname, "item_health_mega" ) || !strcmp( classname, "weapon_grenadelauncher" ) ||
 			!strcmp( classname, "weapon_rocketlauncher" ) || !strcmp( classname, "weapon_lightning" ) || !strcmp( classname, "weapon_plasmagun" ) || !strcmp( classname, "weapon_railgun" ) ||
 			!strcmp( classname, "weapon_bfg" ) || !strcmp( classname, "item_quad" ) || !strcmp( classname, "item_regen" ) || !strcmp( classname, "item_invulnerability" ) )
@@ -4230,28 +4646,40 @@ int AAS_Reachability_WeaponJump( int area1num, int area2num )
 	//		visualize = qtrue;
 	//	}
 	if( !AAS_AreaGrounded( area1num ) || AAS_AreaSwim( area1num ) )
+	{
 		return qfalse;
+	}
 	if( !AAS_AreaGrounded( area2num ) )
+	{
 		return qfalse;
+	}
 	// NOTE: only weapon jump towards areas with an interesting item in it??
 	if( !( aasworld.areasettings[area2num].areaflags & AREA_WEAPONJUMP ) )
+	{
 		return qfalse;
+	}
 	//
 	area1 = &aasworld.areas[area1num];
 	area2 = &aasworld.areas[area2num];
 	// don't weapon jump towards way lower areas
 	if( area2->maxs[2] < area1->mins[2] )
+	{
 		return qfalse;
+	}
 	//
 	VectorCopy( aasworld.areas[area1num].center, start );
 	// if not a swim area
 	if( !AAS_PointAreaNum( start ) )
+	{
 		Log_Write( "area %d center %f %f %f in solid?\r\n", area1num, start[0], start[1], start[2] );
+	}
 	VectorCopy( start, end );
 	end[2] -= 1000;
 	trace = AAS_TraceClientBBox( start, end, PRESENCE_CROUCH, -1 );
 	if( trace.startsolid )
+	{
 		return qfalse;
+	}
 	VectorCopy( trace.endpos, areastart );
 	//
 	// areastart is now the start point
@@ -4262,20 +4690,28 @@ int AAS_Reachability_WeaponJump( int area1num, int area2num )
 		face2	 = &aasworld.faces[abs( face2num )];
 		// if it is not a solid face
 		if( !( face2->faceflags & FACE_GROUND ) )
+		{
 			continue;
+		}
 		// get the center of the face
 		AAS_FaceCenter( face2num, facecenter );
 		// only go higher up with weapon jumps
 		if( facecenter[2] < areastart[2] + 64 )
+		{
 			continue;
+		}
 		// NOTE: set to 2 to allow bfg jump reachabilities
 		for( n = 0; n < 1 /*2*/; n++ )
 		{
 			// get the rocket jump z velocity
 			if( n )
+			{
 				zvel = AAS_BFGJumpZVelocity( areastart );
+			}
 			else
+			{
 				zvel = AAS_RocketJumpZVelocity( areastart );
+			}
 			// get the horizontal speed for the jump, if it isn't possible to calculate this
 			// speed (the jump is not possible) then there's no jump reachability created
 			ret = AAS_HorizontalVelocityForJump( zvel, areastart, facecenter, &speed );
@@ -4317,7 +4753,9 @@ int AAS_Reachability_WeaponJump( int area1num, int area2num )
 						// create a rocket or bfg jump reachability from area1 to area2
 						lreach = AAS_AllocReachability();
 						if( !lreach )
+						{
 							return qfalse;
+						}
 						lreach->areanum = area2num;
 						lreach->facenum = 0;
 						lreach->edgenum = 0;
@@ -4368,7 +4806,9 @@ void AAS_Reachability_WalkOffLedge( int areanum )
 	aas_trace_t			 trace;
 
 	if( !AAS_AreaGrounded( areanum ) || AAS_AreaSwim( areanum ) )
+	{
 		return;
+	}
 	//
 	area = &aasworld.areas[areanum];
 	//
@@ -4378,7 +4818,9 @@ void AAS_Reachability_WalkOffLedge( int areanum )
 		face1	 = &aasworld.faces[abs( face1num )];
 		// face 1 must be a ground face
 		if( !( face1->faceflags & FACE_GROUND ) )
+		{
 			continue;
+		}
 		// go through all the edges of this ground face
 		for( k = 0; k < face1->numedges; k++ )
 		{
@@ -4390,7 +4832,9 @@ void AAS_Reachability_WalkOffLedge( int areanum )
 				face2	 = &aasworld.faces[abs( face2num )];
 				// face 2 may not be a ground face
 				if( face2->faceflags & FACE_GROUND )
+				{
 					continue;
+				}
 				// compare all the edges
 				for( l = 0; l < face2->numedges; l++ )
 				{
@@ -4399,9 +4843,13 @@ void AAS_Reachability_WalkOffLedge( int areanum )
 					{
 						// get the area at the other side of the face
 						if( face2->frontarea == areanum )
+						{
 							otherareanum = face2->backarea;
+						}
 						else
+						{
 							otherareanum = face2->frontarea;
+						}
 						//
 						area2 = &aasworld.areas[otherareanum];
 						// if the other area is grounded!
@@ -4414,7 +4862,9 @@ void AAS_Reachability_WalkOffLedge( int areanum )
 								face3num = aasworld.faceindex[area2->firstface + n];
 								// may not be the shared face of the two areas
 								if( abs( face3num ) == abs( face2num ) )
+								{
 									continue;
+								}
 								//
 								face3 = &aasworld.faces[abs( face3num )];
 								// find an edge shared by all three faces
@@ -4441,10 +4891,14 @@ void AAS_Reachability_WalkOffLedge( int areanum )
 									} // end if
 								} // end for
 								if( m < face3->numedges )
+								{
 									break;
+								}
 							} // end for
 							if( !gap )
+							{
 								break;
+							}
 						} // end if
 						// check for a walk off ledge reachability
 						edge = &aasworld.edges[abs( edge1num )];
@@ -4498,16 +4952,24 @@ void AAS_Reachability_WalkOffLedge( int areanum )
 						numareas = AAS_TraceAreas( mid, testend, areas, NULL, sizeof( areas ) / sizeof( int ) );
 						for( p = 0; p < numareas; p++ )
 							if( AAS_AreaClusterPortal( areas[p] ) )
+							{
 								break;
+							}
 						if( p < numareas )
+						{
 							break;
+						}
 						// if a maximum fall height is set and the bot would fall down further
 						if( aassettings.rs_maxfallheight && fabs( mid[2] - trace.endpos[2] ) > aassettings.rs_maxfallheight )
+						{
 							break;
+						}
 						//
 						lreach = AAS_AllocReachability();
 						if( !lreach )
+						{
 							break;
+						}
 						lreach->areanum = reachareanum;
 						lreach->facenum = 0;
 						lreach->edgenum = edge1num;
@@ -4550,7 +5012,9 @@ void AAS_StoreReachability()
 	aas_reachability_t*	 reach;
 
 	if( aasworld.reachability )
+	{
 		FreeMemory( aasworld.reachability );
+	}
 	aasworld.reachability	  = ( aas_reachability_t* )GetClearedMemory( ( numlreachabilities + 10 ) * sizeof( aas_reachability_t ) );
 	aasworld.reachabilitysize = 1;
 	for( i = 0; i < aasworld.numareas; i++ )
@@ -4606,10 +5070,14 @@ int AAS_ContinueInitReachability( float time )
 	static int	 lastpercentage;
 
 	if( !aasworld.loaded )
+	{
 		return qfalse;
+	}
 	// if reachability is calculated for all areas
 	if( aasworld.numreachabilityareas >= aasworld.numareas + 2 )
+	{
 		return qfalse;
+	}
 	// if starting with area 1 (area 0 is a dummy)
 	if( aasworld.numreachabilityareas == 1 )
 	{
@@ -4634,7 +5102,9 @@ int AAS_ContinueInitReachability( float time )
 		for( j = 1; j < aasworld.numareas; j++ )
 		{
 			if( i == j )
+			{
 				continue;
+			}
 			// never create reachabilities from teleporter or jumppad areas to regular areas
 			if( aasworld.areasettings[i].contents & ( AREACONTENTS_TELEPORTER | AREACONTENTS_JUMPPAD ) )
 			{
@@ -4645,22 +5115,34 @@ int AAS_ContinueInitReachability( float time )
 			} // end if
 			// if there already is a reachability link from area i to j
 			if( AAS_ReachabilityExists( i, j ) )
+			{
 				continue;
+			}
 			// check for a swim reachability
 			if( AAS_Reachability_Swim( i, j ) )
+			{
 				continue;
+			}
 			// check for a simple walk on equal floor height reachability
 			if( AAS_Reachability_EqualFloorHeight( i, j ) )
+			{
 				continue;
+			}
 			// check for step, barrier, waterjump and walk off ledge reachabilities
 			if( AAS_Reachability_Step_Barrier_WaterJump_WalkOffLedge( i, j ) )
+			{
 				continue;
+			}
 			// check for ladder reachabilities
 			if( AAS_Reachability_Ladder( i, j ) )
+			{
 				continue;
+			}
 			// check for a jump reachability
 			if( AAS_Reachability_Jump( i, j ) )
+			{
 				continue;
+			}
 		} // end for
 		// never create these reachabilities from teleporter or jumppad areas
 		if( aasworld.areasettings[i].contents & ( AREACONTENTS_TELEPORTER | AREACONTENTS_JUMPPAD ) )
@@ -4671,22 +5153,32 @@ int AAS_ContinueInitReachability( float time )
 		for( j = 1; j < aasworld.numareas; j++ )
 		{
 			if( i == j )
+			{
 				continue;
+			}
 			//
 			if( AAS_ReachabilityExists( i, j ) )
+			{
 				continue;
+			}
 			// check for a grapple hook reachability
 			if( calcgrapplereach )
+			{
 				AAS_Reachability_Grapple( i, j );
+			}
 			// check for a weapon jump reachability
 			AAS_Reachability_WeaponJump( i, j );
 		} // end for
 		// if the calculation took more time than the max reachability delay
 		if( Sys_MilliSeconds() - start_time > ( int )reachability_delay )
+		{
 			break;
+		}
 		//
 		if( aasworld.numreachabilityareas * 1000 / aasworld.numareas > lastpercentage )
+		{
 			break;
+		}
 	} // end for
 	//
 	if( aasworld.numreachabilityareas == aasworld.numareas )
@@ -4763,7 +5255,9 @@ int AAS_ContinueInitReachability( float time )
 void AAS_InitReachability()
 {
 	if( !aasworld.loaded )
+	{
 		return;
+	}
 
 	if( aasworld.reachabilitysize )
 	{

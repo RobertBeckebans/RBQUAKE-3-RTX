@@ -212,7 +212,9 @@ void inverse( const float* m, float* inv )
 	det = 1.0f / det;
 
 	for( int i = 0; i < 16; i++ )
+	{
 		inv[i] = inv[i] * det;
+	}
 }
 
 void mult_matrix_matrix( float* p, const float* a, const float* b )

@@ -209,7 +209,9 @@ void Q2_ParseBrush( script_t* script, entity_t* mapent )
 	token_t			token;
 
 	if( nummapbrushes >= MAX_MAPFILE_BRUSHES )
+	{
 		Error( "nummapbrushes == MAX_MAPFILE_BRUSHES" );
+	}
 
 	b				  = &mapbrushes[nummapbrushes];
 	b->original_sides = &brushsides[nummapbrushsides];
@@ -220,21 +222,29 @@ void Q2_ParseBrush( script_t* script, entity_t* mapent )
 	do
 	{
 		if( !PS_ReadToken( script, &token ) )
+		{
 			break;
+		}
 		if( !strcmp( token.string, "}" ) )
+		{
 			break;
+		}
 
 		// IDBUG: mixed use of MAX_MAPFILE_? and MAX_MAP_? this could
 		//			lead to out of bound indexing of the arrays
 		if( nummapbrushsides >= MAX_MAPFILE_BRUSHSIDES )
+		{
 			Error( "MAX_MAPFILE_BRUSHSIDES" );
+		}
 		side = &brushsides[nummapbrushsides];
 
 		// read the three point plane definition
 		for( i = 0; i < 3; i++ )
 		{
 			if( i != 0 )
+			{
 				PS_ExpectTokenString( script, "(" );
+			}
 			for( j = 0; j < 3; j++ )
 			{
 				PS_ExpectAnyToken( script, &token );
@@ -279,13 +289,21 @@ void Q2_ParseBrush( script_t* script, entity_t* mapent )
 
 		// translucent objects are automatically classified as detail
 		if( side->surf & ( SURF_TRANS33 | SURF_TRANS66 ) )
+		{
 			side->contents |= CONTENTS_DETAIL;
+		}
 		if( side->contents & ( CONTENTS_PLAYERCLIP | CONTENTS_MONSTERCLIP ) )
+		{
 			side->contents |= CONTENTS_DETAIL;
+		}
 		if( fulldetail )
+		{
 			side->contents &= ~CONTENTS_DETAIL;
+		}
 		if( !( side->contents & ( ( LAST_VISIBLE_CONTENTS - 1 ) | CONTENTS_PLAYERCLIP | CONTENTS_MONSTERCLIP | CONTENTS_MIST ) ) )
+		{
 			side->contents |= CONTENTS_SOLID;
+		}
 
 		// hints and skips are never detail, and have no content
 		if( side->surf & ( SURF_HINT | SURF_SKIP ) )
@@ -298,9 +316,9 @@ void Q2_ParseBrush( script_t* script, entity_t* mapent )
 		// for creating AAS... this side is textured
 		side->flags |= SFL_TEXTURED;
 #endif //ME                  \
-	//                       \
-	// find the plane number \
-	//
+//                       \
+// find the plane number \
+//
 		planenum = PlaneFromPoints( planepts[0], planepts[1], planepts[2] );
 		if( planenum == -1 )
 		{
@@ -326,7 +344,9 @@ void Q2_ParseBrush( script_t* script, entity_t* mapent )
 			}
 		}
 		if( k != b->numsides )
+		{
 			continue; // duplicated
+		}
 
 		//
 		// keep this side
@@ -387,7 +407,9 @@ void Q2_ParseBrush( script_t* script, entity_t* mapent )
 	{
 		c_clipbrushes++;
 		for( i = 0; i < b->numsides; i++ )
+		{
 			b->original_sides[i].texinfo = TEXINFO_NODE;
+		}
 	}
 
 	//
@@ -455,8 +477,10 @@ void Q2_MoveBrushesToWorld( entity_t* mapent )
 	memcpy( temp, mapbrushes + mapent->firstbrush, newbrushes * sizeof( mapbrush_t ) );
 
 #if 0 // let them keep their original brush numbers
-	for (i=0 ; i<newbrushes ; i++)
+	for( i = 0 ; i < newbrushes ; i++ )
+	{
 		temp[i].entitynum = 0;
+	}
 #endif
 
 	// make space to move the brushes (overlapped copy)
@@ -468,7 +492,9 @@ void Q2_MoveBrushesToWorld( entity_t* mapent )
 	// fix up indexes
 	entities[0].numbrushes += newbrushes;
 	for( i = 1; i < num_entities; i++ )
+	{
 		entities[i].firstbrush += newbrushes;
+	}
 	FreeMemory( temp );
 
 	mapent->numbrushes = 0;
@@ -491,13 +517,19 @@ qboolean Q2_ParseMapEntity( script_t* script )
 	token_t		token;
 
 	if( !PS_ReadToken( script, &token ) )
+	{
 		return false;
+	}
 
 	if( strcmp( token.string, "{" ) )
+	{
 		Error( "ParseEntity: { not found" );
+	}
 
 	if( num_entities == MAX_MAP_ENTITIES )
+	{
 		Error( "num_entities == MAX_MAP_ENTITIES" );
+	}
 
 	startbrush = nummapbrushes;
 	startsides = nummapbrushsides;
@@ -517,7 +549,9 @@ qboolean Q2_ParseMapEntity( script_t* script )
 			Error( "ParseEntity: EOF without closing brace" );
 		} // end if
 		if( !strcmp( token.string, "}" ) )
+		{
 			break;
+		}
 		if( !strcmp( token.string, "{" ) )
 		{
 			Q2_ParseBrush( script, mapent );
@@ -568,7 +602,9 @@ qboolean Q2_ParseMapEntity( script_t* script )
 		char str[128];
 
 		if( mapent->numbrushes != 1 )
+		{
 			Error( "Entity %i: func_areaportal can only be a single brush", num_entities - 1 );
+		}
 
 		b			= &mapbrushes[nummapbrushes - 1];
 		b->contents = CONTENTS_AREAPORTAL;
@@ -624,7 +660,9 @@ void Q2_LoadMapFile( char* filename )
 	for( i = 0; i < entities[0].numbrushes; i++ )
 	{
 		if( mapbrushes[i].mins[0] > 4096 )
+		{
 			continue; // no valid points
+		}
 		AddPointToBounds( mapbrushes[i].mins, map_mins, map_maxs );
 		AddPointToBounds( mapbrushes[i].maxs, map_mins, map_maxs );
 	} // end for
@@ -696,7 +734,9 @@ int Q2_PopNodeStack()
 {
 	// if the stack is empty
 	if( nodestackptr <= nodestack )
+	{
 		return -1;
+	}
 	// decrease stack pointer
 	nodestackptr--;
 	nodestacksize--;
@@ -734,7 +774,9 @@ void Q2_SetBrushModelNumbers( entity_t* mapent )
 			{
 				// if we took the first child at the parent node
 				if( dnodes[pn].children[0] == n )
+				{
 					break;
+				}
 			} // end for
 			// if the stack wasn't empty (if not processed whole tree)
 			if( pn >= 0 )
@@ -770,7 +812,9 @@ void Q2_BSPBrushToMapBrush( dbrush_t* bspbrush, entity_t* mapent )
 	dplane_t*	  bspplane;
 
 	if( nummapbrushes >= MAX_MAPFILE_BRUSHES )
+	{
 		Error( "nummapbrushes >= MAX_MAPFILE_BRUSHES" );
+	}
 
 	b				  = &mapbrushes[nummapbrushes];
 	b->original_sides = &brushsides[nummapbrushsides];
@@ -791,26 +835,42 @@ void Q2_BSPBrushToMapBrush( dbrush_t* bspbrush, entity_t* mapent )
 		side = &brushsides[nummapbrushsides];
 		// if the BSP brush side is textured
 		if( brushsidetextured[bspbrush->firstside + n] )
+		{
 			side->flags |= SFL_TEXTURED;
+		}
 		else
+		{
 			side->flags &= ~SFL_TEXTURED;
+		}
 		// ME: can get side contents and surf directly from BSP file
 		side->contents = bspbrush->contents;
 		// if the texinfo is TEXINFO_NODE
 		if( bspbrushside->texinfo < 0 )
+		{
 			side->surf = 0;
+		}
 		else
+		{
 			side->surf = texinfo[bspbrushside->texinfo].flags;
+		}
 
 		// translucent objects are automatically classified as detail
 		if( side->surf & ( SURF_TRANS33 | SURF_TRANS66 ) )
+		{
 			side->contents |= CONTENTS_DETAIL;
+		}
 		if( side->contents & ( CONTENTS_PLAYERCLIP | CONTENTS_MONSTERCLIP ) )
+		{
 			side->contents |= CONTENTS_DETAIL;
+		}
 		if( fulldetail )
+		{
 			side->contents &= ~CONTENTS_DETAIL;
+		}
 		if( !( side->contents & ( ( LAST_VISIBLE_CONTENTS - 1 ) | CONTENTS_PLAYERCLIP | CONTENTS_MONSTERCLIP | CONTENTS_MIST ) ) )
+		{
 			side->contents |= CONTENTS_SOLID;
+		}
 
 		// hints and skips are never detail, and have no content
 		if( side->surf & ( SURF_HINT | SURF_SKIP ) )
@@ -847,7 +907,9 @@ void Q2_BSPBrushToMapBrush( dbrush_t* bspbrush, entity_t* mapent )
 			}
 		}
 		if( k != b->numsides )
+		{
 			continue; // duplicated
+		}
 
 		//
 		// keep this side
@@ -859,9 +921,13 @@ void Q2_BSPBrushToMapBrush( dbrush_t* bspbrush, entity_t* mapent )
 		// ME: texinfo is already stored when bsp is loaded
 		// NOTE: check for TEXINFO_NODE, otherwise crash in Q2_BrushContents
 		if( bspbrushside->texinfo < 0 )
+		{
 			side->texinfo = 0;
+		}
 		else
+		{
 			side->texinfo = bspbrushside->texinfo;
+		}
 
 		// save the td off in case there is an origin brush and we
 		// have to recalculate the texinfo
@@ -918,7 +984,9 @@ void Q2_BSPBrushToMapBrush( dbrush_t* bspbrush, entity_t* mapent )
 	{
 		c_clipbrushes++;
 		for( i = 0; i < b->numsides; i++ )
+		{
 			b->original_sides[i].texinfo = TEXINFO_NODE;
+		}
 	} // end for
 
 	//
@@ -1060,7 +1128,9 @@ void Q2_LoadMapFromBSP( char* filename, int offset, int length )
 	// DPlanes2MapPlanes();
 	// clear brush model numbers
 	for( i = 0; i < MAX_MAPFILE_BRUSHES; i++ )
+	{
 		brushmodelnumbers[i] = -1;
+	}
 
 	nummapbrushsides = 0;
 	num_entities	 = 0;
@@ -1077,7 +1147,9 @@ void Q2_LoadMapFromBSP( char* filename, int offset, int length )
 	for( i = 0; i < entities[0].numbrushes; i++ )
 	{
 		if( mapbrushes[i].mins[0] > 4096 )
+		{
 			continue; // no valid points
+		}
 		AddPointToBounds( mapbrushes[i].mins, map_mins, map_maxs );
 		AddPointToBounds( mapbrushes[i].maxs, map_mins, map_maxs );
 	} // end for
@@ -1121,7 +1193,9 @@ void TestExpandBrushes()
 	Log_Print( "writing %s\n", name );
 	f = fopen( name, "wb" );
 	if( !f )
+	{
 		Error( "Can't write %s\n", name );
+	}
 
 	fprintf( f, "{\n\"classname\" \"worldspawn\"\n" );
 
@@ -1134,7 +1208,9 @@ void TestExpandBrushes()
 			s	 = brush->original_sides + i;
 			dist = mapplanes[s->planenum].dist;
 			for( j = 0; j < 3; j++ )
+			{
 				dist += fabs( 16 * mapplanes[s->planenum].normal[j] );
+			}
 
 			w = BaseWindingForPlane( mapplanes[s->planenum].normal, dist );
 

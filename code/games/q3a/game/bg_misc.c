@@ -502,8 +502,8 @@ gitem_t bg_itemlist[] = { { NULL,
 		/* sounds */ "sound/items/flight.wav" },
 
 	/*QUAKED team_CTF_redflag (1 0 0) (-16 -16 -16) (16 16 16)
-Only in CTF games
-*/
+	Only in CTF games
+	*/
 	{ "team_CTF_redflag",
 		NULL,
 		{ "models/flags/r_flag.md3", 0, 0, 0 },
@@ -516,8 +516,8 @@ Only in CTF games
 		/* sounds */ "" },
 
 	/*QUAKED team_CTF_blueflag (0 0 1) (-16 -16 -16) (16 16 16)
-Only in CTF games
-*/
+	Only in CTF games
+	*/
 	{ "team_CTF_blueflag",
 		NULL,
 		{ "models/flags/b_flag.md3", 0, 0, 0 },
@@ -664,8 +664,8 @@ Only in CTF games
 		/* sounds */ "" },
 
 	/*QUAKED team_CTF_neutralflag (0 0 1) (-16 -16 -16) (16 16 16)
-Only in One Flag CTF games
-*/
+	Only in One Flag CTF games
+	*/
 	{ "team_CTF_neutralflag",
 		NULL,
 		{ "models/flags/n_flag.md3", 0, 0, 0 },
@@ -826,7 +826,9 @@ gitem_t* BG_FindItem( const char* pickupName )
 	for( it = bg_itemlist + 1; it->classname; it++ )
 	{
 		if( !Q_stricmp( it->pickup_name, pickupName ) )
+		{
 			return it;
+		}
 	}
 
 	return NULL;
@@ -1001,12 +1003,16 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t* ent, const play
 				if( ps->persistant[PERS_TEAM] == TEAM_RED )
 				{
 					if( item->giTag == PW_BLUEFLAG || ( item->giTag == PW_REDFLAG && ent->modelindex2 ) || ( item->giTag == PW_REDFLAG && ps->powerups[PW_BLUEFLAG] ) )
+					{
 						return qtrue;
+					}
 				}
 				else if( ps->persistant[PERS_TEAM] == TEAM_BLUE )
 				{
 					if( item->giTag == PW_REDFLAG || ( item->giTag == PW_BLUEFLAG && ent->modelindex2 ) || ( item->giTag == PW_BLUEFLAG && ps->powerups[PW_REDFLAG] ) )
+					{
 						return qtrue;
+					}
 				}
 			}
 
@@ -1228,7 +1234,7 @@ char* eventnames[] = { "EV_NONE",
 	"EV_INVUL_IMPACT",	 // invulnerability sphere impact
 	"EV_JUICED",		 // invulnerability juiced effect
 	"EV_LIGHTNINGBOLT",	 // lightning bolt bounced of invulnerability sphere
-						 // #endif
+	// #endif
 
 	"EV_DEBUG_LINE",
 	"EV_STOPLOOPINGSOUND",
@@ -1360,7 +1366,7 @@ void BG_PlayerStateToEntityState( playerState_t* ps, entityState_t* s, qboolean 
 	s->legsAnim		= ps->legsAnim;
 	s->torsoAnim	= ps->torsoAnim;
 	s->clientNum	= ps->clientNum; // ET_PLAYER looks here instead of at number
-									 // so corpses can also reference the proper config
+	// so corpses can also reference the proper config
 	s->eFlags = ps->eFlags;
 	if( ps->stats[STAT_HEALTH] <= 0 )
 	{
@@ -1457,7 +1463,7 @@ void BG_PlayerStateToEntityStateExtraPolate( playerState_t* ps, entityState_t* s
 	s->legsAnim		= ps->legsAnim;
 	s->torsoAnim	= ps->torsoAnim;
 	s->clientNum	= ps->clientNum; // ET_PLAYER looks here instead of at number
-									 // so corpses can also reference the proper config
+	// so corpses can also reference the proper config
 	s->eFlags = ps->eFlags;
 	if( ps->stats[STAT_HEALTH] <= 0 )
 	{

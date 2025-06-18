@@ -109,7 +109,9 @@ static void UI_SPSkillMenu_SkillEvent( void* ptr, int notification )
 	int skill;
 
 	if( notification != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	SetSkillColor( ( int )trap_Cvar_VariableValue( "g_spSkill" ), color_red );
 
@@ -138,7 +140,9 @@ UI_SPSkillMenu_FightEvent
 static void UI_SPSkillMenu_FightEvent( void* ptr, int notification )
 {
 	if( notification != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	UI_SPArena_Start( skillMenuInfo.arenaInfo );
 }

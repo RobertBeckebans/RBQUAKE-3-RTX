@@ -65,7 +65,9 @@ void AddScore( gentity_t* ent, vec3_t origin, int score )
 	//
 	ent->client->ps.persistant[PERS_SCORE] += score;
 	if( g_gametype.integer == GT_TEAM )
+	{
 		level.teamScores[ent->client->ps.persistant[PERS_TEAM]] += score;
+	}
 	CalculateRanks();
 }
 
@@ -278,11 +280,17 @@ void GibEntity( gentity_t* self, int killer )
 		{
 			ent = &g_entities[i];
 			if( !ent->inuse )
+			{
 				continue;
+			}
 			if( ent->activator != self )
+			{
 				continue;
+			}
 			if( strcmp( ent->classname, "kamikaze timer" ) )
+			{
 				continue;
+			}
 			G_FreeEntity( ent );
 			break;
 		}
@@ -620,17 +628,20 @@ void player_die( gentity_t* self, gentity_t* inflictor, gentity_t* attacker, int
 	if( meansOfDeath == MOD_SUICIDE )
 	{
 		if( self->client->ps.powerups[PW_NEUTRALFLAG] )
-		{ // only happens in One Flag CTF
+		{
+			// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
 			self->client->ps.powerups[PW_NEUTRALFLAG] = 0;
 		}
 		else if( self->client->ps.powerups[PW_REDFLAG] )
-		{ // only happens in standard CTF
+		{
+			// only happens in standard CTF
 			Team_ReturnFlag( TEAM_RED );
 			self->client->ps.powerups[PW_REDFLAG] = 0;
 		}
 		else if( self->client->ps.powerups[PW_BLUEFLAG] )
-		{ // only happens in standard CTF
+		{
+			// only happens in standard CTF
 			Team_ReturnFlag( TEAM_BLUE );
 			self->client->ps.powerups[PW_BLUEFLAG] = 0;
 		}
@@ -645,15 +656,18 @@ void player_die( gentity_t* self, gentity_t* inflictor, gentity_t* attacker, int
 	else
 	{
 		if( self->client->ps.powerups[PW_NEUTRALFLAG] )
-		{ // only happens in One Flag CTF
+		{
+			// only happens in One Flag CTF
 			Team_ReturnFlag( TEAM_FREE );
 		}
 		else if( self->client->ps.powerups[PW_REDFLAG] )
-		{ // only happens in standard CTF
+		{
+			// only happens in standard CTF
 			Team_ReturnFlag( TEAM_RED );
 		}
 		else if( self->client->ps.powerups[PW_BLUEFLAG] )
-		{ // only happens in standard CTF
+		{
+			// only happens in standard CTF
 			Team_ReturnFlag( TEAM_BLUE );
 		}
 	}
@@ -776,24 +790,34 @@ int CheckArmor( gentity_t* ent, int damage, int dflags )
 	int		   count;
 
 	if( !damage )
+	{
 		return 0;
+	}
 
 	client = ent->client;
 
 	if( !client )
+	{
 		return 0;
+	}
 
 	if( dflags & DAMAGE_NO_ARMOR )
+	{
 		return 0;
+	}
 
 	// armor
 	count = client->ps.stats[STAT_ARMOR];
 	save  = ceil( damage * ARMOR_PROTECTION );
 	if( save >= count )
+	{
 		save = count;
+	}
 
 	if( !save )
+	{
 		return 0;
+	}
 
 	client->ps.stats[STAT_ARMOR] -= save;
 
@@ -864,7 +888,9 @@ int G_InvulnerabilityEffect( gentity_t* targ, vec3_t dir, vec3_t point, vec3_t i
 		vectoangles( vec, impact->s.angles );
 		impact->s.angles[0] += 90;
 		if( impact->s.angles[0] > 360 )
+		{
 			impact->s.angles[0] -= 360;
+		}
 		if( impactpoint )
 		{
 			VectorCopy( intersections[0], impactpoint );
@@ -1189,10 +1215,14 @@ void G_Damage( gentity_t* targ, gentity_t* inflictor, gentity_t* attacker, vec3_
 		if( targ->health <= 0 )
 		{
 			if( client )
+			{
 				targ->flags |= FL_NO_KNOCKBACK;
+			}
 
 			if( targ->health < -999 )
+			{
 				targ->health = -999;
+			}
 
 			targ->enemy = attacker;
 			targ->die( targ, inflictor, attacker, take, mod );
@@ -1227,7 +1257,9 @@ qboolean CanDamage( gentity_t* targ, vec3_t origin )
 	VectorCopy( midpoint, dest );
 	trap_Trace( &tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID );
 	if( tr.fraction == 1.0 || tr.entityNum == targ->s.number )
+	{
 		return qtrue;
+	}
 
 	// this should probably check in the plane of projection,
 	// rather than in world coordinate, and also include Z
@@ -1236,28 +1268,36 @@ qboolean CanDamage( gentity_t* targ, vec3_t origin )
 	dest[1] += 15.0;
 	trap_Trace( &tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID );
 	if( tr.fraction == 1.0 )
+	{
 		return qtrue;
+	}
 
 	VectorCopy( midpoint, dest );
 	dest[0] += 15.0;
 	dest[1] -= 15.0;
 	trap_Trace( &tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID );
 	if( tr.fraction == 1.0 )
+	{
 		return qtrue;
+	}
 
 	VectorCopy( midpoint, dest );
 	dest[0] -= 15.0;
 	dest[1] += 15.0;
 	trap_Trace( &tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID );
 	if( tr.fraction == 1.0 )
+	{
 		return qtrue;
+	}
 
 	VectorCopy( midpoint, dest );
 	dest[0] -= 15.0;
 	dest[1] -= 15.0;
 	trap_Trace( &tr, origin, vec3_origin, vec3_origin, dest, ENTITYNUM_NONE, MASK_SOLID );
 	if( tr.fraction == 1.0 )
+	{
 		return qtrue;
+	}
 
 	return qfalse;
 }
@@ -1297,9 +1337,13 @@ qboolean G_RadiusDamage( vec3_t origin, gentity_t* attacker, float damage, float
 		ent = &g_entities[entityList[e]];
 
 		if( ent == ignore )
+		{
 			continue;
+		}
 		if( !ent->takedamage )
+		{
 			continue;
+		}
 
 		// find the distance from the edge of the bounding box
 		for( i = 0; i < 3; i++ )

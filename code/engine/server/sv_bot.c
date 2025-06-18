@@ -106,30 +106,46 @@ void BotDrawDebugPolygons( void ( *drawPoly )( int color, int numPoints, float* 
 	int				 i, parm0;
 
 	if( !debugpolygons )
+	{
 		return;
+	}
 	// bot debugging
 	if( !bot_debug )
+	{
 		bot_debug = Cvar_Get( "bot_debug", "0", 0 );
+	}
 	//
 	if( bot_enable && bot_debug->integer )
 	{
 		// show reachabilities
 		if( !bot_reachability )
+		{
 			bot_reachability = Cvar_Get( "bot_reachability", "0", 0 );
+		}
 		// show ground faces only
 		if( !bot_groundonly )
+		{
 			bot_groundonly = Cvar_Get( "bot_groundonly", "1", 0 );
+		}
 		// get the hightlight area
 		if( !bot_highlightarea )
+		{
 			bot_highlightarea = Cvar_Get( "bot_highlightarea", "0", 0 );
+		}
 		//
 		parm0 = 0;
 		if( svs.clients[0].lastUsercmd.buttons & BUTTON_ATTACK )
+		{
 			parm0 |= 1;
+		}
 		if( bot_reachability->integer )
+		{
 			parm0 |= 2;
+		}
 		if( bot_groundonly->integer )
+		{
 			parm0 |= 4;
+		}
 		botlib_export->BotLibVarSet( "bot_highlightarea", bot_highlightarea->string );
 		botlib_export->Test( parm0, NULL, svs.clients[0].gentity->r.currentOrigin, svs.clients[0].gentity->r.currentAngles );
 	} // end if
@@ -138,7 +154,9 @@ void BotDrawDebugPolygons( void ( *drawPoly )( int color, int numPoints, float* 
 	{
 		poly = &debugpolygons[i];
 		if( !poly->inuse )
+		{
 			continue;
+		}
 		drawPoly( poly->color, poly->numPoints, ( float* )poly->points );
 		// Com_Printf("poly %i, numpoints = %d\n", i, poly->numPoints);
 	}
@@ -302,11 +320,17 @@ void BotImport_BSPModelMinsMaxsOrigin( int modelnum, vec3_t angles, vec3_t outmi
 		}
 	}
 	if( outmins )
+	{
 		VectorCopy( mins, outmins );
+	}
 	if( outmaxs )
+	{
 		VectorCopy( maxs, outmaxs );
+	}
 	if( origin )
+	{
 		VectorClear( origin );
+	}
 }
 
 /*
@@ -357,15 +381,21 @@ int BotImport_DebugPolygonCreate( int color, int numPoints, vec3_t* points )
 	int				 i;
 
 	if( !debugpolygons )
+	{
 		return 0;
+	}
 
 	for( i = 1; i < bot_maxdebugpolys; i++ )
 	{
 		if( !debugpolygons[i].inuse )
+		{
 			break;
+		}
 	}
 	if( i >= bot_maxdebugpolys )
+	{
 		return 0;
+	}
 	poly			= &debugpolygons[i];
 	poly->inuse		= qtrue;
 	poly->color		= color;
@@ -385,7 +415,9 @@ void BotImport_DebugPolygonShow( int id, int color, int numPoints, vec3_t* point
 	bot_debugpoly_t* poly;
 
 	if( !debugpolygons )
+	{
 		return;
+	}
 	poly			= &debugpolygons[id];
 	poly->inuse		= qtrue;
 	poly->color		= color;
@@ -401,7 +433,9 @@ BotImport_DebugPolygonDelete
 void BotImport_DebugPolygonDelete( int id )
 {
 	if( !debugpolygons )
+	{
 		return;
+	}
 	debugpolygons[id].inuse = qfalse;
 }
 
@@ -447,9 +481,13 @@ void BotImport_DebugLineShow( int line, vec3_t start, vec3_t end, int color )
 	VectorNormalize( dir );
 	dot = DotProduct( dir, up );
 	if( dot > 0.99 || dot < -0.99 )
+	{
 		VectorSet( cross, 1, 0, 0 );
+	}
 	else
+	{
 		CrossProduct( dir, up, cross );
+	}
 
 	VectorNormalize( cross );
 
@@ -479,10 +517,14 @@ SV_BotFrame
 void SV_BotFrame( int time )
 {
 	if( !bot_enable )
+	{
 		return;
+	}
 	// NOTE: maybe the game is already shutdown
 	if( !gvm )
+	{
 		return;
+	}
 	VM_Call( gvm, BOTAI_START_FRAME, time );
 }
 
@@ -579,7 +621,9 @@ void SV_BotInitBotLib()
 	}
 
 	if( debugpolygons )
+	{
 		Z_Free( debugpolygons );
+	}
 	bot_maxdebugpolys = Cvar_VariableIntegerValue( "bot_maxdebugpolys" );
 	debugpolygons	  = Z_Malloc( sizeof( bot_debugpoly_t ) * bot_maxdebugpolys );
 
@@ -658,15 +702,18 @@ int SV_BotGetConsoleMessage( int client, char* buf, int size )
 EntityInPVS
 ==================
 */
-int EntityInPVS( int client, int entityNum ) {
-	client_t			*cl;
-	clientSnapshot_t	*frame;
+int EntityInPVS( int client, int entityNum )
+{
+	client_t*			cl;
+	clientSnapshot_t*	frame;
 	int					i;
 
 	cl = &svs.clients[client];
 	frame = &cl->frames[cl->netchan.outgoingSequence & PACKET_MASK];
-	for ( i = 0; i < frame->num_entities; i++ )	{
-		if ( svs.snapshotEntities[(frame->first_entity + i) % svs.numSnapshotEntities].number == entityNum ) {
+	for ( i = 0; i < frame->num_entities; i++ )
+	{
+		if ( svs.snapshotEntities[( frame->first_entity + i ) % svs.numSnapshotEntities].number == entityNum )
+		{
 			return qtrue;
 		}
 	}

@@ -88,7 +88,9 @@ void ExpandWildcards( int* argc, char*** argv )
 
 		handle = _findfirst( path, &fileinfo );
 		if( handle == -1 )
+		{
 			return;
+		}
 
 		ExtractFilePath( path, filebase );
 
@@ -214,7 +216,9 @@ void	 qprintf( char* format, ... )
 #endif // WINBSPC
 
 	if( !verbose )
+	{
 		return;
+	}
 
 	va_start( argptr, format );
 #ifdef WINBSPC
@@ -269,7 +273,8 @@ void SetQdirFromPath( char* path )
 	int	  len;
 
 	if( !( path[0] == '/' || path[0] == '\\' || path[1] == ':' ) )
-	{ // path is partial
+	{
+		// path is partial
 		Q_getwd( temp );
 		strcat( temp, path );
 		path = temp;
@@ -310,7 +315,9 @@ char* ExpandArg( char* path )
 		strcat( full, path );
 	}
 	else
+	{
 		strcpy( full, path );
+	}
 	return full;
 }
 
@@ -318,9 +325,13 @@ char* ExpandPath( char* path )
 {
 	static char full[1024];
 	if( !qdir )
+	{
 		Error( "ExpandPath called without qdir set" );
+	}
 	if( path[0] == '/' || path[0] == '\\' || path[1] == ':' )
+	{
 		return path;
+	}
 	sprintf( full, "%s%s", qdir, path );
 	return full;
 }
@@ -361,20 +372,20 @@ double I_FloatTime()
 
 	return t;
 #if 0
-// more precise, less portable
+	// more precise, less portable
 	struct timeval tp;
 	struct timezone tzp;
 	static int		secbase;
 
-	gettimeofday(&tp, &tzp);
-	
-	if (!secbase)
+	gettimeofday( &tp, &tzp );
+
+	if( !secbase )
 	{
 		secbase = tp.tv_sec;
-		return tp.tv_usec/1000000.0;
+		return tp.tv_usec / 1000000.0;
 	}
-	
-	return (tp.tv_sec - secbase) + tp.tv_usec/1000000.0;
+
+	return ( tp.tv_sec - secbase ) + tp.tv_usec / 1000000.0;
 #endif
 }
 
@@ -393,13 +404,19 @@ void Q_mkdir( char* path )
 {
 #ifdef WIN32
 	if( _mkdir( path ) != -1 )
+	{
 		return;
+	}
 #else
 	if( mkdir( path, 0777 ) != -1 )
+	{
 		return;
+	}
 #endif
 	if( errno != EEXIST )
+	{
 		Error( "mkdir %s: %s", path, strerror( errno ) );
+	}
 }
 
 /*
@@ -414,7 +431,9 @@ int FileTime( char* path )
 	struct stat buf;
 
 	if( stat( path, &buf ) == -1 )
+	{
 		return -1;
+	}
 
 	return buf.st_mtime;
 }
@@ -435,9 +454,11 @@ char* COM_Parse( char* data )
 	com_token[0] = 0;
 
 	if( !data )
+	{
 		return NULL;
+	}
 
-// skip whitespace
+	// skip whitespace
 skipwhite:
 	while( ( c = *data ) <= ' ' )
 	{
@@ -453,7 +474,9 @@ skipwhite:
 	if( c == '/' && data[1] == '/' )
 	{
 		while( *data && *data != '\n' )
+		{
 			data++;
+		}
 		goto skipwhite;
 	}
 
@@ -491,7 +514,9 @@ skipwhite:
 		len++;
 		c = *data;
 		if( c == '{' || c == '}' || c == ')' || c == '(' || c == '\'' || c == ':' )
+		{
 			break;
+		}
 	} while( c > 32 );
 
 	com_token[len] = 0;
@@ -508,16 +533,24 @@ int Q_strncasecmp( char* s1, char* s2, int n )
 		c2 = *s2++;
 
 		if( !n-- )
+		{
 			return 0; // strings are equal until end point
+		}
 
 		if( c1 != c2 )
 		{
 			if( c1 >= 'a' && c1 <= 'z' )
+			{
 				c1 -= ( 'a' - 'A' );
+			}
 			if( c2 >= 'a' && c2 <= 'z' )
+			{
 				c2 -= ( 'a' - 'A' );
+			}
 			if( c1 != c2 )
+			{
 				return -1; // strings not equal
+			}
 		}
 	} while( c1 );
 
@@ -587,7 +620,9 @@ int CheckParm( char* check )
 	for( i = 1; i < myargc; i++ )
 	{
 		if( !Q_strcasecmp( check, myargv[i] ) )
+		{
 			return i;
+		}
 	}
 
 	return 0;
@@ -618,7 +653,9 @@ FILE* SafeOpenWrite( char* filename )
 	f = fopen( filename, "wb" );
 
 	if( !f )
+	{
 		Error( "Error opening %s: %s", filename, strerror( errno ) );
+	}
 
 	return f;
 }
@@ -630,7 +667,9 @@ FILE* SafeOpenRead( char* filename )
 	f = fopen( filename, "rb" );
 
 	if( !f )
+	{
 		Error( "Error opening %s: %s", filename, strerror( errno ) );
+	}
 
 	return f;
 }
@@ -638,13 +677,17 @@ FILE* SafeOpenRead( char* filename )
 void SafeRead( FILE* f, void* buffer, int count )
 {
 	if( fread( buffer, 1, count, f ) != ( size_t )count )
+	{
 		Error( "File read failure" );
+	}
 }
 
 void SafeWrite( FILE* f, void* buffer, int count )
 {
 	if( fwrite( buffer, 1, count, f ) != ( size_t )count )
+	{
 		Error( "File write failure" );
+	}
 }
 
 /*
@@ -658,7 +701,9 @@ qboolean FileExists( char* filename )
 
 	f = fopen( filename, "r" );
 	if( !f )
+	{
 		return false;
+	}
 	fclose( f );
 	return true;
 }
@@ -676,7 +721,9 @@ int LoadFile( char* filename, void** bufferptr, int offset, int length )
 	f = SafeOpenRead( filename );
 	fseek( f, offset, SEEK_SET );
 	if( !length )
+	{
 		length = Q_filelength( f );
+	}
 	buffer						= GetMemory( length + 1 );
 	( ( char* )buffer )[length] = 0;
 	SafeRead( f, buffer, length );
@@ -703,7 +750,9 @@ int TryLoadFile( char* filename, void** bufferptr )
 
 	f = fopen( filename, "rb" );
 	if( !f )
+	{
 		return -1;
+	}
 	length						= Q_filelength( f );
 	buffer						= GetMemory( length + 1 );
 	( ( char* )buffer )[length] = 0;
@@ -740,7 +789,9 @@ void DefaultExtension( char* path, char* extension )
 	while( *src != PATHSEPERATOR && src != path )
 	{
 		if( *src == '.' )
+		{
 			return; // it has an extension
+		}
 		src--;
 	}
 
@@ -752,7 +803,9 @@ void DefaultPath( char* path, char* basepath )
 	char temp[128];
 
 	if( path[0] == PATHSEPERATOR )
+	{
 		return; // absolute path location
+	}
 	strcpy( temp, path );
 	strcpy( path, basepath );
 	strcat( path, temp );
@@ -764,7 +817,9 @@ void StripFilename( char* path )
 
 	length = strlen( path ) - 1;
 	while( length > 0 && path[length] != PATHSEPERATOR )
+	{
 		length--;
+	}
 	path[length] = 0;
 }
 
@@ -777,10 +832,14 @@ void StripExtension( char* path )
 	{
 		length--;
 		if( path[length] == '/' )
+		{
 			return; // no extension
+		}
 	}
 	if( length )
+	{
 		path[length] = 0;
+	}
 }
 
 /*
@@ -800,7 +859,9 @@ void ExtractFilePath( char* path, char* dest )
 	// back up until a \ or the start
 	//
 	while( src != path && *( src - 1 ) != '\\' && *( src - 1 ) != '/' )
+	{
 		src--;
+	}
 
 	memcpy( dest, path, src - path );
 	dest[src - path] = 0;
@@ -816,7 +877,9 @@ void ExtractFileBase( char* path, char* dest )
 	// back up until a \ or the start
 	//
 	while( src != path && *( src - 1 ) != '\\' && *( src - 1 ) != '/' )
+	{
 		src--;
+	}
 
 	while( *src && *src != '.' )
 	{
@@ -835,7 +898,9 @@ void ExtractFileExtension( char* path, char* dest )
 	// back up until a . or the start
 	//
 	while( src != path && *( src - 1 ) != '.' )
+	{
 		src--;
+	}
 	if( src == path )
 	{
 		*dest = 0; // no extension
@@ -862,13 +927,21 @@ int ParseHex( char* hex )
 	{
 		num <<= 4;
 		if( *str >= '0' && *str <= '9' )
+		{
 			num += *str - '0';
+		}
 		else if( *str >= 'a' && *str <= 'f' )
+		{
 			num += 10 + *str - 'a';
+		}
 		else if( *str >= 'A' && *str <= 'F' )
+		{
 			num += 10 + *str - 'A';
+		}
 		else
+		{
 			Error( "Bad hex number: %s", hex );
+		}
 		str++;
 	}
 
@@ -878,9 +951,13 @@ int ParseHex( char* hex )
 int ParseNum( char* str )
 {
 	if( str[0] == '$' )
+	{
 		return ParseHex( str + 1 );
+	}
 	if( str[0] == '0' && str[1] == 'x' )
+	{
 		return ParseHex( str + 2 );
+	}
 	return atol( str );
 }
 
@@ -1372,13 +1449,16 @@ void CreatePath( char* path )
 	char *ofs, c;
 
 	if( path[1] == ':' )
+	{
 		path += 2;
+	}
 
 	for( ofs = path + 1; *ofs; ofs++ )
 	{
 		c = *ofs;
 		if( c == '/' || c == '\\' )
-		{ // create the directory
+		{
+			// create the directory
 			*ofs = 0;
 			Q_mkdir( path );
 			*ofs = c;

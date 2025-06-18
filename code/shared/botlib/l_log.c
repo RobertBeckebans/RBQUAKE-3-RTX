@@ -58,7 +58,9 @@ static logfile_t logfile;
 void			 Log_Open( char* filename )
 {
 	if( !LibVarValue( "log", "0" ) )
+	{
 		return;
+	}
 	if( !filename || !strlen( filename ) )
 	{
 		botimport.Print( PRT_MESSAGE, "openlog <filename>\n" );
@@ -87,7 +89,9 @@ void			 Log_Open( char* filename )
 void Log_Close()
 {
 	if( !logfile.fp )
+	{
 		return;
+	}
 	if( fclose( logfile.fp ) )
 	{
 		botimport.Print( PRT_ERROR, "can't close log file %s\n", logfile.filename );
@@ -105,7 +109,9 @@ void Log_Close()
 void Log_Shutdown()
 {
 	if( logfile.fp )
+	{
 		Log_Close();
+	}
 } // end of the function Log_Shutdown
 //===========================================================================
 //
@@ -118,7 +124,9 @@ void QDECL Log_Write( char* fmt, ... )
 	va_list ap;
 
 	if( !logfile.fp )
+	{
 		return;
+	}
 	va_start( ap, fmt );
 	vfprintf( logfile.fp, fmt, ap );
 	va_end( ap );
@@ -136,7 +144,9 @@ void QDECL Log_WriteTimeStamped( char* fmt, ... )
 	va_list ap;
 
 	if( !logfile.fp )
+	{
 		return;
+	}
 	fprintf( logfile.fp,
 		"%d   %02d:%02d:%02d:%02d   ",
 		logfile.numwrites,
@@ -170,5 +180,7 @@ FILE* Log_FilePointer()
 void Log_Flush()
 {
 	if( logfile.fp )
+	{
 		fflush( logfile.fp );
+	}
 } // end of the function Log_Flush

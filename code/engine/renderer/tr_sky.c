@@ -80,23 +80,35 @@ static void	  AddSkyPolygon( int nump, vec3_t vecs )
 	if( av[0] > av[1] && av[0] > av[2] )
 	{
 		if( v[0] < 0 )
+		{
 			axis = 1;
+		}
 		else
+		{
 			axis = 0;
+		}
 	}
 	else if( av[1] > av[2] && av[1] > av[0] )
 	{
 		if( v[1] < 0 )
+		{
 			axis = 3;
+		}
 		else
+		{
 			axis = 2;
+		}
 	}
 	else
 	{
 		if( v[2] < 0 )
+		{
 			axis = 5;
+		}
 		else
+		{
 			axis = 4;
+		}
 	}
 
 	// project new texture coords
@@ -104,30 +116,52 @@ static void	  AddSkyPolygon( int nump, vec3_t vecs )
 	{
 		j = vec_to_st[axis][2];
 		if( j > 0 )
+		{
 			dv = vecs[j - 1];
+		}
 		else
+		{
 			dv = -vecs[-j - 1];
+		}
 		if( dv < 0.001 )
+		{
 			continue; // don't divide by zero
+		}
 		j = vec_to_st[axis][0];
 		if( j < 0 )
+		{
 			s = -vecs[-j - 1] / dv;
+		}
 		else
+		{
 			s = vecs[j - 1] / dv;
+		}
 		j = vec_to_st[axis][1];
 		if( j < 0 )
+		{
 			t = -vecs[-j - 1] / dv;
+		}
 		else
+		{
 			t = vecs[j - 1] / dv;
+		}
 
 		if( s < sky_mins[0][axis] )
+		{
 			sky_mins[0][axis] = s;
+		}
 		if( t < sky_mins[1][axis] )
+		{
 			sky_mins[1][axis] = t;
+		}
 		if( s > sky_maxs[0][axis] )
+		{
 			sky_maxs[0][axis] = s;
+		}
 		if( t > sky_maxs[1][axis] )
+		{
 			sky_maxs[1][axis] = t;
+		}
 	}
 }
 
@@ -151,9 +185,12 @@ static void ClipSkyPolygon( int nump, vec3_t vecs, int stage )
 	int		 i, j;
 
 	if( nump > MAX_CLIP_VERTS - 2 )
+	{
 		ri.Error( ERR_DROP, "ClipSkyPolygon: MAX_CLIP_VERTS" );
+	}
 	if( stage == 6 )
-	{ // fully clipped, so draw it
+	{
+		// fully clipped, so draw it
 		AddSkyPolygon( nump, vecs );
 		return;
 	}
@@ -174,12 +211,15 @@ static void ClipSkyPolygon( int nump, vec3_t vecs, int stage )
 			sides[i] = SIDE_BACK;
 		}
 		else
+		{
 			sides[i] = SIDE_ON;
+		}
 		dists[i] = d;
 	}
 
 	if( !front || !back )
-	{ // not clipped
+	{
+		// not clipped
 		ClipSkyPolygon( nump, vecs, stage + 1 );
 		return;
 	}
@@ -211,7 +251,9 @@ static void ClipSkyPolygon( int nump, vec3_t vecs, int stage )
 		}
 
 		if( sides[i] == SIDE_ON || sides[i + 1] == SIDE_ON || sides[i + 1] == sides[i] )
+		{
 			continue;
+		}
 
 		d = dists[i] / ( dists[i] - dists[i + 1] );
 		for( j = 0; j < 3; j++ )
@@ -384,22 +426,38 @@ static void DrawSkyBox( shader_t* shader )
 		sky_maxs_subd[1] = sky_maxs[1][i] * HALF_SKY_SUBDIVISIONS;
 
 		if( sky_mins_subd[0] < -HALF_SKY_SUBDIVISIONS )
+		{
 			sky_mins_subd[0] = -HALF_SKY_SUBDIVISIONS;
+		}
 		else if( sky_mins_subd[0] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_mins_subd[0] = HALF_SKY_SUBDIVISIONS;
+		}
 		if( sky_mins_subd[1] < -HALF_SKY_SUBDIVISIONS )
+		{
 			sky_mins_subd[1] = -HALF_SKY_SUBDIVISIONS;
+		}
 		else if( sky_mins_subd[1] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_mins_subd[1] = HALF_SKY_SUBDIVISIONS;
+		}
 
 		if( sky_maxs_subd[0] < -HALF_SKY_SUBDIVISIONS )
+		{
 			sky_maxs_subd[0] = -HALF_SKY_SUBDIVISIONS;
+		}
 		else if( sky_maxs_subd[0] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_maxs_subd[0] = HALF_SKY_SUBDIVISIONS;
+		}
 		if( sky_maxs_subd[1] < -HALF_SKY_SUBDIVISIONS )
+		{
 			sky_maxs_subd[1] = -HALF_SKY_SUBDIVISIONS;
+		}
 		else if( sky_maxs_subd[1] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_maxs_subd[1] = HALF_SKY_SUBDIVISIONS;
+		}
 
 		//
 		// iterate through the subdivisions
@@ -484,7 +542,9 @@ static void FillCloudBox( const shader_t* shader, int stage )
 
 			// still don't want to draw the bottom, even if fullClouds
 			if( i == 5 )
+			{
 				continue;
+			}
 		}
 		else
 		{
@@ -522,22 +582,38 @@ static void FillCloudBox( const shader_t* shader, int stage )
 		sky_maxs_subd[1] = myftol( sky_maxs[1][i] * HALF_SKY_SUBDIVISIONS );
 
 		if( sky_mins_subd[0] < -HALF_SKY_SUBDIVISIONS )
+		{
 			sky_mins_subd[0] = -HALF_SKY_SUBDIVISIONS;
+		}
 		else if( sky_mins_subd[0] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_mins_subd[0] = HALF_SKY_SUBDIVISIONS;
+		}
 		if( sky_mins_subd[1] < MIN_T )
+		{
 			sky_mins_subd[1] = MIN_T;
+		}
 		else if( sky_mins_subd[1] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_mins_subd[1] = HALF_SKY_SUBDIVISIONS;
+		}
 
 		if( sky_maxs_subd[0] < -HALF_SKY_SUBDIVISIONS )
+		{
 			sky_maxs_subd[0] = -HALF_SKY_SUBDIVISIONS;
+		}
 		else if( sky_maxs_subd[0] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_maxs_subd[0] = HALF_SKY_SUBDIVISIONS;
+		}
 		if( sky_maxs_subd[1] < MIN_T )
+		{
 			sky_maxs_subd[1] = MIN_T;
+		}
 		else if( sky_maxs_subd[1] > HALF_SKY_SUBDIVISIONS )
+		{
 			sky_maxs_subd[1] = HALF_SKY_SUBDIVISIONS;
+		}
 
 		//
 		// iterate through the subdivisions

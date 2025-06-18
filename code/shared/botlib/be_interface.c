@@ -148,22 +148,34 @@ int Export_BotLibSetup()
 
 	errnum = AAS_Setup(); // be_aas_main.c
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 	errnum = EA_Setup(); // be_ea.c
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 	errnum = BotSetupWeaponAI(); // be_ai_weap.c
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 	errnum = BotSetupGoalAI(); // be_ai_goal.c
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 	errnum = BotSetupChatAI(); // be_ai_chat.c
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 	errnum = BotSetupMoveAI(); // be_ai_move.c
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 
 	botlibsetup				  = qtrue;
 	botlibglobals.botlibsetup = qtrue;
@@ -179,9 +191,11 @@ int Export_BotLibSetup()
 int Export_BotLibShutdown()
 {
 	if( !BotLibSetup( "BotLibShutdown" ) )
+	{
 		return BLERR_LIBRARYNOTSETUP;
+	}
 #ifndef DEMO
-		// DumpFileCRCs();
+	// DumpFileCRCs();
 #endif // DEMO
 	//
 	BotShutdownChatAI();	 // be_ai_chat.c
@@ -200,7 +214,7 @@ int Export_BotLibShutdown()
 	PC_RemoveAllGlobalDefines();
 
 	// dump all allocated memory
-//	DumpMemory();
+	//	DumpMemory();
 #ifdef DEBUG
 	PrintMemoryLabels();
 #endif
@@ -249,7 +263,9 @@ int Export_BotLibVarGet( char* var_name, char* value, int size )
 int Export_BotLibStartFrame( float time )
 {
 	if( !BotLibSetup( "BotStartFrame" ) )
+	{
 		return BLERR_LIBRARYNOTSETUP;
+	}
 	return AAS_StartFrame( time );
 } // end of the function Export_BotLibStartFrame
 //===========================================================================
@@ -266,13 +282,17 @@ int Export_BotLibLoadMap( const char* mapname )
 	int errnum;
 
 	if( !BotLibSetup( "BotLoadMap" ) )
+	{
 		return BLERR_LIBRARYNOTSETUP;
+	}
 	//
 	botimport.Print( PRT_MESSAGE, "------------ Map Loading ------------\n" );
 	// startup AAS for the current map, model and sound index
 	errnum = AAS_LoadMap( mapname );
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 	// initialize the items in the level
 	BotInitLevelItems();	 // be_ai_goal.h
 	BotSetBrushModelTypes(); // be_ai_move.h
@@ -293,9 +313,13 @@ int Export_BotLibLoadMap( const char* mapname )
 int Export_BotLibUpdateEntity( int ent, bot_entitystate_t* state )
 {
 	if( !BotLibSetup( "BotUpdateEntity" ) )
+	{
 		return BLERR_LIBRARYNOTSETUP;
+	}
 	if( !ValidEntityNumber( ent, "BotUpdateEntity" ) )
+	{
 		return BLERR_INVALIDENTITYNUMBER;
+	}
 
 	return AAS_UpdateEntity( ent, state );
 } // end of the function Export_BotLibUpdateEntity
@@ -360,7 +384,9 @@ int	  BotExportTest( int parm0, char* parm1, vec3_t parm2, vec3_t parm3 )
 	// return 0;
 
 	if( !aasworld.loaded )
+	{
 		return 0;
+	}
 
 	/*
 	if (parm0 & 1)
@@ -372,7 +398,9 @@ int	  BotExportTest( int parm0, char* parm1, vec3_t parm2, vec3_t parm3 )
 	*/
 	for( i = 0; i < 2; i++ )
 		if( !line[i] )
+		{
 			line[i] = botimport.DebugLineCreate();
+		}
 
 	//	AAS_ClearShownDebugLines();
 
@@ -472,7 +500,9 @@ int	  BotExportTest( int parm0, char* parm1, vec3_t parm2, vec3_t parm3 )
 		}
 	} // end if*/
 	if( flood )
+	{
 		return 0;
+	}
 	//	if (parm0 & BUTTON_USE)
 	//	{
 	//		botlibglobals.runai = !botlibglobals.runai;
@@ -523,7 +553,9 @@ int	  BotExportTest( int parm0, char* parm1, vec3_t parm2, vec3_t parm3 )
 	AAS_ClearShownDebugLines();
 	AAS_ShowAreaPolygons( newarea, 1, parm0 & 4 );
 	if( parm0 & 2 )
+	{
 		AAS_ShowReachableAreas( area );
+	}
 	else
 	{
 		static int		   lastgoalareanum, lastareanum;
@@ -608,14 +640,14 @@ int	  BotExportTest( int parm0, char* parm1, vec3_t parm2, vec3_t parm3 )
 		ent = &aasworld.entities[trace.ent];
 		AAS_ShowBoundingBox(ent->origin, ent->mins, ent->maxs);
 	} //end if
-*/
+	*/
 
 	/*
 	start_time = clock();
 	for (i = 0; i < 2000; i++)
 	{
 		AAS_Trace2(eye, mins, maxs, end, 1, MASK_PLAYERSOLID);
-//		AAS_TraceClientBBox(eye, end, PRESENCE_NORMAL, 1);
+	//		AAS_TraceClientBBox(eye, end, PRESENCE_NORMAL, 1);
 	} //end for
 	end_time = clock();
 	botimport.Print(PRT_MESSAGE, "me %lu clocks, %lu CLOCKS_PER_SEC\n", end_time - start_time, CLOCKS_PER_SEC);
@@ -626,46 +658,49 @@ int	  BotExportTest( int parm0, char* parm1, vec3_t parm2, vec3_t parm3 )
 	} //end for
 	end_time = clock();
 	botimport.Print(PRT_MESSAGE, "id %lu clocks, %lu CLOCKS_PER_SEC\n", end_time - start_time, CLOCKS_PER_SEC);
-*/
+	*/
 
 	// TTimo: nested comments are BAD for gcc -Werror, use #if 0 instead..
 	#if 0
 	AAS_ClearShownDebugLines();
 	//bsptrace = AAS_Trace(eye, NULL, NULL, end, 1, MASK_PLAYERSOLID);
-	bsptrace = AAS_Trace(eye, mins, maxs, end, 1, MASK_PLAYERSOLID);
-	if (!line[0]) line[0] = botimport.DebugLineCreate();
-	botimport.DebugLineShow(line[0], eye, bsptrace.endpos, LINECOLOR_YELLOW);
-	if (bsptrace.fraction < 1.0)
+	bsptrace = AAS_Trace( eye, mins, maxs, end, 1, MASK_PLAYERSOLID );
+	if( !line[0] )
 	{
-		face = AAS_TraceEndFace(&trace);
-		if (face)
+		line[0] = botimport.DebugLineCreate();
+	}
+	botimport.DebugLineShow( line[0], eye, bsptrace.endpos, LINECOLOR_YELLOW );
+	if( bsptrace.fraction < 1.0 )
+	{
+		face = AAS_TraceEndFace( &trace );
+		if( face )
 		{
-			AAS_ShowFace(face - aasworld.faces);
+			AAS_ShowFace( face - aasworld.faces );
 		} //end if
-		
-		AAS_DrawPlaneCross(bsptrace.endpos,
-									bsptrace.plane.normal,
-									bsptrace.plane.dist + bsptrace.exp_dist,
-									bsptrace.plane.type, LINECOLOR_GREEN);
-		if (trace.ent)
+
+		AAS_DrawPlaneCross( bsptrace.endpos,
+							bsptrace.plane.normal,
+							bsptrace.plane.dist + bsptrace.exp_dist,
+							bsptrace.plane.type, LINECOLOR_GREEN );
+		if( trace.ent )
 		{
 			ent = &aasworld.entities[trace.ent];
-			AAS_ShowBoundingBox(ent->origin, ent->mins, ent->maxs);
+			AAS_ShowBoundingBox( ent->origin, ent->mins, ent->maxs );
 		} //end if
 	} //end if
 	//bsptrace = AAS_Trace2(eye, NULL, NULL, end, 1, MASK_PLAYERSOLID);
-	bsptrace = AAS_Trace2(eye, mins, maxs, end, 1, MASK_PLAYERSOLID);
-	botimport.DebugLineShow(line[1], eye, bsptrace.endpos, LINECOLOR_BLUE);
-	if (bsptrace.fraction < 1.0)
+	bsptrace = AAS_Trace2( eye, mins, maxs, end, 1, MASK_PLAYERSOLID );
+	botimport.DebugLineShow( line[1], eye, bsptrace.endpos, LINECOLOR_BLUE );
+	if( bsptrace.fraction < 1.0 )
 	{
-		AAS_DrawPlaneCross(bsptrace.endpos,
-									bsptrace.plane.normal,
-									bsptrace.plane.dist,// + bsptrace.exp_dist,
-									bsptrace.plane.type, LINECOLOR_RED);
-		if (bsptrace.ent)
+		AAS_DrawPlaneCross( bsptrace.endpos,
+							bsptrace.plane.normal,
+							bsptrace.plane.dist,// + bsptrace.exp_dist,
+							bsptrace.plane.type, LINECOLOR_RED );
+		if( bsptrace.ent )
 		{
 			ent = &aasworld.entities[bsptrace.ent];
-			AAS_ShowBoundingBox(ent->origin, ent->mins, ent->maxs);
+			AAS_ShowBoundingBox( ent->origin, ent->mins, ent->maxs );
 		} //end if
 	} //end if
 	#endif

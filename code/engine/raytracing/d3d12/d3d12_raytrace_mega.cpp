@@ -44,7 +44,9 @@ void								GL_InitMegaTextures()
 void GL_RegisterTexture( const char* texturePath, int width, int height, byte* data )
 {
 	if( diffuseMegaTexture == NULL )
+	{
 		return;
+	}
 
 	diffuseMegaTexture->RegisterTexture( texturePath, width, height, data );
 }
@@ -174,7 +176,9 @@ GL_FindMegaTile
 void GL_FindMegaTile( const char* name, float& x, float& y, float& width, float& height )
 {
 	if( diffuseMegaTexture == NULL )
+	{
 		return;
+	}
 
 	diffuseMegaTexture->FindMegaTile( name, x, y, width, height );
 }
@@ -187,7 +191,9 @@ void GL_FindMegaTile( const char* name, float* x, float* y, float* width, float*
 {
 	float _x, _y, _width, _height;
 	if( diffuseMegaTexture == NULL )
+	{
 		return;
+	}
 
 	diffuseMegaTexture->FindMegaTile( name, _x, _y, _width, _height );
 
@@ -287,7 +293,9 @@ void iceMegaTexture::RegisterTexture( const char* texturePath, int width, int he
 	for( int i = 0; i < megaEntries.size(); i++ )
 	{
 		if( !strcmp( megaEntries[i].texturePath, texturePath ) )
+		{
 			return;
+		}
 	}
 
 	// common->Printf("RegisterTexture: %s\n", texturePath);

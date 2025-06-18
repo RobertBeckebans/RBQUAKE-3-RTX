@@ -123,7 +123,9 @@ int QDECL VM_DllSyscall( int arg, ... )
 
 	va_start( ap, arg );
 	for( i = 1; i < 32; i++ )
+	{
 		args[i] = va_arg( ap, intptr_t );
+	}
 	va_end( ap );
 
 	return currentVM->systemCall( args );
@@ -247,13 +249,16 @@ void VM_Free( vm_t* vm )
 		Com_Memset( vm, 0, sizeof( *vm ) );
 	}
 #if 0 // now automatically freed by hunk
-	if ( vm->codeBase ) {
+	if( vm->codeBase )
+	{
 		Z_Free( vm->codeBase );
 	}
-	if ( vm->dataBase ) {
+	if( vm->dataBase )
+	{
 		Z_Free( vm->dataBase );
 	}
-	if ( vm->instructionPointers ) {
+	if( vm->instructionPointers )
+	{
 		Z_Free( vm->instructionPointers );
 	}
 #endif
@@ -286,7 +291,9 @@ void* VM_ArgPtr( intptr_t intValue )
 	}
 	// bk001220 - currentVM is missing on reconnect
 	if( currentVM == NULL )
+	{
 		return NULL;
+	}
 
 	if( currentVM->entryPoint )
 	{
@@ -307,7 +314,9 @@ void* VM_ExplicitArgPtr( vm_t* vm, intptr_t intValue )
 
 	// bk010124 - currentVM is missing on reconnect here as well?
 	if( currentVM == NULL )
+	{
 		return NULL;
+	}
 
 	//
 	if( vm->entryPoint )
@@ -380,7 +389,9 @@ int QDECL VM_Call( vm_t* vm, int callnum, ... )
 	r = vm->entryPoint( callnum, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], args[13], args[14], args[15] );
 
 	if( oldVM != NULL ) // bk001220 - assert(currentVM!=NULL) for oldVM==NULL
+	{
 		currentVM = oldVM;
+	}
 	return r;
 }
 

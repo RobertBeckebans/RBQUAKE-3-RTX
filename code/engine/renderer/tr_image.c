@@ -89,9 +89,13 @@ static long generateHashValue( const char* fname )
 	{
 		letter = tolower( fname[i] );
 		if( letter == '.' )
+		{
 			break; // don't include extension
+		}
 		if( letter == '\\' )
+		{
 			letter = '/'; // damn path names
+		}
 		hash += ( long )( letter ) * ( i + 119 );
 		i++;
 	}
@@ -260,7 +264,9 @@ static void ResampleTexture( unsigned* in, int inwidth, int inheight, unsigned* 
 	byte *	  pix1, *pix2, *pix3, *pix4;
 
 	if( outwidth > 2048 )
+	{
 		ri.Error( ERR_DROP, "ResampleTexture: max width" );
+	}
 
 	fracstep = inwidth * 0x10000 / outwidth;
 
@@ -836,9 +842,13 @@ done:
 	GL_CheckErrors();
 
 	if( scaledBuffer != 0 )
+	{
 		ri.Hunk_FreeTempMemory( scaledBuffer );
+	}
 	if( resampledBuffer != 0 )
+	{
 		ri.Hunk_FreeTempMemory( resampledBuffer );
+	}
 }
 
 /*
@@ -1001,7 +1011,9 @@ static void LoadBMP( const char* name, byte** pic, int* width, int* height )
 	Com_Memcpy( bmpHeader.palette, buf_p, sizeof( bmpHeader.palette ) );
 
 	if( bmpHeader.bitsPerPixel == 8 )
+	{
 		buf_p += 1024;
+	}
 
 	if( bmpHeader.id[0] != 'B' && bmpHeader.id[1] != 'M' )
 	{
@@ -1023,13 +1035,19 @@ static void LoadBMP( const char* name, byte** pic, int* width, int* height )
 	columns = bmpHeader.width;
 	rows	= bmpHeader.height;
 	if( rows < 0 )
+	{
 		rows = -rows;
+	}
 	numPixels = columns * rows;
 
 	if( width )
+	{
 		*width = columns;
+	}
 	if( height )
+	{
 		*height = rows;
+	}
 
 	bmpRGBA = ri.Malloc( numPixels * 4 );
 	*pic	= bmpRGBA;
@@ -1154,9 +1172,13 @@ static void LoadPCX( const char* filename, byte** pic, byte** palette, int* widt
 	}
 
 	if( width )
+	{
 		*width = xmax + 1;
+	}
 	if( height )
+	{
 		*height = ymax + 1;
+	}
 	// FIXME: use bytes_per_line here?
 
 	for( y = 0; y <= ymax; y++, pix += xmax + 1 )
@@ -1171,10 +1193,14 @@ static void LoadPCX( const char* filename, byte** pic, byte** palette, int* widt
 				dataByte  = *raw++;
 			}
 			else
+			{
 				runLength = 1;
+			}
 
 			while( runLength-- > 0 )
+			{
 				pix[x++] = dataByte;
+			}
 		}
 	}
 
@@ -1299,15 +1325,21 @@ void LoadTGA( const char* name, byte** pic, int* width, int* height )
 	numPixels = columns * rows;
 
 	if( width )
+	{
 		*width = columns;
+	}
 	if( height )
+	{
 		*height = rows;
+	}
 
 	targa_rgba = ri.Malloc( numPixels * 4 );
 	*pic	   = targa_rgba;
 
 	if( targa_header.id_length != 0 )
+	{
 		buf_p += targa_header.id_length; // skip TARGA image comment
+	}
 
 	if( targa_header.image_type == 2 || targa_header.image_type == 3 )
 	{
@@ -1357,7 +1389,8 @@ void LoadTGA( const char* name, byte** pic, int* width, int* height )
 		}
 	}
 	else if( targa_header.image_type == 10 )
-	{ // Runlength encoded RGB images
+	{
+		// Runlength encoded RGB images
 		unsigned char red, green, blue, alphabyte, packetHeader, packetSize, j;
 
 		red		  = 0;
@@ -1373,7 +1406,8 @@ void LoadTGA( const char* name, byte** pic, int* width, int* height )
 				packetHeader = *buf_p++;
 				packetSize	 = 1 + ( packetHeader & 0x7f );
 				if( packetHeader & 0x80 )
-				{ // run-length packet
+				{
+					// run-length packet
 					switch( targa_header.pixel_size )
 					{
 						case 24:
@@ -1401,18 +1435,24 @@ void LoadTGA( const char* name, byte** pic, int* width, int* height )
 						*pixbuf++ = alphabyte;
 						column++;
 						if( column == columns )
-						{ // run spans across rows
+						{
+							// run spans across rows
 							column = 0;
 							if( row > 0 )
+							{
 								row--;
+							}
 							else
+							{
 								goto breakOut;
+							}
 							pixbuf = targa_rgba + row * columns * 4;
 						}
 					}
 				}
 				else
-				{ // non run-length packet
+				{
+					// non run-length packet
 					for( j = 0; j < packetSize; j++ )
 					{
 						switch( targa_header.pixel_size )
@@ -1442,12 +1482,17 @@ void LoadTGA( const char* name, byte** pic, int* width, int* height )
 						}
 						column++;
 						if( column == columns )
-						{ // pixel packet run spans across rows
+						{
+							// pixel packet run spans across rows
 							column = 0;
 							if( row > 0 )
+							{
 								row--;
+							}
 							else
+							{
 								goto breakOut;
+							}
 							pixbuf = targa_rgba + row * columns * 4;
 						}
 					}
@@ -1457,24 +1502,26 @@ void LoadTGA( const char* name, byte** pic, int* width, int* height )
 		}
 	}
 
-#if 0 
-  // TTimo: this is the chunk of code to ensure a behavior that meets TGA specs 
-  // bk0101024 - fix from Leonardo
-  // bit 5 set => top-down
-  if (targa_header.attributes & 0x20) {
-    unsigned char *flip = (unsigned char*)malloc (columns*4);
-    unsigned char *src, *dst;
+#if 0
+	// TTimo: this is the chunk of code to ensure a behavior that meets TGA specs
+	// bk0101024 - fix from Leonardo
+	// bit 5 set => top-down
+	if ( targa_header.attributes & 0x20 )
+	{
+		unsigned char* flip = ( unsigned char* )malloc ( columns * 4 );
+		unsigned char* src, * dst;
 
-    for (row = 0; row < rows/2; row++) {
-      src = targa_rgba + row * 4 * columns;
-      dst = targa_rgba + (rows - row - 1) * 4 * columns;
+		for ( row = 0; row < rows / 2; row++ )
+		{
+			src = targa_rgba + row * 4 * columns;
+			dst = targa_rgba + ( rows - row - 1 ) * 4 * columns;
 
-      memcpy (flip, src, columns*4);
-      memcpy (src, dst, columns*4);
-      memcpy (dst, flip, columns*4);
-    }
-    free (flip);
-  }
+			memcpy ( flip, src, columns * 4 );
+			memcpy ( src, dst, columns * 4 );
+			memcpy ( dst, flip, columns * 4 );
+		}
+		free ( flip );
+	}
 #endif
 	// instead we just print a warning
 	if( targa_header.attributes & 0x20 )
@@ -1704,10 +1751,14 @@ boolean empty_output_buffer( j_compress_ptr cinfo )
 GLOBAL void jpeg_start_compress( j_compress_ptr cinfo, boolean write_all_tables )
 {
 	if( cinfo->global_state != CSTATE_START )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 
 	if( write_all_tables )
+	{
 		jpeg_suppress_tables( cinfo, FALSE ); /* mark all tables to be written */
+	}
 
 	/* (Re)initialize error mgr and destination modules */
 	( *cinfo->err->reset_error_mgr )( ( j_common_ptr )cinfo );
@@ -1743,9 +1794,13 @@ GLOBAL JDIMENSION jpeg_write_scanlines( j_compress_ptr cinfo, JSAMPARRAY scanlin
 	JDIMENSION row_ctr, rows_left;
 
 	if( cinfo->global_state != CSTATE_SCANNING )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 	if( cinfo->next_scanline >= cinfo->image_height )
+	{
 		WARNMS( cinfo, JWRN_TOO_MUCH_DATA );
+	}
 
 	/* Call progress monitor hook if present */
 	if( cinfo->progress != NULL )
@@ -1761,12 +1816,16 @@ GLOBAL JDIMENSION jpeg_write_scanlines( j_compress_ptr cinfo, JSAMPARRAY scanlin
 	 * jpeg_start_compress and jpeg_write_scanlines.
 	 */
 	if( cinfo->master->call_pass_startup )
+	{
 		( *cinfo->master->pass_startup )( cinfo );
+	}
 
 	/* Ignore any extra scanlines at bottom of image. */
 	rows_left = cinfo->image_height - cinfo->next_scanline;
 	if( num_lines > rows_left )
+	{
 		num_lines = rows_left;
+	}
 
 	row_ctr = 0;
 	( *cinfo->main->process_data )( cinfo, scanlines, &row_ctr, num_lines );
@@ -1809,7 +1868,8 @@ void jpegDest( j_compress_ptr cinfo, byte* outfile, int size )
 	 * sizes may be different.  Caveat programmer.
 	 */
 	if( cinfo->dest == NULL )
-	{ /* first time for this JPEG object? */
+	{
+		/* first time for this JPEG object? */
 		cinfo->dest = ( struct jpeg_destination_mgr* )( *cinfo->mem->alloc_small )( ( j_common_ptr )cinfo, JPOOL_PERMANENT, sizeof( my_destination_mgr ) );
 	}
 
@@ -1956,7 +2016,8 @@ void R_LoadImage( const char* name, byte** pic, int* width, int* height )
 	{
 		LoadTGA( name, pic, width, height ); // try tga first
 		if( !*pic )
-		{							 //
+		{
+			//
 			char altname[MAX_QPATH]; // try jpg in place of tga
 			strcpy( altname, name );
 			len				 = strlen( altname );
@@ -2034,7 +2095,8 @@ image_t* R_FindImageFile( const char* name, qboolean mipmap, qboolean allowPicmi
 	//
 	R_LoadImage( name, &pic, &width, &height );
 	if( pic == NULL )
-	{													   // if we dont get a successful load
+	{
+		// if we dont get a successful load
 		char altname[MAX_QPATH];						   // copy the name
 		int	 len;										   //
 		strcpy( altname, name );						   //
@@ -2045,7 +2107,8 @@ image_t* R_FindImageFile( const char* name, qboolean mipmap, qboolean allowPicmi
 		ri.Printf( PRINT_ALL, "trying %s...\n", altname ); //
 		R_LoadImage( altname, &pic, &width, &height );	   //
 		if( pic == NULL )
-		{				 // if that fails
+		{
+			// if that fails
 			return NULL; // bail
 		}
 	}
@@ -2460,7 +2523,9 @@ static char* CommaParse( char** data_p )
 		if( c == '/' && data[1] == '/' )
 		{
 			while( *data && *data != '\n' )
+			{
 				data++;
+			}
 		}
 		// skip /* */ comments
 		else if( c == '/' && data[1] == '*' )

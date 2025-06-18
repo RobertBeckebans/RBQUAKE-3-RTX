@@ -220,7 +220,8 @@ Speaker entities can automatically play sounds
 static void CG_Speaker( centity_t* cent )
 {
 	if( !cent->currentState.clientNum )
-	{			// FIXME: use something other than clientNum...
+	{
+		// FIXME: use something other than clientNum...
 		return; // not auto triggering
 	}
 
@@ -464,7 +465,7 @@ static void CG_Missile( centity_t* cent )
 		trap_R_AddLightToScene(cent->lerpOrigin, weapon->missileDlight,
 			weapon->missileDlightColor[col][0], weapon->missileDlightColor[col][1], weapon->missileDlightColor[col][2] );
 	}
-*/
+	*/
 	// add dynamic light
 	if( weapon->missileDlight )
 	{
@@ -569,7 +570,8 @@ static void CG_Grapple( centity_t* cent )
 
 #if 0 // FIXME add grapple pull sound here..?
 	// add missile sound
-	if ( weapon->missileSound ) {
+	if( weapon->missileSound )
+	{
 		trap_S_AddLoopingSound( cent->currentState.number, cent->lerpOrigin, vec3_origin, weapon->missileSound );
 	}
 #endif
@@ -901,7 +903,9 @@ static void CG_TeamBase( centity_t* cent )
 			{
 				c = ( float )( t - h ) / h;
 				if( c > 1 )
+				{
 					c = 1;
+				}
 			}
 			else
 			{

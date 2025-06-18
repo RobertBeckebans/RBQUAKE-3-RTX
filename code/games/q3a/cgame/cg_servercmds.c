@@ -383,7 +383,8 @@ static void CG_ConfigStringModified()
 	else if( num >= CS_SOUNDS && num < CS_SOUNDS + MAX_MODELS )
 	{
 		if( str[0] != '*' )
-		{ // player specific sounds don't register here
+		{
+			// player specific sounds don't register here
 			cgs.gameSounds[num - CS_SOUNDS] = trap_S_RegisterSound( str, qfalse );
 		}
 	}
@@ -493,7 +494,9 @@ static void CG_AddToTeamChat( const char* str )
 	cgs.teamChatPos++;
 
 	if( cgs.teamChatPos - cgs.teamLastChatPos > chatHeight )
+	{
 		cgs.teamLastChatPos = cgs.teamChatPos - chatHeight;
+	}
 }
 
 /*
@@ -681,7 +684,9 @@ int					 CG_ParseVoiceChats( const char* filename, voiceChatList_t* voiceChatLis
 				return qtrue;
 			}
 			if( !Q_stricmp( token, "}" ) )
+			{
 				break;
+			}
 			sound																								= trap_S_RegisterSound( token, compress );
 			voiceChats[voiceChatList->numVoiceChats].sounds[voiceChats[voiceChatList->numVoiceChats].numSounds] = sound;
 			token																								= COM_ParseExt( p, qtrue );
@@ -691,13 +696,19 @@ int					 CG_ParseVoiceChats( const char* filename, voiceChatList_t* voiceChatLis
 			}
 			Com_sprintf( voiceChats[voiceChatList->numVoiceChats].chats[voiceChats[voiceChatList->numVoiceChats].numSounds], MAX_CHATSIZE, "%s", token );
 			if( sound )
+			{
 				voiceChats[voiceChatList->numVoiceChats].numSounds++;
+			}
 			if( voiceChats[voiceChatList->numVoiceChats].numSounds >= MAX_VOICESOUNDS )
+			{
 				break;
+			}
 		}
 		voiceChatList->numVoiceChats++;
 		if( voiceChatList->numVoiceChats >= maxVoiceChats )
+		{
 			return qtrue;
+		}
 	}
 	return qtrue;
 }
@@ -858,7 +869,9 @@ voiceChatList_t* CG_VoiceChatListForClient( int clientNum )
 				Com_sprintf( filename, sizeof( filename ), "scripts/%s.vc", headModelName );
 				voiceChatNum = CG_HeadModelVoiceChats( filename );
 				if( voiceChatNum == -1 )
+				{
 					break;
+				}
 				Com_sprintf( headModelVoiceChat[i].headmodel, sizeof( headModelVoiceChat[i].headmodel ), "%s", headModelName );
 				headModelVoiceChat[i].voiceChatNum = voiceChatNum;
 				return &voiceChatLists[headModelVoiceChat[i].voiceChatNum];
@@ -891,7 +904,9 @@ voiceChatList_t* CG_VoiceChatListForClient( int clientNum )
 		}
 		// fall back to male gender because we don't have neuter in the mission pack
 		if( gender == GENDER_MALE )
+		{
 			break;
+		}
 		gender = GENDER_MALE;
 	}
 	// store this head model with voice chat for future reference
@@ -1107,7 +1122,9 @@ static void CG_RemoveChatEscapeChar( char* text )
 	for( i = 0; text[i]; i++ )
 	{
 		if( text[i] == '\x19' )
+		{
 			continue;
+		}
 		text[l++] = text[i];
 	}
 	text[l] = '\0';
@@ -1151,7 +1168,7 @@ static void CG_ServerCommand()
 		CG_Printf( "%s", CG_Argv( 1 ) );
 #ifdef MISSIONPACK
 		cmd = CG_Argv( 1 ); // yes, this is obviously a hack, but so is the way we hear about
-							// votes passing or failing
+		// votes passing or failing
 		if( !Q_stricmpn( cmd, "vote failed", 11 ) || !Q_stricmpn( cmd, "team vote failed", 16 ) )
 		{
 			trap_S_StartLocalSound( cgs.media.voteFailed, CHAN_ANNOUNCER );
@@ -1231,7 +1248,8 @@ static void CG_ServerCommand()
 
 	// loaddeferred can be both a servercmd and a consolecmd
 	if( !strcmp( cmd, "loaddefered" ) )
-	{ // FIXME: spelled wrong, but not changing for demo
+	{
+		// FIXME: spelled wrong, but not changing for demo
 		CG_LoadDeferredPlayers();
 		return;
 	}

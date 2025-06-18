@@ -45,7 +45,9 @@ static qboolean s_alttab_disabled;
 static void		WIN_DisableAltTab()
 {
 	if( s_alttab_disabled )
+	{
 		return;
+	}
 
 	if( !Q_stricmp( Cvar_VariableString( "arch" ), "winnt" ) )
 	{
@@ -266,7 +268,9 @@ static int MapKey( int key )
 	modified = ( key >> 16 ) & 255;
 
 	if( modified > 127 )
+	{
 		return 0;
+	}
 
 	if( key & ( 1 << 24 ) )
 	{
@@ -431,18 +435,19 @@ LONG WINAPI	   MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 			break;
 #if 0
-	case WM_DISPLAYCHANGE:
-		Com_DPrintf( "WM_DISPLAYCHANGE\n" );
-		// we need to force a vid_restart if the user has changed
-		// their desktop resolution while the game is running,
-		// but don't do anything if the message is a result of
-		// our own calling of ChangeDisplaySettings
-		if ( com_insideVidInit ) {
-			break;		// we did this on purpose
-		}
-		// something else forced a mode change, so restart all our gl stuff
-		Cbuf_AddText( "vid_restart\n" );
-		break;
+		case WM_DISPLAYCHANGE:
+			Com_DPrintf( "WM_DISPLAYCHANGE\n" );
+			// we need to force a vid_restart if the user has changed
+			// their desktop resolution while the game is running,
+			// but don't do anything if the message is a result of
+			// our own calling of ChangeDisplaySettings
+			if( com_insideVidInit )
+			{
+				break;		// we did this on purpose
+			}
+			// something else forced a mode change, so restart all our gl stuff
+			Cbuf_AddText( "vid_restart\n" );
+			break;
 #endif
 		case WM_DESTROY:
 			// let sound and input know about this?
@@ -500,8 +505,8 @@ LONG WINAPI	   MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 		}
 		break;
 
-			// this is complicated because Win32 seems to pack multiple mouse events into
-			// one update sometimes, so we always check all states and look for events
+		// this is complicated because Win32 seems to pack multiple mouse events into
+		// one update sometimes, so we always check all states and look for events
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
 		case WM_RBUTTONDOWN:
@@ -515,13 +520,19 @@ LONG WINAPI	   MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 			temp = 0;
 
 			if( wParam & MK_LBUTTON )
+			{
 				temp |= 1;
+			}
 
 			if( wParam & MK_RBUTTON )
+			{
 				temp |= 2;
+			}
 
 			if( wParam & MK_MBUTTON )
+			{
 				temp |= 4;
+			}
 
 			IN_MouseEvent( temp );
 		}
@@ -529,7 +540,9 @@ LONG WINAPI	   MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 		case WM_SYSCOMMAND:
 			if( wParam == SC_SCREENSAVE )
+			{
 				return 0;
+			}
 			break;
 
 		case WM_SYSKEYDOWN:
@@ -542,7 +555,7 @@ LONG WINAPI	   MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 				}
 				return 0;
 			}
-			// fall through
+		// fall through
 		case WM_KEYDOWN:
 			Sys_QueEvent( g_wv.sysMsgTime, SE_KEY, MapKey( lParam ), qtrue, 0, NULL );
 			break;

@@ -196,12 +196,12 @@ void GenerateMengerSponge( int32_t level, float probability, std::vector<Vertex>
 				topLeftFront.m128_f32[0] = m_topLeftFront.m128_f32[0] + static_cast<float>( x ) * size;
 				for( int y = 0; y < 3; y++ )
 				{
-					if( x == 1 && y == 1 ) continue;
+					if( x == 1 && y == 1 ) { continue; }
 					topLeftFront.m128_f32[1] = m_topLeftFront.m128_f32[1] + static_cast<float>( y ) * size;
 					for( int z = 0; z < 3; z++ )
 					{
-						if( x == 1 && z == 1 ) continue;
-						if( y == 1 && z == 1 ) continue;
+						if( x == 1 && z == 1 ) { continue; }
+						if( y == 1 && z == 1 ) { continue; }
 
 						topLeftFront.m128_f32[2] = m_topLeftFront.m128_f32[2] + static_cast<float>( z ) * size;
 						cubes.push_back( { topLeftFront, size } );
@@ -223,7 +223,7 @@ void GenerateMengerSponge( int32_t level, float probability, std::vector<Vertex>
 					for( int z = 0; z < 3; z++ )
 					{
 						float sample = rand() / static_cast<float>( RAND_MAX );
-						if( sample > prob ) continue;
+						if( sample > prob ) { continue; }
 						topLeftFront.m128_f32[2] = m_topLeftFront.m128_f32[2] + static_cast<float>( z ) * size;
 						cubes.push_back( { topLeftFront, size } );
 					}
@@ -250,10 +250,8 @@ void GenerateMengerSponge( int32_t level, float probability, std::vector<Vertex>
 	{
 		for( Cube& c : *previous )
 		{
-			if( probability < 0.f )
-				c.split( *next );
-			else
-				c.splitProb( *next, 20.f / 27.f );
+			if( probability < 0.f ) { c.split( *next ); }
+			else { c.splitProb( *next, 20.f / 27.f ); }
 		}
 		auto temp = previous;
 		previous  = next;

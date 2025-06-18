@@ -109,9 +109,13 @@ int AAS_IndexFromString( char* indexname, char* stringindex[], int numindexes, c
 	for( i = 0; i < numindexes; i++ )
 	{
 		if( !stringindex[i] )
+		{
 			continue;
+		}
 		if( !Q_stricmp( stringindex[i], string ) )
+		{
 			return i;
+		}
 	} // end for
 	return 0;
 } // end of the function AAS_IndexFromString
@@ -203,13 +207,19 @@ void AAS_ContinueInit( float time )
 {
 	// if no AAS file loaded
 	if( !aasworld.loaded )
+	{
 		return;
+	}
 	// if AAS is already initialized
 	if( aasworld.initialized )
+	{
 		return;
+	}
 	// calculate reachability, if not finished return
 	if( AAS_ContinueInitReachability( time ) )
+	{
 		return;
+	}
 	// initialize clustering for the new map
 	AAS_InitClustering();
 	// if reachability has been calculated and an AAS file should be written
@@ -218,7 +228,9 @@ void AAS_ContinueInit( float time )
 	{
 		// optimize the AAS data
 		if( ( int )LibVarValue( "aasoptimize", "0" ) )
+		{
 			AAS_Optimize();
+		}
 		// save the AAS file
 		if( AAS_WriteAASFile( aasworld.filename ) )
 		{
@@ -331,7 +343,9 @@ int AAS_LoadFiles( const char* mapname )
 	Com_sprintf( aasfile, MAX_PATH, "maps/%s.aas", mapname );
 	errnum = AAS_LoadAASFile( aasfile );
 	if( errnum != BLERR_NOERROR )
+	{
 		return errnum;
+	}
 
 	botimport.Print( PRT_MESSAGE, "loaded %s\n", aasfile );
 	strncpy( aasworld.filename, aasfile, MAX_PATH );
@@ -394,7 +408,9 @@ int AAS_Setup()
 	saveroutingcache = LibVar( "saveroutingcache", "0" );
 	// allocate memory for the entities
 	if( aasworld.entities )
+	{
 		FreeMemory( aasworld.entities );
+	}
 	aasworld.entities = ( aas_entity_t* )GetClearedHunkMemory( aasworld.maxentities * sizeof( aas_entity_t ) );
 	// invalidate all the entities
 	AAS_InvalidateEntities();
@@ -425,7 +441,9 @@ void AAS_Shutdown()
 	AAS_DumpAASData();
 	// free the entities
 	if( aasworld.entities )
+	{
 		FreeMemory( aasworld.entities );
+	}
 	// clear the aasworld structure
 	Com_Memset( &aasworld, 0, sizeof( aas_t ) );
 	// aas has not been initialized

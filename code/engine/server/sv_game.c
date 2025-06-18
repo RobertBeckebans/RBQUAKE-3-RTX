@@ -180,9 +180,13 @@ qboolean SV_inPVS( const vec3_t p1, const vec3_t p2 )
 	cluster = CM_LeafCluster( leafnum );
 	area2	= CM_LeafArea( leafnum );
 	if( mask && ( !( mask[cluster >> 3] & ( 1 << ( cluster & 7 ) ) ) ) )
+	{
 		return qfalse;
+	}
 	if( !CM_AreasConnected( area1, area2 ) )
+	{
 		return qfalse; // a door blocks sight
+	}
 	return qtrue;
 }
 
@@ -210,7 +214,9 @@ qboolean SV_inPVSIgnorePortals( const vec3_t p1, const vec3_t p2 )
 	area2	= CM_LeafArea( leafnum );
 
 	if( mask && ( !( mask[cluster >> 3] & ( 1 << ( cluster & 7 ) ) ) ) )
+	{
 		return qfalse;
+	}
 
 	return qtrue;
 }
@@ -941,7 +947,8 @@ void SV_RestartGameProgs()
 	// do a restart instead of a free
 	gvm = VM_Restart( gvm );
 	if( !gvm )
-	{ // bk001212 - as done below
+	{
+		// bk001212 - as done below
 		Com_Error( ERR_FATAL, "VM_Restart on game failed" );
 	}
 

@@ -62,7 +62,9 @@ void				Favorites_Add()
 
 	trap_Cvar_VariableStringBuffer( "cl_currentServerAddress", serverbuff, sizeof( serverbuff ) );
 	if( !serverbuff[0] )
+	{
 		return;
+	}
 
 	best = 0;
 	for( i = 0; i < MAX_FAVORITESERVERS; i++ )
@@ -76,11 +78,15 @@ void				Favorites_Add()
 
 		// use first empty or non-numeric available slot
 		if( ( adrstr[0] < '0' || adrstr[0] > '9' ) && !best )
+		{
 			best = i + 1;
+		}
 	}
 
 	if( best )
+	{
 		trap_Cvar_Set( va( "server%d", best ), serverbuff );
+	}
 }
 
 /*
@@ -94,7 +100,9 @@ static void ServerInfo_Event( void* ptr, int event )
 	{
 		case ID_ADD:
 			if( event != QM_ACTIVATED )
+			{
 				break;
+			}
 
 			Favorites_Add();
 			UI_PopMenu();
@@ -102,7 +110,9 @@ static void ServerInfo_Event( void* ptr, int event )
 
 		case ID_BACK:
 			if( event != QM_ACTIVATED )
+			{
 				break;
+			}
 
 			UI_PopMenu();
 			break;
@@ -165,7 +175,9 @@ void ServerInfo_Cache()
 	for( i = 0;; i++ )
 	{
 		if( !serverinfo_artlist[i] )
+		{
 			break;
+		}
 		trap_R_RegisterShaderNoMip( serverinfo_artlist[i] );
 	}
 }
@@ -254,7 +266,9 @@ void UI_ServerInfoMenu()
 	}
 
 	if( s_serverinfo.numlines > 16 )
+	{
 		s_serverinfo.numlines = 16;
+	}
 
 	Menu_AddItem( &s_serverinfo.menu, ( void* )&s_serverinfo.banner );
 	Menu_AddItem( &s_serverinfo.menu, ( void* )&s_serverinfo.framel );

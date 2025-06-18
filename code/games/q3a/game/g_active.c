@@ -136,7 +136,9 @@ void P_WorldEffects( gentity_t* ent )
 				// take more damage the longer underwater
 				ent->damage += 2;
 				if( ent->damage > 15 )
+				{
 					ent->damage = 15;
+				}
 
 				// play a gurp sound instead of a normal pain sound
 				if( ent->health <= ent->damage )
@@ -615,7 +617,9 @@ void ClientTimerActions( gentity_t* ent, int msec )
 			if( client->ammoTimes[w] >= t )
 			{
 				while( client->ammoTimes[w] >= t )
+				{
 					client->ammoTimes[w] -= t;
+				}
 				client->ps.ammo[w] += inc;
 				if( client->ps.ammo[w] > max )
 				{
@@ -844,17 +848,29 @@ static int StuckInOtherClient( gentity_t* ent )
 		}
 		//
 		if( ent2->r.absmin[0] > ent->r.absmax[0] )
+		{
 			continue;
+		}
 		if( ent2->r.absmin[1] > ent->r.absmax[1] )
+		{
 			continue;
+		}
 		if( ent2->r.absmin[2] > ent->r.absmax[2] )
+		{
 			continue;
+		}
 		if( ent2->r.absmax[0] < ent->r.absmin[0] )
+		{
 			continue;
+		}
 		if( ent2->r.absmax[1] < ent->r.absmin[1] )
+		{
 			continue;
+		}
 		if( ent2->r.absmax[2] < ent->r.absmin[2] )
+		{
 			continue;
+		}
 		return qtrue;
 	}
 	return qfalse;
@@ -1365,7 +1381,8 @@ void ClientEndFrame( gentity_t* ent )
 
 	// save network bandwidth
 #if 0
-	if ( !g_synchronousClients->integer && ent->client->ps.pm_type == PM_NORMAL ) {
+	if( !g_synchronousClients->integer && ent->client->ps.pm_type == PM_NORMAL )
+	{
 		// FIXME: this must change eventually for non-sync demo recording
 		VectorClear( ent->client->ps.viewangles );
 	}

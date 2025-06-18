@@ -81,18 +81,18 @@ extern int g_console_field_width;
 typedef struct
 {
 	int			  timeoutcount; // it requres several frames in a timeout condition
-								// to disconnect, preventing debugging breaks from
-								// causing immediate disconnects on continue
-	clSnapshot_t  snap;			// latest received from server
+	// to disconnect, preventing debugging breaks from
+	// causing immediate disconnects on continue
+	clSnapshot_t  snap; // latest received from server
 
-	int			  serverTime;			// may be paused during play
-	int			  oldServerTime;		// to prevent time from flowing bakcwards
-	int			  oldFrameServerTime;	// to check tournament restarts
-	int			  serverTimeDelta;		// cl.serverTime = cls.realtime + cl.serverTimeDelta
-										// this value changes as net lag varies
+	int			  serverTime;		  // may be paused during play
+	int			  oldServerTime;	  // to prevent time from flowing bakcwards
+	int			  oldFrameServerTime; // to check tournament restarts
+	int			  serverTimeDelta;	  // cl.serverTime = cls.realtime + cl.serverTimeDelta
+	// this value changes as net lag varies
 	qboolean	  extrapolatedSnapshot; // set if any cgame frame has been forced to extrapolate
-										// cleared when CL_AdjustTimeDelta looks at it
-	qboolean	  newSnapshots;			// set on parse of any valid packet
+	// cleared when CL_AdjustTimeDelta looks at it
+	qboolean	  newSnapshots; // set on parse of any valid packet
 
 	gameState_t	  gameState;		  // configstrings
 	char		  mapname[MAX_QPATH]; // extracted from CS_SERVERINFO
@@ -111,7 +111,7 @@ typedef struct
 	// properly generated command
 	usercmd_t	  cmds[CMD_BACKUP]; // each mesage will send several old cmds
 	int			  cmdNumber;		// incremented each frame, because multiple
-									// frames may need to be packed into a single packet
+	// frames may need to be packed into a single packet
 
 	outPacket_t	  outPackets[PACKET_BACKUP]; // information about each packet we have sent out
 
@@ -123,7 +123,7 @@ typedef struct
 	vec3_t		  viewangles;
 
 	int			  serverId; // included in each client message so the server
-							// can tell if it is for a prior map_restart
+	// can tell if it is for a prior map_restart
 	// big stuff at end of structure so most offsets are 15 bits or less
 	clSnapshot_t  snapshots[PACKET_BACKUP];
 

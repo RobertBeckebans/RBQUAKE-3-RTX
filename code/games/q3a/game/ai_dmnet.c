@@ -172,7 +172,7 @@ int BotGoForAir( bot_state_t* bs, int tfl, bot_goal_t* ltg, float range )
 #ifdef DEBUG
 		// BotAI_Print(PRT_MESSAGE, "going for air\n");
 #endif //DEBUG \
-	//if we can find an air goal
+//if we can find an air goal
 		if( BotGetAirGoal( bs, &goal ) )
 		{
 			trap_BotPushGoal( bs->gs, &goal );
@@ -208,7 +208,9 @@ int BotNearbyGoal( bot_state_t* bs, int tfl, bot_goal_t* ltg, float range )
 
 	// check if the bot should go for air
 	if( BotGoForAir( bs, tfl, ltg, range ) )
+	{
 		return qtrue;
+	}
 	// if the bot is carrying the enemy flag
 	if( BotCTFCarryingFlag( bs ) )
 	{
@@ -287,16 +289,22 @@ int BotReachedGoal( bot_state_t* bs, bot_goal_t* goal )
 	{
 		// if touching the goal
 		if( trap_BotTouchingGoal( bs->origin, goal ) )
+		{
 			return qtrue;
+		}
 		// if the bot got air
 		if( bs->lastair_time > FloatTime() - 1 )
+		{
 			return qtrue;
+		}
 	}
 	else
 	{
 		// if touching the goal
 		if( trap_BotTouchingGoal( bs->origin, goal ) )
+		{
 			return qtrue;
+		}
 	}
 	return qfalse;
 }
@@ -340,8 +348,9 @@ int BotGetItemLongTermGoal( bot_state_t* bs, int tfl, bot_goal_t* goal )
 			bs->ltg_time = FloatTime() + 20;
 		}
 		else
-		{ // the bot gets sorta stuck with all the avoid timings, shouldn't happen though
-		  //
+		{
+			// the bot gets sorta stuck with all the avoid timings, shouldn't happen though
+			//
 #ifdef DEBUG
 			char netname[128];
 
@@ -389,10 +398,14 @@ int BotGetLongTermGoal( bot_state_t* bs, int tfl, int retreat, bot_goal_t* goal 
 		}
 		// if trying to help the team mate for more than a minute
 		if( bs->teamgoal_time < FloatTime() )
+		{
 			bs->ltgtype = 0;
+		}
 		// if the team mate IS visible for quite some time
 		if( bs->teammatevisible_time < FloatTime() - 10 )
+		{
 			bs->ltgtype = 0;
+		}
 		// get entity information of the companion
 		BotEntityInfo( bs->teammate, &entinfo );
 		// if the team mate is visible
@@ -500,7 +513,9 @@ int BotGetLongTermGoal( bot_state_t* bs, int tfl, int retreat, bot_goal_t* goal 
 				}
 				// don't crouch when swimming
 				if( trap_AAS_Swimming( bs->origin ) )
+				{
 					bs->attackcrouch_time = FloatTime() - 1;
+				}
 				// if not arrived yet or arived some time ago
 				if( bs->arrive_time < FloatTime() - 2 )
 				{
@@ -763,7 +778,9 @@ int BotGetLongTermGoal( bot_state_t* bs, int tfl, int retreat, bot_goal_t* goal 
 			}
 			// don't crouch when swimming
 			if( trap_AAS_Swimming( bs->origin ) )
+			{
 				bs->attackcrouch_time = FloatTime() - 1;
+			}
 			// make sure the bot is not gonna drown
 			if( trap_PointContents( bs->eye, bs->entitynum ) & ( CONTENTS_WATER | CONTENTS_SLIME | CONTENTS_LAVA ) )
 			{
@@ -801,7 +818,9 @@ int BotGetLongTermGoal( bot_state_t* bs, int tfl, int retreat, bot_goal_t* goal 
 			{
 				strcat( buf, wp->name );
 				if( wp->next )
+				{
 					strcat( buf, " to " );
+				}
 			}
 			BotAI_BotInitialChat( bs, "patrol_start", buf, NULL );
 			trap_BotEnterChat( bs->cs, bs->decisionmaker, CHAT_TELL );
@@ -925,10 +944,14 @@ int BotGetLongTermGoal( bot_state_t* bs, int tfl, int retreat, bot_goal_t* goal 
 			}
 			// if not carrying the flag anymore
 			if( !BotCTFCarryingFlag( bs ) )
+			{
 				bs->ltgtype = 0;
+			}
 			// quit rushing after 2 minutes
 			if( bs->teamgoal_time < FloatTime() )
+			{
 				bs->ltgtype = 0;
+			}
 			// if touching the base flag the bot should loose the enemy flag
 			if( trap_BotTouchingGoal( bs->origin, goal ) )
 			{
@@ -974,7 +997,9 @@ int BotGetLongTermGoal( bot_state_t* bs, int tfl, int retreat, bot_goal_t* goal 
 			}
 			// if touching the flag
 			if( trap_BotTouchingGoal( bs->origin, goal ) )
+			{
 				bs->ltgtype = 0;
+			}
 			// stop after 3 minutes
 			if( bs->teamgoal_time < FloatTime() )
 			{
@@ -1551,25 +1576,43 @@ int BotSelectActivateWeapon( bot_state_t* bs )
 {
 	//
 	if( bs->inventory[INVENTORY_MACHINEGUN] > 0 && bs->inventory[INVENTORY_BULLETS] > 0 )
+	{
 		return WEAPONINDEX_MACHINEGUN;
+	}
 	else if( bs->inventory[INVENTORY_SHOTGUN] > 0 && bs->inventory[INVENTORY_SHELLS] > 0 )
+	{
 		return WEAPONINDEX_SHOTGUN;
+	}
 	else if( bs->inventory[INVENTORY_PLASMAGUN] > 0 && bs->inventory[INVENTORY_CELLS] > 0 )
+	{
 		return WEAPONINDEX_PLASMAGUN;
+	}
 	else if( bs->inventory[INVENTORY_LIGHTNING] > 0 && bs->inventory[INVENTORY_LIGHTNINGAMMO] > 0 )
+	{
 		return WEAPONINDEX_LIGHTNING;
+	}
 #ifdef MISSIONPACK
 	else if( bs->inventory[INVENTORY_CHAINGUN] > 0 && bs->inventory[INVENTORY_BELT] > 0 )
+	{
 		return WEAPONINDEX_CHAINGUN;
+	}
 	else if( bs->inventory[INVENTORY_NAILGUN] > 0 && bs->inventory[INVENTORY_NAILS] > 0 )
+	{
 		return WEAPONINDEX_NAILGUN;
+	}
 #endif
 	else if( bs->inventory[INVENTORY_RAILGUN] > 0 && bs->inventory[INVENTORY_SLUGS] > 0 )
+	{
 		return WEAPONINDEX_RAILGUN;
+	}
 	else if( bs->inventory[INVENTORY_ROCKETLAUNCHER] > 0 && bs->inventory[INVENTORY_ROCKETS] > 0 )
+	{
 		return WEAPONINDEX_ROCKET_LAUNCHER;
+	}
 	else if( bs->inventory[INVENTORY_BFG10K] > 0 && bs->inventory[INVENTORY_BFGAMMO] > 0 )
+	{
 		return WEAPONINDEX_BFG;
+	}
 	else
 	{
 		return -1;
@@ -1667,11 +1710,17 @@ void BotClearPath( bot_state_t* bs, bot_moveresult_t* moveresult )
 			vectoangles( dir, moveresult->ideal_viewangles );
 			// if the bot has a weapon that does splash damage
 			if( bs->inventory[INVENTORY_PLASMAGUN] > 0 && bs->inventory[INVENTORY_CELLS] > 0 )
+			{
 				moveresult->weapon = WEAPONINDEX_PLASMAGUN;
+			}
 			else if( bs->inventory[INVENTORY_ROCKETLAUNCHER] > 0 && bs->inventory[INVENTORY_ROCKETS] > 0 )
+			{
 				moveresult->weapon = WEAPONINDEX_ROCKET_LAUNCHER;
+			}
 			else if( bs->inventory[INVENTORY_BFG10K] > 0 && bs->inventory[INVENTORY_BFGAMMO] > 0 )
+			{
 				moveresult->weapon = WEAPONINDEX_BFG;
+			}
 			else
 			{
 				moveresult->weapon = 0;
@@ -1749,10 +1798,14 @@ int AINode_Seek_ActivateEntity( bot_state_t* bs )
 	//
 	bs->tfl = TFL_DEFAULT;
 	if( bot_grapple.integer )
+	{
 		bs->tfl |= TFL_GRAPPLEHOOK;
+	}
 	// if in lava or slime the bot should be able to get out
 	if( BotInLavaOrSlime( bs ) )
+	{
 		bs->tfl |= TFL_LAVA | TFL_SLIME;
+	}
 	// map specific code
 	BotMapScripts( bs );
 	// no enemy
@@ -1852,7 +1905,9 @@ int AINode_Seek_ActivateEntity( bot_state_t* bs )
 		}
 		// predict obstacles
 		if( BotAIPredictObstacles( bs, goal ) )
+		{
 			return qfalse;
+		}
 		// initialize the movement state
 		BotSetupForMovement( bs );
 		// move towards the goal
@@ -1925,7 +1980,9 @@ int AINode_Seek_ActivateEntity( bot_state_t* bs )
 	}
 	// if the weapon is used for the bot movement
 	if( moveresult.flags & MOVERESULT_MOVEMENTWEAPON )
+	{
 		bs->weaponnum = moveresult.weapon;
+	}
 	// if there is an enemy
 	if( BotFindEnemy( bs, -1 ) )
 	{
@@ -2000,10 +2057,14 @@ int AINode_Seek_NBG( bot_state_t* bs )
 	//
 	bs->tfl = TFL_DEFAULT;
 	if( bot_grapple.integer )
+	{
 		bs->tfl |= TFL_GRAPPLEHOOK;
+	}
 	// if in lava or slime the bot should be able to get out
 	if( BotInLavaOrSlime( bs ) )
+	{
 		bs->tfl |= TFL_LAVA | TFL_SLIME;
+	}
 	//
 	if( BotCanAndWantsToRocketJump( bs ) )
 	{
@@ -2015,7 +2076,9 @@ int AINode_Seek_NBG( bot_state_t* bs )
 	bs->enemy = -1;
 	// if the bot has no goal
 	if( !trap_BotGetTopGoal( bs->gs, &goal ) )
+	{
 		bs->nbg_time = 0;
+	}
 	// if the bot touches the current goal
 	else if( BotReachedGoal( bs, &goal ) )
 	{
@@ -2036,7 +2099,9 @@ int AINode_Seek_NBG( bot_state_t* bs )
 	}
 	// predict obstacles
 	if( BotAIPredictObstacles( bs, &goal ) )
+	{
 		return qfalse;
+	}
 	// initialize the movement state
 	BotSetupForMovement( bs );
 	// move towards the goal
@@ -2071,7 +2136,9 @@ int AINode_Seek_NBG( bot_state_t* bs )
 	else if( !( bs->flags & BFL_IDEALVIEWSET ) )
 	{
 		if( !trap_BotGetSecondGoal( bs->gs, &goal ) )
+		{
 			trap_BotGetTopGoal( bs->gs, &goal );
+		}
 		if( trap_BotMovementViewTarget( bs->ms, &goal, bs->tfl, 300, target ) )
 		{
 			VectorSubtract( target, bs->origin, dir );
@@ -2079,12 +2146,16 @@ int AINode_Seek_NBG( bot_state_t* bs )
 		}
 		// FIXME: look at cluster portals?
 		else
+		{
 			vectoangles( moveresult.movedir, bs->ideal_viewangles );
+		}
 		bs->ideal_viewangles[2] *= 0.5;
 	}
 	// if the weapon is used for the bot movement
 	if( moveresult.flags & MOVERESULT_MOVEMENTWEAPON )
+	{
 		bs->weaponnum = moveresult.weapon;
+	}
 	// if there is an enemy
 	if( BotFindEnemy( bs, -1 ) )
 	{
@@ -2168,10 +2239,14 @@ int AINode_Seek_LTG( bot_state_t* bs )
 	//
 	bs->tfl = TFL_DEFAULT;
 	if( bot_grapple.integer )
+	{
 		bs->tfl |= TFL_GRAPPLEHOOK;
+	}
 	// if in lava or slime the bot should be able to get out
 	if( BotInLavaOrSlime( bs ) )
+	{
 		bs->tfl |= TFL_LAVA | TFL_SLIME;
+	}
 	//
 	if( BotCanAndWantsToRocketJump( bs ) )
 	{
@@ -2223,28 +2298,38 @@ int AINode_Seek_LTG( bot_state_t* bs )
 		BotWantsToCamp( bs );
 		//
 		if( bs->ltgtype == LTG_DEFENDKEYAREA )
+		{
 			range = 400;
+		}
 		else
+		{
 			range = 150;
-			//
+		}
+		//
 #ifdef CTF
 		if( gametype == GT_CTF )
 		{
 			// if carrying a flag the bot shouldn't be distracted too much
 			if( BotCTFCarryingFlag( bs ) )
+			{
 				range = 50;
+			}
 		}
 #endif // CTF
 #ifdef MISSIONPACK
 		else if( gametype == GT_1FCTF )
 		{
 			if( Bot1FCTFCarryingFlag( bs ) )
+			{
 				range = 50;
+			}
 		}
 		else if( gametype == GT_HARVESTER )
 		{
 			if( BotHarvesterCarryingCubes( bs ) )
+			{
 				range = 80;
+			}
 		}
 #endif
 		//
@@ -2263,7 +2348,9 @@ int AINode_Seek_LTG( bot_state_t* bs )
 	}
 	// predict obstacles
 	if( BotAIPredictObstacles( bs, &goal ) )
+	{
 		return qfalse;
+	}
 	// initialize the movement state
 	BotSetupForMovement( bs );
 	// move towards the goal
@@ -2319,7 +2406,9 @@ int AINode_Seek_LTG( bot_state_t* bs )
 	}
 	// if the weapon is used for the bot movement
 	if( moveresult.flags & MOVERESULT_MOVEMENTWEAPON )
+	{
 		bs->weaponnum = moveresult.weapon;
+	}
 	//
 	return qtrue;
 }
@@ -2494,10 +2583,14 @@ int AINode_Battle_Fight( bot_state_t* bs )
 	//
 	bs->tfl = TFL_DEFAULT;
 	if( bot_grapple.integer )
+	{
 		bs->tfl |= TFL_GRAPPLEHOOK;
+	}
 	// if in lava or slime the bot should be able to get out
 	if( BotInLavaOrSlime( bs ) )
+	{
 		bs->tfl |= TFL_LAVA | TFL_SLIME;
+	}
 	//
 	if( BotCanAndWantsToRocketJump( bs ) )
 	{
@@ -2601,10 +2694,14 @@ int AINode_Battle_Chase( bot_state_t* bs )
 	//
 	bs->tfl = TFL_DEFAULT;
 	if( bot_grapple.integer )
+	{
 		bs->tfl |= TFL_GRAPPLEHOOK;
+	}
 	// if in lava or slime the bot should be able to get out
 	if( BotInLavaOrSlime( bs ) )
+	{
 		bs->tfl |= TFL_LAVA | TFL_SLIME;
+	}
 	//
 	if( BotCanAndWantsToRocketJump( bs ) )
 	{
@@ -2620,7 +2717,9 @@ int AINode_Battle_Chase( bot_state_t* bs )
 	VectorSet( goal.maxs, 8, 8, 8 );
 	// if the last seen enemy spot is reached the enemy could not be found
 	if( trap_BotTouchingGoal( bs->origin, &goal ) )
+	{
 		bs->chase_time = 0;
+	}
 	// if there's no chase time left
 	if( !bs->chase_time || bs->chase_time < FloatTime() - 10 )
 	{
@@ -2685,10 +2784,14 @@ int AINode_Battle_Chase( bot_state_t* bs )
 	}
 	// if the weapon is used for the bot movement
 	if( moveresult.flags & MOVERESULT_MOVEMENTWEAPON )
+	{
 		bs->weaponnum = moveresult.weapon;
+	}
 	// if the bot is in the area the enemy was last seen in
 	if( bs->areanum == bs->lastenemyareanum )
+	{
 		bs->chase_time = 0;
+	}
 	// if the bot wants to retreat (the bot could have been damage during the chase)
 	if( BotWantsToRetreat( bs ) )
 	{
@@ -2763,10 +2866,14 @@ int AINode_Battle_Retreat( bot_state_t* bs )
 	//
 	bs->tfl = TFL_DEFAULT;
 	if( bot_grapple.integer )
+	{
 		bs->tfl |= TFL_GRAPPLEHOOK;
+	}
 	// if in lava or slime the bot should be able to get out
 	if( BotInLavaOrSlime( bs ) )
+	{
 		bs->tfl |= TFL_LAVA | TFL_SLIME;
+	}
 	// map specific code
 	BotMapScripts( bs );
 	// update the attack inventory values
@@ -2840,19 +2947,25 @@ int AINode_Battle_Retreat( bot_state_t* bs )
 		{
 			// if carrying a flag the bot shouldn't be distracted too much
 			if( BotCTFCarryingFlag( bs ) )
+			{
 				range = 50;
+			}
 		}
 #endif // CTF
 #ifdef MISSIONPACK
 		else if( gametype == GT_1FCTF )
 		{
 			if( Bot1FCTFCarryingFlag( bs ) )
+			{
 				range = 50;
+			}
 		}
 		else if( gametype == GT_HARVESTER )
 		{
 			if( BotHarvesterCarryingCubes( bs ) )
+			{
 				range = 80;
+			}
 		}
 #endif
 		//
@@ -2910,7 +3023,9 @@ int AINode_Battle_Retreat( bot_state_t* bs )
 	}
 	// if the weapon is used for the bot movement
 	if( moveresult.flags & MOVERESULT_MOVEMENTWEAPON )
+	{
 		bs->weaponnum = moveresult.weapon;
+	}
 	// attack the enemy if possible
 	BotCheckAttack( bs );
 	//
@@ -2975,10 +3090,14 @@ int AINode_Battle_NBG( bot_state_t* bs )
 	//
 	bs->tfl = TFL_DEFAULT;
 	if( bot_grapple.integer )
+	{
 		bs->tfl |= TFL_GRAPPLEHOOK;
+	}
 	// if in lava or slime the bot should be able to get out
 	if( BotInLavaOrSlime( bs ) )
+	{
 		bs->tfl |= TFL_LAVA | TFL_SLIME;
+	}
 	//
 	if( BotCanAndWantsToRocketJump( bs ) )
 	{
@@ -3026,9 +3145,13 @@ int AINode_Battle_NBG( bot_state_t* bs )
 		trap_BotPopGoal( bs->gs );
 		// if the bot still has a goal
 		if( trap_BotGetTopGoal( bs->gs, &goal ) )
+		{
 			AIEnter_Battle_Retreat( bs, "battle nbg: time out" );
+		}
 		else
+		{
 			AIEnter_Battle_Fight( bs, "battle nbg: time out" );
+		}
 		//
 		return qfalse;
 	}
@@ -3080,7 +3203,9 @@ int AINode_Battle_NBG( bot_state_t* bs )
 	}
 	// if the weapon is used for the bot movement
 	if( moveresult.flags & MOVERESULT_MOVEMENTWEAPON )
+	{
 		bs->weaponnum = moveresult.weapon;
+	}
 	// attack the enemy if possible
 	BotCheckAttack( bs );
 	//

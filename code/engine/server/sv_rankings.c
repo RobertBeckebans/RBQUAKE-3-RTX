@@ -100,7 +100,7 @@ void					SV_RankBegin( char* gamekey )
 			Cvar_Set( "sv_enableRankings", "0" );
 			return;
 		}
-*/
+		*/
 
 		// substitute game-specific game key
 		switch( ( int )Cvar_VariableValue( "g_gametype" ) )
@@ -868,7 +868,9 @@ static void SV_RankNewGameCBF( GR_NEWGAME* gr_newgame, void* cbf_arg )
 
 		// initialize client status
 		for( i = 0; i < sv_maxclients->value; i++ )
+		{
 			s_ranked_players[i].grank_status = QGR_STATUS_NEW;
+		}
 
 		// start new match
 		match		   = GRankStartMatch( s_server_context );
@@ -991,7 +993,9 @@ static void SV_RankJoinGameCBF( GR_JOINGAME* gr_joingame, void* cbf_arg )
 		// find the index and call SV_RankUserValidate
 		for( i = 0; i < sv_maxclients->value; i++ )
 			if( ranked_player == &s_ranked_players[i] )
+			{
 				SV_RankUserValidate( i, NULL, NULL, 0, gr_joingame->rank, ranked_player->name );
+			}
 	}
 	else
 	{

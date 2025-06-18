@@ -92,16 +92,22 @@ int AAS_OptimizeEdge( optimized_t* optimized, int edgenum )
 
 	edge = &aasworld.edges[abs( edgenum )];
 	if( !AAS_KeepEdge( edge ) )
+	{
 		return 0;
+	}
 
 	optedgenum = optimized->edgeoptimizeindex[abs( edgenum )];
 	if( optedgenum )
 	{
 		// keep the edge reversed sign
 		if( edgenum > 0 )
+		{
 			return optedgenum;
+		}
 		else
+		{
 			return -optedgenum;
+		}
 	} // end if
 
 	optedge = &optimized->edges[optimized->numedges];
@@ -125,9 +131,13 @@ int AAS_OptimizeEdge( optimized_t* optimized, int edgenum )
 	optimized->numedges++;
 	// keep the edge reversed sign
 	if( edgenum > 0 )
+	{
 		return optedgenum;
+	}
 	else
+	{
 		return -optedgenum;
+	}
 } // end of the function AAS_OptimizeEdge
 //===========================================================================
 //
@@ -138,9 +148,13 @@ int AAS_OptimizeEdge( optimized_t* optimized, int edgenum )
 int AAS_KeepFace( aas_face_t* face )
 {
 	if( !( face->faceflags & FACE_LADDER ) )
+	{
 		return 0;
+	}
 	else
+	{
 		return 1;
+	}
 } // end of the function AAS_KeepFace
 //===========================================================================
 //
@@ -155,16 +169,22 @@ int AAS_OptimizeFace( optimized_t* optimized, int facenum )
 
 	face = &aasworld.faces[abs( facenum )];
 	if( !AAS_KeepFace( face ) )
+	{
 		return 0;
+	}
 
 	optfacenum = optimized->faceoptimizeindex[abs( facenum )];
 	if( optfacenum )
 	{
 		// keep the face side sign
 		if( facenum > 0 )
+		{
 			return optfacenum;
+		}
 		else
+		{
 			return -optfacenum;
+		}
 	} // end if
 
 	optface = &optimized->faces[optimized->numfaces];
@@ -188,9 +208,13 @@ int AAS_OptimizeFace( optimized_t* optimized, int facenum )
 	optimized->numfaces++;
 	// keep the face side sign
 	if( facenum > 0 )
+	{
 		return optfacenum;
+	}
 	else
+	{
 		return -optfacenum;
+	}
 } // end of the function AAS_OptimizeFace
 //===========================================================================
 //
@@ -256,32 +280,44 @@ void AAS_OptimizeStore( optimized_t* optimized )
 {
 	// store the optimized vertexes
 	if( aasworld.vertexes )
+	{
 		FreeMemory( aasworld.vertexes );
+	}
 	aasworld.vertexes	 = optimized->vertexes;
 	aasworld.numvertexes = optimized->numvertexes;
 	// store the optimized edges
 	if( aasworld.edges )
+	{
 		FreeMemory( aasworld.edges );
+	}
 	aasworld.edges	  = optimized->edges;
 	aasworld.numedges = optimized->numedges;
 	// store the optimized edge index
 	if( aasworld.edgeindex )
+	{
 		FreeMemory( aasworld.edgeindex );
+	}
 	aasworld.edgeindex	   = optimized->edgeindex;
 	aasworld.edgeindexsize = optimized->edgeindexsize;
 	// store the optimized faces
 	if( aasworld.faces )
+	{
 		FreeMemory( aasworld.faces );
+	}
 	aasworld.faces	  = optimized->faces;
 	aasworld.numfaces = optimized->numfaces;
 	// store the optimized face index
 	if( aasworld.faceindex )
+	{
 		FreeMemory( aasworld.faceindex );
+	}
 	aasworld.faceindex	   = optimized->faceindex;
 	aasworld.faceindexsize = optimized->faceindexsize;
 	// store the optimized areas
 	if( aasworld.areas )
+	{
 		FreeMemory( aasworld.areas );
+	}
 	aasworld.areas	  = optimized->areas;
 	aasworld.numareas = optimized->numareas;
 	// free optimize indexes
@@ -311,22 +347,32 @@ void AAS_Optimize()
 		// NOTE: for TRAVEL_ELEVATOR the facenum is the model number of
 		//		the elevator
 		if( ( aasworld.reachability[i].traveltype & TRAVELTYPE_MASK ) == TRAVEL_ELEVATOR )
+		{
 			continue;
+		}
 		// NOTE: for TRAVEL_JUMPPAD the facenum is the Z velocity and the edgenum is the hor velocity
 		if( ( aasworld.reachability[i].traveltype & TRAVELTYPE_MASK ) == TRAVEL_JUMPPAD )
+		{
 			continue;
+		}
 		// NOTE: for TRAVEL_FUNCBOB the facenum and edgenum contain other coded information
 		if( ( aasworld.reachability[i].traveltype & TRAVELTYPE_MASK ) == TRAVEL_FUNCBOB )
+		{
 			continue;
+		}
 		//
 		sign							 = aasworld.reachability[i].facenum;
 		aasworld.reachability[i].facenum = optimized.faceoptimizeindex[abs( aasworld.reachability[i].facenum )];
 		if( sign < 0 )
+		{
 			aasworld.reachability[i].facenum = -aasworld.reachability[i].facenum;
+		}
 		sign							 = aasworld.reachability[i].edgenum;
 		aasworld.reachability[i].edgenum = optimized.edgeoptimizeindex[abs( aasworld.reachability[i].edgenum )];
 		if( sign < 0 )
+		{
 			aasworld.reachability[i].edgenum = -aasworld.reachability[i].edgenum;
+		}
 	} // end for
 	// store the optimized AAS data into aasworld
 	AAS_OptimizeStore( &optimized );

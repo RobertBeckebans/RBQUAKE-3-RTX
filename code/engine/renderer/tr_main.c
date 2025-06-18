@@ -856,7 +856,8 @@ static qboolean SurfIsOffscreen( const drawSurf_t* drawSurf, vec4_t clipDest[128
 	unsigned int pointAnd = ( unsigned int )~0;
 
 	if( glConfig.smpActive )
-	{ // FIXME!  we can't do RB_BeginSurface/RB_EndSurface stuff with smp!
+	{
+		// FIXME!  we can't do RB_BeginSurface/RB_EndSurface stuff with smp!
 		return qfalse;
 	}
 
@@ -1114,7 +1115,9 @@ void qsortFast( void* base, unsigned num, unsigned width )
 	   1 + log2(size), so 30 is sufficient for any array */
 
 	if( num < 2 || width == 0 )
+	{
 		return; /* nothing to do */
+	}
 
 	stkptr = 0; /* initialize stack */
 
@@ -1181,7 +1184,9 @@ recurse:
 			   either higuy <= lo or A[higuy] < A[lo] */
 
 			if( higuy < loguy )
+			{
 				break;
+			}
 
 			/* if loguy > hi or higuy <= lo, then we would have exited, so
 			   A[loguy] > A[lo], A[higuy] < A[lo],
@@ -1256,7 +1261,9 @@ recurse:
 		goto recurse; /* pop subarray from stack */
 	}
 	else
+	{
 		return; /* all subarrays done */
+	}
 }
 
 //==========================================================================================
@@ -1309,16 +1316,22 @@ static ID_INLINE void R_Radix( int byte, int size, drawSurf_t* source, drawSurf_
 	sortKey = ( ( unsigned char* )&source[0].sort ) + byte;
 	end		= sortKey + ( size * sizeof( drawSurf_t ) );
 	for( ; sortKey < end; sortKey += sizeof( drawSurf_t ) )
+	{
 		++count[*sortKey];
+	}
 
 	index[0] = 0;
 
 	for( i = 1; i < 256; ++i )
+	{
 		index[i] = index[i - 1] + count[i - 1];
+	}
 
 	sortKey = ( ( unsigned char* )&source[0].sort ) + byte;
 	for( i = 0; i < size; ++i, sortKey += sizeof( drawSurf_t ) )
+	{
 		dest[index[*sortKey]++] = source[i];
+	}
 }
 
 /*

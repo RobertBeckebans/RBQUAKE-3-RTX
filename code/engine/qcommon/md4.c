@@ -133,7 +133,9 @@ void MD4Update( MD4_CTX* context, const unsigned char* input, unsigned int input
 
 	/* Update number of bits */
 	if( ( context->count[0] += ( ( UINT4 )inputLen << 3 ) ) < ( ( UINT4 )inputLen << 3 ) )
+	{
 		context->count[1]++;
+	}
 
 	context->count[1] += ( ( UINT4 )inputLen >> 29 );
 
@@ -146,12 +148,16 @@ void MD4Update( MD4_CTX* context, const unsigned char* input, unsigned int input
 		MD4Transform( context->state, context->buffer );
 
 		for( i = partLen; i + 63 < inputLen; i += 64 )
+		{
 			MD4Transform( context->state, &input[i] );
+		}
 
 		index = 0;
 	}
 	else
+	{
 		i = 0;
+	}
 
 	/* Buffer remaining input */
 	Com_Memcpy( ( POINTER )&context->buffer[index], ( POINTER )&input[i], inputLen - i );
@@ -271,7 +277,9 @@ static void Decode( UINT4* output, const unsigned char* input, unsigned int len 
 	unsigned int i, j;
 
 	for( i = 0, j = 0; j < len; i++, j += 4 )
+	{
 		output[i] = ( ( UINT4 )input[j] ) | ( ( ( UINT4 )input[j + 1] ) << 8 ) | ( ( ( UINT4 )input[j + 2] ) << 16 ) | ( ( ( UINT4 )input[j + 3] ) << 24 );
+	}
 }
 
 //===================================================================

@@ -753,7 +753,9 @@ Abort a download if in progress
 void SV_StopDownload_f( client_t* cl )
 {
 	if( *cl->downloadName )
+	{
 		Com_DPrintf( "clientDownload: %d : file \"%s\" aborted\n", cl - svs.clients, cl->downloadName );
+	}
 
 	SV_CloseDownload( cl );
 }
@@ -838,7 +840,9 @@ void SV_WriteDownloadToClient( client_t* cl, msg_t* msg )
 	char errorMessage[1024];
 
 	if( !*cl->downloadName )
+	{
 		return; // Nothing being downloaded
+	}
 
 	if( !cl->download )
 	{
@@ -919,7 +923,9 @@ void SV_WriteDownloadToClient( client_t* cl, msg_t* msg )
 		curindex = ( cl->downloadCurrentBlock % MAX_DOWNLOAD_WINDOW );
 
 		if( !cl->downloadBlocks[curindex] )
+		{
 			cl->downloadBlocks[curindex] = Z_Malloc( MAX_DOWNLOAD_BLKSIZE );
+		}
 
 		cl->downloadBlockSize[curindex] = FS_Read( cl->downloadBlocks[curindex], MAX_DOWNLOAD_BLKSIZE, cl->download );
 
@@ -973,7 +979,9 @@ void SV_WriteDownloadToClient( client_t* cl, msg_t* msg )
 	}
 
 	if( blockspersnap < 0 )
+	{
 		blockspersnap = 1;
+	}
 
 	while( blockspersnap-- )
 	{
@@ -981,7 +989,9 @@ void SV_WriteDownloadToClient( client_t* cl, msg_t* msg )
 		// automatically start retransmitting
 
 		if( cl->downloadClientBlock == cl->downloadCurrentBlock )
+		{
 			return; // Nothing to transmit
+		}
 
 		if( cl->downloadXmitBlock == cl->downloadCurrentBlock )
 		{
@@ -990,9 +1000,13 @@ void SV_WriteDownloadToClient( client_t* cl, msg_t* msg )
 			// FIXME:  This uses a hardcoded one second timeout for lost blocks
 			// the timeout should be based on client rate somehow
 			if( svs.time - cl->downloadSendTime > 1000 )
+			{
 				cl->downloadXmitBlock = cl->downloadClientBlock;
+			}
 			else
+			{
 				return;
+			}
 		}
 
 		// Send current block
@@ -1003,7 +1017,9 @@ void SV_WriteDownloadToClient( client_t* cl, msg_t* msg )
 
 		// block zero is special, contains file size
 		if( cl->downloadXmitBlock == 0 )
+		{
 			MSG_WriteLong( msg, cl->downloadSize );
+		}
 
 		MSG_WriteShort( msg, cl->downloadBlockSize[curindex] );
 
@@ -1067,7 +1083,9 @@ static void SV_VerifyPaks_f( client_t* cl )
 		// we run the game, so determine which cgame and ui the client "should" be running
 		bGood = ( FS_FileIsInPAK( "vm/cgame.qvm", &nChkSum1 ) == 1 );
 		if( bGood )
+		{
 			bGood = ( FS_FileIsInPAK( "vm/ui.qvm", &nChkSum2 ) == 1 );
+		}
 
 		nClientPaks = Cmd_Argc();
 
@@ -1138,7 +1156,9 @@ static void SV_VerifyPaks_f( client_t* cl )
 				for( j = 0; j < nClientPaks; j++ )
 				{
 					if( i == j )
+					{
 						continue;
+					}
 					if( nClientChkSum[i] == nClientChkSum[j] )
 					{
 						bGood = qfalse;
@@ -1146,17 +1166,23 @@ static void SV_VerifyPaks_f( client_t* cl )
 					}
 				}
 				if( bGood == qfalse )
+				{
 					break;
+				}
 			}
 			if( bGood == qfalse )
+			{
 				break;
+			}
 
 			// get the pure checksums of the pk3 files loaded by the server
 			pPaks = FS_LoadedPakPureChecksums();
 			Cmd_TokenizeString( pPaks );
 			nServerPaks = Cmd_Argc();
 			if( nServerPaks > 1024 )
+			{
 				nServerPaks = 1024;
+			}
 
 			for( i = 0; i < nServerPaks; i++ )
 			{
@@ -1313,10 +1339,14 @@ void SV_UserinfoChanged( client_t* cl )
 	{
 		// Com_DPrintf("Maintain IP in userinfo for '%s'\n", cl->name);
 		if( !NET_IsLocalAddress( cl->netchan.remoteAddress ) )
+		{
 			Info_SetValueForKey( cl->userinfo, "ip", NET_AdrToString( cl->netchan.remoteAddress ) );
+		}
 		else
-			// force the "ip" info key to "localhost" for local clients
+		// force the "ip" info key to "localhost" for local clients
+		{
 			Info_SetValueForKey( cl->userinfo, "ip", "localhost" );
+		}
 	}
 }
 
@@ -1385,7 +1415,9 @@ void		  SV_ExecuteClientCommand( client_t* cl, const char* s, qboolean clientOK 
 		}
 	}
 	else if( !bProcessed )
+	{
 		Com_DPrintf( "client text ignored for %s: %s\n", cl->name, Cmd_Argv( 0 ) );
+	}
 }
 
 /*
@@ -1651,7 +1683,8 @@ void SV_ExecuteClientMessage( client_t* cl, msg_t* msg )
 	if( serverId != sv.serverId && !*cl->downloadName && !strstr( cl->lastClientCommandString, "nextdl" ) )
 	{
 		if( serverId >= sv.restartedServerId && serverId < sv.serverId )
-		{ // TTimo - use a comparison here to catch multiple map_restart
+		{
+			// TTimo - use a comparison here to catch multiple map_restart
 			// they just haven't caught the map_restart yet
 			Com_DPrintf( "%s : ignoring pre map_restart / outdated client message\n", cl->name );
 			return;

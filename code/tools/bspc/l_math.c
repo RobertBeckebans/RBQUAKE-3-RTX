@@ -126,7 +126,9 @@ double VectorLength( vec3_t v )
 
 	length = 0;
 	for( i = 0; i < 3; i++ )
+	{
 		length += v[i] * v[i];
+	}
 	length = sqrt( length ); // FIXME
 
 	return length;
@@ -138,7 +140,9 @@ qboolean VectorCompare( vec3_t v1, vec3_t v2 )
 
 	for( i = 0; i < 3; i++ )
 		if( fabs( v1[i] - v2[i] ) > EQUAL_EPSILON )
+		{
 			return false;
+		}
 
 	return true;
 }
@@ -239,12 +243,18 @@ vec_t ColorNormalize( vec3_t in, vec3_t out )
 
 	max = in[0];
 	if( in[1] > max )
+	{
 		max = in[1];
+	}
 	if( in[2] > max )
+	{
 		max = in[2];
+	}
 
 	if( max == 0 )
+	{
 		return 0;
+	}
 
 	scale = 1.0 / max;
 
@@ -275,8 +285,12 @@ void AddPointToBounds( const vec3_t v, vec3_t mins, vec3_t maxs )
 	{
 		val = v[i];
 		if( val < mins[i] )
+		{
 			mins[i] = val;
+		}
 		if( val > maxs[i] )
+		{
 			maxs[i] = val;
+		}
 	}
 }

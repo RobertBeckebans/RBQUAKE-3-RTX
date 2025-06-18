@@ -16,9 +16,9 @@
 
 /* Forward declarations */
 LOCAL void transencode_master_selection
-	JPP( ( j_compress_ptr cinfo, jvirt_barray_ptr* coef_arrays ) );
+JPP( ( j_compress_ptr cinfo, jvirt_barray_ptr* coef_arrays ) );
 LOCAL void transencode_coef_controller
-	JPP( ( j_compress_ptr cinfo, jvirt_barray_ptr* coef_arrays ) );
+JPP( ( j_compress_ptr cinfo, jvirt_barray_ptr* coef_arrays ) );
 
 /*
  * Compression initialization for writing raw-coefficient data.
@@ -33,10 +33,12 @@ LOCAL void transencode_coef_controller
  */
 
 GLOBAL void
-	jpeg_write_coefficients( j_compress_ptr cinfo, jvirt_barray_ptr* coef_arrays )
+jpeg_write_coefficients( j_compress_ptr cinfo, jvirt_barray_ptr* coef_arrays )
 {
 	if( cinfo->global_state != CSTATE_START )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 	/* Mark all tables to be written */
 	jpeg_suppress_tables( cinfo, FALSE );
 	/* (Re)initialize error mgr and destination modules */
@@ -57,17 +59,19 @@ GLOBAL void
  */
 
 GLOBAL void
-	jpeg_copy_critical_parameters( j_decompress_ptr srcinfo,
-		j_compress_ptr                              dstinfo )
+jpeg_copy_critical_parameters( j_decompress_ptr srcinfo,
+							   j_compress_ptr                              dstinfo )
 {
 	JQUANT_TBL**         qtblptr;
-	jpeg_component_info *incomp, *outcomp;
-	JQUANT_TBL *         c_quant, *slot_quant;
+	jpeg_component_info *incomp, * outcomp;
+	JQUANT_TBL *         c_quant, * slot_quant;
 	int                  tblno, ci, coefi;
 
 	/* Safety check to ensure start_compress not called yet. */
 	if( dstinfo->global_state != CSTATE_START )
+	{
 		ERREXIT1( dstinfo, JERR_BAD_STATE, dstinfo->global_state );
+	}
 	/* Copy fundamental image dimensions */
 	dstinfo->image_width      = srcinfo->image_width;
 	dstinfo->image_height     = srcinfo->image_height;
@@ -76,8 +80,8 @@ GLOBAL void
 	/* Initialize all parameters to default values */
 	jpeg_set_defaults( dstinfo );
 	/* jpeg_set_defaults may choose wrong colorspace, eg YCbCr if input is RGB.
-   * Fix it to get the right header markers for the image colorspace.
-   */
+	* Fix it to get the right header markers for the image colorspace.
+	*/
 	jpeg_set_colorspace( dstinfo, srcinfo->jpeg_color_space );
 	dstinfo->data_precision   = srcinfo->data_precision;
 	dstinfo->CCIR601_sampling = srcinfo->CCIR601_sampling;
@@ -88,35 +92,41 @@ GLOBAL void
 		{
 			qtblptr = &dstinfo->quant_tbl_ptrs[ tblno ];
 			if( *qtblptr == NULL )
+			{
 				*qtblptr = jpeg_alloc_quant_table( ( j_common_ptr )dstinfo );
+			}
 			MEMCOPY( ( *qtblptr )->quantval,
-				srcinfo->quant_tbl_ptrs[ tblno ]->quantval,
-				SIZEOF( ( *qtblptr )->quantval ) );
+					 srcinfo->quant_tbl_ptrs[ tblno ]->quantval,
+					 SIZEOF( ( *qtblptr )->quantval ) );
 			( *qtblptr )->sent_table = FALSE;
 		}
 	}
 	/* Copy the source's per-component info.
-   * Note we assume jpeg_set_defaults has allocated the dest comp_info array.
-   */
+	* Note we assume jpeg_set_defaults has allocated the dest comp_info array.
+	*/
 	dstinfo->num_components = srcinfo->num_components;
 	if( dstinfo->num_components < 1 || dstinfo->num_components > MAX_COMPONENTS )
+	{
 		ERREXIT2( dstinfo, JERR_COMPONENT_COUNT, dstinfo->num_components, MAX_COMPONENTS );
+	}
 	for( ci = 0, incomp = srcinfo->comp_info, outcomp = dstinfo->comp_info;
-		 ci < dstinfo->num_components;
-		 ci++, incomp++, outcomp++ )
+			ci < dstinfo->num_components;
+			ci++, incomp++, outcomp++ )
 	{
 		outcomp->component_id  = incomp->component_id;
 		outcomp->h_samp_factor = incomp->h_samp_factor;
 		outcomp->v_samp_factor = incomp->v_samp_factor;
 		outcomp->quant_tbl_no  = incomp->quant_tbl_no;
 		/* Make sure saved quantization table for component matches the qtable
-     * slot.  If not, the input file re-used this qtable slot.
-     * IJG encoder currently cannot duplicate this.
-     */
+		* slot.  If not, the input file re-used this qtable slot.
+		* IJG encoder currently cannot duplicate this.
+		*/
 		tblno = outcomp->quant_tbl_no;
 		if( tblno < 0 || tblno >= NUM_QUANT_TBLS ||
-			srcinfo->quant_tbl_ptrs[ tblno ] == NULL )
+				srcinfo->quant_tbl_ptrs[ tblno ] == NULL )
+		{
 			ERREXIT1( dstinfo, JERR_NO_QUANT_TABLE, tblno );
+		}
 		slot_quant = srcinfo->quant_tbl_ptrs[ tblno ];
 		c_quant    = incomp->quant_table;
 		if( c_quant != NULL )
@@ -124,12 +134,14 @@ GLOBAL void
 			for( coefi = 0; coefi < DCTSIZE2; coefi++ )
 			{
 				if( c_quant->quantval[ coefi ] != slot_quant->quantval[ coefi ] )
+				{
 					ERREXIT1( dstinfo, JERR_MISMATCHED_QUANT_TABLE, tblno );
+				}
 			}
 		}
 		/* Note: we do not copy the source's Huffman table assignments;
-     * instead we rely on jpeg_set_colorspace to have made a suitable choice.
-     */
+		* instead we rely on jpeg_set_colorspace to have made a suitable choice.
+		*/
 	}
 }
 
@@ -139,12 +151,12 @@ GLOBAL void
  */
 
 LOCAL void
-	transencode_master_selection( j_compress_ptr cinfo,
-		jvirt_barray_ptr*                        coef_arrays )
+transencode_master_selection( j_compress_ptr cinfo,
+							  jvirt_barray_ptr*                        coef_arrays )
 {
 	/* Although we don't actually use input_components for transcoding,
-   * jcmaster.c's initial_setup will complain if input_components is 0.
-   */
+	* jcmaster.c's initial_setup will complain if input_components is 0.
+	*/
 	cinfo->input_components = 1;
 	/* Initialize master control (includes parameter checking/processing) */
 	jinit_c_master_control( cinfo, TRUE /* transcode only */ );
@@ -165,7 +177,9 @@ LOCAL void
 #endif
 		}
 		else
+		{
 			jinit_huff_encoder( cinfo );
+		}
 	}
 
 	/* We need a special coefficient buffer controller. */
@@ -177,9 +191,9 @@ LOCAL void
 	( *cinfo->mem->realize_virt_arrays )( ( j_common_ptr )cinfo );
 
 	/* Write the datastream header (SOI) immediately.
-   * Frame and scan headers are postponed till later.
-   * This lets application insert special markers after the SOI.
-   */
+	* Frame and scan headers are postponed till later.
+	* This lets application insert special markers after the SOI.
+	*/
 	( *cinfo->marker->write_file_header )( cinfo );
 }
 
@@ -212,15 +226,15 @@ typedef struct
 typedef my_coef_controller* my_coef_ptr;
 
 LOCAL void
-	start_iMCU_row( j_compress_ptr cinfo )
+start_iMCU_row( j_compress_ptr cinfo )
 /* Reset within-iMCU-row counters for a new row */
 {
 	my_coef_ptr coef = ( my_coef_ptr )cinfo->coef;
 
 	/* In an interleaved scan, an MCU row is the same as an iMCU row.
-   * In a noninterleaved scan, an iMCU row has v_samp_factor MCU rows.
-   * But at the bottom of the image, process only what's left.
-   */
+	* In a noninterleaved scan, an iMCU row has v_samp_factor MCU rows.
+	* But at the bottom of the image, process only what's left.
+	*/
 	if( cinfo->comps_in_scan > 1 )
 	{
 		coef->MCU_rows_per_iMCU_row = 1;
@@ -228,9 +242,13 @@ LOCAL void
 	else
 	{
 		if( coef->iMCU_row_num < ( cinfo->total_iMCU_rows - 1 ) )
+		{
 			coef->MCU_rows_per_iMCU_row = cinfo->cur_comp_info[ 0 ]->v_samp_factor;
+		}
 		else
+		{
 			coef->MCU_rows_per_iMCU_row = cinfo->cur_comp_info[ 0 ]->last_row_height;
+		}
 	}
 
 	coef->mcu_ctr         = 0;
@@ -242,12 +260,14 @@ LOCAL void
  */
 
 METHODDEF void
-	start_pass_coef( j_compress_ptr cinfo, J_BUF_MODE pass_mode )
+start_pass_coef( j_compress_ptr cinfo, J_BUF_MODE pass_mode )
 {
 	my_coef_ptr coef = ( my_coef_ptr )cinfo->coef;
 
 	if( pass_mode != JBUF_CRANK_DEST )
+	{
 		ERREXIT( cinfo, JERR_BAD_BUFFER_MODE );
+	}
 
 	coef->iMCU_row_num = 0;
 	start_iMCU_row( cinfo );
@@ -264,7 +284,7 @@ METHODDEF void
  */
 
 METHODDEF boolean
-	compress_output( j_compress_ptr cinfo, JSAMPIMAGE input_buf )
+compress_output( j_compress_ptr cinfo, JSAMPIMAGE input_buf )
 {
 	my_coef_ptr          coef = ( my_coef_ptr )cinfo->coef;
 	JDIMENSION           MCU_col_num; /* index of current MCU within row */
@@ -281,15 +301,16 @@ METHODDEF boolean
 	for( ci = 0; ci < cinfo->comps_in_scan; ci++ )
 	{
 		compptr      = cinfo->cur_comp_info[ ci ];
-		buffer[ ci ] = ( *cinfo->mem->access_virt_barray )( ( j_common_ptr )cinfo, coef->whole_image[ compptr->component_index ], coef->iMCU_row_num * compptr->v_samp_factor, ( JDIMENSION )compptr->v_samp_factor, FALSE );
+		buffer[ ci ] = ( *cinfo->mem->access_virt_barray )( ( j_common_ptr )cinfo, coef->whole_image[ compptr->component_index ], coef->iMCU_row_num * compptr->v_samp_factor,
+					   ( JDIMENSION )compptr->v_samp_factor, FALSE );
 	}
 
 	/* Loop to process one whole iMCU row */
 	for( yoffset = coef->MCU_vert_offset; yoffset < coef->MCU_rows_per_iMCU_row;
-		 yoffset++ )
+			yoffset++ )
 	{
 		for( MCU_col_num = coef->mcu_ctr; MCU_col_num < cinfo->MCUs_per_row;
-			 MCU_col_num++ )
+				MCU_col_num++ )
 		{
 			/* Construct list of pointers to DCT blocks belonging to this MCU */
 			blkn = 0; /* index of current DCT block within MCU */
@@ -301,12 +322,14 @@ METHODDEF boolean
 				for( yindex = 0; yindex < compptr->MCU_height; yindex++ )
 				{
 					if( coef->iMCU_row_num < last_iMCU_row ||
-						yindex + yoffset < compptr->last_row_height )
+							yindex + yoffset < compptr->last_row_height )
 					{
 						/* Fill in pointers to real blocks in this row */
 						buffer_ptr = buffer[ ci ][ yindex + yoffset ] + start_col;
 						for( xindex = 0; xindex < blockcnt; xindex++ )
+						{
 							MCU_buffer[ blkn++ ] = buffer_ptr++;
+						}
 					}
 					else
 					{
@@ -314,11 +337,11 @@ METHODDEF boolean
 						xindex = 0;
 					}
 					/* Fill in any dummy blocks needed in this row.
-	   * Dummy blocks are filled in the same way as in jccoefct.c:
-	   * all zeroes in the AC entries, DC entries equal to previous
-	   * block's DC value.  The init routine has already zeroed the
-	   * AC entries, so we need only set the DC entries correctly.
-	   */
+					* Dummy blocks are filled in the same way as in jccoefct.c:
+					* all zeroes in the AC entries, DC entries equal to previous
+					* block's DC value.  The init routine has already zeroed the
+					* AC entries, so we need only set the DC entries correctly.
+					*/
 					for( ; xindex < compptr->MCU_width; xindex++ )
 					{
 						MCU_buffer[ blkn ]           = coef->dummy_buffer[ blkn ];
@@ -354,8 +377,8 @@ METHODDEF boolean
  */
 
 LOCAL void
-	transencode_coef_controller( j_compress_ptr cinfo,
-		jvirt_barray_ptr*                       coef_arrays )
+transencode_coef_controller( j_compress_ptr cinfo,
+							 jvirt_barray_ptr*                       coef_arrays )
 {
 	my_coef_ptr coef;
 	JBLOCKROW   buffer;

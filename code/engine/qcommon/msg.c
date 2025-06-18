@@ -306,7 +306,9 @@ void MSG_WriteChar( msg_t* sb, int c )
 {
 #ifdef PARANOID
 	if( c < -128 || c > 127 )
+	{
 		Com_Error( ERR_FATAL, "MSG_WriteChar: range error" );
+	}
 #endif
 
 	MSG_WriteBits( sb, c, 8 );
@@ -316,7 +318,9 @@ void MSG_WriteByte( msg_t* sb, int c )
 {
 #ifdef PARANOID
 	if( c < 0 || c > 255 )
+	{
 		Com_Error( ERR_FATAL, "MSG_WriteByte: range error" );
+	}
 #endif
 
 	MSG_WriteBits( sb, c, 8 );
@@ -335,7 +339,9 @@ void MSG_WriteShort( msg_t* sb, int c )
 {
 #ifdef PARANOID
 	if( c < ( ( short )0x8000 ) || c > ( short )0x7fff )
+	{
 		Com_Error( ERR_FATAL, "MSG_WriteShort: range error" );
+	}
 #endif
 
 	MSG_WriteBits( sb, c, 16 );
@@ -1413,7 +1419,7 @@ void	   MSG_WriteDeltaPlayerstate( msg_t* msg, struct playerState_s* from, struc
 		}
 
 		MSG_WriteBits( msg, 1, 1 ); // changed
-									//		pcount[i]++;
+		//		pcount[i]++;
 
 		if( field->bits == 0 )
 		{
@@ -1492,7 +1498,9 @@ void	   MSG_WriteDeltaPlayerstate( msg_t* msg, struct playerState_s* from, struc
 		MSG_WriteShort( msg, statsbits );
 		for( i = 0; i < 16; i++ )
 			if( statsbits & ( 1 << i ) )
+			{
 				MSG_WriteShort( msg, to->stats[i] );
+			}
 	}
 	else
 	{
@@ -1505,7 +1513,9 @@ void	   MSG_WriteDeltaPlayerstate( msg_t* msg, struct playerState_s* from, struc
 		MSG_WriteShort( msg, persistantbits );
 		for( i = 0; i < 16; i++ )
 			if( persistantbits & ( 1 << i ) )
+			{
 				MSG_WriteShort( msg, to->persistant[i] );
+			}
 	}
 	else
 	{
@@ -1518,7 +1528,9 @@ void	   MSG_WriteDeltaPlayerstate( msg_t* msg, struct playerState_s* from, struc
 		MSG_WriteShort( msg, ammobits );
 		for( i = 0; i < 16; i++ )
 			if( ammobits & ( 1 << i ) )
+			{
 				MSG_WriteShort( msg, to->ammo[i] );
+			}
 	}
 	else
 	{
@@ -1531,7 +1543,9 @@ void	   MSG_WriteDeltaPlayerstate( msg_t* msg, struct playerState_s* from, struc
 		MSG_WriteShort( msg, powerupbits );
 		for( i = 0; i < 16; i++ )
 			if( powerupbits & ( 1 << i ) )
+			{
 				MSG_WriteLong( msg, to->powerups[i] );
+			}
 	}
 	else
 	{

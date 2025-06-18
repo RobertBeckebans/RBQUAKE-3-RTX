@@ -13,7 +13,8 @@
 /* Declarations for both compression & decompression */
 
 typedef enum
-{                   /* Operating modes for buffer controllers */
+{
+	/* Operating modes for buffer controllers */
 	JBUF_PASS_THRU, /* Plain stripwise operation */
 	/* Remaining modes require a full-image buffer to have been created */
 	JBUF_SAVE_SOURCE,  /* Run source subobject only, save output */
@@ -63,7 +64,8 @@ struct jpeg_c_main_controller
 struct jpeg_c_prep_controller
 {
 	JMETHOD( void, start_pass, ( j_compress_ptr cinfo, J_BUF_MODE pass_mode ) );
-	JMETHOD( void, pre_process_data, ( j_compress_ptr cinfo, JSAMPARRAY input_buf, JDIMENSION* in_row_ctr, JDIMENSION in_rows_avail, JSAMPIMAGE output_buf, JDIMENSION* out_row_group_ctr, JDIMENSION out_row_groups_avail ) );
+	JMETHOD( void, pre_process_data, ( j_compress_ptr cinfo, JSAMPARRAY input_buf, JDIMENSION* in_row_ctr, JDIMENSION in_rows_avail, JSAMPIMAGE output_buf, JDIMENSION* out_row_group_ctr,
+									   JDIMENSION out_row_groups_avail ) );
 };
 
 /* Coefficient buffer control */
@@ -165,7 +167,8 @@ struct jpeg_d_coef_controller
 struct jpeg_d_post_controller
 {
 	JMETHOD( void, start_pass, ( j_decompress_ptr cinfo, J_BUF_MODE pass_mode ) );
-	JMETHOD( void, post_process_data, ( j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENSION* in_row_group_ctr, JDIMENSION in_row_groups_avail, JSAMPARRAY output_buf, JDIMENSION* out_row_ctr, JDIMENSION out_rows_avail ) );
+	JMETHOD( void, post_process_data, ( j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENSION* in_row_group_ctr, JDIMENSION in_row_groups_avail, JSAMPARRAY output_buf, JDIMENSION* out_row_ctr,
+										JDIMENSION out_rows_avail ) );
 };
 
 /* Marker reading & parsing */
@@ -173,9 +176,9 @@ struct jpeg_marker_reader
 {
 	JMETHOD( void, reset_marker_reader, ( j_decompress_ptr cinfo ) );
 	/* Read markers until SOS or EOI.
-   * Returns same codes as are defined for jpeg_consume_input:
-   * JPEG_SUSPENDED, JPEG_REACHED_SOS, or JPEG_REACHED_EOI.
-   */
+	* Returns same codes as are defined for jpeg_consume_input:
+	* JPEG_SUSPENDED, JPEG_REACHED_SOS, or JPEG_REACHED_EOI.
+	*/
 	JMETHOD( int, read_markers, ( j_decompress_ptr cinfo ) );
 	/* Read a restart marker --- exported for use by entropy decoder only */
 	jpeg_marker_parser_method read_restart_marker;
@@ -184,8 +187,8 @@ struct jpeg_marker_reader
 	jpeg_marker_parser_method process_APPn[ 16 ];
 
 	/* State of marker reader --- nominally internal, but applications
-   * supplying COM or APPn handlers might like to know the state.
-   */
+	* supplying COM or APPn handlers might like to know the state.
+	*/
 	boolean      saw_SOI;          /* found SOI? */
 	boolean      saw_SOF;          /* found SOF? */
 	int          next_restart_num; /* next restart number expected (0-7) */
@@ -213,7 +216,8 @@ struct jpeg_inverse_dct
 struct jpeg_upsampler
 {
 	JMETHOD( void, start_pass, ( j_decompress_ptr cinfo ) );
-	JMETHOD( void, upsample, ( j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENSION* in_row_group_ctr, JDIMENSION in_row_groups_avail, JSAMPARRAY output_buf, JDIMENSION* out_row_ctr, JDIMENSION out_rows_avail ) );
+	JMETHOD( void, upsample, ( j_decompress_ptr cinfo, JSAMPIMAGE input_buf, JDIMENSION* in_row_group_ctr, JDIMENSION in_row_groups_avail, JSAMPARRAY output_buf, JDIMENSION* out_row_ctr,
+							   JDIMENSION out_rows_avail ) );
 
 	boolean need_context_rows; /* TRUE if need rows above & below */
 };
@@ -252,14 +256,14 @@ struct jpeg_color_quantizer
  */
 
 #ifdef RIGHT_SHIFT_IS_UNSIGNED
-	#define SHIFT_TEMPS INT32 shift_temp;
-	#define RIGHT_SHIFT( x, shft )                                                          \
+#define SHIFT_TEMPS INT32 shift_temp;
+#define RIGHT_SHIFT( x, shft )                                                          \
 		( ( shift_temp = ( x ) ) < 0 ?                                                      \
                 ( shift_temp >> ( shft ) ) | ( ( ~( ( INT32 )0 ) ) << ( 32 - ( shft ) ) ) : \
                 ( shift_temp >> ( shft ) ) )
 #else
-	#define SHIFT_TEMPS
-	#define RIGHT_SHIFT( x, shft ) ( ( x ) >> ( shft ) )
+#define SHIFT_TEMPS
+#define RIGHT_SHIFT( x, shft ) ( ( x ) >> ( shft ) )
 #endif
 
 /* Short forms of external names for systems with brain-damaged linkers. */
@@ -303,13 +307,13 @@ struct jpeg_color_quantizer
 /* Compression module initialization routines */
 EXTERN void jinit_compress_master   JPP( ( j_compress_ptr cinfo ) );
 EXTERN void jinit_c_master_control  JPP( ( j_compress_ptr cinfo,
-    boolean                                              transcode_only ) );
+		boolean                                              transcode_only ) );
 EXTERN void jinit_c_main_controller JPP( ( j_compress_ptr cinfo,
-	boolean                                               need_full_buffer ) );
+		boolean                                               need_full_buffer ) );
 EXTERN void jinit_c_prep_controller JPP( ( j_compress_ptr cinfo,
-	boolean                                               need_full_buffer ) );
+		boolean                                               need_full_buffer ) );
 EXTERN void jinit_c_coef_controller JPP( ( j_compress_ptr cinfo,
-	boolean                                               need_full_buffer ) );
+		boolean                                               need_full_buffer ) );
 EXTERN void jinit_color_converter   JPP( ( j_compress_ptr cinfo ) );
 EXTERN void jinit_downsampler       JPP( ( j_compress_ptr cinfo ) );
 EXTERN void jinit_forward_dct       JPP( ( j_compress_ptr cinfo ) );
@@ -319,11 +323,11 @@ EXTERN void jinit_marker_writer     JPP( ( j_compress_ptr cinfo ) );
 /* Decompression module initialization routines */
 EXTERN void jinit_master_decompress JPP( ( j_decompress_ptr cinfo ) );
 EXTERN void jinit_d_main_controller JPP( ( j_decompress_ptr cinfo,
-	boolean                                                 need_full_buffer ) );
+		boolean                                                 need_full_buffer ) );
 EXTERN void jinit_d_coef_controller JPP( ( j_decompress_ptr cinfo,
-	boolean                                                 need_full_buffer ) );
+		boolean                                                 need_full_buffer ) );
 EXTERN void jinit_d_post_controller JPP( ( j_decompress_ptr cinfo,
-	boolean                                                 need_full_buffer ) );
+		boolean                                                 need_full_buffer ) );
 EXTERN void jinit_input_controller  JPP( ( j_decompress_ptr cinfo ) );
 EXTERN void jinit_marker_reader     JPP( ( j_decompress_ptr cinfo ) );
 EXTERN void jinit_huff_decoder      JPP( ( j_decompress_ptr cinfo ) );
@@ -350,7 +354,7 @@ extern const int jpeg_natural_order[]; /* zigzag coef order to natural order */
 /* Suppress undefined-structure complaints if necessary. */
 
 #ifdef INCOMPLETE_TYPES_BROKEN
-	#ifndef AM_MEMORY_MANAGER /* only jmemmgr.c defines these */
+#ifndef AM_MEMORY_MANAGER /* only jmemmgr.c defines these */
 struct jvirt_sarray_control
 {
 	long dummy;
@@ -359,5 +363,5 @@ struct jvirt_barray_control
 {
 	long dummy;
 };
-	#endif
+#endif
 #endif /* INCOMPLETE_TYPES_BROKEN */

@@ -113,18 +113,21 @@ static void UI_Mods_ParseInfos( char* modDir, char* modDesc )
 UI_Mods_LoadModsFromFile
 ===============
 */
-static void UI_Mods_LoadModsFromFile( char *filename ) {
+static void UI_Mods_LoadModsFromFile( char* filename )
+{
 	int				len;
 	fileHandle_t	f;
 	char			buf[1024];
 
 	len = trap_FS_FOpenFile( filename, &f, FS_READ );
-	if ( !f ) {
+	if ( !f )
+	{
 		trap_Print( va( S_COLOR_RED "file not found: %s\n", filename ) );
 		return;
 	}
-	if ( len >= sizeof(buf) ) {
-		trap_Print( va( S_COLOR_RED "file too large: %s is %i, max allowed is %i", filename, len, sizeof(buf) ) );
+	if ( len >= sizeof( buf ) )
+	{
+		trap_Print( va( S_COLOR_RED "file too large: %s is %i, max allowed is %i", filename, len, sizeof( buf ) ) );
 		trap_FS_FCloseFile( f );
 		return;
 	}
@@ -134,8 +137,9 @@ static void UI_Mods_LoadModsFromFile( char *filename ) {
 	trap_FS_FCloseFile( f );
 
 	len = strlen( filename );
-	if( !Q_stricmp(filename +  len - 4,".mod") ) {
-		filename[len-4] = '\0';
+	if( !Q_stricmp( filename +  len - 4, ".mod" ) )
+	{
+		filename[len - 4] = '\0';
 	}
 
 	UI_Mods_ParseInfos( filename, buf );

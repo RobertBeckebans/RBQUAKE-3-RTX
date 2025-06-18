@@ -106,7 +106,9 @@ static void ( *rd_flush )( char* buffer );
 void Com_BeginRedirect( char* buffer, int buffersize, void ( *flush )( char* ) )
 {
 	if( !buffer || !buffersize || !flush )
+	{
 		return;
+	}
 	rd_buffer	  = buffer;
 	rd_buffersize = buffersize;
 	rd_flush	  = flush;
@@ -518,12 +520,16 @@ void Info_Print( const char* s )
 	int	  l;
 
 	if( *s == '\\' )
+	{
 		s++;
+	}
 	while( *s )
 	{
 		o = key;
 		while( *s && *s != '\\' )
+		{
 			*o++ = *s++;
+		}
 
 		l = o - key;
 		if( l < 20 )
@@ -532,7 +538,9 @@ void Info_Print( const char* s )
 			key[20] = 0;
 		}
 		else
+		{
 			*o = 0;
+		}
 		Com_Printf( "%s", key );
 
 		if( !*s )
@@ -544,11 +552,15 @@ void Info_Print( const char* s )
 		o = value;
 		s++;
 		while( *s && *s != '\\' )
+		{
 			*o++ = *s++;
+		}
 		*o = 0;
 
 		if( *s )
+		{
 			s++;
+		}
 		Com_Printf( "%s\n", value );
 	}
 }
@@ -609,7 +621,9 @@ int Com_Filter( char* filter, char* name, int casesensitive )
 			for( i = 0; *filter; i++ )
 			{
 				if( *filter == '*' || *filter == '?' )
+				{
 					break;
+				}
 				buf[i] = *filter;
 				filter++;
 			}
@@ -618,7 +632,9 @@ int Com_Filter( char* filter, char* name, int casesensitive )
 			{
 				ptr = Com_StringContains( name, buf, casesensitive );
 				if( !ptr )
+				{
 					return qfalse;
+				}
 				name = ptr + strlen( buf );
 			}
 		}
@@ -638,18 +654,24 @@ int Com_Filter( char* filter, char* name, int casesensitive )
 			while( *filter && !found )
 			{
 				if( *filter == ']' && *( filter + 1 ) != ']' )
+				{
 					break;
+				}
 				if( *( filter + 1 ) == '-' && *( filter + 2 ) && ( *( filter + 2 ) != ']' || *( filter + 3 ) == ']' ) )
 				{
 					if( casesensitive )
 					{
 						if( *name >= *filter && *name <= *( filter + 2 ) )
+						{
 							found = qtrue;
+						}
 					}
 					else
 					{
 						if( toupper( *name ) >= toupper( *filter ) && toupper( *name ) <= toupper( *( filter + 2 ) ) )
+						{
 							found = qtrue;
+						}
 					}
 					filter += 3;
 				}
@@ -658,22 +680,30 @@ int Com_Filter( char* filter, char* name, int casesensitive )
 					if( casesensitive )
 					{
 						if( *filter == *name )
+						{
 							found = qtrue;
+						}
 					}
 					else
 					{
 						if( toupper( *filter ) == toupper( *name ) )
+						{
 							found = qtrue;
+						}
 					}
 					filter++;
 				}
 			}
 			if( !found )
+			{
 				return qfalse;
+			}
 			while( *filter )
 			{
 				if( *filter == ']' && *( filter + 1 ) != ']' )
+				{
 					break;
+				}
 				filter++;
 			}
 			filter++;
@@ -684,12 +714,16 @@ int Com_Filter( char* filter, char* name, int casesensitive )
 			if( casesensitive )
 			{
 				if( *filter != *name )
+				{
 					return qfalse;
+				}
 			}
 			else
 			{
 				if( toupper( *filter ) != toupper( *name ) )
+				{
 					return qfalse;
+				}
 			}
 			filter++;
 			name++;
@@ -766,7 +800,9 @@ int Com_RealTime( qtime_t* qtime )
 
 	t = time( NULL );
 	if( !qtime )
+	{
 		return t;
+	}
 	tms = localtime( &t );
 	if( tms )
 	{
@@ -1152,7 +1188,9 @@ void Z_CheckHeap()
 			break; // all blocks have been hit
 		}
 		if( ( byte* )block + block->size != ( byte* )block->next )
+		{
 			Com_Error( ERR_FATAL, "Z_CheckHeap: block size does not touch the next block\n" );
+		}
 		if( block->next->prev != block )
 		{
 			Com_Error( ERR_FATAL, "Z_CheckHeap: next block doesn't have proper back link\n" );
@@ -1180,7 +1218,9 @@ void Z_LogZoneHeap( memzone_t* zone, char* name )
 	int			size, allocSize, numBlocks;
 
 	if( !logfile || !FS_Initialized() )
+	{
 		return;
+	}
 	size = allocSize = numBlocks = 0;
 	Com_sprintf( buf, sizeof( buf ), "\r\n================\r\n%s log\r\n================\r\n", name );
 	FS_Write( buf, strlen( buf ), logfile );
@@ -1485,14 +1525,16 @@ void Com_TouchMemory()
 
 	j = hunk_low.permanent >> 2;
 	for( i = 0; i < j; i += 64 )
-	{ // only need to touch each page
+	{
+		// only need to touch each page
 		sum += ( ( int* )s_hunkData )[i];
 	}
 
 	i = ( s_hunkTotal - hunk_high.permanent ) >> 2;
 	j = hunk_high.permanent >> 2;
 	for( ; i < j; i += 64 )
-	{ // only need to touch each page
+	{
+		// only need to touch each page
 		sum += ( ( int* )s_hunkData )[i];
 	}
 
@@ -1502,7 +1544,8 @@ void Com_TouchMemory()
 		{
 			j = block->size >> 2;
 			for( i = 0; i < j; i += 64 )
-			{ // only need to touch each page
+			{
+				// only need to touch each page
 				sum += ( ( int* )block )[i];
 			}
 		}
@@ -1572,7 +1615,9 @@ void Hunk_Log()
 	int			 size, numBlocks;
 
 	if( !logfile || !FS_Initialized() )
+	{
 		return;
+	}
 	size	  = 0;
 	numBlocks = 0;
 	Com_sprintf( buf, sizeof( buf ), "\r\n================\r\nHunk log\r\n================\r\n" );
@@ -1604,7 +1649,9 @@ void Hunk_SmallLog()
 	int			 size, locsize, numBlocks;
 
 	if( !logfile || !FS_Initialized() )
+	{
 		return;
+	}
 	for( block = hunkblocks; block; block = block->next )
 	{
 		block->printed = qfalse;
@@ -2058,7 +2105,9 @@ void Hunk_Trash()
 	return;
 
 	if( s_hunkData == NULL )
+	{
 		return;
+	}
 
 #ifdef _DEBUG
 	Com_Error( ERR_DROP, "hunk trashed\n" );

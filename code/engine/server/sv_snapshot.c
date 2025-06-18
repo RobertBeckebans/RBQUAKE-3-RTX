@@ -384,9 +384,13 @@ static void SV_AddEntitiesVisibleFromPoint( vec3_t origin, clientSnapshot_t* fra
 		if( ent->r.svFlags & SVF_CLIENTMASK )
 		{
 			if( frame->ps.clientNum >= 32 )
+			{
 				Com_Error( ERR_DROP, "SVF_CLIENTMASK: cientNum > 32\n" );
+			}
 			if( ~ent->r.singleClient & ( 1 << frame->ps.clientNum ) )
+			{
 				continue;
+			}
 		}
 
 		svEnt = SV_SvEntityForGentity( ent );

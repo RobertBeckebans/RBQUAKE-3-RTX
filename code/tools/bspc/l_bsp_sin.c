@@ -343,11 +343,15 @@ winding_t* Sin_BrushSideWinding( sin_dbrush_t* brush, sin_dbrushside_t* baseside
 		side = &sin_dbrushsides[brush->firstside + i];
 		// don't chop with the base plane
 		if( side->planenum == baseside->planenum )
+		{
 			continue;
+		}
 		// also don't use planes that are almost equal
 		plane = &sin_dplanes[side->planenum];
 		if( DotProduct( baseplane->normal, plane->normal ) > 0.999 && fabs( baseplane->dist - plane->dist ) < 0.01 )
+		{
 			continue;
+		}
 		//
 		plane = &sin_dplanes[side->planenum ^ 1];
 		ChopWindingInPlace( &w, plane->normal, plane->dist, 0 ); // CLIP_EPSILON);
@@ -402,7 +406,9 @@ void	 Sin_FixTextureReferences()
 		brush = &sin_dbrushes[i];
 		// hint brushes are not textured
 		if( Sin_HintSkipBrush( brush ) )
+		{
 			continue;
+		}
 		// go over all the sides of the brush
 		for( j = 0; j < brush->numsides; j++ )
 		{
@@ -446,7 +452,9 @@ void	 Sin_FixTextureReferences()
 				face = &sin_dfaces[k];
 				// if the face is in the same plane as the brush side
 				if( ( face->planenum & ~1 ) != ( brushside->planenum & ~1 ) )
+				{
 					continue;
+				}
 				// if the face is partly or totally on the brush side
 				if( Sin_FaceOnWinding( face, w ) )
 				{
@@ -481,14 +489,20 @@ int Sin_CompressVis( byte* vis, byte* dest )
 	{
 		*dest_p++ = vis[j];
 		if( vis[j] )
+		{
 			continue;
+		}
 
 		rep = 1;
 		for( j++; j < visrow; j++ )
 			if( vis[j] || rep == 255 )
+			{
 				break;
+			}
 			else
+			{
 				rep++;
+			}
 		*dest_p++ = rep;
 		j--;
 	}
@@ -521,7 +535,9 @@ void Sin_DecompressVis( byte* in, byte* decompressed )
 
 		c = in[1];
 		if( !c )
+		{
 			Error( "DecompressVis: 0 repeat" );
+		}
 		in += 2;
 		while( c )
 		{
@@ -568,7 +584,9 @@ void Sin_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < sin_numvertexes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			sin_dvertexes[i].point[j] = LittleFloat( sin_dvertexes[i].point[j] );
+		}
 	}
 
 	//
@@ -577,7 +595,9 @@ void Sin_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < sin_numplanes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			sin_dplanes[i].normal[j] = LittleFloat( sin_dplanes[i].normal[j] );
+		}
 		sin_dplanes[i].dist = LittleFloat( sin_dplanes[i].dist );
 		sin_dplanes[i].type = LittleLong( sin_dplanes[i].type );
 	}
@@ -588,7 +608,9 @@ void Sin_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < sin_numtexinfo; i++ )
 	{
 		for( j = 0; j < 8; j++ )
+		{
 			sin_texinfo[i].vecs[0][j] = LittleFloat( sin_texinfo[i].vecs[0][j] );
+		}
 #ifdef SIN
 		sin_texinfo[i].trans_mag	= LittleFloat( sin_texinfo[i].trans_mag );
 		sin_texinfo[i].trans_angle	= LittleLong( sin_texinfo[i].trans_angle );
@@ -692,19 +714,25 @@ void Sin_SwapBSPFile( qboolean todisk )
 	// leaffaces
 	//
 	for( i = 0; i < sin_numleaffaces; i++ )
+	{
 		sin_dleaffaces[i] = LittleShort( sin_dleaffaces[i] );
+	}
 
 	//
 	// leafbrushes
 	//
 	for( i = 0; i < sin_numleafbrushes; i++ )
+	{
 		sin_dleafbrushes[i] = LittleShort( sin_dleafbrushes[i] );
+	}
 
 	//
 	// surfedges
 	//
 	for( i = 0; i < sin_numsurfedges; i++ )
+	{
 		sin_dsurfedges[i] = LittleLong( sin_dsurfedges[i] );
+	}
 
 	//
 	// edges
@@ -768,9 +796,13 @@ void Sin_SwapBSPFile( qboolean todisk )
 	// visibility
 	//
 	if( todisk )
+	{
 		j = sin_dvis->numclusters;
+	}
 	else
+	{
 		j = LittleLong( sin_dvis->numclusters );
+	}
 	sin_dvis->numclusters = LittleLong( sin_dvis->numclusters );
 	for( i = 0; i < j; i++ )
 	{
@@ -789,10 +821,14 @@ int Sin_CopyLump( int lump, void* dest, int size, int maxsize )
 	ofs	   = header->lumps[lump].fileofs;
 
 	if( length % size )
+	{
 		Error( "Sin_LoadBSPFile: odd lump size" );
+	}
 
 	if( ( length / size ) > maxsize )
+	{
 		Error( "Sin_LoadBSPFile: exceeded max size for lump %d size %d > maxsize %d\n", lump, ( length / size ), maxsize );
+	}
 
 	memcpy( dest, ( byte* )header + ofs, length );
 
@@ -807,7 +843,9 @@ int Sin_CopyLump( int lump, void* dest, int size )
 	ofs	   = header->lumps[lump].fileofs;
 
 	if( length % size )
+	{
 		Error( "Sin_LoadBSPFile: odd lump size" );
+	}
 
 	memcpy( dest, ( byte* )header + ofs, length );
 
@@ -831,12 +869,18 @@ void Sin_LoadBSPFile( char* filename, int offset, int length )
 
 	// swap the header
 	for( i = 0; i < sizeof( sin_dheader_t ) / 4; i++ )
+	{
 		( ( int* )header )[i] = LittleLong( ( ( int* )header )[i] );
+	}
 
 	if( header->ident != SIN_BSPHEADER && header->ident != SINGAME_BSPHEADER )
+	{
 		Error( "%s is not a IBSP file", filename );
+	}
 	if( header->version != SIN_BSPVERSION && header->version != SINGAME_BSPVERSION )
+	{
 		Error( "%s is version %i, not %i", filename, header->version, SIN_BSPVERSION );
+	}
 
 #ifdef SIN
 	sin_nummodels	   = Sin_CopyLump( SIN_LUMP_MODELS, sin_dmodels, sizeof( sin_dmodel_t ), SIN_MAX_MAP_MODELS );
@@ -913,12 +957,18 @@ void Sin_LoadBSPFileTexinfo( char* filename )
 
 	// swap the header
 	for( i = 0; i < sizeof( sin_dheader_t ) / 4; i++ )
+	{
 		( ( int* )header )[i] = LittleLong( ( ( int* )header )[i] );
+	}
 
 	if( header->ident != SIN_BSPHEADER && header->ident != SINGAME_BSPHEADER )
+	{
 		Error( "%s is not a IBSP file", filename );
+	}
 	if( header->version != SIN_BSPVERSION && header->version != SINGAME_BSPVERSION )
+	{
 		Error( "%s is version %i, not %i", filename, header->version, SIN_BSPVERSION );
+	}
 
 	length = header->lumps[SIN_LUMP_TEXINFO].filelen;
 	ofs	   = header->lumps[SIN_LUMP_TEXINFO].fileofs;
@@ -948,7 +998,9 @@ void Sin_AddLump( int lumpnum, void* data, int len, int size, int maxsize )
 	totallength = len * size;
 
 	if( len > maxsize )
+	{
 		Error( "Sin_WriteBSPFile: exceeded max size for lump %d size %d > maxsize %d\n", lumpnum, len, maxsize );
+	}
 
 	lump = &header->lumps[lumpnum];
 
@@ -1087,7 +1139,9 @@ void Sin_UnparseEntities()
 	{
 		ep = entities[i].epairs;
 		if( !ep )
+		{
 			continue; // ent got removed
+		}
 
 		strcat( end, "{\n" );
 		end += 2;
@@ -1107,7 +1161,9 @@ void Sin_UnparseEntities()
 		end += 2;
 
 		if( end > buf + SIN_MAX_MAP_ENTSTRING )
+		{
 			Error( "Entity text too long" );
+		}
 	}
 	sin_entdatasize = end - buf + 1;
 } // end of the function Sin_UnparseEntities
@@ -1138,7 +1194,9 @@ Dumps info about current file
 void Sin_PrintBSPFileSizes()
 {
 	if( !num_entities )
+	{
 		Sin_ParseEntities();
+	}
 
 	Log_Print( "%6i models       %7i\n", sin_nummodels, ( int )( sin_nummodels * sizeof( sin_dmodel_t ) ) );
 	Log_Print( "%6i brushes      %7i\n", sin_numbrushes, ( int )( sin_numbrushes * sizeof( sin_dbrush_t ) ) );

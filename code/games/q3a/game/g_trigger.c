@@ -25,7 +25,9 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 void InitTrigger( gentity_t* self )
 {
 	if( !VectorCompare( self->s.angles, vec3_origin ) )
+	{
 		G_SetMovedir( self->s.angles, self->movedir );
+	}
 
 	trap_SetBrushModel( self, self->model );
 	self->r.contents = CONTENTS_TRIGGER; // replaces the -1 from trap_SetBrushModel
@@ -412,9 +414,13 @@ void hurt_touch( gentity_t* self, gentity_t* other, trace_t* trace )
 	}
 
 	if( self->spawnflags & 8 )
+	{
 		dflags = DAMAGE_NO_PROTECTION;
+	}
 	else
+	{
 		dflags = 0;
+	}
 	G_Damage( other, self, self, NULL, NULL, self->damage, dflags, MOD_TRIGGER_HURT );
 }
 

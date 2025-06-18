@@ -195,7 +195,8 @@ int CG_PointContents( const vec3_t point, int passEntityNum )
 		}
 
 		if( ent->solid != SOLID_BMODEL )
-		{ // special value for bmodel
+		{
+			// special value for bmodel
 			continue;
 		}
 
@@ -323,9 +324,13 @@ static void CG_TouchItem( centity_t* cent )
 	{
 #endif
 		if( cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_RED && item->giTag == PW_REDFLAG )
+		{
 			return;
+		}
 		if( cg.predictedPlayerState.persistant[PERS_TEAM] == TEAM_BLUE && item->giTag == PW_BLUEFLAG )
+		{
 			return;
+		}
 	}
 
 	// grab it
@@ -512,7 +517,8 @@ void CG_PredictPlayerState()
 	cmdNum = current - CMD_BACKUP + 1;
 	trap_GetUserCmd( cmdNum, &oldestCmd );
 	if( oldestCmd.serverTime > cg.snap->ps.commandTime && oldestCmd.serverTime < cg.time )
-	{ // special check for map_restart
+	{
+		// special check for map_restart
 		if( cg_showmiss.integer )
 		{
 			CG_Printf( "exceeded PACKET_BACKUP on commands\n" );

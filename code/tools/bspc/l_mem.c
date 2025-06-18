@@ -38,15 +38,25 @@ void PrintMemorySize( unsigned long size )
 	number2 = ( size & 0xFFFFF ) >> 10;
 	number3 = ( size & 0x3FF );
 	if( number1 )
+	{
 		Log_Print( "%ld MB", number1 );
+	}
 	if( number1 && number2 )
+	{
 		Log_Print( " and " );
+	}
 	if( number2 )
+	{
 		Log_Print( "%ld KB", number2 );
+	}
 	if( number2 && number3 )
+	{
 		Log_Print( " and " );
+	}
 	if( number3 )
+	{
 		Log_Print( "%ld bytes", number3 );
+	}
 } // end of the function PrintFileSize
 
 #ifndef MEMDEBUG
@@ -81,7 +91,9 @@ void* GetClearedMemory( int size )
 
 	ptr = ( void* )malloc( size );
 	if( !ptr )
+	{
 		Error( "out of memory" );
+	}
 	memset( ptr, 0, size );
 	allocedmemory += MemorySize( ptr );
 	return ptr;
@@ -97,7 +109,9 @@ void* GetMemory( unsigned long size )
 	void* ptr;
 	ptr = malloc( size );
 	if( !ptr )
+	{
 		Error( "out of memory" );
+	}
 	allocedmemory += MemorySize( ptr );
 	return ptr;
 } // end of the function GetMemory
@@ -156,7 +170,9 @@ void		   LinkMemoryBlock( memoryblock_t* block )
 	block->prev = NULL;
 	block->next = memory;
 	if( memory )
+	{
 		memory->prev = block;
+	}
 	memory = block;
 } // end of the function LinkMemoryBlock
 //===========================================================================
@@ -168,11 +184,17 @@ void		   LinkMemoryBlock( memoryblock_t* block )
 void UnlinkMemoryBlock( memoryblock_t* block )
 {
 	if( block->prev )
+	{
 		block->prev->next = block->next;
+	}
 	else
+	{
 		memory = block->next;
+	}
 	if( block->next )
+	{
 		block->next->prev = block->prev;
+	}
 } // end of the function UnlinkMemoryBlock
 	//===========================================================================
 	//
@@ -287,7 +309,9 @@ void FreeMemory( void* ptr )
 
 	block = BlockFromPointer( ptr, "FreeMemory" );
 	if( !block )
+	{
 		return;
+	}
 	UnlinkMemoryBlock( block );
 	totalmemorysize -= block->size;
 	numblocks--;
@@ -306,7 +330,9 @@ int MemoryByteSize( void* ptr )
 
 	block = BlockFromPointer( ptr, "MemoryByteSize" );
 	if( !block )
+	{
 		return 0;
+	}
 	return block->size;
 } // end of the function MemoryByteSize
 //===========================================================================
@@ -423,7 +449,9 @@ void* Hunk_Alloc( int size )
 	memhunk_t* h;
 
 	if( !size )
+	{
 		return ( void* )memhunk_high_size;
+	}
 	//
 	h			 = GetClearedMemory( size + sizeof( memhunk_t ) );
 	h->ptr		 = ( char* )h + sizeof( memhunk_t );

@@ -323,11 +323,17 @@ void G_AddRandomBot( int team )
 			{
 				skill = trap_Cvar_VariableValue( "g_spSkill" );
 				if( team == TEAM_RED )
+				{
 					teamstr = "red";
+				}
 				else if( team == TEAM_BLUE )
+				{
 					teamstr = "blue";
+				}
 				else
+				{
 					teamstr = "";
+				}
 				strncpy( netname, value, sizeof( netname ) - 1 );
 				netname[sizeof( netname ) - 1] = '\0';
 				Q_CleanStr( netname );
@@ -458,7 +464,9 @@ void G_CheckMinimumPlayers()
 	static int checkminimumplayers_time;
 
 	if( level.intermissiontime )
+	{
 		return;
+	}
 	// only check once each 10 seconds
 	if( checkminimumplayers_time > level.time - 10000 )
 	{
@@ -468,7 +476,9 @@ void G_CheckMinimumPlayers()
 	trap_Cvar_Update( &bot_minplayers );
 	minplayers = bot_minplayers.integer;
 	if( minplayers <= 0 )
+	{
 		return;
+	}
 
 	if( g_gametype.integer >= GT_TEAM )
 	{

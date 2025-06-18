@@ -43,64 +43,77 @@ void S_WriteLinearBlastStereo16()
 	{
 		val = snd_p[i] >> 8;
 		if( val > 0x7fff )
+		{
 			snd_out[i] = 0x7fff;
+		}
 		else if( val < -32768 )
+		{
 			snd_out[i] = -32768;
+		}
 		else
+		{
 			snd_out[i] = val;
+		}
 
 		val = snd_p[i + 1] >> 8;
 		if( val > 0x7fff )
+		{
 			snd_out[i + 1] = 0x7fff;
+		}
 		else if( val < -32768 )
+		{
 			snd_out[i + 1] = -32768;
+		}
 		else
+		{
 			snd_out[i + 1] = val;
+		}
 	}
 }
 	#else
 
 __declspec( naked ) void S_WriteLinearBlastStereo16()
 {
-	__asm {
+	__asm
+	{
 
- push edi
- push ebx
- mov ecx,ds:dword ptr[snd_linear_count]
- mov ebx,ds:dword ptr[snd_p]
- mov edi,ds:dword ptr[snd_out]
-LWLBLoopTop:
- mov eax,ds:dword ptr[-8+ebx+ecx*4]
- sar eax,8
- cmp eax,07FFFh
- jg LClampHigh
- cmp eax,0FFFF8000h
- jnl LClampDone
- mov eax,0FFFF8000h
- jmp LClampDone
-LClampHigh:
- mov eax,07FFFh
-LClampDone:
- mov edx,ds:dword ptr[-4+ebx+ecx*4]
- sar edx,8
- cmp edx,07FFFh
- jg LClampHigh2
- cmp edx,0FFFF8000h
- jnl LClampDone2
- mov edx,0FFFF8000h
- jmp LClampDone2
-LClampHigh2:
- mov edx,07FFFh
-LClampDone2:
- shl edx,16
- and eax,0FFFFh
- or edx,eax
- mov ds:dword ptr[-4+edi+ecx*2],edx
- sub ecx,2
- jnz LWLBLoopTop
- pop ebx
- pop edi
- ret
+		push edi
+		push ebx
+		mov ecx, ds:dword ptr[snd_linear_count]
+		mov ebx, ds:dword ptr[snd_p]
+		mov edi, ds:dword ptr[snd_out]
+		LWLBLoopTop:
+		mov eax, ds:dword ptr[-8+ebx+ecx*4]
+		sar eax, 8
+		cmp eax, 07FFFh
+		jg LClampHigh
+		cmp eax, 0FFFF8000h
+		jnl LClampDone
+		mov eax, 0FFFF8000h
+		jmp LClampDone
+		LClampHigh:
+		mov eax, 07FFFh
+		LClampDone:
+		mov edx, ds:dword ptr[-4+ebx+ecx*4]
+		sar edx, 8
+		cmp edx, 07FFFh
+		jg LClampHigh2
+		cmp edx, 0FFFF8000h
+		jnl LClampDone2
+		mov edx, 0FFFF8000h
+		jmp LClampDone2
+		LClampHigh2:
+		mov edx, 07FFFh
+		LClampDone2:
+		shl edx, 16
+		and eax, 0FFFFh
+		or edx, eax
+		mov ds:dword ptr[-4+edi+ecx*2], edx
+		sub ecx, 2
+		jnz LWLBLoopTop
+		pop ebx
+		pop edi
+		ret
 	}
 }
 
@@ -127,7 +140,9 @@ void S_TransferStereo16( unsigned long* pbuf, int endtime )
 
 		snd_linear_count = ( dma.samples >> 1 ) - lpos;
 		if( ls_paintedtime + snd_linear_count > endtime )
+		{
 			snd_linear_count = endtime - ls_paintedtime;
+		}
 
 		snd_linear_count <<= 1;
 
@@ -165,15 +180,19 @@ void S_TransferPaintBuffer( int endtime )
 		// write a fixed sine wave
 		count = ( endtime - s_paintedtime );
 		for( i = 0; i < count; i++ )
+		{
 			paintbuffer[i].left = paintbuffer[i].right = sin( ( s_paintedtime + i ) * 0.1 ) * 20000 * 256;
+		}
 	}
 
 	if( dma.samplebits == 16 && dma.channels == 2 )
-	{ // optimized case
+	{
+		// optimized case
 		S_TransferStereo16( pbuf, endtime );
 	}
 	else
-	{ // general case
+	{
+		// general case
 		p		 = ( int* )paintbuffer;
 		count	 = ( endtime - s_paintedtime ) * dma.channels;
 		out_mask = dma.samples - 1;
@@ -188,9 +207,13 @@ void S_TransferPaintBuffer( int endtime )
 				val = *p >> 8;
 				p += step;
 				if( val > 0x7fff )
+				{
 					val = 0x7fff;
+				}
 				else if( val < -32768 )
+				{
 					val = -32768;
+				}
 				out[out_idx] = val;
 				out_idx		 = ( out_idx + 1 ) & out_mask;
 			}
@@ -203,9 +226,13 @@ void S_TransferPaintBuffer( int endtime )
 				val = *p >> 8;
 				p += step;
 				if( val > 0x7fff )
+				{
 					val = 0x7fff;
+				}
 				else if( val < -32768 )
+				{
 					val = -32768;
+				}
 				out[out_idx] = ( val >> 8 ) + 128;
 				out_idx		 = ( out_idx + 1 ) & out_mask;
 			}
@@ -294,7 +321,9 @@ static void S_PaintChannelFrom16( channel_t* ch, const sfx_t* sc, int count, int
 			samplesLeft		 = count - i;
 			chunkSamplesLeft = SND_CHUNK_SIZE - sampleOffset;
 			if( samplesLeft > chunkSamplesLeft )
+			{
 				samplesLeft = chunkSamplesLeft;
+			}
 
 			vectorCount = samplesLeft / 8;
 

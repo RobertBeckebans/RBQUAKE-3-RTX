@@ -464,17 +464,17 @@ void XMLUtil::ConvertUTF32ToUTF8( unsigned long input, char* output, int* length
 			--output;
 			*output = static_cast<char>( ( input | BYTE_MARK ) & BYTE_MASK );
 			input >>= 6;
-			// fall through
+		// fall through
 		case 3:
 			--output;
 			*output = static_cast<char>( ( input | BYTE_MARK ) & BYTE_MASK );
 			input >>= 6;
-			// fall through
+		// fall through
 		case 2:
 			--output;
 			*output = static_cast<char>( ( input | BYTE_MARK ) & BYTE_MASK );
 			input >>= 6;
-			// fall through
+		// fall through
 		case 1:
 			--output;
 			*output = static_cast<char>( input | FIRST_BYTE_MARK[*length] );
@@ -834,7 +834,9 @@ const char* XMLNode::Value() const
 {
 	// Edge case: XMLDocuments don't have a Value. Return null.
 	if( this->ToDocument() )
+	{
 		return 0;
+	}
 	return _value.GetStr();
 }
 
@@ -854,7 +856,9 @@ XMLNode* XMLNode::DeepClone( XMLDocument* target ) const
 {
 	XMLNode* clone = this->ShallowClone( target );
 	if( !clone )
+	{
 		return 0;
+	}
 
 	for( const XMLNode* child = this->FirstChild(); child; child = child->NextSibling() )
 	{
@@ -1091,7 +1095,9 @@ char* XMLNode::ParseDeep( char* p, StrPair* parentEndTag, int* curLineNumPtr )
 
 	XMLDocument::DepthTracker tracker( _document );
 	if( _document->Error() )
+	{
 		return 0;
+	}
 
 	while( p && *p )
 	{
@@ -1705,7 +1711,9 @@ const char* XMLElement::GetText() const
 void XMLElement::SetText( const char* inText )
 {
 	if( FirstChild() && FirstChild()->ToText() )
+	{
 		FirstChild()->SetValue( inText );
+	}
 	else
 	{
 		XMLText* theText = GetDocument()->NewText( inText );
@@ -2241,10 +2249,10 @@ void XMLDocument::Clear()
 	_parsingDepth = 0;
 
 #if 0
-    _textPool.Trace( "text" );
-    _elementPool.Trace( "element" );
-    _commentPool.Trace( "comment" );
-    _attributePool.Trace( "attribute" );
+	_textPool.Trace( "text" );
+	_elementPool.Trace( "element" );
+	_commentPool.Trace( "comment" );
+	_attributePool.Trace( "attribute" );
 #endif
 
 #ifdef TINYXML2_DEBUG

@@ -34,7 +34,8 @@ void CG_AdjustFrom640( float* x, float* y, float* w, float* h )
 {
 #if 0
 	// adjust for wide screens
-	if ( cgs.glconfig.vidWidth * 480 > cgs.glconfig.vidHeight * 640 ) {
+	if( cgs.glconfig.vidWidth * 480 > cgs.glconfig.vidHeight * 640 )
+	{
 		*x += 0.5 * ( cgs.glconfig.vidWidth - ( cgs.glconfig.vidHeight * 640 / 480 ) );
 	}
 #endif
@@ -169,7 +170,9 @@ void CG_DrawStringExt( int x, int y, const char* string, const float* setColor, 
 	int			cnt;
 
 	if( maxChars <= 0 )
+	{
 		maxChars = 32767; // do them all!
+	}
 
 	// draw the drop shadow
 	if( shadow )

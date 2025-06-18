@@ -584,7 +584,9 @@ void GL_RaytraceSurfaceGrid( dxrMesh_t* mesh, msurface_t* fa, srfGridMesh_t* cv 
 	float		   x, y, w, h;
 
 	if( fa->shader == NULL )
+	{
 		return;
+	}
 
 	x = fa->shader->atlas_x;
 	y = fa->shader->atlas_y;
@@ -775,10 +777,14 @@ void GL_LoadBottomLevelAccelStruct( dxrMesh_t* mesh, msurface_t* surfaces, int n
 		float		 x, y, w, h;
 
 		if( fa->shader == NULL )
+		{
 			continue;
+		}
 
 		if( fa->shader->defaultShader )
+		{
 			continue;
+		}
 
 		if( strstr( fa->shader->name, "fog" ) )
 		{
@@ -801,7 +807,9 @@ void GL_LoadBottomLevelAccelStruct( dxrMesh_t* mesh, msurface_t* surfaces, int n
 		}
 
 		if( fa->shader->hasRaytracingReflection )
+		{
 			materialInfo = 5;
+		}
 
 		x = fa->shader->atlas_x;
 		y = fa->shader->atlas_y;
@@ -1154,7 +1162,9 @@ void* GL_LoadMD3RaytracedMesh( md3Header_t* mod, int frame )
 
 		int			 materialInfo = 1;
 		if( tr.shaders[shader->shaderIndex]->hasRaytracingReflection )
+		{
 			materialInfo = 5;
+		}
 
 		LerpMeshVertexes( materialInfo, surf, 0.0f, frame, frame, meshVertexes, x, y, w, h );
 

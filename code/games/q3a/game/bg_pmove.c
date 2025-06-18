@@ -550,13 +550,20 @@ static void PM_WaterMove()
 	}
 #if 0
 	// jump = head for surface
-	if ( pm->cmd.upmove >= 10 ) {
-		if (pm->ps->velocity[2] > -300) {
-			if ( pm->watertype == CONTENTS_WATER ) {
+	if( pm->cmd.upmove >= 10 )
+	{
+		if( pm->ps->velocity[2] > -300 )
+		{
+			if( pm->watertype == CONTENTS_WATER )
+			{
 				pm->ps->velocity[2] = 100;
-			} else if (pm->watertype == CONTENTS_SLIME) {
+			}
+			else if( pm->watertype == CONTENTS_SLIME )
+			{
 				pm->ps->velocity[2] = 80;
-			} else {
+			}
+			else
+			{
 				pm->ps->velocity[2] = 50;
 			}
 		}
@@ -577,7 +584,9 @@ static void PM_WaterMove()
 	else
 	{
 		for( i = 0; i < 3; i++ )
+		{
 			wishvel[i] = scale * pml.forward[i] * pm->cmd.forwardmove + scale * pml.right[i] * pm->cmd.rightmove;
+		}
 
 		wishvel[2] += scale * pm->cmd.upmove;
 	}
@@ -727,10 +736,14 @@ static void PM_AirMove()
 	//ZOID:  If we are on the grapple, try stair-stepping
 	//this allows a player to use the grapple to pull himself
 	//over a ledge
-	if (pm->ps->pm_flags & PMF_GRAPPLE_PULL)
-		PM_StepSlideMove ( qtrue );
+	if( pm->ps->pm_flags & PMF_GRAPPLE_PULL )
+	{
+		PM_StepSlideMove( qtrue );
+	}
 	else
-		PM_SlideMove ( qtrue );
+	{
+		PM_SlideMove( qtrue );
+	}
 #endif
 
 	PM_StepSlideMove( qtrue );
@@ -754,9 +767,13 @@ static void PM_GrappleMove()
 	VectorNormalize( vel );
 
 	if( vlen <= 100 )
+	{
 		VectorScale( vel, 10 * vlen, vel );
+	}
 	else
+	{
 		VectorScale( vel, 800, vel );
+	}
 
 	VectorCopy( vel, pm->ps->velocity );
 
@@ -967,7 +984,9 @@ static void PM_NoclipMove()
 		// scale the velocity
 		newspeed = speed - drop;
 		if( newspeed < 0 )
+		{
 			newspeed = 0;
+		}
 		newspeed /= speed;
 
 		VectorScale( pm->ps->velocity, newspeed, pm->ps->velocity );
@@ -980,7 +999,9 @@ static void PM_NoclipMove()
 	smove = pm->cmd.rightmove;
 
 	for( i = 0; i < 3; i++ )
+	{
 		wishvel[i] = pml.forward[i] * fmove + pml.right[i] * smove;
+	}
 	wishvel[2] += pm->cmd.upmove;
 
 	VectorCopy( wishvel, wishdir );
@@ -1251,7 +1272,9 @@ static void PM_GroundTrace()
 	if( trace.allsolid )
 	{
 		if( !PM_CorrectAllSolid( &trace ) )
+		{
 			return;
+		}
 	}
 
 	// if the trace didn't hit anything, we are in free fall
@@ -1431,18 +1454,22 @@ static void PM_CheckDuck()
 	}
 
 	if( pm->cmd.upmove < 0 )
-	{ // duck
+	{
+		// duck
 		pm->ps->pm_flags |= PMF_DUCKED;
 	}
 	else
-	{ // stand up if possible
+	{
+		// stand up if possible
 		if( pm->ps->pm_flags & PMF_DUCKED )
 		{
 			// try to stand up
 			pm->maxs[2] = 32;
 			pm->trace( &trace, pm->ps->origin, pm->mins, pm->maxs, pm->ps->origin, pm->ps->clientNum, pm->tracemask );
 			if( !trace.allsolid )
+			{
 				pm->ps->pm_flags &= ~PMF_DUCKED;
+			}
 		}
 	}
 
@@ -1524,7 +1551,7 @@ static void PM_Footsteps()
 		}
 		// ducked characters never play footsteps
 		/*
-	} else 	if ( pm->ps->pm_flags & PMF_BACKWARDS_RUN ) {
+		} else 	if ( pm->ps->pm_flags & PMF_BACKWARDS_RUN ) {
 		if ( !( pm->cmd.buttons & BUTTON_WALKING ) ) {
 			bobmove = 0.4;	// faster speeds bob faster
 			footstep = qtrue;
@@ -1532,7 +1559,7 @@ static void PM_Footsteps()
 			bobmove = 0.3;
 		}
 		PM_ContinueLegsAnim( LEGS_BACK );
-	*/
+		*/
 	}
 	else
 	{
@@ -1603,7 +1630,8 @@ Generate sound events for entering and leaving water
 ==============
 */
 static void PM_WaterEvents()
-{ // FIXME?
+{
+	// FIXME?
 	//
 	// if just entered a water volume, play a sound
 	//

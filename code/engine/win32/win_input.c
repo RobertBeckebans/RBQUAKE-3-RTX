@@ -136,13 +136,21 @@ void IN_ActivateWin32Mouse()
 
 	GetWindowRect( g_wv.hWnd, &window_rect );
 	if( window_rect.left < 0 )
+	{
 		window_rect.left = 0;
+	}
 	if( window_rect.top < 0 )
+	{
 		window_rect.top = 0;
+	}
 	if( window_rect.right >= width )
+	{
 		window_rect.right = width - 1;
+	}
 	if( window_rect.bottom >= height - 1 )
+	{
 		window_rect.bottom = height - 1;
+	}
 	window_center_x = ( window_rect.right + window_rect.left ) / 2;
 	window_center_y = ( window_rect.top + window_rect.bottom ) / 2;
 
@@ -488,32 +496,48 @@ void IN_DIMouse( int* mx, int* my )
 		{
 			case DIMOFS_BUTTON0:
 				if( od.dwData & 0x80 )
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE1, qtrue, 0, NULL );
+				}
 				else
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE1, qfalse, 0, NULL );
+				}
 				break;
 
 			case DIMOFS_BUTTON1:
 				if( od.dwData & 0x80 )
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE2, qtrue, 0, NULL );
+				}
 				else
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE2, qfalse, 0, NULL );
+				}
 				break;
 
 			case DIMOFS_BUTTON2:
 				if( od.dwData & 0x80 )
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE3, qtrue, 0, NULL );
+				}
 				else
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE3, qfalse, 0, NULL );
+				}
 				break;
 
 			case DIMOFS_BUTTON3:
 				if( od.dwData & 0x80 )
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE4, qtrue, 0, NULL );
+				}
 				else
+				{
 					Sys_QueEvent( od.dwTimeStamp, SE_KEY, K_MOUSE4, qfalse, 0, NULL );
+				}
 				break;
-				// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=50
+			// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=50
 			case DIMOFS_Z:
 				value = od.dwData;
 				if( value == 0 )
@@ -664,7 +688,9 @@ void IN_MouseEvent( int mstate )
 	int i;
 
 	if( !s_wmv.mouseInitialized )
+	{
 		return;
+	}
 
 	// perform button actions
 	for( i = 0; i < 3; i++ )
@@ -893,7 +919,9 @@ void IN_StartupJoystick()
 		joy.ji.dwFlags = JOY_RETURNCENTERED;
 
 		if( ( mmr = joyGetPosEx( joy.id, &joy.ji ) ) == JOYERR_NOERROR )
+		{
 			break;
+		}
 	}
 
 	// abort startup if we didn't find a valid joystick
@@ -1075,13 +1103,21 @@ void IN_JoyMove()
 		if( joy.ji.dwPOV != JOY_POVCENTERED )
 		{
 			if( joy.ji.dwPOV == JOY_POVFORWARD )
+			{
 				povstate |= 1 << 12;
+			}
 			if( joy.ji.dwPOV == JOY_POVBACKWARD )
+			{
 				povstate |= 1 << 13;
+			}
 			if( joy.ji.dwPOV == JOY_POVRIGHT )
+			{
 				povstate |= 1 << 14;
+			}
 			if( joy.ji.dwPOV == JOY_POVLEFT )
+			{
 				povstate |= 1 << 15;
+			}
 		}
 	}
 
@@ -1127,7 +1163,9 @@ static void MIDI_NoteOff( int note )
 	qkey = note - 60 + K_AUX1;
 
 	if( qkey > 255 || qkey < K_AUX1 )
+	{
 		return;
+	}
 
 	Sys_QueEvent( g_wv.sysMsgTime, SE_KEY, qkey, qfalse, 0, NULL );
 }
@@ -1137,12 +1175,16 @@ static void MIDI_NoteOn( int note, int velocity )
 	int qkey;
 
 	if( velocity == 0 )
+	{
 		MIDI_NoteOff( note );
+	}
 
 	qkey = note - 60 + K_AUX1;
 
 	if( qkey > 255 || qkey < K_AUX1 )
+	{
 		return;
+	}
 
 	Sys_QueEvent( g_wv.sysMsgTime, SE_KEY, qkey, qtrue, 0, NULL );
 }
@@ -1164,12 +1206,16 @@ static void CALLBACK MidiInProc( HMIDIIN hMidiIn, UINT uMsg, DWORD dwInstance, D
 			if( ( message & 0xf0 ) == 0x90 )
 			{
 				if( ( ( message & 0x0f ) + 1 ) == in_midichannel->integer )
+				{
 					MIDI_NoteOn( ( dwParam1 & 0xff00 ) >> 8, ( dwParam1 & 0xff0000 ) >> 16 );
+				}
 			}
 			else if( ( message & 0xf0 ) == 0x80 )
 			{
 				if( ( ( message & 0x0f ) + 1 ) == in_midichannel->integer )
+				{
 					MIDI_NoteOff( ( dwParam1 & 0xff00 ) >> 8 );
+				}
 			}
 			break;
 		case MIM_LONGDATA:
@@ -1197,9 +1243,13 @@ static void MidiInfo_f()
 	for( i = 0; i < s_midiInfo.numDevices; i++ )
 	{
 		if( i == Cvar_VariableValue( "in_mididevice" ) )
+		{
 			Com_Printf( "***" );
+		}
 		else
+		{
 			Com_Printf( "..." );
+		}
 		Com_Printf( "device %2d:       %s\n", i, s_midiInfo.caps[i].szPname );
 		Com_Printf( "...manufacturer ID: 0x%hx\n", s_midiInfo.caps[i].wMid );
 		Com_Printf( "...product ID:      0x%hx\n", s_midiInfo.caps[i].wPid );
@@ -1213,7 +1263,9 @@ static void IN_StartupMIDI()
 	int i;
 
 	if( !Cvar_VariableValue( "in_midi" ) )
+	{
 		return;
+	}
 
 	//
 	// enumerate MIDI IN devices

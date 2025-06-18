@@ -64,11 +64,17 @@ vec_t BoxOriginDistanceFromPlane( vec3_t normal, vec3_t mins, vec3_t maxs, int s
 		for( i = 0; i < 3; i++ )
 		{
 			if( normal[i] > BBOX_NORMAL_EPSILON )
+			{
 				v1[i] = maxs[i];
+			}
 			else if( normal[i] < -BBOX_NORMAL_EPSILON )
+			{
 				v1[i] = mins[i];
+			}
 			else
+			{
 				v1[i] = 0;
+			}
 		} // end for
 	} // end if
 	else
@@ -76,11 +82,17 @@ vec_t BoxOriginDistanceFromPlane( vec3_t normal, vec3_t mins, vec3_t maxs, int s
 		for( i = 0; i < 3; i++ )
 		{
 			if( normal[i] > BBOX_NORMAL_EPSILON )
+			{
 				v1[i] = mins[i];
+			}
 			else if( normal[i] < -BBOX_NORMAL_EPSILON )
+			{
 				v1[i] = maxs[i];
+			}
 			else
+			{
 				v1[i] = 0;
+			}
 		} // end for
 	} // end else
 	VectorCopy( normal, v2 );
@@ -189,9 +201,13 @@ void AAS_SetTexinfo( mapbrush_t* brush )
 			side = brush->original_sides + n;
 			// don't use side as splitter (set texinfo to TEXINFO_NODE) if not textured
 			if( side->flags & ( SFL_TEXTURED | SFL_BEVEL ) )
+			{
 				side->texinfo = 0;
+			}
 			else
+			{
 				side->texinfo = TEXINFO_NODE;
+			}
 		} // end for
 	} // end else
 } // end of the function AAS_SetTexinfo
@@ -211,7 +227,9 @@ void FreeBrushWindings( mapbrush_t* brush )
 		side = brush->original_sides + n;
 		//
 		if( side->winding )
+		{
 			FreeWinding( side->winding );
+		}
 	} // end for
 } // end of the function FreeBrushWindings
 //===========================================================================
@@ -225,7 +243,9 @@ void AAS_AddMapBrushSide( mapbrush_t* brush, int planenum )
 	side_t* side;
 	//
 	if( nummapbrushsides >= MAX_MAPFILE_BRUSHSIDES )
+	{
 		Error( "MAX_MAPFILE_BRUSHSIDES" );
+	}
 	//
 	side		   = brush->original_sides + brush->numsides;
 	side->original = NULL;
@@ -263,10 +283,14 @@ void AAS_FixMapBrush( mapbrush_t* brush )
 		for( j = 0; j < brush->numsides && w; j++ )
 		{
 			if( i == j )
+			{
 				continue;
+			}
 			// there are no brush bevels marked but who cares :)
 			if( brush->original_sides[j].flags & SFL_BEVEL )
+			{
 				continue;
+			}
 			plane = &mapplanes[brush->original_sides[j].planenum ^ 1];
 			ChopWindingInPlace( &w, plane->normal, plane->dist, 0 ); // CLIP_EPSILON);
 		} // end for
@@ -287,7 +311,9 @@ void AAS_FixMapBrush( mapbrush_t* brush )
 		for( j = 0; j < brush->numsides; j++ )
 		{
 			if( i == j )
+			{
 				continue;
+			}
 			plane1 = &mapplanes[brush->original_sides[i].planenum];
 			plane2 = &mapplanes[brush->original_sides[j].planenum];
 			if( WindingsNonConvex( brush->original_sides[i].winding, brush->original_sides[j].winding, plane1->normal, plane2->normal, plane1->dist, plane2->dist ) )
@@ -350,9 +376,13 @@ qboolean AAS_MakeBrushWindings( mapbrush_t* ob )
 		for( j = 0; j < ob->numsides && w; j++ )
 		{
 			if( i == j )
+			{
 				continue;
+			}
 			if( ob->original_sides[j].flags & SFL_BEVEL )
+			{
 				continue;
+			}
 			plane = &mapplanes[ob->original_sides[j].planenum ^ 1];
 			ChopWindingInPlace( &w, plane->normal, plane->dist, 0 ); // CLIP_EPSILON);
 		}
@@ -363,7 +393,9 @@ qboolean AAS_MakeBrushWindings( mapbrush_t* ob )
 		{
 			side->flags |= SFL_VISIBLE;
 			for( j = 0; j < w->numpoints; j++ )
+			{
 				AddPointToBounds( w->p[j], ob->mins, ob->maxs );
+			}
 		}
 	}
 	// check if the brush is convex
@@ -372,7 +404,9 @@ qboolean AAS_MakeBrushWindings( mapbrush_t* ob )
 		for( j = 0; j < ob->numsides; j++ )
 		{
 			if( i == j )
+			{
 				continue;
+			}
 			plane1 = &mapplanes[ob->original_sides[i].planenum];
 			plane2 = &mapplanes[ob->original_sides[j].planenum];
 			if( WindingsNonConvex( ob->original_sides[i].winding, ob->original_sides[j].winding, plane1->normal, plane2->normal, plane1->dist, plane2->dist ) )
@@ -415,7 +449,9 @@ mapbrush_t* AAS_CopyMapBrush( mapbrush_t* brush, entity_t* mapent )
 	side_t *	side, *newside;
 
 	if( nummapbrushes >= MAX_MAPFILE_BRUSHES )
+	{
 		Error( "MAX_MAPFILE_BRUSHES" );
+	}
 
 	newbrush				 = &mapbrushes[nummapbrushes];
 	newbrush->original_sides = &brushsides[nummapbrushsides];
@@ -428,7 +464,9 @@ mapbrush_t* AAS_CopyMapBrush( mapbrush_t* brush, entity_t* mapent )
 	for( n = 0; n < brush->numsides; n++ )
 	{
 		if( nummapbrushsides >= MAX_MAPFILE_BRUSHSIDES )
+		{
 			Error( "MAX_MAPFILE_BRUSHSIDES" );
+		}
 		side = brush->original_sides + n;
 
 		newside			  = newbrush->original_sides + n;
@@ -613,19 +651,29 @@ void AAS_PositionFuncRotatingBrush( entity_t* mapent, mapbrush_t* brush )
 	spawnflags = FloatForKey( mapent, "spawnflags" );
 	VectorClear( movedir );
 	if( spawnflags & DOOR_X_AXIS )
+	{
 		movedir[2] = 1.0; // roll
+	}
 	else if( spawnflags & DOOR_Y_AXIS )
+	{
 		movedir[0] = 1.0; // pitch
-	else				  // Z_AXIS
+	}
+	else // Z_AXIS
+	{
 		movedir[1] = 1.0; // yaw
+	}
 
 	// check for reverse rotation
 	if( spawnflags & DOOR_REVERSE )
+	{
 		VectorInverse( movedir );
+	}
 
 	distance = FloatForKey( mapent, "distance" );
 	if( !distance )
+	{
 		distance = 90;
+	}
 
 	GetVectorForKey( mapent, "angles", angles );
 	VectorCopy( angles, pos1 );

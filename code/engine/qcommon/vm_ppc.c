@@ -433,10 +433,12 @@ static void ltopandsecond()
 
 // TJW: Unused
 #if 0
-static void fltop() {
-    if (rtopped == qfalse) {
-	InstImm( PPC_LFS, R_TOP, R_OPSTACK, 0 );		// get value from opstack
-    }
+static void fltop()
+{
+	if( rtopped == qfalse )
+	{
+		InstImm( PPC_LFS, R_TOP, R_OPSTACK, 0 );		// get value from opstack
+	}
 }
 #endif
 
@@ -690,41 +692,41 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					rtopped = qfalse;
 					break;
 				case OP_LOAD4:
-					ltop();									   // get value from opstack
-															   // Inst( PPC_AND, R_MEMMASK, R_TOP, R_TOP );		// mask it
+					ltop(); // get value from opstack
+					// Inst( PPC_AND, R_MEMMASK, R_TOP, R_TOP );		// mask it
 					Inst( PPC_LWZX, R_TOP, R_TOP, R_MEMBASE ); // load from memory base
 					InstImm( PPC_STW, R_TOP, R_OPSTACK, 0 );
 					rtopped = qtrue;
 					break;
 				case OP_LOAD2:
-					ltop();									   // get value from opstack
-															   // Inst( PPC_AND, R_MEMMASK, R_TOP, R_TOP );		// mask it
+					ltop(); // get value from opstack
+					// Inst( PPC_AND, R_MEMMASK, R_TOP, R_TOP );		// mask it
 					Inst( PPC_LHZX, R_TOP, R_TOP, R_MEMBASE ); // load from memory base
 					InstImm( PPC_STW, R_TOP, R_OPSTACK, 0 );
 					rtopped = qtrue;
 					break;
 				case OP_LOAD1:
-					ltop();									   // get value from opstack
-															   // Inst( PPC_AND, R_MEMMASK, R_TOP, R_TOP );		// mask it
+					ltop(); // get value from opstack
+					// Inst( PPC_AND, R_MEMMASK, R_TOP, R_TOP );		// mask it
 					Inst( PPC_LBZX, R_TOP, R_TOP, R_MEMBASE ); // load from memory base
 					InstImm( PPC_STW, R_TOP, R_OPSTACK, 0 );
 					rtopped = qtrue;
 					break;
 				case OP_STORE4:
-					ltopandsecond();							  // get value from opstack
-																  // Inst( PPC_AND, R_MEMMASK, R_SECOND, R_SECOND );		// mask it
+					ltopandsecond(); // get value from opstack
+					// Inst( PPC_AND, R_MEMMASK, R_SECOND, R_SECOND );		// mask it
 					Inst( PPC_STWX, R_TOP, R_SECOND, R_MEMBASE ); // store from memory base
 					rtopped = qfalse;
 					break;
 				case OP_STORE2:
-					ltopandsecond();							  // get value from opstack
-																  // Inst( PPC_AND, R_MEMMASK, R_SECOND, R_SECOND );		// mask it
+					ltopandsecond(); // get value from opstack
+					// Inst( PPC_AND, R_MEMMASK, R_SECOND, R_SECOND );		// mask it
 					Inst( PPC_STHX, R_TOP, R_SECOND, R_MEMBASE ); // store from memory base
 					rtopped = qfalse;
 					break;
 				case OP_STORE1:
-					ltopandsecond();							  // get value from opstack
-																  // Inst( PPC_AND, R_MEMMASK, R_SECOND, R_SECOND );		// mask it
+					ltopandsecond(); // get value from opstack
+					// Inst( PPC_AND, R_MEMMASK, R_SECOND, R_SECOND );		// mask it
 					Inst( PPC_STBX, R_TOP, R_SECOND, R_MEMBASE ); // store from memory base
 					rtopped = qfalse;
 					break;
@@ -1202,8 +1204,8 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					InstImm( PPC_LWZ, R_SECOND, R_OPSTACK, -4 ); // dest
 					InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -8 );
 					InstImmU( PPC_ADDI, R_EA, 0, v ); // count
-													  // FIXME: range check
-					Inst( PPC_MTSPR, R_EA, 9, 0 );	  // move to count register
+					// FIXME: range check
+					Inst( PPC_MTSPR, R_EA, 9, 0 ); // move to count register
 
 					Inst( PPC_ADD, R_TOP, R_TOP, R_MEMBASE );
 					InstImm( PPC_ADDI, R_TOP, R_TOP, -4 );
@@ -1334,8 +1336,8 @@ void AsmCall()
 		"    bc		12,0, systemTrap	\n"
 
 		// calling another VM function, so lookup in instructionPointers
-		"    slwi	r12,r12,2		\n"		// RG_TOP,RG_TOP,2
-											// FIXME: range check
+		"    slwi	r12,r12,2		\n" // RG_TOP,RG_TOP,2
+		// FIXME: range check
 		"    lwzx	r12, r8, r12		\n" // RG_TOP, RG_INSTRUCTIONS(RG_TOP)
 		"    mtctr	r12			\n"			// RG_TOP
 	);

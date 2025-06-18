@@ -524,7 +524,9 @@ static void CG_RegisterItemSounds( int itemNum )
 	// parse the space seperated precache string for other media
 	s = item->sounds;
 	if( !s || !s[0] )
+	{
 		return;
+	}
 
 	while( *s )
 	{
@@ -1161,7 +1163,7 @@ static void CG_RegisterGraphics()
 				break;
 		}
 	}
-*/
+	*/
 }
 
 /*
@@ -1295,7 +1297,9 @@ qboolean CG_Asset_Parse( int handle )
 	const char* tempStr;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( Q_stricmp( token.string, "{" ) != 0 )
 	{
 		return qfalse;
@@ -1304,7 +1308,9 @@ qboolean CG_Asset_Parse( int handle )
 	while( 1 )
 	{
 		if( !trap_PC_ReadToken( handle, &token ) )
+		{
 			return qfalse;
+		}
 
 		if( Q_stricmp( token.string, "}" ) == 0 )
 		{
@@ -1477,9 +1483,13 @@ void CG_ParseMenu( const char* menuFile )
 
 	handle = trap_PC_LoadSource( menuFile );
 	if( !handle )
+	{
 		handle = trap_PC_LoadSource( "ui/testhud.menu" );
+	}
 	if( !handle )
+	{
 		return;
+	}
 
 	while( 1 )
 	{

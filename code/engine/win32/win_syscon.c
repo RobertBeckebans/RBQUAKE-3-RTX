@@ -133,16 +133,16 @@ static LONG WINAPI ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 				SetTextColor( ( HDC )wParam, RGB( 0xff, 0xff, 0x00 ) );
 
 #if 0 // this draws a background in the edit box, but there are issues with this
-			if ( ( hdcScaled = CreateCompatibleDC( ( HDC ) wParam ) ) != 0 )
-			{
-				if ( SelectObject( ( HDC ) hdcScaled, s_wcd.hbmLogo ) )
+				if ( ( hdcScaled = CreateCompatibleDC( ( HDC ) wParam ) ) != 0 )
 				{
-					StretchBlt( ( HDC ) wParam, 0, 0, 512, 384, 
-							hdcScaled, 0, 0, 512, 384,
-							SRCCOPY );
+					if ( SelectObject( ( HDC ) hdcScaled, s_wcd.hbmLogo ) )
+					{
+						StretchBlt( ( HDC ) wParam, 0, 0, 512, 384,
+									hdcScaled, 0, 0, 512, 384,
+									SRCCOPY );
+					}
+					DeleteDC( hdcScaled );
 				}
-				DeleteDC( hdcScaled );
-			}
 #endif
 				return ( long )s_wcd.hbrEditBackground;
 			}
@@ -196,50 +196,50 @@ static LONG WINAPI ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 			break;
 		case WM_ERASEBKGND:
 #if 0
-	HDC hdcScaled;
-	HGDIOBJ oldObject;
+			HDC hdcScaled;
+			HGDIOBJ oldObject;
 
 	#if 1 // a single, large image
-		hdcScaled = CreateCompatibleDC( ( HDC ) wParam );
-		assert( hdcScaled != 0 );
+			hdcScaled = CreateCompatibleDC( ( HDC ) wParam );
+			assert( hdcScaled != 0 );
 
-		if ( hdcScaled )
-		{
-			oldObject = SelectObject( ( HDC ) hdcScaled, s_wcd.hbmLogo );
-			assert( oldObject != 0 );
-			if ( oldObject )
+			if ( hdcScaled )
 			{
-				StretchBlt( ( HDC ) wParam, 0, 0, s_wcd.windowWidth, s_wcd.windowHeight, 
-						hdcScaled, 0, 0, 512, 384,
-						SRCCOPY );
+				oldObject = SelectObject( ( HDC ) hdcScaled, s_wcd.hbmLogo );
+				assert( oldObject != 0 );
+				if ( oldObject )
+				{
+					StretchBlt( ( HDC ) wParam, 0, 0, s_wcd.windowWidth, s_wcd.windowHeight,
+								hdcScaled, 0, 0, 512, 384,
+								SRCCOPY );
+				}
+				DeleteDC( hdcScaled );
+				hdcScaled = 0;
 			}
-			DeleteDC( hdcScaled );
-			hdcScaled = 0;
-		}
 	#else // a repeating brush
-		{
-			HBRUSH hbrClearBrush;
-			RECT r;
-
-			GetWindowRect( hWnd, &r );
-
-			r.bottom = r.bottom - r.top + 1;
-			r.right = r.right - r.left + 1;
-			r.top = 0;
-			r.left = 0;
-
-			hbrClearBrush = CreatePatternBrush( s_wcd.hbmClearBitmap );
-
-			assert( hbrClearBrush != 0 );
-
-			if ( hbrClearBrush )
 			{
-				FillRect( ( HDC ) wParam, &r, hbrClearBrush );
-				DeleteObject( hbrClearBrush );
+				HBRUSH hbrClearBrush;
+				RECT r;
+
+				GetWindowRect( hWnd, &r );
+
+				r.bottom = r.bottom - r.top + 1;
+				r.right = r.right - r.left + 1;
+				r.top = 0;
+				r.left = 0;
+
+				hbrClearBrush = CreatePatternBrush( s_wcd.hbmClearBitmap );
+
+				assert( hbrClearBrush != 0 );
+
+				if ( hbrClearBrush )
+				{
+					FillRect( ( HDC ) wParam, &r, hbrClearBrush );
+					DeleteObject( hbrClearBrush );
+				}
 			}
-		}
 	#endif
-		return 1;
+			return 1;
 #endif
 			return DefWindowProc( hWnd, uMsg, wParam, lParam );
 		case WM_TIMER:
@@ -315,7 +315,9 @@ void Sys_CreateConsole()
 	wc.lpszClassName = DEDCLASS;
 
 	if( !RegisterClass( &wc ) )
+	{
 		return;
+	}
 
 	rect.left	= 0;
 	rect.right	= 540;
@@ -462,7 +464,9 @@ void Sys_ShowConsole( int visLevel, qboolean quitOnClose )
 	s_wcd.visLevel = visLevel;
 
 	if( !s_wcd.hWnd )
+	{
 		return;
+	}
 
 	switch( visLevel )
 	{

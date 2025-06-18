@@ -1830,7 +1830,9 @@ static void CG_DustTrail( centity_t* cent )
 	trace_t		   tr;
 
 	if( !cg_enableDust.integer )
+	{
 		return;
+	}
 
 	if( cent->dustTrailTime > cg.time )
 	{
@@ -1854,7 +1856,9 @@ static void CG_DustTrail( centity_t* cent )
 	CG_Trace( &tr, cent->currentState.pos.trBase, NULL, NULL, end, cent->currentState.number, MASK_PLAYERSOLID );
 
 	if( !( tr.surfaceFlags & SURF_DUST ) )
+	{
 		return;
+	}
 
 	VectorCopy( cent->currentState.pos.trBase, end );
 	end[2] -= 16;
@@ -1973,9 +1977,13 @@ static void CG_PlayerFlag( centity_t* cent, qhandle_t hSkin, refEntity_t* torso 
 				angles[YAW] = angle * 180 / M_PI;
 			}
 			if( angles[YAW] < 0 )
+			{
 				angles[YAW] += 360;
+			}
 			if( angles[YAW] > 360 )
+			{
 				angles[YAW] -= 360;
+			}
 
 			// vectoangles( cent->currentState.pos.trDelta, tmpangles );
 			// angles[YAW] = tmpangles[YAW] + 45 - cent->pe.torso.yawAngle;
@@ -2323,7 +2331,8 @@ static qboolean CG_PlayerShadow( centity_t* cent, float* shadowPlane )
 	*shadowPlane = trace.endpos[2] + 1;
 
 	if( cg_shadows.integer != 1 )
-	{ // no mark for stencil or projection shadows
+	{
+		// no mark for stencil or projection shadows
 		return qtrue;
 	}
 
@@ -2464,9 +2473,13 @@ void CG_AddRefEntityWithPowerups( refEntity_t* ent, entityState_t* state, int te
 		if( state->powerups & ( 1 << PW_QUAD ) )
 		{
 			if( team == TEAM_RED )
+			{
 				ent->customShader = cgs.media.redQuadShader;
+			}
 			else
+			{
 				ent->customShader = cgs.media.quadShader;
+			}
 			trap_R_AddRefEntityToScene( ent );
 		}
 		if( state->powerups & ( 1 << PW_REGEN ) )
@@ -2682,7 +2695,9 @@ void CG_Player( centity_t* cent )
 			// one skull bobbing above the dead body
 			angle = ( ( cg.time / 7 ) & 255 ) * ( M_PI * 2 ) / 255;
 			if( angle > M_PI * 2 )
+			{
 				angle -= ( float )M_PI * 2;
+			}
 			dir[0] = sin( angle ) * 20;
 			dir[1] = cos( angle ) * 20;
 			angle  = ( ( cg.time / 4 ) & 255 ) * ( M_PI * 2 ) / 255;
@@ -2712,7 +2727,9 @@ void CG_Player( centity_t* cent )
 			angles[0] = sin( angle ) * 30;
 			angles[1] = ( angle * 180 / M_PI ) + 90;
 			if( angles[1] > 360 )
+			{
 				angles[1] -= 360;
+			}
 			angles[2] = 0;
 			AnglesToAxis( angles, skull.axis );
 
@@ -2734,7 +2751,9 @@ void CG_Player( centity_t* cent )
 
 			angle = ( ( cg.time / 4 ) & 255 ) * ( M_PI * 2 ) / 255 + M_PI;
 			if( angle > M_PI * 2 )
+			{
 				angle -= ( float )M_PI * 2;
+			}
 			dir[0] = sin( angle ) * 20;
 			dir[1] = cos( angle ) * 20;
 			dir[2] = cos( angle ) * 20;
@@ -2743,7 +2762,9 @@ void CG_Player( centity_t* cent )
 			angles[0] = cos( angle - 0.5 * M_PI ) * 30;
 			angles[1] = 360 - ( angle * 180 / M_PI );
 			if( angles[1] > 360 )
+			{
 				angles[1] -= 360;
+			}
 			angles[2] = 0;
 			AnglesToAxis( angles, skull.axis );
 
@@ -2762,7 +2783,9 @@ void CG_Player( centity_t* cent )
 
 			angle = ( ( cg.time / 3 ) & 255 ) * ( M_PI * 2 ) / 255 + 0.5 * M_PI;
 			if( angle > M_PI * 2 )
+			{
 				angle -= ( float )M_PI * 2;
+			}
 			dir[0] = sin( angle ) * 20;
 			dir[1] = cos( angle ) * 20;
 			dir[2] = 0;

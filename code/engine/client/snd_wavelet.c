@@ -37,7 +37,9 @@ void daub4( float b[], unsigned long n, int isign )
 	unsigned long nh, nh1, i, j;
 
 	if( n < 4 )
+	{
 		return;
+	}
 
 	nh1 = ( nh = n >> 1 ) + 1;
 	if( isign >= 0 )
@@ -71,16 +73,22 @@ void wt1( float a[], unsigned long n, int isign )
 	unsigned long nn;
 	int			  inverseStartLength = n / 4;
 	if( n < inverseStartLength )
+	{
 		return;
+	}
 	if( isign >= 0 )
 	{
 		for( nn = n; nn >= inverseStartLength; nn >>= 1 )
+		{
 			daub4( a, nn, isign );
+		}
 	}
 	else
 	{
 		for( nn = inverseStartLength; nn <= n; nn <<= 1 )
+		{
 			daub4( a, nn, isign );
+		}
 	}
 }
 
@@ -352,11 +360,15 @@ byte MuLawEncode( short s )
 	sign = ( s < 0 ) ? 0 : 0x80;
 
 	if( s < 0 )
+	{
 		s = -s;
+	}
 	adjusted = ( long )s << ( 16 - sizeof( short ) * 8 );
 	adjusted += 128L + 4L;
 	if( adjusted > 32767 )
+	{
 		adjusted = 32767;
+	}
 	exponent = numBits[( adjusted >> 7 ) & 0xff] - 1;
 	mantissa = ( adjusted >> ( exponent + 3 ) ) & 0xf;
 	return ~( sign | ( exponent << 4 ) | mantissa );
@@ -438,9 +450,13 @@ void encodeWavelet( sfx_t* sfx, short* packets )
 		{
 			temp = wksp[i];
 			if( temp > 32767 )
+			{
 				temp = 32767;
+			}
 			else if( temp < -32768 )
+			{
 				temp = -32768;
+			}
 			out[i] = MuLawEncode( ( short )temp );
 		}
 
@@ -466,7 +482,9 @@ void decodeWavelet( sndBuffer* chunk, short* to )
 	wt1( wksp, size, -1 );
 
 	if( !to )
+	{
 		return;
+	}
 
 	for( i = 0; i < size; i++ )
 	{

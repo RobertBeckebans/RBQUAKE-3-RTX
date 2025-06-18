@@ -197,11 +197,17 @@ void Cbuf_Execute()
 		for( i = 0; i < cmd_text.cursize; i++ )
 		{
 			if( text[i] == '"' )
+			{
 				quotes++;
+			}
 			if( !( quotes & 1 ) && text[i] == ';' )
+			{
 				break; // don't break if inside a quoted string
+			}
 			if( text[i] == '\n' || text[i] == '\r' )
+			{
 				break;
+			}
 		}
 
 		if( i >= ( MAX_CMD_LINE - 1 ) )
@@ -217,7 +223,9 @@ void Cbuf_Execute()
 		// beginning of the text buffer
 
 		if( i == cmd_text.cursize )
+		{
 			cmd_text.cursize = 0;
+		}
 		else
 		{
 			i++;
@@ -304,7 +312,9 @@ void Cmd_Echo_f()
 	int i;
 
 	for( i = 1; i < Cmd_Argc(); i++ )
+	{
 		Com_Printf( "%s ", Cmd_Argv( i ) );
+	}
 	Com_Printf( "\n" );
 }
 
@@ -406,7 +416,9 @@ char* Cmd_ArgsFrom( int arg )
 
 	cmd_args[0] = 0;
 	if( arg < 0 )
+	{
 		arg = 0;
+	}
 	for( i = arg; i < cmd_argc; i++ )
 	{
 		strcat( cmd_args, cmd_argv[i] );
@@ -755,7 +767,9 @@ void Cmd_List_f()
 	for( cmd = cmd_functions; cmd; cmd = cmd->next )
 	{
 		if( match && !Com_Filter( match, cmd->name, qfalse ) )
+		{
 			continue;
+		}
 
 		Com_Printf( "%s\n", cmd->name );
 		i++;

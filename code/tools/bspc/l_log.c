@@ -94,7 +94,9 @@ void Log_Close()
 void Log_Shutdown()
 {
 	if( logfile.fp )
+	{
 		Log_Close();
+	}
 } // end of the function Log_Shutdown
 //===========================================================================
 //
@@ -162,7 +164,9 @@ void Log_Write( char* fmt, ... )
 	char	buf[2048];
 
 	if( !logfile.fp )
+	{
 		return;
+	}
 	va_start( ap, fmt );
 	vsprintf( buf, fmt, ap );
 	va_end( ap );
@@ -181,7 +185,9 @@ void Log_WriteTimeStamped( char* fmt, ... )
 	va_list ap;
 
 	if( !logfile.fp )
+	{
 		return;
+	}
 	/*	fprintf(logfile.fp, "%d   %02d:%02d:%02d:%02d   ",
 					logfile.numwrites,
 					(int) (botlibglobals.time / 60 / 60),
@@ -214,5 +220,7 @@ FILE* Log_FileStruct()
 void Log_Flush()
 {
 	if( logfile.fp )
+	{
 		fflush( logfile.fp );
+	}
 } // end of the function Log_Flush

@@ -565,7 +565,9 @@ static void ArenaServers_Remove()
 	table_t*	  tableptr;
 
 	if( !g_arenaservers.list.numitems )
+	{
 		return;
+	}
 
 	// remove selected item from display list
 	// items are in scattered order due to sort and cull
@@ -577,7 +579,9 @@ static void ArenaServers_Remove()
 	// find address in master list
 	for( i = 0; i < g_arenaservers.numfavoriteaddresses; i++ )
 		if( !Q_stricmp( g_arenaservers.favoriteaddresses[i], servernodeptr->adrstr ) )
+		{
 			break;
+		}
 
 	// delete address from master list
 	if( i <= g_arenaservers.numfavoriteaddresses - 1 )
@@ -593,7 +597,9 @@ static void ArenaServers_Remove()
 	// find address in server list
 	for( i = 0; i < g_numfavoriteservers; i++ )
 		if( &g_favoriteserverlist[i] == servernodeptr )
+		{
 			break;
+		}
 
 	// delete address from server list
 	if( i <= g_numfavoriteservers - 1 )
@@ -717,7 +723,9 @@ void ArenaServers_InsertFavorites()
 		// find favorite address in refresh list
 		for( j = 0; j < g_numfavoriteservers; j++ )
 			if( !Q_stricmp( g_arenaservers.favoriteaddresses[i], g_favoriteserverlist[j].adrstr ) )
+			{
 				break;
+			}
 
 		if( j >= g_numfavoriteservers )
 		{
@@ -760,12 +768,16 @@ void ArenaServers_LoadFavorites()
 	{
 		trap_Cvar_VariableStringBuffer( va( "server%d", i + 1 ), adrstr, MAX_ADDRESSLENGTH );
 		if( !adrstr[0] )
+		{
 			continue;
+		}
 
 		// quick sanity check to avoid slow domain name resolving
 		// first character must be numeric
 		if( adrstr[0] < '0' || adrstr[0] > '9' )
+		{
 			continue;
+		}
 
 		// favorite server addresses must be maintained outside refresh list
 		// this mimics local and global netadr's stored in client
@@ -775,7 +787,9 @@ void ArenaServers_LoadFavorites()
 		// find this server in the old list
 		for( j = 0; j < numtempitems; j++ )
 			if( !Q_stricmp( templist[j].adrstr, adrstr ) )
+			{
 				break;
+			}
 
 		if( j < numtempitems )
 		{
@@ -811,8 +825,10 @@ ArenaServers_StopRefresh
 static void ArenaServers_StopRefresh()
 {
 	if( !g_arenaservers.refreshservers )
-		// not currently refreshing
+	// not currently refreshing
+	{
 		return;
+	}
 
 	g_arenaservers.refreshservers = qfalse;
 
@@ -891,7 +907,9 @@ static void ArenaServers_DoRefresh()
 		// find ping result in our local list
 		for( j = 0; j < MAX_PINGREQUESTS; j++ )
 			if( !Q_stricmp( adrstr, g_arenaservers.pinglist[j].adrstr ) )
+			{
 				break;
+			}
 
 		if( j < MAX_PINGREQUESTS )
 		{
@@ -955,11 +973,15 @@ static void ArenaServers_DoRefresh()
 		// find empty slot
 		for( j = 0; j < MAX_PINGREQUESTS; j++ )
 			if( !g_arenaservers.pinglist[j].adrstr[0] )
+			{
 				break;
+			}
 
 		if( j >= MAX_PINGREQUESTS )
-			// no empty slots available yet - wait for timeout
+		// no empty slots available yet - wait for timeout
+		{
 			break;
+		}
 
 		// get an address to ping
 
@@ -1096,10 +1118,14 @@ void ArenaServers_SaveChanges()
 	int i;
 
 	for( i = 0; i < g_arenaservers.numfavoriteaddresses; i++ )
+	{
 		trap_Cvar_Set( va( "server%d", i + 1 ), g_arenaservers.favoriteaddresses[i] );
+	}
 
 	for( ; i < MAX_FAVORITESERVERS; i++ )
+	{
 		trap_Cvar_Set( va( "server%d", i + 1 ), "" );
+	}
 }
 
 /*
@@ -1126,7 +1152,9 @@ ArenaServers_SetType
 void ArenaServers_SetType( int type )
 {
 	if( g_servertype == type )
+	{
 		return;
+	}
 
 	g_servertype = type;
 
@@ -1316,7 +1344,9 @@ ArenaServers_MenuDraw
 static void ArenaServers_MenuDraw()
 {
 	if( g_arenaservers.refreshservers )
+	{
 		ArenaServers_DoRefresh();
+	}
 
 	Menu_Draw( &g_arenaservers.menu );
 }
@@ -1613,7 +1643,9 @@ static void ArenaServers_MenuInit()
 	// hack to get rid of MPlayer stuff
 	value = g_servertype;
 	if( value >= 1 )
+	{
 		value--;
+	}
 	g_arenaservers.master.curvalue = value;
 
 	g_gametype						 = Com_Clamp( 0, 4, ui_browserGameType.integer );

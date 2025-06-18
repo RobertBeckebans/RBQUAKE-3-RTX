@@ -210,7 +210,9 @@ void MField_KeyDownEvent( mfield_t* edit, int key )
 		edit->cursor = len;
 		edit->scroll = len - edit->widthInChars + 1;
 		if( edit->scroll < 0 )
+		{
 			edit->scroll = 0;
+		}
 		return;
 	}
 
@@ -231,13 +233,15 @@ void MField_CharEvent( mfield_t* edit, int ch )
 	int len;
 
 	if( ch == 'v' - 'a' + 1 )
-	{ // ctrl-v is paste
+	{
+		// ctrl-v is paste
 		MField_Paste( edit );
 		return;
 	}
 
 	if( ch == 'c' - 'a' + 1 )
-	{ // ctrl-c clears the field
+	{
+		// ctrl-c clears the field
 		MField_Clear( edit );
 		return;
 	}
@@ -245,7 +249,8 @@ void MField_CharEvent( mfield_t* edit, int ch )
 	len = strlen( edit->buffer );
 
 	if( ch == 'h' - 'a' + 1 )
-	{ // ctrl-h is backspace
+	{
+		// ctrl-h is backspace
 		if( edit->cursor > 0 )
 		{
 			memmove( edit->buffer + edit->cursor - 1, edit->buffer + edit->cursor, len + 1 - edit->cursor );
@@ -259,18 +264,22 @@ void MField_CharEvent( mfield_t* edit, int ch )
 	}
 
 	if( ch == 'a' - 'a' + 1 )
-	{ // ctrl-a is home
+	{
+		// ctrl-a is home
 		edit->cursor = 0;
 		edit->scroll = 0;
 		return;
 	}
 
 	if( ch == 'e' - 'a' + 1 )
-	{ // ctrl-e is end
+	{
+		// ctrl-e is end
 		edit->cursor = len;
 		edit->scroll = edit->cursor - edit->widthInChars + 1;
 		if( edit->scroll < 0 )
+		{
 			edit->scroll = 0;
+		}
 		return;
 	}
 
@@ -285,19 +294,25 @@ void MField_CharEvent( mfield_t* edit, int ch )
 	if( !trap_Key_GetOverstrikeMode() )
 	{
 		if( ( edit->cursor == MAX_EDIT_LINE - 1 ) || ( edit->maxchars && edit->cursor >= edit->maxchars ) )
+		{
 			return;
+		}
 	}
 	else
 	{
 		// insert mode
 		if( ( len == MAX_EDIT_LINE - 1 ) || ( edit->maxchars && len >= edit->maxchars ) )
+		{
 			return;
+		}
 		memmove( edit->buffer + edit->cursor + 1, edit->buffer + edit->cursor, len + 1 - edit->cursor );
 	}
 
 	edit->buffer[edit->cursor] = ch;
 	if( !edit->maxchars || edit->cursor < edit->maxchars - 1 )
+	{
 		edit->cursor++;
+	}
 
 	if( edit->cursor >= edit->widthInChars )
 	{
@@ -403,11 +418,17 @@ void MenuField_Draw( menufield_s* f )
 	}
 
 	if( f->generic.flags & QMF_GRAYED )
+	{
 		color = text_color_disabled;
+	}
 	else if( focus )
+	{
 		color = text_color_highlight;
+	}
 	else
+	{
 		color = text_color_normal;
+	}
 
 	if( focus )
 	{
@@ -460,16 +481,24 @@ sfxHandle_t MenuField_Key( menufield_s* m, int* key )
 				keycode &= ~K_CHAR_FLAG;
 
 				if( ( m->generic.flags & QMF_UPPERCASE ) && Q_islower( keycode ) )
+				{
 					keycode -= 'a' - 'A';
+				}
 				else if( ( m->generic.flags & QMF_LOWERCASE ) && Q_isupper( keycode ) )
+				{
 					keycode -= 'A' - 'a';
+				}
 				else if( ( m->generic.flags & QMF_NUMBERSONLY ) && Q_isalpha( keycode ) )
+				{
 					return ( menu_buzz_sound );
+				}
 
 				MField_CharEvent( &m->field, keycode );
 			}
 			else
+			{
 				MField_KeyDownEvent( &m->field, keycode );
+			}
 			break;
 	}
 

@@ -36,9 +36,9 @@
  * This module is specialized to the case DCTSIZE = 8.
  */
 
-	#if DCTSIZE != 8
-Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
-	#endif
+#if DCTSIZE != 8
+	Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
+#endif
 
 /*
  * The poop on this scaling stuff is as follows:
@@ -72,13 +72,13 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
  * shows that the values given below are the most effective.
  */
 
-	#if BITS_IN_JSAMPLE == 8
-		#define CONST_BITS 13
-		#define PASS1_BITS 2
-	#else
-		#define CONST_BITS 13
-		#define PASS1_BITS 1 /* lose a little precision to avoid overflow */
-	#endif
+#if BITS_IN_JSAMPLE == 8
+	#define CONST_BITS 13
+	#define PASS1_BITS 2
+#else
+	#define CONST_BITS 13
+	#define PASS1_BITS 1 /* lose a little precision to avoid overflow */
+#endif
 
 /* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
  * causing a lot of useless floating-point operations at run time.
@@ -87,33 +87,33 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
  * (With a reasonable C compiler, you can just rely on the FIX() macro...)
  */
 
-	#if CONST_BITS == 13
-		#define FIX_0_298631336 ( ( INT32 )2446 ) /* FIX(0.298631336) */
-		#define FIX_0_390180644 ( ( INT32 )3196 ) /* FIX(0.390180644) */
-		#define FIX_0_541196100 ( ( INT32 )4433 ) /* FIX(0.541196100) */
-		#define FIX_0_765366865 ( ( INT32 )6270 ) /* FIX(0.765366865) */
-		#define FIX_0_899976223 ( ( INT32 )7373 ) /* FIX(0.899976223) */
-		#define FIX_1_175875602 ( ( INT32 )9633 ) /* FIX(1.175875602) */
-		#define FIX_1_501321110 ( ( INT32 )12299 ) /* FIX(1.501321110) */
-		#define FIX_1_847759065 ( ( INT32 )15137 ) /* FIX(1.847759065) */
-		#define FIX_1_961570560 ( ( INT32 )16069 ) /* FIX(1.961570560) */
-		#define FIX_2_053119869 ( ( INT32 )16819 ) /* FIX(2.053119869) */
-		#define FIX_2_562915447 ( ( INT32 )20995 ) /* FIX(2.562915447) */
-		#define FIX_3_072711026 ( ( INT32 )25172 ) /* FIX(3.072711026) */
-	#else
-		#define FIX_0_298631336 FIX( 0.298631336 )
-		#define FIX_0_390180644 FIX( 0.390180644 )
-		#define FIX_0_541196100 FIX( 0.541196100 )
-		#define FIX_0_765366865 FIX( 0.765366865 )
-		#define FIX_0_899976223 FIX( 0.899976223 )
-		#define FIX_1_175875602 FIX( 1.175875602 )
-		#define FIX_1_501321110 FIX( 1.501321110 )
-		#define FIX_1_847759065 FIX( 1.847759065 )
-		#define FIX_1_961570560 FIX( 1.961570560 )
-		#define FIX_2_053119869 FIX( 2.053119869 )
-		#define FIX_2_562915447 FIX( 2.562915447 )
-		#define FIX_3_072711026 FIX( 3.072711026 )
-	#endif
+#if CONST_BITS == 13
+	#define FIX_0_298631336 ( ( INT32 )2446 ) /* FIX(0.298631336) */
+	#define FIX_0_390180644 ( ( INT32 )3196 ) /* FIX(0.390180644) */
+	#define FIX_0_541196100 ( ( INT32 )4433 ) /* FIX(0.541196100) */
+	#define FIX_0_765366865 ( ( INT32 )6270 ) /* FIX(0.765366865) */
+	#define FIX_0_899976223 ( ( INT32 )7373 ) /* FIX(0.899976223) */
+	#define FIX_1_175875602 ( ( INT32 )9633 ) /* FIX(1.175875602) */
+	#define FIX_1_501321110 ( ( INT32 )12299 ) /* FIX(1.501321110) */
+	#define FIX_1_847759065 ( ( INT32 )15137 ) /* FIX(1.847759065) */
+	#define FIX_1_961570560 ( ( INT32 )16069 ) /* FIX(1.961570560) */
+	#define FIX_2_053119869 ( ( INT32 )16819 ) /* FIX(2.053119869) */
+	#define FIX_2_562915447 ( ( INT32 )20995 ) /* FIX(2.562915447) */
+	#define FIX_3_072711026 ( ( INT32 )25172 ) /* FIX(3.072711026) */
+#else
+	#define FIX_0_298631336 FIX( 0.298631336 )
+	#define FIX_0_390180644 FIX( 0.390180644 )
+	#define FIX_0_541196100 FIX( 0.541196100 )
+	#define FIX_0_765366865 FIX( 0.765366865 )
+	#define FIX_0_899976223 FIX( 0.899976223 )
+	#define FIX_1_175875602 FIX( 1.175875602 )
+	#define FIX_1_501321110 FIX( 1.501321110 )
+	#define FIX_1_847759065 FIX( 1.847759065 )
+	#define FIX_1_961570560 FIX( 1.961570560 )
+	#define FIX_2_053119869 FIX( 2.053119869 )
+	#define FIX_2_562915447 FIX( 2.562915447 )
+	#define FIX_3_072711026 FIX( 3.072711026 )
+#endif
 
 /* Multiply an INT32 variable by an INT32 constant to yield an INT32 result.
  * For 8-bit samples with the recommended scaling, all the variable
@@ -122,25 +122,25 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
  * For 12-bit samples, a full 32-bit multiplication will be needed.
  */
 
-	#if BITS_IN_JSAMPLE == 8
-		#define MULTIPLY( var, const ) MULTIPLY16C16( var, const )
-	#else
-		#define MULTIPLY( var, const ) ( ( var ) * ( const ) )
-	#endif
+#if BITS_IN_JSAMPLE == 8
+	#define MULTIPLY( var, const ) MULTIPLY16C16( var, const )
+#else
+	#define MULTIPLY( var, const ) ( ( var ) * ( const ) )
+#endif
 
 /* Dequantize a coefficient by multiplying it by the multiplier-table
  * entry; produce an int result.  In this module, both inputs and result
  * are 16 bits or less, so either int or short multiply will work.
  */
 
-	#define DEQUANTIZE( coef, quantval ) ( ( ( ISLOW_MULT_TYPE )( coef ) ) * ( quantval ) )
+#define DEQUANTIZE( coef, quantval ) ( ( ( ISLOW_MULT_TYPE )( coef ) ) * ( quantval ) )
 
-	   /*
- * Perform dequantization and inverse DCT on one block of coefficients.
- */
+/*
+* Perform dequantization and inverse DCT on one block of coefficients.
+*/
 
-	   GLOBAL void
-	   jpeg_idct_islow( j_decompress_ptr cinfo, jpeg_component_info* compptr, JCOEFPTR coef_block, JSAMPARRAY output_buf, JDIMENSION output_col )
+GLOBAL void
+jpeg_idct_islow( j_decompress_ptr cinfo, jpeg_component_info* compptr, JCOEFPTR coef_block, JSAMPARRAY output_buf, JDIMENSION output_col )
 {
 	INT32            tmp0, tmp1, tmp2, tmp3;
 	INT32            tmp10, tmp11, tmp12, tmp13;
@@ -164,13 +164,13 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 	for( ctr = DCTSIZE; ctr > 0; ctr-- )
 	{
 		/* Due to quantization, we will usually find that many of the input
-     * coefficients are zero, especially the AC terms.  We can exploit this
-     * by short-circuiting the IDCT calculation for any column in which all
-     * the AC terms are zero.  In that case each output is equal to the
-     * DC coefficient (with scale factor as needed).
-     * With typical images and quantization tables, half or more of the
-     * column DCT calculations can be simplified this way.
-     */
+		* coefficients are zero, especially the AC terms.  We can exploit this
+		* by short-circuiting the IDCT calculation for any column in which all
+		* the AC terms are zero.  In that case each output is equal to the
+		* DC coefficient (with scale factor as needed).
+		* With typical images and quantization tables, half or more of the
+		* column DCT calculations can be simplified this way.
+		*/
 
 		if( ( inptr[ DCTSIZE * 1 ] | inptr[ DCTSIZE * 2 ] | inptr[ DCTSIZE * 3 ] |
 				inptr[ DCTSIZE * 4 ] | inptr[ DCTSIZE * 5 ] | inptr[ DCTSIZE * 6 ] |
@@ -216,8 +216,8 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 		tmp12 = tmp1 - tmp2;
 
 		/* Odd part per figure 8; the matrix is unitary and hence its
-     * transpose is its inverse.  i0..i3 are y7,y5,y3,y1 respectively.
-     */
+		* transpose is its inverse.  i0..i3 are y7,y5,y3,y1 respectively.
+		*/
 
 		tmp0 = DEQUANTIZE( inptr[ DCTSIZE * 7 ], quantptr[ DCTSIZE * 7 ] );
 		tmp1 = DEQUANTIZE( inptr[ DCTSIZE * 5 ], quantptr[ DCTSIZE * 5 ] );
@@ -272,19 +272,19 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 	{
 		outptr = output_buf[ ctr ] + output_col;
 		/* Rows of zeroes can be exploited in the same way as we did with columns.
-     * However, the column calculation has created many nonzero AC terms, so
-     * the simplification applies less often (typically 5% to 10% of the time).
-     * On machines with very fast multiplication, it's possible that the
-     * test takes more time than it's worth.  In that case this section
-     * may be commented out.
-     */
+		* However, the column calculation has created many nonzero AC terms, so
+		* the simplification applies less often (typically 5% to 10% of the time).
+		* On machines with very fast multiplication, it's possible that the
+		* test takes more time than it's worth.  In that case this section
+		* may be commented out.
+		*/
 
-	#ifndef NO_ZERO_ROW_TEST
+#ifndef NO_ZERO_ROW_TEST
 		if( ( wsptr[ 1 ] | wsptr[ 2 ] | wsptr[ 3 ] | wsptr[ 4 ] | wsptr[ 5 ] | wsptr[ 6 ] |
 				wsptr[ 7 ] ) == 0 )
 		{
 			/* AC terms all zero */
-			JSAMPLE dcval = range_limit[ ( int )DESCALE( ( INT32 )wsptr[ 0 ], PASS1_BITS + 3 ) & RANGE_MASK ];
+			JSAMPLE dcval = range_limit[( int )DESCALE( ( INT32 )wsptr[ 0 ], PASS1_BITS + 3 ) & RANGE_MASK ];
 
 			outptr[ 0 ] = dcval;
 			outptr[ 1 ] = dcval;
@@ -298,7 +298,7 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 			wsptr += DCTSIZE; /* advance pointer to next row */
 			continue;
 		}
-	#endif
+#endif
 
 		/* Even part: reverse the even part of the forward DCT. */
 		/* The rotator is sqrt(2)*c(-6). */
@@ -319,8 +319,8 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 		tmp12 = tmp1 - tmp2;
 
 		/* Odd part per figure 8; the matrix is unitary and hence its
-     * transpose is its inverse.  i0..i3 are y7,y5,y3,y1 respectively.
-     */
+		* transpose is its inverse.  i0..i3 are y7,y5,y3,y1 respectively.
+		*/
 
 		tmp0 = ( INT32 )wsptr[ 7 ];
 		tmp1 = ( INT32 )wsptr[ 5 ];
@@ -352,30 +352,30 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 
 		/* Final output stage: inputs are tmp10..tmp13, tmp0..tmp3 */
 
-		outptr[ 0 ] = range_limit[ ( int )DESCALE( tmp10 + tmp3,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
-		outptr[ 7 ] = range_limit[ ( int )DESCALE( tmp10 - tmp3,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
-		outptr[ 1 ] = range_limit[ ( int )DESCALE( tmp11 + tmp2,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
-		outptr[ 6 ] = range_limit[ ( int )DESCALE( tmp11 - tmp2,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
-		outptr[ 2 ] = range_limit[ ( int )DESCALE( tmp12 + tmp1,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
-		outptr[ 5 ] = range_limit[ ( int )DESCALE( tmp12 - tmp1,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
-		outptr[ 3 ] = range_limit[ ( int )DESCALE( tmp13 + tmp0,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
-		outptr[ 4 ] = range_limit[ ( int )DESCALE( tmp13 - tmp0,
-									   CONST_BITS + PASS1_BITS + 3 ) &
-			RANGE_MASK ];
+		outptr[ 0 ] = range_limit[( int )DESCALE( tmp10 + tmp3,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
+		outptr[ 7 ] = range_limit[( int )DESCALE( tmp10 - tmp3,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
+		outptr[ 1 ] = range_limit[( int )DESCALE( tmp11 + tmp2,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
+		outptr[ 6 ] = range_limit[( int )DESCALE( tmp11 - tmp2,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
+		outptr[ 2 ] = range_limit[( int )DESCALE( tmp12 + tmp1,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
+		outptr[ 5 ] = range_limit[( int )DESCALE( tmp12 - tmp1,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
+		outptr[ 3 ] = range_limit[( int )DESCALE( tmp13 + tmp0,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
+		outptr[ 4 ] = range_limit[( int )DESCALE( tmp13 - tmp0,
+								  CONST_BITS + PASS1_BITS + 3 ) &
+								  RANGE_MASK ];
 
 		wsptr += DCTSIZE; /* advance pointer to next row */
 	}

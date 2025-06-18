@@ -39,13 +39,17 @@ tmp_node_t* AAS_RefreshMergedTree_r( tmp_node_t* tmpnode )
 
 	// if this is a solid leaf
 	if( !tmpnode )
+	{
 		return NULL;
+	}
 	// if this is an area leaf
 	if( tmpnode->tmparea )
 	{
 		tmparea = tmpnode->tmparea;
 		while( tmparea->mergedarea )
+		{
 			tmparea = tmparea->mergedarea;
+		}
 		tmpnode->tmparea = tmparea;
 		return tmpnode;
 	} // end if
@@ -78,13 +82,17 @@ int NonConvex( tmp_face_t* face1, tmp_face_t* face2, int side1, int side2 )
 	for( i = 0; i < w1->numpoints; i++ )
 	{
 		if( DotProduct( plane2->normal, w1->p[i] ) - plane2->dist < -CONVEX_EPSILON )
+		{
 			return true;
+		}
 	} // end for
 	// check if one of the points of face2 is at the back of the plane of face1
 	for( i = 0; i < w2->numpoints; i++ )
 	{
 		if( DotProduct( plane1->normal, w2->p[i] ) - plane1->dist < -CONVEX_EPSILON )
+		{
 			return true;
+		}
 	} // end for
 
 	return false;
@@ -107,13 +115,19 @@ int AAS_TryMergeFaceAreas( tmp_face_t* seperatingface )
 
 	// areas must have the same presence type
 	if( tmparea1->presencetype != tmparea2->presencetype )
+	{
 		return false;
+	}
 	// areas must have the same area contents
 	if( tmparea1->contents != tmparea2->contents )
+	{
 		return false;
+	}
 	// areas must have the same bsp model inside (or both none)
 	if( tmparea1->modelnum != tmparea2->modelnum )
+	{
 		return false;
+	}
 
 	area1faceflags = 0;
 	area2faceflags = 0;
@@ -122,35 +136,49 @@ int AAS_TryMergeFaceAreas( tmp_face_t* seperatingface )
 		side1 = ( face1->frontarea != tmparea1 );
 		// debug: check if the area belongs to the area
 		if( face1->frontarea != tmparea1 && face1->backarea != tmparea1 )
+		{
 			Error( "face does not belong to area1" );
+		}
 		// just continue if the face is seperating the two areas
 		// NOTE: a result of this is that ground and gap areas can
 		//       be merged if the seperating face is the gap
 		if( ( face1->frontarea == tmparea1 && face1->backarea == tmparea2 ) || ( face1->frontarea == tmparea2 && face1->backarea == tmparea1 ) )
+		{
 			continue;
+		}
 		// get area1 face flags
 		area1faceflags |= face1->faceflags;
 		if( AAS_GapFace( face1, side1 ) )
+		{
 			area1faceflags |= FACE_GAP;
+		}
 		//
 		for( face2 = tmparea2->tmpfaces; face2; face2 = face2->next[side2] )
 		{
 			side2 = ( face2->frontarea != tmparea2 );
 			// debug: check if the area belongs to the area
 			if( face2->frontarea != tmparea2 && face2->backarea != tmparea2 )
+			{
 				Error( "face does not belong to area2" );
+			}
 			// just continue if the face is seperating the two areas
 			// NOTE: a result of this is that ground and gap areas can
 			//       be merged if the seperating face is the gap
 			if( ( face2->frontarea == tmparea1 && face2->backarea == tmparea2 ) || ( face2->frontarea == tmparea2 && face2->backarea == tmparea1 ) )
+			{
 				continue;
+			}
 			// get area2 face flags
 			area2faceflags |= face2->faceflags;
 			if( AAS_GapFace( face2, side2 ) )
+			{
 				area2faceflags |= FACE_GAP;
+			}
 			// if the two faces would create a non-convex area
 			if( NonConvex( face1, face2, side1, side2 ) )
+			{
 				return false;
+			}
 		} // end for
 	} // end for
 	// if one area has gap faces (that aren't seperating the two areas)
@@ -317,7 +345,9 @@ int AAS_GroundArea( tmp_area_t* tmparea )
 	{
 		side = ( face->frontarea != tmparea );
 		if( face->faceflags & FACE_GROUND )
+		{
 			return true;
+		}
 	} // end for
 	return false;
 } // end of the function AAS_GroundArea
@@ -352,7 +382,9 @@ void AAS_MergeAreas()
 			if( groundfirst )
 			{
 				if( !AAS_GroundArea( tmparea ) )
+				{
 					continue;
+				}
 			} // end if
 			//
 			for( face = tmparea->tmpfaces; face; face = face->next[side] )
@@ -363,14 +395,20 @@ void AAS_MergeAreas()
 				{
 					//
 					if( face->frontarea == tmparea )
+					{
 						othertmparea = face->backarea;
+					}
 					else
+					{
 						othertmparea = face->frontarea;
+					}
 					//
 					if( groundfirst )
 					{
 						if( !AAS_GroundArea( othertmparea ) )
+						{
 							continue;
+						}
 					} // end if
 					if( AAS_TryMergeFaceAreas( face ) )
 					{
@@ -384,9 +422,13 @@ void AAS_MergeAreas()
 		if( !merges )
 		{
 			if( groundfirst )
+			{
 				groundfirst = false;
+			}
 			else
+			{
 				break;
+			}
 		} // end if
 	} // end for
 	qprintf( "\n" );

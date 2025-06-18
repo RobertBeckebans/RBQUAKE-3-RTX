@@ -236,7 +236,9 @@ static void UI_TeamOrdersMenu_ListEvent( void* ptr, int event )
 	char message[256];
 
 	if( event != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	id		  = ( ( menulist_s* )ptr )->generic.id;
 	selection = ( ( menulist_s* )ptr )->curvalue;

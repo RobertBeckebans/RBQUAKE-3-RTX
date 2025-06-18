@@ -59,7 +59,9 @@ void Spk_Open( char* name )
 void Spk_Close()
 {
 	if( !fh )
+	{
 		return;
+	}
 
 	close( fh );
 	fh = 0;
@@ -71,7 +73,9 @@ void Spk_Printf( const char* text, ... )
 	char	buf[32768];
 
 	if( !fh )
+	{
 		return;
+	}
 
 	va_start( argptr, text );
 	vsprintf( buf, text, argptr );
@@ -135,7 +139,9 @@ void QDECL Sys_Error( const char* error, ... )
 	while( 1 )
 	{
 		if( !GetMessage( &msg, NULL, 0, 0 ) )
+		{
 			Com_Quit_f();
+		}
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
 	}
@@ -275,7 +281,9 @@ void Sys_ListFilteredFiles( const char* basedir, char* subdirs, char* filter, ch
 		}
 		Com_sprintf( filename, sizeof( filename ), "%s\\%s", subdirs, findinfo.name );
 		if( !Com_FilterPath( filter, filename, qfalse ) )
+		{
 			continue;
+		}
 		list[*numfiles] = CopyString( filename );
 		( *numfiles )++;
 	} while( _findnext( findhandle, &findinfo ) != -1 );
@@ -335,7 +343,9 @@ char** Sys_ListFiles( const char* directory, const char* extension, char* filter
 		*numfiles	 = nfiles;
 
 		if( !nfiles )
+		{
 			return NULL;
+		}
 
 		listCopy = Z_Malloc( ( nfiles + 1 ) * sizeof( *listCopy ) );
 		for( i = 0; i < nfiles; i++ )
@@ -469,7 +479,8 @@ qboolean Sys_ScanForCD()
 	char		test[MAX_OSPATH];
 #if 0
 	// don't override a cdpath on the command line
-	if ( strstr( sys_cmdline, "cdpath" ) ) {
+	if( strstr( sys_cmdline, "cdpath" ) )
+	{
 		return;
 	}
 #endif
@@ -642,9 +653,13 @@ void* QDECL	 Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoin
 #ifndef NDEBUG
 	libHandle = LoadLibrary( filename );
 	if( libHandle )
+	{
 		Com_Printf( "LoadLibrary '%s' ok\n", filename );
+	}
 	else
+	{
 		Com_Printf( "LoadLibrary '%s' failed\n", filename );
+	}
 	if( !libHandle )
 	{
 #endif
@@ -656,9 +671,13 @@ void* QDECL	 Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoin
 		libHandle = LoadLibrary( fn );
 #ifndef NDEBUG
 		if( libHandle )
+		{
 			Com_Printf( "LoadLibrary '%s' ok\n", fn );
+		}
 		else
+		{
 			Com_Printf( "LoadLibrary '%s' failed\n", fn );
+		}
 #endif
 
 		if( !libHandle )
@@ -669,9 +688,13 @@ void* QDECL	 Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoin
 				libHandle = LoadLibrary( fn );
 #ifndef NDEBUG
 				if( libHandle )
+				{
 					Com_Printf( "LoadLibrary '%s' ok\n", fn );
+				}
 				else
+				{
 					Com_Printf( "LoadLibrary '%s' failed\n", fn );
+				}
 #endif
 			}
 
@@ -694,7 +717,9 @@ void* QDECL	 Sys_LoadDll( const char* name, char* fqpath, int( QDECL** entryPoin
 	dllEntry( systemcalls );
 
 	if( libHandle )
+	{
 		Q_strncpyz( fqpath, filename, MAX_QPATH ); // added 7/20/02 by T.Ray
+	}
 	return libHandle;
 }
 
@@ -1174,12 +1199,18 @@ void Sys_Init()
 	g_wv.osversion.dwOSVersionInfoSize = sizeof( g_wv.osversion );
 
 	if( !GetVersionEx( &g_wv.osversion ) )
+	{
 		Sys_Error( "Couldn't get OS info" );
+	}
 
 	if( g_wv.osversion.dwMajorVersion < 4 )
+	{
 		Sys_Error( "Quake3 requires Windows version 4 or greater" );
+	}
 	if( g_wv.osversion.dwPlatformId == VER_PLATFORM_WIN32s )
+	{
 		Sys_Error( "Quake3 doesn't run on Win32s" );
+	}
 
 	if( g_wv.osversion.dwPlatformId == VER_PLATFORM_WIN32_NT )
 	{

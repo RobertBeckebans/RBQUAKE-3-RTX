@@ -284,22 +284,34 @@ void G_FindTeams()
 	for( i = 1, e = g_entities + i; i < level.num_entities; i++, e++ )
 	{
 		if( !e->inuse )
+		{
 			continue;
+		}
 		if( !e->team )
+		{
 			continue;
+		}
 		if( e->flags & FL_TEAMSLAVE )
+		{
 			continue;
+		}
 		e->teammaster = e;
 		c++;
 		c2++;
 		for( j = i + 1, e2 = e + 1; j < level.num_entities; j++, e2++ )
 		{
 			if( !e2->inuse )
+			{
 				continue;
+			}
 			if( !e2->team )
+			{
 				continue;
+			}
 			if( e2->flags & FL_TEAMSLAVE )
+			{
 				continue;
+			}
 			if( !strcmp( e->team, e2->team ) )
 			{
 				c2++;
@@ -351,7 +363,9 @@ void G_RegisterCvars()
 	{
 		trap_Cvar_Register( cv->vmCvar, cv->cvarName, cv->defaultString, cv->cvarFlags );
 		if( cv->vmCvar )
+		{
 			cv->modificationCount = cv->vmCvar->modificationCount;
+		}
 
 		if( cv->teamShader )
 		{
@@ -849,9 +863,13 @@ void CalculateRanks()
 					{
 						level.numVotingClients++;
 						if( level.clients[i].sess.sessionTeam == TEAM_RED )
+						{
 							level.numteamVotingClients[0]++;
+						}
 						else if( level.clients[i].sess.sessionTeam == TEAM_BLUE )
+						{
 							level.numteamVotingClients[1]++;
+						}
 					}
 					if( level.follow1 == -1 )
 					{
@@ -1030,7 +1048,8 @@ void FindIntermissionPoint()
 	// find the intermission spot
 	ent = G_Find( NULL, FOFS( classname ), "info_player_intermission" );
 	if( !ent )
-	{ // the map creator forgot to put in an intermission point...
+	{
+		// the map creator forgot to put in an intermission point...
 		SelectSpawnPoint( vec3_origin, level.intermission_origin, level.intermission_angle );
 	}
 	else
@@ -1094,7 +1113,9 @@ void BeginIntermission()
 	{
 		client = g_entities + i;
 		if( !client->inuse )
+		{
 			continue;
+		}
 		// respawn if dead
 		if( client->health <= 0 )
 		{
@@ -1725,7 +1746,9 @@ void PrintTeam( int team, char* message )
 	for( i = 0; i < level.maxclients; i++ )
 	{
 		if( level.clients[i].sess.sessionTeam != team )
+		{
 			continue;
+		}
 		trap_SendServerCommand( i, message );
 	}
 }
@@ -1752,7 +1775,9 @@ void SetLeader( int team, int client )
 	for( i = 0; i < level.maxclients; i++ )
 	{
 		if( level.clients[i].sess.sessionTeam != team )
+		{
 			continue;
+		}
 		if( level.clients[i].sess.teamLeader )
 		{
 			level.clients[i].sess.teamLeader = qfalse;
@@ -1776,16 +1801,22 @@ void CheckTeamLeader( int team )
 	for( i = 0; i < level.maxclients; i++ )
 	{
 		if( level.clients[i].sess.sessionTeam != team )
+		{
 			continue;
+		}
 		if( level.clients[i].sess.teamLeader )
+		{
 			break;
+		}
 	}
 	if( i >= level.maxclients )
 	{
 		for( i = 0; i < level.maxclients; i++ )
 		{
 			if( level.clients[i].sess.sessionTeam != team )
+			{
 				continue;
+			}
 			if( !( g_entities[i].r.svFlags & SVF_BOT ) )
 			{
 				level.clients[i].sess.teamLeader = qtrue;
@@ -1795,7 +1826,9 @@ void CheckTeamLeader( int team )
 		for( i = 0; i < level.maxclients; i++ )
 		{
 			if( level.clients[i].sess.sessionTeam != team )
+			{
 				continue;
+			}
 			level.clients[i].sess.teamLeader = qtrue;
 			break;
 		}
@@ -1812,11 +1845,17 @@ void CheckTeamVote( int team )
 	int cs_offset;
 
 	if( team == TEAM_RED )
+	{
 		cs_offset = 0;
+	}
 	else if( team == TEAM_BLUE )
+	{
 		cs_offset = 1;
+	}
 	else
+	{
 		return;
+	}
 
 	if( !level.teamVoteTime[cs_offset] )
 	{

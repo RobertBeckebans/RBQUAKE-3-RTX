@@ -107,16 +107,17 @@ void GL_InitRaytracing( int width, int height )
 
 	{
 		nv_helpers_dx12::RootSignatureGenerator rsc;
-		rsc.AddHeapRangesParameter( { { 0 /*u0*/,
+		rsc.AddHeapRangesParameter( { {
+										  0 /*u0*/,
 										  1 /*1 descriptor */,
 										  0 /*use the implicit register space 0*/,
 										  D3D12_DESCRIPTOR_RANGE_TYPE_UAV /* UAV representing the output buffer*/,
-										  0 /*heap slot where the UAV is defined*/ },
-			{ 1 /*u1*/,
-				1 /*1 descriptor */,
-				0 /*use the implicit register space 0*/,
-				D3D12_DESCRIPTOR_RANGE_TYPE_UAV /* UAV representing the output buffer*/,
-				1 /*heap slot where the UAV is defined*/ },
+										  0 /*heap slot where the UAV is defined*/
+									  },
+			{
+				1 /*u1*/, 1 /*1 descriptor */, 0 /*use the implicit register space 0*/, D3D12_DESCRIPTOR_RANGE_TYPE_UAV /* UAV representing the output buffer*/, 1 /*heap slot where the UAV is
+																																									  defined*/
+			},
 			{ 0 /*t0*/, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_SRV /*Top-level acceleration structure*/, 2 },
 			{ 0 /*b0*/, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_CBV /*Camera parameters*/, 3 },
 			{ 1 /*t1*/, 1, 0, D3D12_DESCRIPTOR_RANGE_TYPE_SRV /*megatexture*/, 4 } } );
@@ -131,11 +132,9 @@ void GL_InitRaytracing( int width, int height )
 
 	{
 		nv_helpers_dx12::RootSignatureGenerator rsc;
-		rsc.AddHeapRangesParameter( { { 1 /*u1*/,
-			1 /*1 descriptor */,
-			0 /*use the implicit register space 0*/,
-			D3D12_DESCRIPTOR_RANGE_TYPE_UAV /* UAV representing the output buffer*/,
-			1 /*heap slot where the UAV is defined*/ } } );
+		rsc.AddHeapRangesParameter( { {
+			1 /*u1*/, 1 /*1 descriptor */, 0 /*use the implicit register space 0*/, D3D12_DESCRIPTOR_RANGE_TYPE_UAV /* UAV representing the output buffer*/, 1 /*heap slot where the UAV is defined*/
+		} } );
 
 		m_hitSecondSignature = rsc.Generate( m_device.Get(), true );
 	}
@@ -465,7 +464,9 @@ void GL_Init( HWND hwnd, HINSTANCE hinstance, int width, int height )
 	D3D12_FEATURE_DATA_D3D12_OPTIONS5 options5 = {};
 	ThrowIfFailed( m_device->CheckFeatureSupport( D3D12_FEATURE_D3D12_OPTIONS5, &options5, sizeof( options5 ) ) );
 	if( options5.RaytracingTier < D3D12_RAYTRACING_TIER_1_0 )
+	{
 		Sys_Error( "Your GPU doesn't support raytracing!\n" );
+	}
 
 	// Create the command list.
 	ThrowIfFailed( m_device->CreateCommandList( 0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocator.Get(), m_pipelineState.Get(), IID_PPV_ARGS( &m_commandList ) ) );

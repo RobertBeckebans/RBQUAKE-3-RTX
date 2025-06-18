@@ -122,16 +122,22 @@ char* StringContains( char* str1, char* str2, int casesensitive )
 			if( casesensitive )
 			{
 				if( str1[j] != str2[j] )
+				{
 					break;
+				}
 			} // end if
 			else
 			{
 				if( toupper( str1[j] ) != toupper( str2[j] ) )
+				{
 					break;
+				}
 			} // end else
 		} // end for
 		if( !str2[j] )
+		{
 			return str1;
+		}
 	} // end for
 	return NULL;
 } // end of the function StringContains
@@ -155,7 +161,9 @@ int FileFilter( char* filter, char* filename, int casesensitive )
 			for( i = 0; *filter; i++ )
 			{
 				if( *filter == '*' || *filter == '?' )
+				{
 					break;
+				}
 				buf[i] = *filter;
 				filter++;
 			} // end for
@@ -164,7 +172,9 @@ int FileFilter( char* filter, char* filename, int casesensitive )
 			{
 				ptr = StringContains( filename, buf, casesensitive );
 				if( !ptr )
+				{
 					return false;
+				}
 				filename = ptr + strlen( buf );
 			} // end if
 		} // end if
@@ -184,18 +194,24 @@ int FileFilter( char* filter, char* filename, int casesensitive )
 			while( *filter && !found )
 			{
 				if( *filter == ']' && *( filter + 1 ) != ']' )
+				{
 					break;
+				}
 				if( *( filter + 1 ) == '-' && *( filter + 2 ) && ( *( filter + 2 ) != ']' || *( filter + 3 ) == ']' ) )
 				{
 					if( casesensitive )
 					{
 						if( *filename >= *filter && *filename <= *( filter + 2 ) )
+						{
 							found = true;
+						}
 					} // end if
 					else
 					{
 						if( toupper( *filename ) >= toupper( *filter ) && toupper( *filename ) <= toupper( *( filter + 2 ) ) )
+						{
 							found = true;
+						}
 					} // end else
 					filter += 3;
 				} // end if
@@ -204,22 +220,30 @@ int FileFilter( char* filter, char* filename, int casesensitive )
 					if( casesensitive )
 					{
 						if( *filter == *filename )
+						{
 							found = true;
+						}
 					} // end if
 					else
 					{
 						if( toupper( *filter ) == toupper( *filename ) )
+						{
 							found = true;
+						}
 					} // end else
 					filter++;
 				} // end else
 			} // end while
 			if( !found )
+			{
 				return false;
+			}
 			while( *filter )
 			{
 				if( *filter == ']' && *( filter + 1 ) != ']' )
+				{
 					break;
+				}
 				filter++;
 			} // end while
 			filter++;
@@ -230,12 +254,16 @@ int FileFilter( char* filter, char* filename, int casesensitive )
 			if( casesensitive )
 			{
 				if( *filter != *filename )
+				{
 					return false;
+				}
 			} // end if
 			else
 			{
 				if( toupper( *filter ) != toupper( *filename ) )
+				{
 					return false;
+				}
 			} // end else
 			filter++;
 			filename++;
@@ -263,7 +291,9 @@ quakefile_t* FindQuakeFilesInZip( char* zipfile, char* filter )
 	err = unzGetGlobalInfo( uf, &gi );
 
 	if( err != UNZ_OK )
+	{
 		return NULL;
+	}
 
 	unzGoToFirstFile( uf );
 
@@ -273,14 +303,18 @@ quakefile_t* FindQuakeFilesInZip( char* zipfile, char* filter )
 	{
 		err = unzGetCurrentFileInfo( uf, &file_info, filename_inzip, sizeof( filename_inzip ), NULL, 0, NULL, 0 );
 		if( err != UNZ_OK )
+		{
 			break;
+		}
 
 		ConvertPath( filename_inzip );
 		if( FileFilter( filter, filename_inzip, false ) )
 		{
 			qf = malloc( sizeof( quakefile_t ) );
 			if( !qf )
+			{
 				Error( "out of memory" );
+			}
 			memset( qf, 0, sizeof( quakefile_t ) );
 			strcpy( qf->pakfile, zipfile );
 			strcpy( qf->filename, zipfile );
@@ -294,9 +328,13 @@ quakefile_t* FindQuakeFilesInZip( char* zipfile, char* filter )
 			// add the file ot the list
 			qf->next = NULL;
 			if( lastqf )
+			{
 				lastqf->next = qf;
+			}
 			else
+			{
 				qfiles = qf;
+			}
 			lastqf = qf;
 		} // end if
 		unzGoToNextFile( uf );
@@ -345,7 +383,9 @@ quakefile_t* FindQuakeFilesInPak( char* pakfile, char* filter )
 		numpackdirs = LittleLong( packheader.dirlen ) / sizeof( dpackfile_t );
 		idpackfiles = ( dpackfile_t* )malloc( numpackdirs * sizeof( dpackfile_t ) );
 		if( !idpackfiles )
+		{
 			Error( "out of memory" );
+		}
 		// read the dir entry
 		if( fread( idpackfiles, sizeof( dpackfile_t ), numpackdirs, fp ) != numpackdirs )
 		{
@@ -358,7 +398,9 @@ quakefile_t* FindQuakeFilesInPak( char* pakfile, char* filter )
 		// convert to sin pack files
 		packfiles = ( dsinpackfile_t* )malloc( numpackdirs * sizeof( dsinpackfile_t ) );
 		if( !packfiles )
+		{
 			Error( "out of memory" );
+		}
 		for( i = 0; i < numpackdirs; i++ )
 		{
 			strcpy( packfiles[i].name, idpackfiles[i].name );
@@ -373,7 +415,9 @@ quakefile_t* FindQuakeFilesInPak( char* pakfile, char* filter )
 		numpackdirs = LittleLong( packheader.dirlen ) / sizeof( dsinpackfile_t );
 		packfiles	= ( dsinpackfile_t* )malloc( numpackdirs * sizeof( dsinpackfile_t ) );
 		if( !packfiles )
+		{
 			Error( "out of memory" );
+		}
 		// read the dir entry
 		if( fread( packfiles, sizeof( dsinpackfile_t ), numpackdirs, fp ) != numpackdirs )
 		{
@@ -397,7 +441,9 @@ quakefile_t* FindQuakeFilesInPak( char* pakfile, char* filter )
 		{
 			qf = malloc( sizeof( quakefile_t ) );
 			if( !qf )
+			{
 				Error( "out of memory" );
+			}
 			memset( qf, 0, sizeof( quakefile_t ) );
 			strcpy( qf->pakfile, pakfile );
 			strcpy( qf->filename, pakfile );
@@ -409,9 +455,13 @@ quakefile_t* FindQuakeFilesInPak( char* pakfile, char* filter )
 			// add the file ot the list
 			qf->next = NULL;
 			if( lastqf )
+			{
 				lastqf->next = qf;
+			}
 			else
+			{
 				qfiles = qf;
+			}
 			lastqf = qf;
 		} // end if
 	} // end for
@@ -468,12 +518,18 @@ quakefile_t* FindQuakeFilesWithPakFilter( char* pakfilter, char* filter )
 				strcat( filename, filter );
 				qf = FindQuakeFilesWithPakFilter( NULL, filename );
 				if( lastqf )
+				{
 					lastqf->next = qf;
+				}
 				else
+				{
 					qfiles = qf;
+				}
 				lastqf = qf;
 				while( lastqf->next )
+				{
 					lastqf = lastqf->next;
+				}
 			} // end if
 			else
 			{
@@ -494,15 +550,21 @@ quakefile_t* FindQuakeFilesWithPakFilter( char* pakfilter, char* filter )
 				if( qf )
 				{
 					if( lastqf )
+					{
 						lastqf->next = qf;
+					}
 					else
+					{
 						qfiles = qf;
+					}
 					lastqf = qf;
 					while( lastqf->next )
+					{
 						lastqf = lastqf->next;
+					}
 				} // end if
 			} // end else
-			  //
+			//
 #if defined( WIN32 ) | defined( _WIN32 )
 			// find the next file
 			done = !FindNextFile( handle, &filedata );
@@ -532,7 +594,9 @@ quakefile_t* FindQuakeFilesWithPakFilter( char* pakfilter, char* filter )
 			//
 			qf = malloc( sizeof( quakefile_t ) );
 			if( !qf )
+			{
 				Error( "out of memory" );
+			}
 			memset( qf, 0, sizeof( quakefile_t ) );
 			strcpy( qf->pakfile, "" );
 			strcpy( qf->filename, filename );
@@ -543,9 +607,13 @@ quakefile_t* FindQuakeFilesWithPakFilter( char* pakfilter, char* filter )
 			// add the file ot the list
 			qf->next = NULL;
 			if( lastqf )
+			{
 				lastqf->next = qf;
+			}
 			else
+			{
 				qfiles = qf;
+			}
 			lastqf = qf;
 #if defined( WIN32 ) | defined( _WIN32 )
 			// find the next file
@@ -577,7 +645,9 @@ quakefile_t* FindQuakeFiles( char* filter )
 
 	str = StringContains( pakfilter, ".pak", false );
 	if( !str )
+	{
 		str = StringContains( pakfilter, ".pk3", false );
+	}
 
 	if( str )
 	{
@@ -586,7 +656,9 @@ quakefile_t* FindQuakeFiles( char* filter )
 		{
 			*str++ = '\0';
 			while( *str == '\\' || *str == '/' )
+			{
 				str++;
+			}
 			strcpy( filefilter, str );
 			return FindQuakeFilesWithPakFilter( pakfilter, filefilter );
 		} // end if
@@ -631,10 +703,14 @@ int LoadQuakeFile( quakefile_t* qf, void** bufferptr )
 	{
 		fp = SafeOpenRead( qf->filename );
 		if( qf->offset )
+		{
 			fseek( fp, qf->offset, SEEK_SET );
+		}
 		length = qf->length;
 		if( !length )
+		{
 			length = Q_filelength( fp );
+		}
 		buffer						= GetMemory( length + 1 );
 		( ( char* )buffer )[length] = 0;
 		SafeRead( fp, buffer, length );
@@ -670,7 +746,9 @@ int ReadQuakeFile( quakefile_t* qf, void* buffer, int offset, int length )
 		{
 			read = offset;
 			if( read > sizeof( tmpbuf ) )
+			{
 				read = sizeof( tmpbuf );
+			}
 			unzReadCurrentFile( &qf->zipinfo, tmpbuf, read );
 			offset -= read;
 		} // end while
@@ -687,9 +765,13 @@ int ReadQuakeFile( quakefile_t* qf, void* buffer, int offset, int length )
 	{
 		fp = SafeOpenRead( qf->filename );
 		if( qf->offset )
+		{
 			fseek( fp, qf->offset, SEEK_SET );
+		}
 		if( offset )
+		{
 			fseek( fp, offset, SEEK_CUR );
+		}
 		SafeRead( fp, buffer, length );
 		fclose( fp );
 

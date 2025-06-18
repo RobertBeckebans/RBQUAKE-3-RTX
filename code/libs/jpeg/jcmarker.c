@@ -13,7 +13,8 @@
 #include "jpeglib.h"
 
 typedef enum
-{ /* JPEG marker codes */
+{
+	/* JPEG marker codes */
 	M_SOF0 = 0xc0,
 	M_SOF1 = 0xc1,
 	M_SOF2 = 0xc2,
@@ -93,7 +94,7 @@ typedef enum
  */
 
 LOCAL void
-	emit_byte( j_compress_ptr cinfo, int val )
+emit_byte( j_compress_ptr cinfo, int val )
 /* Emit a byte */
 {
 	struct jpeg_destination_mgr* dest = cinfo->dest;
@@ -102,12 +103,14 @@ LOCAL void
 	if( --dest->free_in_buffer == 0 )
 	{
 		if( !( *dest->empty_output_buffer )( cinfo ) )
+		{
 			ERREXIT( cinfo, JERR_CANT_SUSPEND );
+		}
 	}
 }
 
 LOCAL void
-	emit_marker( j_compress_ptr cinfo, JPEG_MARKER mark )
+emit_marker( j_compress_ptr cinfo, JPEG_MARKER mark )
 /* Emit a marker code */
 {
 	emit_byte( cinfo, 0xFF );
@@ -115,7 +118,7 @@ LOCAL void
 }
 
 LOCAL void
-	emit_2bytes( j_compress_ptr cinfo, int value )
+emit_2bytes( j_compress_ptr cinfo, int value )
 /* Emit a 2-byte integer; these are always MSB first in JPEG files */
 {
 	emit_byte( cinfo, ( value >> 8 ) & 0xFF );
@@ -127,7 +130,7 @@ LOCAL void
  */
 
 LOCAL int
-	emit_dqt( j_compress_ptr cinfo, int index )
+emit_dqt( j_compress_ptr cinfo, int index )
 /* Emit a DQT marker */
 /* Returns the precision used (0 = 8bits, 1 = 16bits) for baseline checking */
 {
@@ -136,13 +139,17 @@ LOCAL int
 	int         i;
 
 	if( qtbl == NULL )
+	{
 		ERREXIT1( cinfo, JERR_NO_QUANT_TABLE, index );
+	}
 
 	prec = 0;
 	for( i = 0; i < DCTSIZE2; i++ )
 	{
 		if( qtbl->quantval[ i ] > 255 )
+		{
 			prec = 1;
+		}
 	}
 
 	if( !qtbl->sent_table )
@@ -156,7 +163,9 @@ LOCAL int
 		for( i = 0; i < DCTSIZE2; i++ )
 		{
 			if( prec )
+			{
 				emit_byte( cinfo, qtbl->quantval[ i ] >> 8 );
+			}
 			emit_byte( cinfo, qtbl->quantval[ i ] & 0xFF );
 		}
 
@@ -167,7 +176,7 @@ LOCAL int
 }
 
 LOCAL void
-	emit_dht( j_compress_ptr cinfo, int index, boolean is_ac )
+emit_dht( j_compress_ptr cinfo, int index, boolean is_ac )
 /* Emit a DHT marker */
 {
 	JHUFF_TBL* htbl;
@@ -184,7 +193,9 @@ LOCAL void
 	}
 
 	if( htbl == NULL )
+	{
 		ERREXIT1( cinfo, JERR_NO_HUFF_TABLE, index );
+	}
 
 	if( !htbl->sent_table )
 	{
@@ -192,23 +203,29 @@ LOCAL void
 
 		length = 0;
 		for( i = 1; i <= 16; i++ )
+		{
 			length += htbl->bits[ i ];
+		}
 
 		emit_2bytes( cinfo, length + 2 + 1 + 16 );
 		emit_byte( cinfo, index );
 
 		for( i = 1; i <= 16; i++ )
+		{
 			emit_byte( cinfo, htbl->bits[ i ] );
+		}
 
 		for( i = 0; i < length; i++ )
+		{
 			emit_byte( cinfo, htbl->huffval[ i ] );
+		}
 
 		htbl->sent_table = TRUE;
 	}
 }
 
 LOCAL void
-	emit_dac( j_compress_ptr cinfo )
+emit_dac( j_compress_ptr cinfo )
 /* Emit a DAC marker */
 /* Since the useful info is so small, we want to emit all the tables in */
 /* one DAC marker.  Therefore this routine does its own scan of the table. */
@@ -220,7 +237,9 @@ LOCAL void
 	jpeg_component_info* compptr;
 
 	for( i = 0; i < NUM_ARITH_TBLS; i++ )
+	{
 		dc_in_use[ i ] = ac_in_use[ i ] = 0;
+	}
 
 	for( i = 0; i < cinfo->comps_in_scan; i++ )
 	{
@@ -231,7 +250,9 @@ LOCAL void
 
 	length = 0;
 	for( i = 0; i < NUM_ARITH_TBLS; i++ )
+	{
 		length += dc_in_use[ i ] + ac_in_use[ i ];
+	}
 
 	emit_marker( cinfo, M_DAC );
 
@@ -254,7 +275,7 @@ LOCAL void
 }
 
 LOCAL void
-	emit_dri( j_compress_ptr cinfo )
+emit_dri( j_compress_ptr cinfo )
 /* Emit a DRI marker */
 {
 	emit_marker( cinfo, M_DRI );
@@ -265,7 +286,7 @@ LOCAL void
 }
 
 LOCAL void
-	emit_sof( j_compress_ptr cinfo, JPEG_MARKER code )
+emit_sof( j_compress_ptr cinfo, JPEG_MARKER code )
 /* Emit a SOF marker */
 {
 	int                  ci;
@@ -277,8 +298,10 @@ LOCAL void
 
 	/* Make sure image isn't bigger than SOF field can handle */
 	if( ( long )cinfo->image_height > 65535L ||
-		( long )cinfo->image_width > 65535L )
+			( long )cinfo->image_width > 65535L )
+	{
 		ERREXIT1( cinfo, JERR_IMAGE_TOO_BIG, ( unsigned int )65535 );
+	}
 
 	emit_byte( cinfo, cinfo->data_precision );
 	emit_2bytes( cinfo, ( int )cinfo->image_height );
@@ -287,7 +310,7 @@ LOCAL void
 	emit_byte( cinfo, cinfo->num_components );
 
 	for( ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
-		 ci++, compptr++ )
+			ci++, compptr++ )
 	{
 		emit_byte( cinfo, compptr->component_id );
 		emit_byte( cinfo, ( compptr->h_samp_factor << 4 ) + compptr->v_samp_factor );
@@ -296,7 +319,7 @@ LOCAL void
 }
 
 LOCAL void
-	emit_sos( j_compress_ptr cinfo )
+emit_sos( j_compress_ptr cinfo )
 /* Emit a SOS marker */
 {
 	int                  i, td, ta;
@@ -317,15 +340,17 @@ LOCAL void
 		if( cinfo->progressive_mode )
 		{
 			/* Progressive mode: only DC or only AC tables are used in one scan;
-       * furthermore, Huffman coding of DC refinement uses no table at all.
-       * We emit 0 for unused field(s); this is recommended by the P&M text
-       * but does not seem to be specified in the standard.
-       */
+			* furthermore, Huffman coding of DC refinement uses no table at all.
+			* We emit 0 for unused field(s); this is recommended by the P&M text
+			* but does not seem to be specified in the standard.
+			*/
 			if( cinfo->Ss == 0 )
 			{
 				ta = 0; /* DC scan */
 				if( cinfo->Ah != 0 && !cinfo->arith_code )
-					td = 0; /* no DC table either */
+				{
+					td = 0;    /* no DC table either */
+				}
 			}
 			else
 			{
@@ -341,20 +366,20 @@ LOCAL void
 }
 
 LOCAL void
-	emit_jfif_app0( j_compress_ptr cinfo )
+emit_jfif_app0( j_compress_ptr cinfo )
 /* Emit a JFIF-compliant APP0 marker */
 {
 	/*
-   * Length of APP0 block	(2 bytes)
-   * Block ID			(4 bytes - ASCII "JFIF")
-   * Zero byte			(1 byte to terminate the ID string)
-   * Version Major, Minor	(2 bytes - 0x01, 0x01)
-   * Units			(1 byte - 0x00 = none, 0x01 = inch, 0x02 = cm)
-   * Xdpu			(2 bytes - dots per unit horizontal)
-   * Ydpu			(2 bytes - dots per unit vertical)
-   * Thumbnail X size		(1 byte)
-   * Thumbnail Y size		(1 byte)
-   */
+	* Length of APP0 block	(2 bytes)
+	* Block ID			(4 bytes - ASCII "JFIF")
+	* Zero byte			(1 byte to terminate the ID string)
+	* Version Major, Minor	(2 bytes - 0x01, 0x01)
+	* Units			(1 byte - 0x00 = none, 0x01 = inch, 0x02 = cm)
+	* Xdpu			(2 bytes - dots per unit horizontal)
+	* Ydpu			(2 bytes - dots per unit vertical)
+	* Thumbnail X size		(1 byte)
+	* Thumbnail Y size		(1 byte)
+	*/
 
 	emit_marker( cinfo, M_APP0 );
 
@@ -366,8 +391,8 @@ LOCAL void
 	emit_byte( cinfo, 0x46 );
 	emit_byte( cinfo, 0 );
 	/* We currently emit version code 1.01 since we use no 1.02 features.
-   * This may avoid complaints from some older decoders.
-   */
+	* This may avoid complaints from some older decoders.
+	*/
 	emit_byte( cinfo, 1 );                   /* Major version */
 	emit_byte( cinfo, 1 );                   /* Minor version */
 	emit_byte( cinfo, cinfo->density_unit ); /* Pixel size information */
@@ -378,24 +403,24 @@ LOCAL void
 }
 
 LOCAL void
-	emit_adobe_app14( j_compress_ptr cinfo )
+emit_adobe_app14( j_compress_ptr cinfo )
 /* Emit an Adobe APP14 marker */
 {
 	/*
-   * Length of APP14 block	(2 bytes)
-   * Block ID			(5 bytes - ASCII "Adobe")
-   * Version Number		(2 bytes - currently 100)
-   * Flags0			(2 bytes - currently 0)
-   * Flags1			(2 bytes - currently 0)
-   * Color transform		(1 byte)
-   *
-   * Although Adobe TN 5116 mentions Version = 101, all the Adobe files
-   * now in circulation seem to use Version = 100, so that's what we write.
-   *
-   * We write the color transform byte as 1 if the JPEG color space is
-   * YCbCr, 2 if it's YCCK, 0 otherwise.  Adobe's definition has to do with
-   * whether the encoder performed a transformation, which is pretty useless.
-   */
+	* Length of APP14 block	(2 bytes)
+	* Block ID			(5 bytes - ASCII "Adobe")
+	* Version Number		(2 bytes - currently 100)
+	* Flags0			(2 bytes - currently 0)
+	* Flags1			(2 bytes - currently 0)
+	* Color transform		(1 byte)
+	*
+	* Although Adobe TN 5116 mentions Version = 101, all the Adobe files
+	* now in circulation seem to use Version = 100, so that's what we write.
+	*
+	* We write the color transform byte as 1 if the JPEG color space is
+	* YCbCr, 2 if it's YCCK, 0 otherwise.  Adobe's definition has to do with
+	* whether the encoder performed a transformation, which is pretty useless.
+	*/
 
 	emit_marker( cinfo, M_APP14 );
 
@@ -432,11 +457,12 @@ LOCAL void
  */
 
 METHODDEF void
-	write_any_marker( j_compress_ptr cinfo, int marker, const JOCTET* dataptr, unsigned int datalen )
+write_any_marker( j_compress_ptr cinfo, int marker, const JOCTET* dataptr, unsigned int datalen )
 /* Emit an arbitrary marker with parameters */
 {
 	if( datalen <= ( unsigned int )65533 )
-	{ /* safety check */
+	{
+		/* safety check */
 		emit_marker( cinfo, ( JPEG_MARKER )marker );
 
 		emit_2bytes( cinfo, ( int )( datalen + 2 ) ); /* total length */
@@ -461,14 +487,18 @@ METHODDEF void
  */
 
 METHODDEF void
-	write_file_header( j_compress_ptr cinfo )
+write_file_header( j_compress_ptr cinfo )
 {
 	emit_marker( cinfo, M_SOI ); /* first the SOI */
 
 	if( cinfo->write_JFIF_header ) /* next an optional JFIF APP0 */
+	{
 		emit_jfif_app0( cinfo );
+	}
 	if( cinfo->write_Adobe_marker ) /* next an optional Adobe APP14 */
+	{
 		emit_adobe_app14( cinfo );
+	}
 }
 
 /*
@@ -480,28 +510,28 @@ METHODDEF void
  */
 
 METHODDEF void
-	write_frame_header( j_compress_ptr cinfo )
+write_frame_header( j_compress_ptr cinfo )
 {
 	int                  ci, prec;
 	boolean              is_baseline;
 	jpeg_component_info* compptr;
 
 	/* Emit DQT for each quantization table.
-   * Note that emit_dqt() suppresses any duplicate tables.
-   */
+	* Note that emit_dqt() suppresses any duplicate tables.
+	*/
 	prec = 0;
 	for( ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
-		 ci++, compptr++ )
+			ci++, compptr++ )
 	{
 		prec += emit_dqt( cinfo, compptr->quant_tbl_no );
 	}
 	/* now prec is nonzero iff there are any 16-bit quant tables. */
 
 	/* Check for a non-baseline specification.
-   * Note we assume that Huffman table numbers won't be changed later.
-   */
+	* Note we assume that Huffman table numbers won't be changed later.
+	*/
 	if( cinfo->arith_code || cinfo->progressive_mode ||
-		cinfo->data_precision != 8 )
+			cinfo->data_precision != 8 )
 	{
 		is_baseline = FALSE;
 	}
@@ -509,10 +539,12 @@ METHODDEF void
 	{
 		is_baseline = TRUE;
 		for( ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
-			 ci++, compptr++ )
+				ci++, compptr++ )
 		{
 			if( compptr->dc_tbl_no > 1 || compptr->ac_tbl_no > 1 )
+			{
 				is_baseline = FALSE;
+			}
 		}
 		if( prec && is_baseline )
 		{
@@ -530,11 +562,17 @@ METHODDEF void
 	else
 	{
 		if( cinfo->progressive_mode )
-			emit_sof( cinfo, M_SOF2 ); /* SOF code for progressive Huffman */
+		{
+			emit_sof( cinfo, M_SOF2 );    /* SOF code for progressive Huffman */
+		}
 		else if( is_baseline )
-			emit_sof( cinfo, M_SOF0 ); /* SOF code for baseline implementation */
+		{
+			emit_sof( cinfo, M_SOF0 );    /* SOF code for baseline implementation */
+		}
 		else
-			emit_sof( cinfo, M_SOF1 ); /* SOF code for non-baseline Huffman file */
+		{
+			emit_sof( cinfo, M_SOF1 );    /* SOF code for non-baseline Huffman file */
+		}
 	}
 }
 
@@ -545,7 +583,7 @@ METHODDEF void
  */
 
 METHODDEF void
-	write_scan_header( j_compress_ptr cinfo )
+write_scan_header( j_compress_ptr cinfo )
 {
 	int                  i;
 	jpeg_component_info* compptr;
@@ -553,16 +591,16 @@ METHODDEF void
 	if( cinfo->arith_code )
 	{
 		/* Emit arith conditioning info.  We may have some duplication
-     * if the file has multiple scans, but it's so small it's hardly
-     * worth worrying about.
-     */
+		* if the file has multiple scans, but it's so small it's hardly
+		* worth worrying about.
+		*/
 		emit_dac( cinfo );
 	}
 	else
 	{
 		/* Emit Huffman tables.
-     * Note that emit_dht() suppresses any duplicate tables.
-     */
+		* Note that emit_dht() suppresses any duplicate tables.
+		*/
 		for( i = 0; i < cinfo->comps_in_scan; i++ )
 		{
 			compptr = cinfo->cur_comp_info[ i ];
@@ -572,7 +610,9 @@ METHODDEF void
 				if( cinfo->Ss == 0 )
 				{
 					if( cinfo->Ah == 0 ) /* DC needs no table for refinement scan */
+					{
 						emit_dht( cinfo, compptr->dc_tbl_no, FALSE );
+					}
 				}
 				else
 				{
@@ -589,11 +629,13 @@ METHODDEF void
 	}
 
 	/* Emit DRI if required --- note that DRI value could change for each scan.
-   * If it doesn't, a tiny amount of space is wasted in multiple-scan files.
-   * We assume DRI will never be nonzero for one scan and zero for a later one.
-   */
+	* If it doesn't, a tiny amount of space is wasted in multiple-scan files.
+	* We assume DRI will never be nonzero for one scan and zero for a later one.
+	*/
 	if( cinfo->restart_interval )
+	{
 		emit_dri( cinfo );
+	}
 
 	emit_sos( cinfo );
 }
@@ -603,7 +645,7 @@ METHODDEF void
  */
 
 METHODDEF void
-	write_file_trailer( j_compress_ptr cinfo )
+write_file_trailer( j_compress_ptr cinfo )
 {
 	emit_marker( cinfo, M_EOI );
 }
@@ -616,7 +658,7 @@ METHODDEF void
  */
 
 METHODDEF void
-	write_tables_only( j_compress_ptr cinfo )
+write_tables_only( j_compress_ptr cinfo )
 {
 	int i;
 
@@ -625,7 +667,9 @@ METHODDEF void
 	for( i = 0; i < NUM_QUANT_TBLS; i++ )
 	{
 		if( cinfo->quant_tbl_ptrs[ i ] != NULL )
+		{
 			( void )emit_dqt( cinfo, i );
+		}
 	}
 
 	if( !cinfo->arith_code )
@@ -633,9 +677,13 @@ METHODDEF void
 		for( i = 0; i < NUM_HUFF_TBLS; i++ )
 		{
 			if( cinfo->dc_huff_tbl_ptrs[ i ] != NULL )
+			{
 				emit_dht( cinfo, i, FALSE );
+			}
 			if( cinfo->ac_huff_tbl_ptrs[ i ] != NULL )
+			{
 				emit_dht( cinfo, i, TRUE );
+			}
 		}
 	}
 
@@ -647,7 +695,7 @@ METHODDEF void
  */
 
 GLOBAL void
-	jinit_marker_writer( j_compress_ptr cinfo )
+jinit_marker_writer( j_compress_ptr cinfo )
 {
 	/* Create the subobject */
 	cinfo->marker = ( struct jpeg_marker_writer* )( *cinfo->mem->alloc_small )( ( j_common_ptr )cinfo, JPOOL_IMAGE, SIZEOF( struct jpeg_marker_writer ) );

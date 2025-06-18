@@ -73,9 +73,9 @@ static void			   Login_MenuEvent( void* ptr, int event )
 			// set name								``
 			// trap_Cvar_Set( "name", s_login.name_box.field.buffer );
 			/*
-		trap_Cvar_Set( "rank_name", s_login.name_box.field.buffer );
-		trap_Cvar_Set( "rank_pwd", s_login.password_box.field.buffer );
-		*/
+			trap_Cvar_Set( "rank_name", s_login.name_box.field.buffer );
+			trap_Cvar_Set( "rank_pwd", s_login.password_box.field.buffer );
+			*/
 
 			// login
 			trap_CL_UI_RankUserLogin( s_login.name_box.field.buffer, s_login.password_box.field.buffer );

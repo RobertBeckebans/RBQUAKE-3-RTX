@@ -57,7 +57,9 @@ idImagePackerNode* idImagePackerNode::Insert( const idSubImage& image )
 	{
 		idImagePackerNode* newNode = children[0]->Insert( image );
 		if( newNode )
+		{
 			return newNode;
+		}
 
 		return children[1]->Insert( image );
 	}
@@ -369,13 +371,19 @@ void idImagePacker::DrawTree( byte* image, int width, int height )
 void idImagePacker::DrawTree_R( idImagePackerNode* node, byte* image, int width, int height )
 {
 	if( node->isStuffed )
+	{
 		CheckerRect( image, width, height, node->rect );
+	}
 	DrawRect( image, width, height, node->rect );
 
 	if( node->children[0] )
+	{
 		DrawTree_R( node->children[0], image, width, height );
+	}
 	if( node->children[1] )
+	{
 		DrawTree_R( node->children[1], image, width, height );
+	}
 }
 
 idSubImage idImagePacker::PackImage( idSubImage& image )
@@ -386,13 +394,17 @@ idSubImage idImagePacker::PackImage( idSubImage& image )
 int idImagePacker::GetWidth()
 {
 	if( !root )
+	{
 		return 0;
+	}
 	return root->rect.width;
 }
 
 int idImagePacker::GetHeight()
 {
 	if( !root )
+	{
 		return 0;
+	}
 	return root->rect.height;
 }

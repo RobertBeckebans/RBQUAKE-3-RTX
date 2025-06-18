@@ -8,7 +8,7 @@ rm -rf libs/
 mkdir -p libs
 mkdir -p engine
 mkdir -p engine/null
-mkdir -p games/q3a
+mkdir -p games/default
 mkdir -p shared
 
 git mv jpeg-6 libs/jpeg

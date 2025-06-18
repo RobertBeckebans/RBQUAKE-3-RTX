@@ -64,17 +64,19 @@ void	   AAS_ClearShownPolygons()
 	for( i = 0; i < MAX_DEBUGPOLYGONS; i++ )
 	{
 		if( debugpolygons[i] )
+		{
 			botimport.DebugPolygonDelete( debugpolygons[i] );
+		}
 		debugpolygons[i] = 0;
 	} // end for
-	  //*/
+	//*/
 	/*
-  for (i = 0; i < MAX_DEBUGPOLYGONS; i++)
-  {
+	for (i = 0; i < MAX_DEBUGPOLYGONS; i++)
+	{
 	  botimport.DebugPolygonDelete(i);
 	  debugpolygons[i] = 0;
-  } //end for
-*/
+	} //end for
+	*/
 } // end of the function AAS_ClearShownPolygons
 //===========================================================================
 //
@@ -261,7 +263,9 @@ void AAS_ShowBoundingBox( vec3_t origin, vec3_t mins, vec3_t maxs )
 	// lower corners
 	Com_Memcpy( bboxcorners[4], bboxcorners[0], sizeof( vec3_t ) * 4 );
 	for( i = 0; i < 4; i++ )
+	{
 		bboxcorners[4 + i][2] = origin[2] + mins[2];
+	}
 	// draw bounding box
 	for( i = 0; i < 4; i++ )
 	{
@@ -321,13 +325,21 @@ void AAS_ShowFace( int facenum )
 		} // end if
 		edge = &aasworld.edges[edgenum];
 		if( color == LINECOLOR_RED )
+		{
 			color = LINECOLOR_GREEN;
+		}
 		else if( color == LINECOLOR_GREEN )
+		{
 			color = LINECOLOR_BLUE;
+		}
 		else if( color == LINECOLOR_BLUE )
+		{
 			color = LINECOLOR_YELLOW;
+		}
 		else
+		{
 			color = LINECOLOR_RED;
+		}
 		AAS_DebugLine( aasworld.vertexes[edge->v[0]], aasworld.vertexes[edge->v[1]], color );
 	} // end for
 	plane	= &aasworld.planes[face->planenum];
@@ -421,7 +433,9 @@ void AAS_ShowArea( int areanum, int groundfacesonly )
 		if( groundfacesonly )
 		{
 			if( !( face->faceflags & ( FACE_GROUND | FACE_LADDER ) ) )
+			{
 				continue;
+			}
 		} // end if
 		// walk through the edges of the face
 		for( j = 0; j < face->numedges; j++ )
@@ -437,7 +451,9 @@ void AAS_ShowArea( int areanum, int groundfacesonly )
 			for( n = 0; n < numareaedges; n++ )
 			{
 				if( areaedges[n] == edgenum )
+				{
 					break;
+				}
 			} // end for
 			if( n == numareaedges && numareaedges < MAX_DEBUGLINES )
 			{
@@ -462,16 +478,26 @@ void AAS_ShowArea( int areanum, int groundfacesonly )
 			} // end else
 		} // end for
 		if( line >= MAX_DEBUGLINES )
+		{
 			return;
+		}
 		edge = &aasworld.edges[areaedges[n]];
 		if( color == LINECOLOR_RED )
+		{
 			color = LINECOLOR_BLUE;
+		}
 		else if( color == LINECOLOR_BLUE )
+		{
 			color = LINECOLOR_GREEN;
+		}
 		else if( color == LINECOLOR_GREEN )
+		{
 			color = LINECOLOR_YELLOW;
+		}
 		else
+		{
 			color = LINECOLOR_RED;
+		}
 		botimport.DebugLineShow( debuglines[line], aasworld.vertexes[edge->v[0]], aasworld.vertexes[edge->v[1]], color );
 		debuglinevisible[line] = qtrue;
 	} // end for*/
@@ -510,7 +536,9 @@ void AAS_ShowAreaPolygons( int areanum, int color, int groundfacesonly )
 		if( groundfacesonly )
 		{
 			if( !( face->faceflags & ( FACE_GROUND | FACE_LADDER ) ) )
+			{
 				continue;
+			}
 		} // end if
 		AAS_ShowFacePolygon( facenum, color, face->frontarea != areanum );
 	} // end for
@@ -618,9 +646,13 @@ void AAS_DrawArrow( vec3_t start, vec3_t end, int linecolor, int arrowcolor )
 	VectorNormalize( dir );
 	dot = DotProduct( dir, up );
 	if( dot > 0.99 || dot < -0.99 )
+	{
 		VectorSet( cross, 1, 0, 0 );
+	}
 	else
+	{
 		CrossProduct( dir, up, cross );
+	}
 
 	VectorMA( end, -6, dir, p1 );
 	VectorCopy( p1, p2 );
@@ -744,10 +776,14 @@ void AAS_ShowReachableAreas( int areanum )
 	settings = &aasworld.areasettings[areanum];
 	//
 	if( !settings->numreachableareas )
+	{
 		return;
+	}
 	//
 	if( index >= settings->numreachableareas )
+	{
 		index = 0;
+	}
 	//
 	if( AAS_Time() - lasttime > 1.5 )
 	{
@@ -778,18 +814,30 @@ void AAS_FloodAreas_r( int areanum, int cluster, int* done )
 		facenum = abs( aasworld.faceindex[area->firstface + i] );
 		face	= &aasworld.faces[facenum];
 		if( face->frontarea == areanum )
+		{
 			nextareanum = face->backarea;
+		}
 		else
+		{
 			nextareanum = face->frontarea;
+		}
 		if( !nextareanum )
+		{
 			continue;
+		}
 		if( done[nextareanum] )
+		{
 			continue;
+		}
 		done[nextareanum] = qtrue;
 		if( aasworld.areasettings[nextareanum].contents & AREACONTENTS_VIEWPORTAL )
+		{
 			continue;
+		}
 		if( AAS_AreaCluster( nextareanum ) != cluster )
+		{
 			continue;
+		}
 		AAS_FloodAreas_r( nextareanum, cluster, done );
 	} // end for
 	//
@@ -798,14 +846,22 @@ void AAS_FloodAreas_r( int areanum, int cluster, int* done )
 		reach		= &aasworld.reachability[settings->firstreachablearea + i];
 		nextareanum = reach->areanum;
 		if( !nextareanum )
+		{
 			continue;
+		}
 		if( done[nextareanum] )
+		{
 			continue;
+		}
 		done[nextareanum] = qtrue;
 		if( aasworld.areasettings[nextareanum].contents & AREACONTENTS_VIEWPORTAL )
+		{
 			continue;
+		}
 		if( AAS_AreaCluster( nextareanum ) != cluster )
+		{
 			continue;
+		}
 		/*
 		if ((reach->traveltype & TRAVELTYPE_MASK) == TRAVEL_WALKOFFLEDGE)
 		{

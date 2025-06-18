@@ -38,10 +38,14 @@ tmp_node_t* AAS_PruneNodes_r( tmp_node_t* tmpnode )
 
 	// if it is a solid leaf
 	if( !tmpnode )
+	{
 		return NULL;
+	}
 	//
 	if( tmpnode->tmparea )
+	{
 		return tmpnode;
+	}
 	// process the children first
 	tmpnode->children[0] = AAS_PruneNodes_r( tmpnode->children[0] );
 	tmpnode->children[1] = AAS_PruneNodes_r( tmpnode->children[1] );
@@ -50,11 +54,15 @@ tmp_node_t* AAS_PruneNodes_r( tmp_node_t* tmpnode )
 	{
 		tmparea1 = tmpnode->children[0]->tmparea;
 		while( tmparea1->mergedarea )
+		{
 			tmparea1 = tmparea1->mergedarea;
+		}
 
 		tmparea2 = tmpnode->children[1]->tmparea;
 		while( tmparea2->mergedarea )
+		{
 			tmparea2 = tmparea2->mergedarea;
+		}
 
 		if( tmparea1 == tmparea2 )
 		{

@@ -352,9 +352,13 @@ const void* RB_TakeScreenshotCmd( const void* data )
 	cmd = ( const screenshotCommand_t* )data;
 
 	if( cmd->jpeg )
+	{
 		RB_TakeScreenshotJPEG( cmd->x, cmd->y, cmd->width, cmd->height, cmd->fileName );
+	}
 	else
+	{
 		RB_TakeScreenshot( cmd->x, cmd->y, cmd->width, cmd->height, cmd->fileName );
+	}
 
 	return ( const void* )( cmd + 1 );
 }
@@ -952,11 +956,15 @@ void R_Init()
 
 	max_polys = r_maxpolys->integer;
 	if( max_polys < MAX_POLYS )
+	{
 		max_polys = MAX_POLYS;
+	}
 
 	max_polyverts = r_maxpolyverts->integer;
 	if( max_polyverts < MAX_POLYVERTS )
+	{
 		max_polyverts = MAX_POLYVERTS;
+	}
 
 	ptr						  = ri.Hunk_Alloc( sizeof( *backEndData[0] ) + sizeof( srfPoly_t ) * max_polys + sizeof( polyVert_t ) * max_polyverts, h_low );
 	backEndData[0]			  = ( backEndData_t* )ptr;

@@ -178,19 +178,29 @@ gentity_t* G_Find( gentity_t* from, int fieldofs, const char* match )
 	char* s;
 
 	if( !from )
+	{
 		from = g_entities;
+	}
 	else
+	{
 		from++;
+	}
 
 	for( ; from < &g_entities[level.num_entities]; from++ )
 	{
 		if( !from->inuse )
+		{
 			continue;
+		}
 		s = *( char** )( ( byte* )from + fieldofs );
 		if( !s )
+		{
 			continue;
+		}
 		if( !Q_stricmp( s, match ) )
+		{
 			return from;
+		}
 	}
 
 	return NULL;
@@ -221,10 +231,14 @@ gentity_t* G_PickTarget( char* targetname )
 	{
 		ent = G_Find( ent, FOFS( targetname ), targetname );
 		if( !ent )
+		{
 			break;
+		}
 		choice[num_choices++] = ent;
 		if( num_choices == MAXCHOICES )
+		{
 			break;
+		}
 	}
 
 	if( !num_choices )
@@ -708,9 +722,13 @@ int DebugLine( vec3_t start, vec3_t end, int color )
 	VectorNormalize( dir );
 	dot = DotProduct( dir, up );
 	if( dot > 0.99 || dot < -0.99 )
+	{
 		VectorSet( cross, 1, 0, 0 );
+	}
 	else
+	{
 		CrossProduct( dir, up, cross );
+	}
 
 	VectorNormalize( cross );
 

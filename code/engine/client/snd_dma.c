@@ -273,9 +273,13 @@ static long S_HashSFXName( const char* name )
 	{
 		letter = tolower( name[i] );
 		if( letter == '.' )
+		{
 			break; // don't include extension
+		}
 		if( letter == '\\' )
+		{
 			letter = '/'; // damn path names
+		}
 		hash += ( long )( letter ) * ( i + 119 );
 		i++;
 	}
@@ -492,7 +496,9 @@ void S_SpatializeOrigin( vec3_t origin, int master_vol, int* left_vol, int* righ
 	dist = VectorNormalize( source_vec );
 	dist -= SOUND_FULLVOLUME;
 	if( dist < 0 )
-		dist = 0;	   // close enough to be at full volume
+	{
+		dist = 0; // close enough to be at full volume
+	}
 	dist *= dist_mult; // different attenuation levels
 
 	VectorRotate( source_vec, listener_axis, vec );
@@ -500,7 +506,8 @@ void S_SpatializeOrigin( vec3_t origin, int master_vol, int* left_vol, int* righ
 	dot = -vec[1];
 
 	if( dma.channels == 1 )
-	{ // no attenuation = no spatialization
+	{
+		// no attenuation = no spatialization
 		rscale = 1.0;
 		lscale = 1.0;
 	}
@@ -524,12 +531,16 @@ void S_SpatializeOrigin( vec3_t origin, int master_vol, int* left_vol, int* righ
 	scale	   = ( 1.0 - dist ) * rscale;
 	*right_vol = ( master_vol * scale );
 	if( *right_vol < 0 )
+	{
 		*right_vol = 0;
+	}
 
 	scale	  = ( 1.0 - dist ) * lscale;
 	*left_vol = ( master_vol * scale );
 	if( *left_vol < 0 )
+	{
 		*left_vol = 0;
+	}
 }
 
 // =======================================================================
@@ -719,7 +730,9 @@ void S_ClearSoundBuffer()
 	int clear;
 
 	if( !s_soundStarted )
+	{
 		return;
+	}
 
 	// stop looping sounds
 	Com_Memset( loopSounds, 0, MAX_GENTITIES * sizeof( loopSound_t ) );
@@ -731,17 +744,23 @@ void S_ClearSoundBuffer()
 	s_rawend = 0;
 
 	if( dma.samplebits == 8 )
+	{
 		clear = 0x80;
+	}
 	else
+	{
 		clear = 0;
+	}
 
 	SNDDMA_BeginPainting();
 	if( dma.buffer )
-		// TTimo: due to a particular bug workaround in linux sound code,
-		//   have to optionally use a custom C implementation of Com_Memset
-		//   not affecting win32, we have #define Snd_Memset Com_Memset
-		// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=371
+	// TTimo: due to a particular bug workaround in linux sound code,
+	//   have to optionally use a custom C implementation of Com_Memset
+	//   not affecting win32, we have #define Snd_Memset Com_Memset
+	// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=371
+	{
 		Snd_Memset( dma.buffer, clear, dma.samples * dma.samplebits / 8 );
+	}
 	SNDDMA_Submit();
 }
 
@@ -1077,7 +1096,8 @@ void S_RawSamples( int samples, int rate, int width, int s_channels, const byte*
 	if( s_channels == 2 && width == 2 )
 	{
 		if( scale == 1.0 )
-		{ // optimized case
+		{
+			// optimized case
 			for( i = 0; i < samples; i++ )
 			{
 				dst = s_rawend & ( MAX_RAW_SAMPLES - 1 );
@@ -1092,7 +1112,9 @@ void S_RawSamples( int samples, int rate, int width, int s_channels, const byte*
 			{
 				src = i * scale;
 				if( src >= samples )
+				{
 					break;
+				}
 				dst = s_rawend & ( MAX_RAW_SAMPLES - 1 );
 				s_rawend++;
 				s_rawsamples[dst].left	= ( ( short* )data )[src * 2] * intVolume;
@@ -1106,7 +1128,9 @@ void S_RawSamples( int samples, int rate, int width, int s_channels, const byte*
 		{
 			src = i * scale;
 			if( src >= samples )
+			{
 				break;
+			}
 			dst = s_rawend & ( MAX_RAW_SAMPLES - 1 );
 			s_rawend++;
 			s_rawsamples[dst].left	= ( ( short* )data )[src] * intVolume;
@@ -1121,7 +1145,9 @@ void S_RawSamples( int samples, int rate, int width, int s_channels, const byte*
 		{
 			src = i * scale;
 			if( src >= samples )
+			{
 				break;
+			}
 			dst = s_rawend & ( MAX_RAW_SAMPLES - 1 );
 			s_rawend++;
 			s_rawsamples[dst].left	= ( ( char* )data )[src * 2] * intVolume;
@@ -1136,7 +1162,9 @@ void S_RawSamples( int samples, int rate, int width, int s_channels, const byte*
 		{
 			src = i * scale;
 			if( src >= samples )
+			{
 				break;
+			}
 			dst = s_rawend & ( MAX_RAW_SAMPLES - 1 );
 			s_rawend++;
 			s_rawsamples[dst].left	= ( ( ( byte* )data )[src] - 128 ) * intVolume;
@@ -1329,7 +1357,8 @@ void S_GetSoundtime()
 		buffers++; // buffer wrapped
 
 		if( s_paintedtime > 0x40000000 )
-		{ // time to chop things off to avoid 32 bit limits
+		{
+			// time to chop things off to avoid 32 bit limits
 			buffers		  = 0;
 			s_paintedtime = fullsamples;
 			S_StopAllSounds();
@@ -1340,10 +1369,10 @@ void S_GetSoundtime()
 	s_soundtime = buffers * fullsamples + samplepos / dma.channels;
 
 #if 0
-// check to make sure that we haven't overshot
-	if (s_paintedtime < s_soundtime)
+	// check to make sure that we haven't overshot
+	if( s_paintedtime < s_soundtime )
 	{
-		Com_DPrintf ("S_Update_ : overflow\n");
+		Com_DPrintf( "S_Update_ : overflow\n" );
 		s_paintedtime = s_soundtime;
 	}
 #endif
@@ -1410,7 +1439,9 @@ void S_Update_()
 	// never mix more than the complete buffer
 	samps = dma.samples >> ( dma.channels - 1 );
 	if( endtime - s_soundtime > samps )
+	{
 		endtime = s_soundtime + samps;
+	}
 
 	SNDDMA_BeginPainting();
 
@@ -1549,7 +1580,7 @@ int S_FindWavChunk( fileHandle_t f, char* chunk )
 		return 0;
 	}
 	len = ( len + 1 ) & ~1; // pad to word boundary
-							//	s_nextWavChunk += len + 8;
+	//	s_nextWavChunk += len + 8;
 
 	if( strcmp( name, chunk ) )
 	{

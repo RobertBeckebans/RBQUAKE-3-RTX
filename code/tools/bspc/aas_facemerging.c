@@ -36,13 +36,19 @@ int AAS_TryMergeFaces( tmp_face_t* face1, tmp_face_t* face2 )
 
 #ifdef DEBUG
 	if( !face1->winding )
+	{
 		Error( "face1 %d without winding", face1->num );
+	}
 	if( !face2->winding )
+	{
 		Error( "face2 %d without winding", face2->num );
+	}
 #endif // DEBUG
 	//
 	if( face1->faceflags != face2->faceflags )
+	{
 		return false;
+	}
 	// NOTE: if the front or back area is zero this doesn't mean there's
 	// a real area. It means there's solid at that side of the face
 	// if both faces have the same front area
@@ -69,9 +75,13 @@ int AAS_TryMergeFaces( tmp_face_t* face1, tmp_face_t* face2 )
 					FreeWinding( face1->winding );
 					face1->winding = neww;
 					if( face2->frontarea )
+					{
 						AAS_RemoveFaceFromArea( face2, face2->frontarea );
+					}
 					if( face2->backarea )
+					{
 						AAS_RemoveFaceFromArea( face2, face2->backarea );
+					}
 					AAS_FreeTmpFace( face2 );
 					return true;
 				} // end if
@@ -144,7 +154,9 @@ void AAS_MergeAreaFaces()
 		restart = false;
 		//
 		if( tmparea->invalid )
+		{
 			continue;
+		}
 		//
 		for( face1 = tmparea->tmpfaces; face1; face1 = face1->next[side1] )
 		{
@@ -190,7 +202,9 @@ void AAS_MergePlaneFaces( tmp_area_t* tmparea, int planenum )
 	{
 		side1 = face1->frontarea != tmparea;
 		if( face1->planenum != planenum )
+		{
 			continue;
+		}
 		//
 		for( face2 = face1->next[side1]; face2; face2 = nextface2 )
 		{
@@ -198,15 +212,21 @@ void AAS_MergePlaneFaces( tmp_area_t* tmparea, int planenum )
 			nextface2 = face2->next[side2];
 			//
 			if( ( face2->planenum & ~1 ) != ( planenum & ~1 ) )
+			{
 				continue;
+			}
 			//
 			neww = MergeWindings( face1->winding, face2->winding, mapplanes[face1->planenum].normal );
 			FreeWinding( face1->winding );
 			face1->winding = neww;
 			if( face2->frontarea )
+			{
 				AAS_RemoveFaceFromArea( face2, face2->frontarea );
+			}
 			if( face2->backarea )
+			{
 				AAS_RemoveFaceFromArea( face2, face2->backarea );
+			}
 			AAS_FreeTmpFace( face2 );
 			//
 			nextface2 = face1->next[side1];
@@ -231,7 +251,9 @@ int AAS_CanMergePlaneFaces( tmp_area_t* tmparea, int planenum )
 	{
 		side1 = face1->frontarea != tmparea;
 		if( ( face1->planenum & ~1 ) != ( planenum & ~1 ) )
+		{
 			continue;
+		}
 		if( !frontarea && !backarea )
 		{
 			frontarea = face1->frontarea;
@@ -241,11 +263,17 @@ int AAS_CanMergePlaneFaces( tmp_area_t* tmparea, int planenum )
 		else
 		{
 			if( frontarea != face1->frontarea )
+			{
 				return false;
+			}
 			if( backarea != face1->backarea )
+			{
 				return false;
+			}
 			if( faceflags != face1->faceflags )
+			{
 				return false;
+			}
 			merge = true;
 		} // end else
 	} // end for
@@ -272,7 +300,9 @@ void AAS_MergeAreaPlaneFaces()
 		nexttmparea = tmparea->l_next;
 		//
 		if( tmparea->invalid )
+		{
 			continue;
+		}
 		//
 		for( face1 = tmparea->tmpfaces; face1; face1 = face1->next[side1] )
 		{

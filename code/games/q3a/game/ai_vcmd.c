@@ -74,13 +74,17 @@ void BotVoiceChat_GetFlag( bot_state_t* bs, int client, int mode )
 	if( gametype == GT_CTF )
 	{
 		if( !ctf_redflag.areanum || !ctf_blueflag.areanum )
+		{
 			return;
+		}
 	}
 #ifdef MISSIONPACK
 	else if( gametype == GT_1FCTF )
 	{
 		if( !ctf_neutralflag.areanum || !ctf_redflag.areanum || !ctf_blueflag.areanum )
+		{
 			return;
+		}
 	}
 #endif
 	else
@@ -293,7 +297,8 @@ void BotVoiceChat_Camp( bot_state_t* bs, int client, int mode )
 	{
 		areanum = BotPointAreaNum( entinfo.origin );
 		if( areanum )
-		{ // && trap_AAS_AreaReachability(areanum)) {
+		{
+			// && trap_AAS_AreaReachability(areanum)) {
 			// NOTE: just assume the bot knows where the person is
 			// if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, client)) {
 			bs->teamgoal.entitynum = client;
@@ -352,7 +357,8 @@ void BotVoiceChat_FollowMe( bot_state_t* bs, int client, int mode )
 	{
 		areanum = BotPointAreaNum( entinfo.origin );
 		if( areanum )
-		{ // && trap_AAS_AreaReachability(areanum)) {
+		{
+			// && trap_AAS_AreaReachability(areanum)) {
 			bs->teamgoal.entitynum = client;
 			bs->teamgoal.areanum   = areanum;
 			VectorCopy( entinfo.origin, bs->teamgoal.origin );
@@ -403,7 +409,9 @@ void BotVoiceChat_FollowFlagCarrier( bot_state_t* bs, int client, int mode )
 
 	carrier = BotTeamFlagCarrier( bs );
 	if( carrier >= 0 )
+	{
 		BotVoiceChat_FollowMe( bs, carrier, mode );
+	}
 #ifdef DEBUG
 	BotPrintTeamGoal( bs );
 #endif // DEBUG
@@ -478,7 +486,9 @@ void BotVoiceChat_WhoIsLeader( bot_state_t* bs, int client, int mode )
 	char netname[MAX_MESSAGE_SIZE];
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 
 	ClientName( bs->client, netname, sizeof( netname ) );
 	// if this bot IS the team leader
@@ -574,17 +584,23 @@ int			   BotVoiceChatCommand( bot_state_t* bs, int mode, char* voiceChat )
 	for( ptr = cmd; *cmd && *cmd > ' '; cmd++ )
 		;
 	while( *cmd && *cmd <= ' ' )
+	{
 		*cmd++ = '\0';
+	}
 	voiceOnly = atoi( ptr );
 	for( ptr = cmd; *cmd && *cmd > ' '; cmd++ )
 		;
 	while( *cmd && *cmd <= ' ' )
+	{
 		*cmd++ = '\0';
+	}
 	clientNum = atoi( ptr );
 	for( ptr = cmd; *cmd && *cmd > ' '; cmd++ )
 		;
 	while( *cmd && *cmd <= ' ' )
+	{
 		*cmd++ = '\0';
+	}
 	color = atoi( ptr );
 
 	if( !BotSameTeam( bs, clientNum ) )

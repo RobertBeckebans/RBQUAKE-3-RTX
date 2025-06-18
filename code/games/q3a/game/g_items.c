@@ -293,7 +293,9 @@ int Pickup_Weapon( gentity_t* ent, gentity_t* other )
 	Add_Ammo( other, ent->item->giTag, quantity );
 
 	if( ent->item->giTag == WP_GRAPPLING_HOOK )
+	{
 		other->client->ps.ammo[ent->item->giTag] = -1; // unlimited ammo
+	}
 
 	// team deathmatch has slow weapon respawns
 	if( g_gametype.integer == GT_TEAM )
@@ -346,7 +348,8 @@ int Pickup_Health( gentity_t* ent, gentity_t* other )
 	other->client->ps.stats[STAT_HEALTH] = other->health;
 
 	if( ent->item->quantity == 100 )
-	{ // mega health respawns slow
+	{
+		// mega health respawns slow
 		return RESPAWN_MEGAHEALTH;
 	}
 
@@ -475,9 +478,13 @@ void Touch_Item( gentity_t* ent, gentity_t* other, trace_t* trace )
 	qboolean predict;
 
 	if( !other->client )
+	{
 		return;
+	}
 	if( other->health < 1 )
+	{
 		return; // dead people can't pickup
+	}
 
 	// the same pickup rules are used for client side and server side
 	if( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ) )
@@ -658,17 +665,20 @@ gentity_t* LaunchItem( gitem_t* item, vec3_t origin, vec3_t velocity )
 	dropped->s.eFlags |= EF_BOUNCE_HALF;
 #ifdef MISSIONPACK
 	if( ( g_gametype.integer == GT_CTF || g_gametype.integer == GT_1FCTF ) && item->giType == IT_TEAM )
-	{ // Special case for CTF flags
+	{
+		// Special case for CTF flags
 #else
 	if( g_gametype.integer == GT_CTF && item->giType == IT_TEAM )
-	{ // Special case for CTF flags
+	{
+		// Special case for CTF flags
 #endif
 		dropped->think	   = Team_DroppedFlagThink;
 		dropped->nextthink = level.time + 30000;
 		Team_CheckDroppedItem( dropped );
 	}
 	else
-	{ // auto-remove after 30 seconds
+	{
+		// auto-remove after 30 seconds
 		dropped->think	   = G_FreeEntity;
 		dropped->nextthink = level.time + 30000;
 	}
@@ -989,7 +999,9 @@ void G_SpawnItem( gentity_t* ent, gitem_t* item )
 
 	RegisterItem( item );
 	if( G_ItemDisabled( item ) )
+	{
 		return;
+	}
 
 	ent->item = item;
 	// some movers spawn on the second frame, so delay item

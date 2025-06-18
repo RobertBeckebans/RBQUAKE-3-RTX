@@ -247,7 +247,9 @@ int AAS_NextBSPEntity( int ent )
 {
 	ent++;
 	if( ent >= 1 && ent < bspworld.numentities )
+	{
 		return ent;
+	}
 	return 0;
 } // end of the function AAS_NextBSPEntity
 //===========================================================================
@@ -277,7 +279,9 @@ int AAS_ValueForBSPEpairKey( int ent, char* key, char* value, int size )
 
 	value[0] = '\0';
 	if( !AAS_BSPEntityInRange( ent ) )
+	{
 		return qfalse;
+	}
 	for( epair = bspworld.entities[ent].epairs; epair; epair = epair->next )
 	{
 		if( !strcmp( epair->key, key ) )
@@ -302,7 +306,9 @@ int AAS_VectorForBSPEpairKey( int ent, char* key, vec3_t v )
 
 	VectorClear( v );
 	if( !AAS_ValueForBSPEpairKey( ent, key, buf, MAX_EPAIRKEY ) )
+	{
 		return qfalse;
+	}
 	// scanf into doubles, then assign, so it is vec_t size independent
 	v1 = v2 = v3 = 0;
 	sscanf( buf, "%lf %lf %lf", &v1, &v2, &v3 );
@@ -323,7 +329,9 @@ int AAS_FloatForBSPEpairKey( int ent, char* key, float* value )
 
 	*value = 0;
 	if( !AAS_ValueForBSPEpairKey( ent, key, buf, MAX_EPAIRKEY ) )
+	{
 		return qfalse;
+	}
 	*value = atof( buf );
 	return qtrue;
 } // end of the function AAS_FloatForBSPEpairKey
@@ -339,7 +347,9 @@ int AAS_IntForBSPEpairKey( int ent, char* key, int* value )
 
 	*value = 0;
 	if( !AAS_ValueForBSPEpairKey( ent, key, buf, MAX_EPAIRKEY ) )
+	{
 		return qfalse;
+	}
 	*value = atoi( buf );
 	return qtrue;
 } // end of the function AAS_IntForBSPEpairKey
@@ -363,9 +373,13 @@ void AAS_FreeBSPEntities()
 			nextepair = epair->next;
 			//
 			if( epair->key )
+			{
 				FreeMemory( epair->key );
+			}
 			if( epair->value )
+			{
 				FreeMemory( epair->value );
+			}
 			FreeMemory( epair );
 		} // end for
 	} // end for
@@ -409,7 +423,9 @@ void AAS_ParseBSPEntities()
 		while( PS_ReadToken( script, &token ) )
 		{
 			if( !strcmp( token.string, "}" ) )
+			{
 				break;
+			}
 			epair		= ( bsp_epair_t* )GetClearedHunkMemory( sizeof( bsp_epair_t ) );
 			epair->next = ent->epairs;
 			ent->epairs = epair;
@@ -464,7 +480,9 @@ void AAS_DumpBSPData()
 	AAS_FreeBSPEntities();
 
 	if( bspworld.dentdata )
+	{
 		FreeMemory( bspworld.dentdata );
+	}
 	bspworld.dentdata	 = NULL;
 	bspworld.entdatasize = 0;
 	//

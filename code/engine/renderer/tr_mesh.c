@@ -35,7 +35,9 @@ static float ProjectRadius( float r, vec3_t location )
 	dist = DotProduct( tr.viewParms.or.axis[0], location ) - c;
 
 	if( dist <= 0 )
+	{
 		return 0;
+	}
 
 	p[0] = 0;
 	p[1] = fabs( r );
@@ -52,7 +54,9 @@ static float ProjectRadius( float r, vec3_t location )
 	pr = projected[1] / projected[3];
 
 	if( pr > 1.0f )
+	{
 		pr = 1.0f;
+	}
 
 	return pr;
 }
@@ -182,7 +186,9 @@ int R_ComputeLOD( trRefEntity_t* ent )
 		{
 			lodscale = r_lodscale->value;
 			if( lodscale > 20 )
+			{
 				lodscale = 20;
+			}
 			flod = 1.0f - projectedRadius * lodscale;
 		}
 		else
@@ -207,9 +213,13 @@ int R_ComputeLOD( trRefEntity_t* ent )
 	lod += r_lodbias->integer;
 
 	if( lod >= tr.currentModel->numLods )
+	{
 		lod = tr.currentModel->numLods - 1;
+	}
 	if( lod < 0 )
+	{
 		lod = 0;
+	}
 
 	return lod;
 }

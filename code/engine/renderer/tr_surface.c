@@ -356,9 +356,13 @@ static void DoRailDiscs( int numSegs, const vec3_t start, const vec3_t dir, cons
 	float  scale;
 
 	if( numSegs > 1 )
+	{
 		numSegs--;
+	}
 	if( !numSegs )
+	{
 		return;
+	}
 
 	scale = 0.25;
 
@@ -1095,7 +1099,8 @@ void RB_SurfaceBad( surfaceType_t* surfType )
 
 #if 0
 
-void RB_SurfaceFlare( srfFlare_t *surf ) {
+void RB_SurfaceFlare( srfFlare_t* surf )
+{
 	vec3_t		left, up;
 	float		radius;
 	byte		color[4];
@@ -1107,7 +1112,8 @@ void RB_SurfaceFlare( srfFlare_t *surf ) {
 	radius = 30;
 	VectorScale( backEnd.viewParms.or.axis[1], radius, left );
 	VectorScale( backEnd.viewParms.or.axis[2], radius, up );
-	if ( backEnd.viewParms.isMirror ) {
+	if( backEnd.viewParms.isMirror )
+	{
 		VectorSubtract( vec3_origin, left, left );
 	}
 
@@ -1119,7 +1125,8 @@ void RB_SurfaceFlare( srfFlare_t *surf ) {
 	VectorMA( origin, r_ignore->value, dir, origin );
 
 	d = -DotProduct( dir, surf->normal );
-	if ( d < 0 ) {
+	if( d < 0 )
+	{
 		return;
 	}
 	#if 0
@@ -1150,7 +1157,7 @@ void RB_SurfaceFlare( srfFlare_t* surf )
 	left[0] = r_ignore->value;
 
 	up[1] = r_ignore->value;
-	
+
 	RB_AddQuadStampExt( surf->origin, left, up, color, 0, 0, 1, 1 );
 	#endif
 }

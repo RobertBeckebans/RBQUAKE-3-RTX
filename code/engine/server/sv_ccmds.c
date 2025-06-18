@@ -637,15 +637,21 @@ static void SV_Status_f()
 	for( i = 0, cl = svs.clients; i < sv_maxclients->integer; i++, cl++ )
 	{
 		if( !cl->state )
+		{
 			continue;
+		}
 		Com_Printf( "%3i ", i );
 		ps = SV_GameClientNum( i );
 		Com_Printf( "%5i ", ps->persistant[PERS_SCORE] );
 
 		if( cl->state == CS_CONNECTED )
+		{
 			Com_Printf( "CNCT " );
+		}
 		else if( cl->state == CS_ZOMBIE )
+		{
 			Com_Printf( "ZMBI " );
+		}
 		else
 		{
 			ping = cl->ping < 9999 ? cl->ping : 9999;
@@ -658,7 +664,9 @@ static void SV_Status_f()
 		Com_Printf( "^7" );
 		l = 16 - strlen( cl->name );
 		for( j = 0; j < l; j++ )
+		{
 			Com_Printf( " " );
+		}
 
 		Com_Printf( "%7i ", svs.time - cl->lastPacketTime );
 
@@ -666,7 +674,9 @@ static void SV_Status_f()
 		Com_Printf( "%s", s );
 		l = 22 - strlen( s );
 		for( j = 0; j < l; j++ )
+		{
 			Com_Printf( " " );
+		}
 
 		Com_Printf( "%5i", cl->netchan.qport );
 
@@ -846,16 +856,16 @@ void SV_RemoveOperatorCommands()
 {
 #if 0
 	// removing these won't let the server start again
-	Cmd_RemoveCommand ("heartbeat");
-	Cmd_RemoveCommand ("kick");
-	Cmd_RemoveCommand ("banUser");
-	Cmd_RemoveCommand ("banClient");
-	Cmd_RemoveCommand ("status");
-	Cmd_RemoveCommand ("serverinfo");
-	Cmd_RemoveCommand ("systeminfo");
-	Cmd_RemoveCommand ("dumpuser");
-	Cmd_RemoveCommand ("map_restart");
-	Cmd_RemoveCommand ("sectorlist");
-	Cmd_RemoveCommand ("say");
+	Cmd_RemoveCommand( "heartbeat" );
+	Cmd_RemoveCommand( "kick" );
+	Cmd_RemoveCommand( "banUser" );
+	Cmd_RemoveCommand( "banClient" );
+	Cmd_RemoveCommand( "status" );
+	Cmd_RemoveCommand( "serverinfo" );
+	Cmd_RemoveCommand( "systeminfo" );
+	Cmd_RemoveCommand( "dumpuser" );
+	Cmd_RemoveCommand( "map_restart" );
+	Cmd_RemoveCommand( "sectorlist" );
+	Cmd_RemoveCommand( "say" );
 #endif
 }

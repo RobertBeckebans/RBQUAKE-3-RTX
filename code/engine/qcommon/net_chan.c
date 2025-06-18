@@ -102,31 +102,37 @@ more difficult.
 ==============
 */
 	#define SCRAMBLE_START 6
-static void Netchan_ScramblePacket( msg_t *buf ) {
+static void Netchan_ScramblePacket( msg_t *buf )
+{
 	unsigned	seed;
 	int			i, j, c, mask, temp;
 	int			seq[MAX_PACKETLEN];
 
-	seed = ( LittleLong( *(unsigned *)buf->data ) * 3 ) ^ ( buf->cursize * 123 );
+	seed = ( LittleLong( *( unsigned* )buf->data ) * 3 ) ^ ( buf->cursize * 123 );
 	c = buf->cursize;
-	if ( c <= SCRAMBLE_START ) {
+	if( c <= SCRAMBLE_START )
+	{
 		return;
 	}
-	if ( c > MAX_PACKETLEN ) {
+	if( c > MAX_PACKETLEN )
+	{
 		Com_Error( ERR_DROP, "MAX_PACKETLEN" );
 	}
 
 	// generate a sequence of "random" numbers
-	for (i = 0 ; i < c ; i++) {
-		seed = (119 * seed + 1);
+	for( i = 0 ; i < c ; i++ )
+	{
+		seed = ( 119 * seed + 1 );
 		seq[i] = seed;
 	}
 
 	// transpose each character
-	for ( mask = 1 ; mask < c-SCRAMBLE_START ; mask = ( mask << 1 ) + 1 ) {
+	for( mask = 1 ; mask < c - SCRAMBLE_START ; mask = ( mask << 1 ) + 1 )
+	{
 	}
 	mask >>= 1;
-	for (i = SCRAMBLE_START ; i < c ; i++) {
+	for( i = SCRAMBLE_START ; i < c ; i++ )
+	{
 		j = SCRAMBLE_START + ( seq[i] & mask );
 		temp = buf->data[j];
 		buf->data[j] = buf->data[i];
@@ -134,41 +140,49 @@ static void Netchan_ScramblePacket( msg_t *buf ) {
 	}
 
 	// byte xor the data after the header
-	for (i = SCRAMBLE_START ; i < c ; i++) {
+	for( i = SCRAMBLE_START ; i < c ; i++ )
+	{
 		buf->data[i] ^= seq[i];
 	}
 }
 
-static void Netchan_UnScramblePacket( msg_t *buf ) {
+static void Netchan_UnScramblePacket( msg_t *buf )
+{
 	unsigned	seed;
 	int			i, j, c, mask, temp;
 	int			seq[MAX_PACKETLEN];
 
-	seed = ( LittleLong( *(unsigned *)buf->data ) * 3 ) ^ ( buf->cursize * 123 );
+	seed = ( LittleLong( *( unsigned* )buf->data ) * 3 ) ^ ( buf->cursize * 123 );
 	c = buf->cursize;
-	if ( c <= SCRAMBLE_START ) {
+	if( c <= SCRAMBLE_START )
+	{
 		return;
 	}
-	if ( c > MAX_PACKETLEN ) {
+	if( c > MAX_PACKETLEN )
+	{
 		Com_Error( ERR_DROP, "MAX_PACKETLEN" );
 	}
 
 	// generate a sequence of "random" numbers
-	for (i = 0 ; i < c ; i++) {
-		seed = (119 * seed + 1);
+	for( i = 0 ; i < c ; i++ )
+	{
+		seed = ( 119 * seed + 1 );
 		seq[i] = seed;
 	}
 
 	// byte xor the data after the header
-	for (i = SCRAMBLE_START ; i < c ; i++) {
+	for( i = SCRAMBLE_START ; i < c ; i++ )
+	{
 		buf->data[i] ^= seq[i];
 	}
 
 	// transpose each character in reverse order
-	for ( mask = 1 ; mask < c-SCRAMBLE_START ; mask = ( mask << 1 ) + 1 ) {
+	for( mask = 1 ; mask < c - SCRAMBLE_START ; mask = ( mask << 1 ) + 1 )
+	{
 	}
 	mask >>= 1;
-	for (i = c-1 ; i >= SCRAMBLE_START ; i--) {
+	for( i = c - 1 ; i >= SCRAMBLE_START ; i-- )
+	{
 		j = SCRAMBLE_START + ( seq[i] & mask );
 		temp = buf->data[j];
 		buf->data[j] = buf->data[i];
@@ -472,22 +486,30 @@ Compares without the port
 qboolean NET_CompareBaseAdr( netadr_t a, netadr_t b )
 {
 	if( a.type != b.type )
+	{
 		return qfalse;
+	}
 
 	if( a.type == NA_LOOPBACK )
+	{
 		return qtrue;
+	}
 
 	if( a.type == NA_IP )
 	{
 		if( a.ip[0] == b.ip[0] && a.ip[1] == b.ip[1] && a.ip[2] == b.ip[2] && a.ip[3] == b.ip[3] )
+		{
 			return qtrue;
+		}
 		return qfalse;
 	}
 
 	if( a.type == NA_IPX )
 	{
 		if( ( memcmp( a.ipx, b.ipx, 10 ) == 0 ) )
+		{
 			return qtrue;
+		}
 		return qfalse;
 	}
 
@@ -523,22 +545,30 @@ const char* NET_AdrToString( netadr_t a )
 qboolean NET_CompareAdr( netadr_t a, netadr_t b )
 {
 	if( a.type != b.type )
+	{
 		return qfalse;
+	}
 
 	if( a.type == NA_LOOPBACK )
+	{
 		return qtrue;
+	}
 
 	if( a.type == NA_IP )
 	{
 		if( a.ip[0] == b.ip[0] && a.ip[1] == b.ip[1] && a.ip[2] == b.ip[2] && a.ip[3] == b.ip[3] && a.port == b.port )
+		{
 			return qtrue;
+		}
 		return qfalse;
 	}
 
 	if( a.type == NA_IPX )
 	{
 		if( ( memcmp( a.ipx, b.ipx, 10 ) == 0 ) && a.port == b.port )
+		{
 			return qtrue;
+		}
 		return qfalse;
 	}
 
@@ -585,10 +615,14 @@ qboolean   NET_GetLoopPacket( netsrc_t sock, netadr_t* net_from, msg_t* net_mess
 	loop = &loopbacks[sock];
 
 	if( loop->send - loop->get > MAX_LOOPBACK )
+	{
 		loop->get = loop->send - MAX_LOOPBACK;
+	}
 
 	if( loop->get >= loop->send )
+	{
 		return qfalse;
+	}
 
 	i = loop->get & ( MAX_LOOPBACK - 1 );
 	loop->get++;

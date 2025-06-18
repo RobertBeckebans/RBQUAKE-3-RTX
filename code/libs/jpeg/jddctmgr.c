@@ -43,10 +43,10 @@ typedef struct
 	struct jpeg_inverse_dct pub; /* public fields */
 
 	/* This array contains the IDCT method code that each multiplier table
-   * is currently set up for, or -1 if it's not yet set up.
-   * The actual multiplier tables are pointed to by dct_table in the
-   * per-component comp_info structures.
-   */
+	* is currently set up for, or -1 if it's not yet set up.
+	* The actual multiplier tables are pointed to by dct_table in the
+	* per-component comp_info structures.
+	*/
 	int cur_method[ MAX_COMPONENTS ];
 } my_idct_controller;
 
@@ -83,7 +83,7 @@ typedef union
  */
 
 METHODDEF void
-	start_pass( j_decompress_ptr cinfo )
+start_pass( j_decompress_ptr cinfo )
 {
 	my_idct_ptr            idct = ( my_idct_ptr )cinfo->idct;
 	int                    ci, i;
@@ -93,7 +93,7 @@ METHODDEF void
 	JQUANT_TBL*            qtbl;
 
 	for( ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
-		 ci++, compptr++ )
+			ci++, compptr++ )
 	{
 		/* Select the proper IDCT routine for this component's scaling */
 		switch( compptr->DCT_scaled_size )
@@ -144,17 +144,21 @@ METHODDEF void
 		}
 		idct->pub.inverse_DCT[ ci ] = method_ptr;
 		/* Create multiplier table from quant table.
-     * However, we can skip this if the component is uninteresting
-     * or if we already built the table.  Also, if no quant table
-     * has yet been saved for the component, we leave the
-     * multiplier table all-zero; we'll be reading zeroes from the
-     * coefficient controller's buffer anyway.
-     */
+		* However, we can skip this if the component is uninteresting
+		* or if we already built the table.  Also, if no quant table
+		* has yet been saved for the component, we leave the
+		* multiplier table all-zero; we'll be reading zeroes from the
+		* coefficient controller's buffer anyway.
+		*/
 		if( !compptr->component_needed || idct->cur_method[ ci ] == method )
+		{
 			continue;
+		}
 		qtbl = compptr->quant_table;
 		if( qtbl == NULL ) /* happens if no data yet for component */
+		{
 			continue;
+		}
 		idct->cur_method[ ci ] = method;
 		switch( method )
 		{
@@ -162,8 +166,8 @@ METHODDEF void
 			case JDCT_ISLOW:
 			{
 				/* For LL&M IDCT method, multipliers are equal to raw quantization
-	 * coefficients, but are stored in natural order as ints.
-	 */
+				* coefficients, but are stored in natural order as ints.
+				*/
 				ISLOW_MULT_TYPE* ismtbl = ( ISLOW_MULT_TYPE* )compptr->dct_table;
 				for( i = 0; i < DCTSIZE2; i++ )
 				{
@@ -176,15 +180,16 @@ METHODDEF void
 			case JDCT_IFAST:
 			{
 				/* For AA&N IDCT method, multipliers are equal to quantization
-	 * coefficients scaled by scalefactor[row]*scalefactor[col], where
-	 *   scalefactor[0] = 1
-	 *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
-	 * For integer operation, the multiplier table is to be scaled by
-	 * IFAST_SCALE_BITS.  The multipliers are stored in natural order.
-	 */
+				* coefficients scaled by scalefactor[row]*scalefactor[col], where
+				*   scalefactor[0] = 1
+				*   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
+				* For integer operation, the multiplier table is to be scaled by
+				* IFAST_SCALE_BITS.  The multipliers are stored in natural order.
+				*/
 				IFAST_MULT_TYPE* ifmtbl = ( IFAST_MULT_TYPE* )compptr->dct_table;
-	#define CONST_BITS 14
-				static const INT16 aanscales[ DCTSIZE2 ] = {
+#define CONST_BITS 14
+				static const INT16 aanscales[ DCTSIZE2 ] =
+				{
 					/* precomputed values scaled up by 14 bits */
 					16384,
 					22725,
@@ -256,9 +261,9 @@ METHODDEF void
 				for( i = 0; i < DCTSIZE2; i++ )
 				{
 					ifmtbl[ i ] = ( IFAST_MULT_TYPE )
-						DESCALE( MULTIPLY16V16( ( INT32 )qtbl->quantval[ jpeg_zigzag_order[ i ] ],
-									 ( INT32 )aanscales[ i ] ),
-							CONST_BITS - IFAST_SCALE_BITS );
+								  DESCALE( MULTIPLY16V16( ( INT32 )qtbl->quantval[ jpeg_zigzag_order[ i ] ],
+														  ( INT32 )aanscales[ i ] ),
+										   CONST_BITS - IFAST_SCALE_BITS );
 				}
 			}
 			break;
@@ -267,14 +272,15 @@ METHODDEF void
 			case JDCT_FLOAT:
 			{
 				/* For float AA&N IDCT method, multipliers are equal to quantization
-	 * coefficients scaled by scalefactor[row]*scalefactor[col], where
-	 *   scalefactor[0] = 1
-	 *   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
-	 * The multipliers are stored in natural order.
-	 */
+				* coefficients scaled by scalefactor[row]*scalefactor[col], where
+				*   scalefactor[0] = 1
+				*   scalefactor[k] = cos(k*PI/16) * sqrt(2)    for k=1..7
+				* The multipliers are stored in natural order.
+				*/
 				FLOAT_MULT_TYPE*    fmtbl = ( FLOAT_MULT_TYPE* )compptr->dct_table;
 				int                 row, col;
-				static const double aanscalefactor[ DCTSIZE ] = {
+				static const double aanscalefactor[ DCTSIZE ] =
+				{
 					1.0, 1.387039845, 1.306562965, 1.175875602, 1.0, 0.785694958, 0.541196100, 0.275899379
 				};
 
@@ -284,7 +290,7 @@ METHODDEF void
 					for( col = 0; col < DCTSIZE; col++ )
 					{
 						fmtbl[ i ] = ( FLOAT_MULT_TYPE )( ( double )qtbl->quantval[ jpeg_zigzag_order[ i ] ] *
-							aanscalefactor[ row ] * aanscalefactor[ col ] );
+														  aanscalefactor[ row ] * aanscalefactor[ col ] );
 						i++;
 					}
 				}
@@ -303,7 +309,7 @@ METHODDEF void
  */
 
 GLOBAL void
-	jinit_inverse_dct( j_decompress_ptr cinfo )
+jinit_inverse_dct( j_decompress_ptr cinfo )
 {
 	my_idct_ptr          idct;
 	int                  ci;
@@ -314,7 +320,7 @@ GLOBAL void
 	idct->pub.start_pass = start_pass;
 
 	for( ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
-		 ci++, compptr++ )
+			ci++, compptr++ )
 	{
 		/* Allocate and pre-zero a multiplier table for each component */
 		compptr->dct_table =

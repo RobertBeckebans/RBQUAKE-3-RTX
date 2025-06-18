@@ -39,13 +39,21 @@ int CM_PointLeafnum_r( const vec3_t p, int num )
 		plane = node->plane;
 
 		if( plane->type < 3 )
+		{
 			d = p[plane->type] - plane->dist;
+		}
 		else
+		{
 			d = DotProduct( plane->normal, p ) - plane->dist;
+		}
 		if( d < 0 )
+		{
 			num = node->children[1];
+		}
 		else
+		{
 			num = node->children[0];
+		}
 	}
 
 	c_pointcontents++; // optimize counter
@@ -56,7 +64,8 @@ int CM_PointLeafnum_r( const vec3_t p, int num )
 int CM_PointLeafnum( const vec3_t p )
 {
 	if( !cm.numNodes )
-	{ // map not loaded
+	{
+		// map not loaded
 		return 0;
 	}
 	return CM_PointLeafnum_r( p, 0 );
@@ -131,9 +140,11 @@ void CM_StoreBrushes( leafList_t* ll, int nodenum )
 	}
 #if 0
 	// store patches?
-	for ( k = 0 ; k < leaf->numLeafSurfaces ; k++ ) {
+	for( k = 0 ; k < leaf->numLeafSurfaces ; k++ )
+	{
 		patch = cm.surfaces[ cm.leafsurfaces[ leaf->firstleafsurface + k ] ];
-		if ( !patch ) {
+		if( !patch )
+		{
 			continue;
 		}
 	}
@@ -252,7 +263,8 @@ int CM_PointContents( const vec3_t p, clipHandle_t model )
 	cmodel_t* clipm;
 
 	if( !cm.numNodes )
-	{ // map not loaded
+	{
+		// map not loaded
 		return 0;
 	}
 
@@ -362,7 +374,9 @@ void CM_FloodArea_r( int areaNum, int floodnum )
 	if( area->floodvalid == cm.floodvalid )
 	{
 		if( area->floodnum == floodnum )
+		{
 			return;
+		}
 		Com_Error( ERR_DROP, "FloodArea_r: reflooded" );
 	}
 
@@ -501,7 +515,8 @@ int CM_WriteAreaBits( byte* buffer, int area )
 #else
 	if( area == -1 )
 #endif
-	{ // for debugging, send everything
+	{
+		// for debugging, send everything
 		Com_Memset( buffer, 255, bytes );
 	}
 	else
@@ -510,7 +525,9 @@ int CM_WriteAreaBits( byte* buffer, int area )
 		for( i = 0; i < cm.numAreas; i++ )
 		{
 			if( cm.areas[i].floodnum == floodnum || area == -1 )
+			{
 				buffer[i >> 3] |= 1 << ( i & 7 );
+			}
 		}
 	}
 

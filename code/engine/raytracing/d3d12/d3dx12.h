@@ -308,7 +308,9 @@ struct CD3DX12_BLEND_DESC : public D3D12_BLEND_DESC
 			D3D12_COLOR_WRITE_ENABLE_ALL,
 		};
 		for( UINT i = 0; i < D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i )
+		{
 			RenderTarget[i] = defaultRenderTargetBlendDesc;
+		}
 	}
 	~CD3DX12_BLEND_DESC() { }
 	operator const D3D12_BLEND_DESC&() const { return *this; }
@@ -1515,7 +1517,7 @@ inline UINT64 UpdateSubresources( _In_ ID3D12GraphicsCommandList*			pCmdList,
 
 	for( UINT i = 0; i < NumSubresources; ++i )
 	{
-		if( pRowSizesInBytes[i] > ( SIZE_T )-1 ) return 0;
+		if( pRowSizesInBytes[i] > ( SIZE_T )-1 ) { return 0; }
 		D3D12_MEMCPY_DEST DestData = { pData + pLayouts[i].Offset, pLayouts[i].Footprint.RowPitch, pLayouts[i].Footprint.RowPitch * pNumRows[i] };
 		MemcpySubresource( &DestData, &pSrcData[i], ( SIZE_T )pRowSizesInBytes[i], pNumRows[i], pLayouts[i].Footprint.Depth );
 	}

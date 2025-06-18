@@ -65,7 +65,8 @@ void GL_Bind( image_t* image )
 	}
 
 	if( r_nobind->integer && tr.dlightImage )
-	{ // performance evaluation option
+	{
+		// performance evaluation option
 		texnum = tr.dlightImage->texnum;
 	}
 

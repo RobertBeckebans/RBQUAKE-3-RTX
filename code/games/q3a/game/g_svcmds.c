@@ -96,7 +96,9 @@ static qboolean	  StringToFilter( char* s, ipFilter_t* f )
 				// b[i] and m[i] to 0
 				s++;
 				if( !*s )
+				{
 					break;
+				}
 				s++;
 				continue;
 			}
@@ -114,7 +116,9 @@ static qboolean	  StringToFilter( char* s, ipFilter_t* f )
 		m[i]   = 255;
 
 		if( !*s )
+		{
 			break;
+		}
 		s++;
 	}
 
@@ -141,7 +145,9 @@ static void UpdateIPBans()
 	for( i = 0; i < numIPFilters; i++ )
 	{
 		if( ipFilters[i].compare == 0xffffffff )
+		{
 			continue;
+		}
 
 		*( unsigned* )b = ipFilters[i].compare;
 		*( unsigned* )m = ipFilters[i].mask;
@@ -149,9 +155,13 @@ static void UpdateIPBans()
 		for( j = 0; j < 4; j++ )
 		{
 			if( m[j] != 255 )
+			{
 				Q_strcat( ip, sizeof( ip ), "*" );
+			}
 			else
+			{
 				Q_strcat( ip, sizeof( ip ), va( "%i", b[j] ) );
+			}
 			Q_strcat( ip, sizeof( ip ), ( j < 3 ) ? "." : " " );
 		}
 		if( strlen( iplist_final ) + strlen( ip ) < MAX_CVAR_VALUE_STRING )
@@ -191,7 +201,9 @@ qboolean G_FilterPacket( char* from )
 			p++;
 		}
 		if( !*p || *p == ':' )
+		{
 			break;
+		}
 		i++, p++;
 	}
 
@@ -199,7 +211,9 @@ qboolean G_FilterPacket( char* from )
 
 	for( i = 0; i < numIPFilters; i++ )
 		if( ( in & ipFilters[i].mask ) == ipFilters[i].compare )
+		{
 			return g_filterBan.integer != 0;
+		}
 
 	return g_filterBan.integer == 0;
 }
@@ -215,7 +229,9 @@ static void AddIP( char* str )
 
 	for( i = 0; i < numIPFilters; i++ )
 		if( ipFilters[i].compare == 0xffffffff )
+		{
 			break; // free spot
+		}
 	if( i == numIPFilters )
 	{
 		if( numIPFilters == MAX_IPFILTERS )
@@ -227,7 +243,9 @@ static void AddIP( char* str )
 	}
 
 	if( !StringToFilter( str, &ipFilters[i] ) )
+	{
 		ipFilters[i].compare = 0xffffffffu;
+	}
 
 	UpdateIPBans();
 }
@@ -248,11 +266,17 @@ void G_ProcessIPBans()
 	{
 		s = strchr( s, ' ' );
 		if( !s )
+		{
 			break;
+		}
 		while( *s == ' ' )
+		{
 			*s++ = 0;
+		}
 		if( *t )
+		{
 			AddIP( t );
+		}
 		t = s;
 	}
 }
@@ -297,7 +321,9 @@ void Svcmd_RemoveIP_f()
 	trap_Argv( 1, str, sizeof( str ) );
 
 	if( !StringToFilter( str, &f ) )
+	{
 		return;
+	}
 
 	for( i = 0; i < numIPFilters; i++ )
 	{

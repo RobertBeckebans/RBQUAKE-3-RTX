@@ -44,9 +44,13 @@ node_t*	   NodeForPoint( node_t* node, vec3_t origin )
 		plane = &mapplanes[node->planenum];
 		d	  = DotProduct( origin, plane->normal ) - plane->dist;
 		if( d >= 0 )
+		{
 			node = node->children[0];
+		}
 		else
+		{
 			node = node->children[1];
+		}
 	}
 	return node;
 } // end of the function NodeForPoint
@@ -77,7 +81,9 @@ void Tree_FreePortals_r( node_t* node )
 		RemovePortalFromNode( p, p->nodes[!s] );
 #ifdef ME
 		if( p->winding )
+		{
 			freedtreemem += MemorySize( p->winding );
+		}
 		freedtreemem += MemorySize( p );
 #endif // ME
 		FreePortal( p );
@@ -119,10 +125,10 @@ void Tree_Free_r( node_t* node )
 	for (f = node->faces; f; f = nextf)
 	{
 		nextf = f->next;
-#ifdef ME
+	#ifdef ME
 		if (f->w) freedtreemem += MemorySize(f->w);
 		freedtreemem += sizeof(face_t);
-#endif //ME
+	#endif //ME
 		FreeFace(f);
 	} //end for
 	*/
@@ -137,7 +143,9 @@ void Tree_Free_r( node_t* node )
 	} // end if
 
 	if( numthreads == 1 )
+	{
 		c_nodes--;
+	}
 #ifdef ME
 	freedtreemem += MemorySize( node );
 #endif // ME
@@ -153,7 +161,9 @@ void Tree_Free( tree_t* tree )
 {
 	// if no tree just return
 	if( !tree )
+	{
 		return;
+	}
 	//
 	freedtreemem = 0;
 	//
@@ -198,15 +208,21 @@ void Tree_Print_r( node_t* node, int depth )
 	bspbrush_t* bb;
 
 	for( i = 0; i < depth; i++ )
+	{
 		printf( "  " );
+	}
 	if( node->planenum == PLANENUM_LEAF )
 	{
 		if( !node->brushlist )
+		{
 			printf( "NULL\n" );
+		}
 		else
 		{
 			for( bb = node->brushlist; bb; bb = bb->next )
+			{
 				printf( "%i ", bb->original->brushnum );
+			}
 			printf( "\n" );
 		}
 		return;
@@ -229,7 +245,9 @@ void Tree_PruneNodes_r( node_t* node )
 	bspbrush_t *b, *next;
 
 	if( node->planenum == PLANENUM_LEAF )
+	{
 		return;
+	}
 
 	Tree_PruneNodes_r( node->children[0] );
 	Tree_PruneNodes_r( node->children[1] );
@@ -237,22 +255,30 @@ void Tree_PruneNodes_r( node_t* node )
 	if( create_aas )
 	{
 		if( ( node->children[0]->contents & CONTENTS_LADDER ) || ( node->children[1]->contents & CONTENTS_LADDER ) )
+		{
 			return;
+		}
 	}
 
 	if( ( node->children[0]->contents & CONTENTS_SOLID ) && ( node->children[1]->contents & CONTENTS_SOLID ) )
 	{
 		if( node->faces )
+		{
 			Error( "node->faces seperating CONTENTS_SOLID" );
+		}
 		if( node->children[0]->faces || node->children[1]->faces )
+		{
 			Error( "!node->faces with children" );
+		}
 		// FIXME: free stuff
 		node->planenum		   = PLANENUM_LEAF;
 		node->contents		   = CONTENTS_SOLID;
 		node->detail_seperator = false;
 
 		if( node->brushlist )
+		{
 			Error( "PruneNodes: node->brushlist" );
+		}
 		// combine brush lists
 		node->brushlist = node->children[1]->brushlist;
 

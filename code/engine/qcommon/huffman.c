@@ -231,7 +231,8 @@ void Huff_addRef( huff_t* huff, byte ch )
 {
 	node_t *tnode, *tnode2;
 	if( huff->loc[ch] == NULL )
-	{ /* if this is the first transmission of this node */
+	{
+		/* if this is the first transmission of this node */
 		tnode  = &( huff->nodeList[huff->blocNode++] );
 		tnode2 = &( huff->nodeList[huff->blocNode++] );
 
@@ -289,7 +290,8 @@ void Huff_addRef( huff_t* huff, byte ch )
 		if( huff->lhead->parent )
 		{
 			if( huff->lhead->parent->left == huff->lhead )
-			{ /* lhead is guaranteed to by the NYT */
+			{
+				/* lhead is guaranteed to by the NYT */
 				huff->lhead->parent->left = tnode2;
 			}
 			else
@@ -454,7 +456,8 @@ void Huff_Decompress( msg_t* mbuf, int offset )
 		}
 		Huff_Receive( huff.tree, &ch, buffer ); /* Get a character */
 		if( ch == NYT )
-		{ /* We got a NYT, get the symbol associated with it */
+		{
+			/* We got a NYT, get the symbol associated with it */
 			ch = 0;
 			for( i = 0; i < 8; i++ )
 			{

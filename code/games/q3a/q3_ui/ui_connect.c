@@ -39,21 +39,25 @@ static char		   lastLoadingText[MAX_INFO_VALUE];
 static void		   UI_ReadableSize( char* buf, int bufsize, int value )
 {
 	if( value > 1024 * 1024 * 1024 )
-	{ // gigs
+	{
+		// gigs
 		Com_sprintf( buf, bufsize, "%d", value / ( 1024 * 1024 * 1024 ) );
 		Com_sprintf( buf + strlen( buf ), bufsize - strlen( buf ), ".%02d GB", ( value % ( 1024 * 1024 * 1024 ) ) * 100 / ( 1024 * 1024 * 1024 ) );
 	}
 	else if( value > 1024 * 1024 )
-	{ // megs
+	{
+		// megs
 		Com_sprintf( buf, bufsize, "%d", value / ( 1024 * 1024 ) );
 		Com_sprintf( buf + strlen( buf ), bufsize - strlen( buf ), ".%02d MB", ( value % ( 1024 * 1024 ) ) * 100 / ( 1024 * 1024 ) );
 	}
 	else if( value > 1024 )
-	{ // kilos
+	{
+		// kilos
 		Com_sprintf( buf, bufsize, "%d KB", value / 1024 );
 	}
 	else
-	{ // bytes
+	{
+		// bytes
 		Com_sprintf( buf, bufsize, "%d bytes", value );
 	}
 }
@@ -64,15 +68,18 @@ static void UI_PrintTime( char* buf, int bufsize, int time )
 	time /= 1000; // change to seconds
 
 	if( time > 3600 )
-	{ // in the hours range
+	{
+		// in the hours range
 		Com_sprintf( buf, bufsize, "%d hr %d min", time / 3600, ( time % 3600 ) / 60 );
 	}
 	else if( time > 60 )
-	{ // mins
+	{
+		// mins
 		Com_sprintf( buf, bufsize, "%d min %d sec", time / 60, time % 60 );
 	}
 	else
-	{ // secs
+	{
+		// secs
 		Com_sprintf( buf, bufsize, "%d sec", time );
 	}
 }
@@ -95,21 +102,25 @@ static void UI_DisplayDownloadInfo( const char* downloadName )
 	downloadTime  = trap_Cvar_VariableValue( "cl_downloadTime" );
 
 #if 0 // bk010104
-	fprintf( stderr, "\n\n-----------------------------------------------\n");
+	fprintf( stderr, "\n\n-----------------------------------------------\n" );
 	fprintf( stderr, "DB: downloadSize:  %16d\n", downloadSize );
 	fprintf( stderr, "DB: downloadCount: %16d\n", downloadCount );
-	fprintf( stderr, "DB: downloadTime:  %16d\n", downloadTime );  
-  	fprintf( stderr, "DB: UI realtime:   %16d\n", uis.realtime );	// bk
+	fprintf( stderr, "DB: downloadTime:  %16d\n", downloadTime );
+	fprintf( stderr, "DB: UI realtime:   %16d\n", uis.realtime );	// bk
 	fprintf( stderr, "DB: UI frametime:  %16d\n", uis.frametime );	// bk
 #endif
 
 	leftWidth = width = UI_ProportionalStringWidth( dlText ) * UI_ProportionalSizeScale( style );
 	width			  = UI_ProportionalStringWidth( etaText ) * UI_ProportionalSizeScale( style );
 	if( width > leftWidth )
+	{
 		leftWidth = width;
+	}
 	width = UI_ProportionalStringWidth( xferText ) * UI_ProportionalSizeScale( style );
 	if( width > leftWidth )
+	{
 		leftWidth = width;
+	}
 	leftWidth += 16;
 
 	UI_DrawProportionalString( 8, 128, dlText, style, color_white );
@@ -165,7 +176,7 @@ static void UI_DisplayDownloadInfo( const char* downloadName )
 			n = ( n - ( ( ( downloadCount / 1024 ) * n ) / ( downloadSize / 1024 ) ) ) * 1000;
 
 			UI_PrintTime( dlTimeBuf, sizeof dlTimeBuf, n ); // bk010104
-															//(n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000);
+			//(n - (((downloadCount/1024) * n) / (downloadSize/1024))) * 1000);
 
 			UI_DrawProportionalString( leftWidth, 160, dlTimeBuf, style, color_white );
 			UI_DrawProportionalString( leftWidth, 192, va( "(%s of %s copied)", dlSizeBuf, totalSizeBuf ), style, color_white );
@@ -236,7 +247,8 @@ void UI_DrawConnectScreen( qboolean overlay )
 
 #if 0
 	// display password field
-	if ( passwordNeeded ) {
+	if( passwordNeeded )
+	{
 		s_ingame_menu.x = SCREEN_WIDTH * 0.50 - 128;
 		s_ingame_menu.nitems = 0;
 		s_ingame_menu.wrapAround = qtrue;
@@ -249,10 +261,10 @@ void UI_DrawConnectScreen( qboolean overlay )
 		Field_Clear( &passwordField.field );
 		passwordField.width = 256;
 		passwordField.field.widthInChars = 16;
-		Q_strncpyz( passwordField.field.buffer, Cvar_VariableString("password"), 
-			sizeof(passwordField.field.buffer) );
+		Q_strncpyz( passwordField.field.buffer, Cvar_VariableString( "password" ),
+					sizeof( passwordField.field.buffer ) );
 
-		Menu_AddItem( &s_ingame_menu, ( void * ) &s_customize_player_action );
+		Menu_AddItem( &s_ingame_menu, ( void* ) &s_customize_player_action );
 
 		MField_Draw( &passwordField );
 	}

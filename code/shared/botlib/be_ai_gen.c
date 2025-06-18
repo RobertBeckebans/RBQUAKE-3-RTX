@@ -58,7 +58,9 @@ int GeneticSelection( int numranks, float* rankings )
 	for( i = 0; i < numranks; i++ )
 	{
 		if( rankings[i] < 0 )
+		{
 			continue;
+		}
 		sum += rankings[i];
 	} // end for
 	if( sum > 0 )
@@ -69,10 +71,14 @@ int GeneticSelection( int numranks, float* rankings )
 		for( i = 0; i < numranks; i++ )
 		{
 			if( rankings[i] < 0 )
+			{
 				continue;
+			}
 			sum -= rankings[i];
 			if( sum <= 0 )
+			{
 				return i;
+			}
 		} // end for
 	} // end if
 	// select a bot randomly
@@ -80,7 +86,9 @@ int GeneticSelection( int numranks, float* rankings )
 	for( i = 0; i < numranks; i++ )
 	{
 		if( rankings[index] >= 0 )
+		{
 			return index;
+		}
 		index = ( index + 1 ) % numranks;
 	} // end for
 	return 0;
@@ -105,7 +113,9 @@ int GeneticParentsAndChildSelection( int numranks, float* ranks, int* parent1, i
 	for( max = 0, i = 0; i < numranks; i++ )
 	{
 		if( ranks[i] < 0 )
+		{
 			continue;
+		}
 		max++;
 	} // end for
 	if( max < 3 )
@@ -126,14 +136,20 @@ int GeneticParentsAndChildSelection( int numranks, float* ranks, int* parent1, i
 	for( i = 0; i < numranks; i++ )
 	{
 		if( rankings[i] < 0 )
+		{
 			continue;
+		}
 		if( rankings[i] > max )
+		{
 			max = rankings[i];
+		}
 	} // end for
 	for( i = 0; i < numranks; i++ )
 	{
 		if( rankings[i] < 0 )
+		{
 			continue;
+		}
 		rankings[i] = max - rankings[i];
 	} // end for
 	// select child

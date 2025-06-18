@@ -708,7 +708,8 @@ void R_Modellist_f()
 	ri.Printf( PRINT_ALL, "%8i : Total models\n", total );
 
 #if 0 // not working right with new hunk
-	if ( tr.world ) {
+	if( tr.world )
+	{
 		ri.Printf( PRINT_ALL, "\n%8i : %s\n", tr.world->dataSize, tr.world->name );
 	}
 #endif

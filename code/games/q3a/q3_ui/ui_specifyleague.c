@@ -125,12 +125,16 @@ static void SpecifyLeague_Event( void* ptr, int event )
 
 		case ID_SPECIFYLEAGUEUP:
 			if( event == QM_ACTIVATED )
+			{
 				ScrollList_Key( &s_specifyleague.list, K_UPARROW );
+			}
 			break;
 
 		case ID_SPECIFYLEAGUEDOWN:
 			if( event == QM_ACTIVATED )
+			{
 				ScrollList_Key( &s_specifyleague.list, K_DOWNARROW );
+			}
 			break;
 
 		case ID_SPECIFYLEAGUENAME:
@@ -296,7 +300,9 @@ void SpecifyLeague_Cache()
 	for( i = 0;; i++ )
 	{
 		if( !specifyleague_artlist[i] )
+		{
 			break;
+		}
 		trap_R_RegisterShaderNoMip( specifyleague_artlist[i] );
 	}
 }

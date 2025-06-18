@@ -175,7 +175,9 @@ void BotFreeCharacter2( int handle )
 void BotFreeCharacter( int handle )
 {
 	if( !LibVarGetValue( "bot_reloadcharacters" ) )
+	{
 		return;
+	}
 	BotFreeCharacter2( handle );
 } // end of the function BotFreeCharacter
 //===========================================================================
@@ -191,7 +193,9 @@ void BotDefaultCharacteristics( bot_character_t* ch, bot_character_t* defaultch 
 	for( i = 0; i < MAX_CHARACTERISTICS; i++ )
 	{
 		if( ch->c[i].type )
+		{
 			continue;
+		}
 		//
 		if( defaultch->c[i].type == CT_FLOAT )
 		{
@@ -261,7 +265,9 @@ bot_character_t* BotLoadCharacterFromFile( char* charfile, int skill )
 				while( PC_ExpectAnyToken( source, &token ) )
 				{
 					if( !strcmp( token.string, "}" ) )
+					{
 						break;
+					}
 					if( token.type != TT_NUMBER || !( token.subtype & TT_INTEGER ) )
 					{
 						SourceError( source, "expected integer index, found %s\n", token.string );
@@ -338,9 +344,13 @@ bot_character_t* BotLoadCharacterFromFile( char* charfile, int skill )
 						return NULL;
 					} // end if
 					if( !strcmp( token.string, "{" ) )
+					{
 						indent++;
+					}
 					else if( !strcmp( token.string, "}" ) )
+					{
 						indent--;
+					}
 				} // end while
 			} // end else
 		} // end if
@@ -376,7 +386,9 @@ int BotFindCachedCharacter( char* charfile, float skill )
 	for( handle = 1; handle <= MAX_CLIENTS; handle++ )
 	{
 		if( !botcharacters[handle] )
+		{
 			continue;
+		}
 		if( strcmp( botcharacters[handle]->filename, charfile ) == 0 && ( skill < 0 || fabs( botcharacters[handle]->skill - skill ) < 0.01 ) )
 		{
 			return handle;
@@ -404,10 +416,14 @@ int BotLoadCachedCharacter( char* charfile, float skill, int reload )
 	for( handle = 1; handle <= MAX_CLIENTS; handle++ )
 	{
 		if( !botcharacters[handle] )
+		{
 			break;
+		}
 	} // end for
 	if( handle > MAX_CLIENTS )
+	{
 		return 0;
+	}
 	// try to load a cached character with the given skill
 	if( !reload )
 	{
@@ -534,15 +550,21 @@ int BotInterpolateCharacters( int handle1, int handle2, float desiredskill )
 	ch1 = BotCharacterFromHandle( handle1 );
 	ch2 = BotCharacterFromHandle( handle2 );
 	if( !ch1 || !ch2 )
+	{
 		return 0;
+	}
 	// find a free spot for a character
 	for( handle = 1; handle <= MAX_CLIENTS; handle++ )
 	{
 		if( !botcharacters[handle] )
+		{
 			break;
+		}
 	} // end for
 	if( handle > MAX_CLIENTS )
+	{
 		return 0;
+	}
 	out		   = ( bot_character_t* )GetClearedMemory( sizeof( bot_character_t ) + MAX_CHARACTERISTICS * sizeof( bot_characteristic_t ) );
 	out->skill = desiredskill;
 	strcpy( out->filename, ch1->filename );
@@ -583,9 +605,13 @@ int BotLoadCharacter( char* charfile, float skill )
 
 	// make sure the skill is in the valid range
 	if( skill < 1.0 )
+	{
 		skill = 1.0;
+	}
 	else if( skill > 5.0 )
+	{
 		skill = 5.0;
+	}
 	// skill 1, 4 and 5 should be available in the character files
 	if( skill == 1.0 || skill == 4.0 || skill == 5.0 )
 	{
@@ -603,25 +629,35 @@ int BotLoadCharacter( char* charfile, float skill )
 		// load skill 1 and 4
 		firstskill = BotLoadCharacterSkill( charfile, 1 );
 		if( !firstskill )
+		{
 			return 0;
+		}
 		secondskill = BotLoadCharacterSkill( charfile, 4 );
 		if( !secondskill )
+		{
 			return firstskill;
+		}
 	} // end if
 	else
 	{
 		// load skill 4 and 5
 		firstskill = BotLoadCharacterSkill( charfile, 4 );
 		if( !firstskill )
+		{
 			return 0;
+		}
 		secondskill = BotLoadCharacterSkill( charfile, 5 );
 		if( !secondskill )
+		{
 			return firstskill;
+		}
 	} // end else
 	// interpolate between the two skills
 	handle = BotInterpolateCharacters( firstskill, secondskill, skill );
 	if( !handle )
+	{
 		return 0;
+	}
 	// write the character to the log file
 	BotDumpCharacter( botcharacters[handle] );
 	//
@@ -639,7 +675,9 @@ int CheckCharacteristicIndex( int character, int index )
 
 	ch = BotCharacterFromHandle( character );
 	if( !ch )
+	{
 		return qfalse;
+	}
 	if( index < 0 || index >= MAX_CHARACTERISTICS )
 	{
 		botimport.Print( PRT_ERROR, "characteristic %d does not exist\n", index );
@@ -664,10 +702,14 @@ float Characteristic_Float( int character, int index )
 
 	ch = BotCharacterFromHandle( character );
 	if( !ch )
+	{
 		return 0;
+	}
 	// check if the index is in range
 	if( !CheckCharacteristicIndex( character, index ) )
+	{
 		return 0;
+	}
 	// an integer will be converted to a float
 	if( ch->c[index].type == CT_INTEGER )
 	{
@@ -684,7 +726,7 @@ float Characteristic_Float( int character, int index )
 		botimport.Print( PRT_ERROR, "characteristic %d is not a float\n", index );
 		return 0;
 	} // end else if
-	  //	return 0;
+	//	return 0;
 } // end of the function Characteristic_Float
 //===========================================================================
 //
@@ -699,7 +741,9 @@ float Characteristic_BFloat( int character, int index, float min, float max )
 
 	ch = BotCharacterFromHandle( character );
 	if( !ch )
+	{
 		return 0;
+	}
 	if( min > max )
 	{
 		botimport.Print( PRT_ERROR, "cannot bound characteristic %d between %f and %f\n", index, min, max );
@@ -707,9 +751,13 @@ float Characteristic_BFloat( int character, int index, float min, float max )
 	} // end if
 	value = Characteristic_Float( character, index );
 	if( value < min )
+	{
 		return min;
+	}
 	if( value > max )
+	{
 		return max;
+	}
 	return value;
 } // end of the function Characteristic_BFloat
 //===========================================================================
@@ -724,10 +772,14 @@ int Characteristic_Integer( int character, int index )
 
 	ch = BotCharacterFromHandle( character );
 	if( !ch )
+	{
 		return 0;
+	}
 	// check if the index is in range
 	if( !CheckCharacteristicIndex( character, index ) )
+	{
 		return 0;
+	}
 	// an integer will just be returned
 	if( ch->c[index].type == CT_INTEGER )
 	{
@@ -743,7 +795,7 @@ int Characteristic_Integer( int character, int index )
 		botimport.Print( PRT_ERROR, "characteristic %d is not a integer\n", index );
 		return 0;
 	} // end else if
-	  //	return 0;
+	//	return 0;
 } // end of the function Characteristic_Integer
 //===========================================================================
 //
@@ -758,7 +810,9 @@ int Characteristic_BInteger( int character, int index, int min, int max )
 
 	ch = BotCharacterFromHandle( character );
 	if( !ch )
+	{
 		return 0;
+	}
 	if( min > max )
 	{
 		botimport.Print( PRT_ERROR, "cannot bound characteristic %d between %d and %d\n", index, min, max );
@@ -766,9 +820,13 @@ int Characteristic_BInteger( int character, int index, int min, int max )
 	} // end if
 	value = Characteristic_Integer( character, index );
 	if( value < min )
+	{
 		return min;
+	}
 	if( value > max )
+	{
 		return max;
+	}
 	return value;
 } // end of the function Characteristic_BInteger
 //===========================================================================
@@ -783,10 +841,14 @@ void Characteristic_String( int character, int index, char* buf, int size )
 
 	ch = BotCharacterFromHandle( character );
 	if( !ch )
+	{
 		return;
+	}
 	// check if the index is in range
 	if( !CheckCharacteristicIndex( character, index ) )
+	{
 		return;
+	}
 	// an integer will be converted to a float
 	if( ch->c[index].type == CT_STRING )
 	{

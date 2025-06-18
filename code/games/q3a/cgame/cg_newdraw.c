@@ -204,7 +204,8 @@ static void CG_DrawPlayerArmorIcon( rectDef_t* rect, qboolean draw2D )
 	ps	 = &cg.snap->ps;
 
 	if( draw2D || ( !cg_draw3dIcons.integer && cg_drawIcons.integer ) )
-	{ // bk001206 - parentheses
+	{
+		// bk001206 - parentheses
 		CG_DrawPic( rect->x, rect->y + rect->h / 2 + 1, rect->w, rect->h, cgs.media.armorIcon );
 	}
 	else if( cg_draw3dIcons.integer )
@@ -267,7 +268,8 @@ static void CG_DrawPlayerAmmoIcon( rectDef_t* rect, qboolean draw2D )
 	ps	 = &cg.snap->ps;
 
 	if( draw2D || ( !cg_draw3dIcons.integer && cg_drawIcons.integer ) )
-	{ // bk001206 - parentheses
+	{
+		// bk001206 - parentheses
 		qhandle_t icon;
 		icon = cg_weapons[cg.predictedPlayerState.weapon].ammoIcon;
 		if( icon )
@@ -1576,7 +1578,9 @@ void CG_DrawNewTeamInfo( rectDef_t* rect, float text_x, float text_y, float scal
 		{
 			len = CG_Text_Width( ci->name, scale, 0 );
 			if( len > pwidth )
+			{
 				pwidth = len;
+			}
 		}
 	}
 
@@ -1589,7 +1593,9 @@ void CG_DrawNewTeamInfo( rectDef_t* rect, float text_x, float text_y, float scal
 		{
 			len = CG_Text_Width( p, scale, 0 );
 			if( len > lwidth )
+			{
 				lwidth = len;
+			}
 		}
 	}
 
@@ -1628,11 +1634,14 @@ void CG_DrawNewTeamInfo( rectDef_t* rect, float text_x, float text_y, float scal
 			// draw weapon icon
 			xx += PIC_WIDTH + 1;
 
-// weapon used is not that useful, use the space for task
+			// weapon used is not that useful, use the space for task
 #if 0
-			if ( cg_weapons[ci->curWeapon].weaponIcon ) {
+			if( cg_weapons[ci->curWeapon].weaponIcon )
+			{
 				CG_DrawPic( xx, y, PIC_WIDTH, PIC_WIDTH, cg_weapons[ci->curWeapon].weaponIcon );
-			} else {
+			}
+			else
+			{
 				CG_DrawPic( xx, y, PIC_WIDTH, PIC_WIDTH, cgs.media.deferShader );
 			}
 #endif
@@ -2042,15 +2051,23 @@ void CG_MouseEvent( int x, int y )
 
 	cgs.cursorX += x;
 	if( cgs.cursorX < 0 )
+	{
 		cgs.cursorX = 0;
+	}
 	else if( cgs.cursorX > 640 )
+	{
 		cgs.cursorX = 640;
+	}
 
 	cgs.cursorY += y;
 	if( cgs.cursorY < 0 )
+	{
 		cgs.cursorY = 0;
+	}
 	else if( cgs.cursorY > 480 )
+	{
 		cgs.cursorY = 480;
+	}
 
 	n				 = Display_CursorType( cgs.cursorX, cgs.cursorY );
 	cgs.activeCursor = 0;

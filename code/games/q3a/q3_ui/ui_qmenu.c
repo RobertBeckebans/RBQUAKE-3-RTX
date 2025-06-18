@@ -121,16 +121,24 @@ static void Text_Draw( menutext_s* t )
 
 	// possible label
 	if( t->generic.name )
+	{
 		strcpy( buff, t->generic.name );
+	}
 
 	// possible value
 	if( t->string )
+	{
 		strcat( buff, t->string );
+	}
 
 	if( t->generic.flags & QMF_GRAYED )
+	{
 		color = text_color_disabled;
+	}
 	else
+	{
 		color = t->color;
+	}
 
 	UI_DrawString( x, y, buff, t->style, color );
 }
@@ -160,9 +168,13 @@ static void BText_Draw( menutext_s* t )
 	y = t->generic.y;
 
 	if( t->generic.flags & QMF_GRAYED )
+	{
 		color = text_color_disabled;
+	}
 	else
+	{
 		color = t->color;
+	}
 
 	UI_DrawBannerString( x, y, t->string, t->style, color );
 }
@@ -218,9 +230,13 @@ static void PText_Draw( menutext_s* t )
 	y = t->generic.y;
 
 	if( t->generic.flags & QMF_GRAYED )
+	{
 		color = text_color_disabled;
+	}
 	else
+	{
 		color = t->color;
+	}
 
 	style = t->style;
 	if( t->generic.flags & QMF_PULSEIFFOCUS )
@@ -314,11 +330,15 @@ void Bitmap_Draw( menubitmap_s* b )
 	{
 		b->shader = trap_R_RegisterShaderNoMip( b->generic.name );
 		if( !b->shader && b->errorpic )
+		{
 			b->shader = trap_R_RegisterShaderNoMip( b->errorpic );
+		}
 	}
 
 	if( b->focuspic && !b->focusshader )
+	{
 		b->focusshader = trap_R_RegisterShaderNoMip( b->focuspic );
+	}
 
 	if( b->generic.flags & QMF_GRAYED )
 	{
@@ -332,7 +352,9 @@ void Bitmap_Draw( menubitmap_s* b )
 	else
 	{
 		if( b->shader )
+		{
 			UI_DrawHandlePic( x, y, w, h, b->shader );
+		}
 
 		// bk001204 - parentheses
 		if( ( ( b->generic.flags & QMF_PULSE ) || ( b->generic.flags & QMF_PULSEIFFOCUS ) ) && ( Menu_ItemAtCursor( b->generic.parent ) == b ) )
@@ -345,7 +367,9 @@ void Bitmap_Draw( menubitmap_s* b )
 				color		 = tempcolor;
 			}
 			else
+			{
 				color = pulse_color;
+			}
 			color[3] = 0.5 + 0.5 * sin( uis.realtime / PULSE_DIVISOR );
 
 			trap_R_SetColor( color );
@@ -361,7 +385,9 @@ void Bitmap_Draw( menubitmap_s* b )
 				trap_R_SetColor( NULL );
 			}
 			else
+			{
 				UI_DrawHandlePic( x, y, w, h, b->focusshader );
+			}
 		}
 	}
 }
@@ -377,9 +403,13 @@ static void Action_Init( menuaction_s* a )
 
 	// calculate bounds
 	if( a->generic.name )
+	{
 		len = strlen( a->generic.name );
+	}
 	else
+	{
 		len = 0;
+	}
 
 	// left justify text
 	a->generic.left	  = a->generic.x;
@@ -443,9 +473,13 @@ static void RadioButton_Init( menuradiobutton_s* rb )
 
 	// calculate bounds
 	if( rb->generic.name )
+	{
 		len = strlen( rb->generic.name );
+	}
 	else
+	{
 		len = 0;
+	}
 
 	rb->generic.left   = rb->generic.x - ( len + 1 ) * SMALLCHAR_WIDTH;
 	rb->generic.right  = rb->generic.x + 6 * SMALLCHAR_WIDTH;
@@ -464,7 +498,9 @@ static sfxHandle_t RadioButton_Key( menuradiobutton_s* rb, int key )
 	{
 		case K_MOUSE1:
 			if( !( rb->generic.flags & QMF_HASMOUSEFOCUS ) )
+			{
 				break;
+			}
 
 		case K_JOY1:
 		case K_JOY2:
@@ -478,7 +514,9 @@ static sfxHandle_t RadioButton_Key( menuradiobutton_s* rb, int key )
 		case K_RIGHTARROW:
 			rb->curvalue = !rb->curvalue;
 			if( rb->generic.callback )
+			{
 				rb->generic.callback( rb, QM_ACTIVATED );
+			}
 
 			return ( menu_move_sound );
 	}
@@ -529,7 +567,9 @@ static void RadioButton_Draw( menuradiobutton_s* rb )
 	}
 
 	if( rb->generic.name )
+	{
 		UI_DrawString( x - SMALLCHAR_WIDTH, y, rb->generic.name, UI_RIGHT | UI_SMALLFONT, color );
+	}
 
 	if( !rb->curvalue )
 	{
@@ -554,9 +594,13 @@ static void Slider_Init( menuslider_s* s )
 
 	// calculate bounds
 	if( s->generic.name )
+	{
 		len = strlen( s->generic.name );
+	}
 	else
+	{
 		len = 0;
+	}
 
 	s->generic.left	  = s->generic.x - ( len + 1 ) * SMALLCHAR_WIDTH;
 	s->generic.right  = s->generic.x + ( SLIDER_RANGE + 2 + 1 ) * SMALLCHAR_WIDTH;
@@ -583,13 +627,21 @@ static sfxHandle_t Slider_Key( menuslider_s* s, int key )
 			s->curvalue = ( x / ( float )( SLIDER_RANGE * SMALLCHAR_WIDTH ) ) * ( s->maxvalue - s->minvalue ) + s->minvalue;
 
 			if( s->curvalue < s->minvalue )
+			{
 				s->curvalue = s->minvalue;
+			}
 			else if( s->curvalue > s->maxvalue )
+			{
 				s->curvalue = s->maxvalue;
+			}
 			if( s->curvalue != oldvalue )
+			{
 				sound = menu_move_sound;
+			}
 			else
+			{
 				sound = 0;
+			}
 			break;
 
 		case K_KP_LEFTARROW:
@@ -600,7 +652,9 @@ static sfxHandle_t Slider_Key( menuslider_s* s, int key )
 				sound = menu_move_sound;
 			}
 			else
+			{
 				sound = menu_buzz_sound;
+			}
 			break;
 
 		case K_KP_RIGHTARROW:
@@ -611,7 +665,9 @@ static sfxHandle_t Slider_Key( menuslider_s* s, int key )
 				sound = menu_move_sound;
 			}
 			else
+			{
 				sound = menu_buzz_sound;
+			}
 			break;
 
 		default:
@@ -621,7 +677,9 @@ static sfxHandle_t Slider_Key( menuslider_s* s, int key )
 	}
 
 	if( sound && s->generic.callback )
+	{
 		s->generic.callback( s, QM_ACTIVATED );
+	}
 
 	return ( sound );
 }
@@ -746,7 +804,9 @@ static void Slider_Draw( menuslider_s* s )
 	// draw slider
 	UI_DrawChar( x + SMALLCHAR_WIDTH, y, 128, UI_LEFT | style, color );
 	for( i = 0; i < SLIDER_RANGE; i++ )
+	{
 		UI_DrawChar( x + ( i + 2 ) * SMALLCHAR_WIDTH, y, 129, UI_LEFT | style, color );
+	}
 	UI_DrawChar( x + ( i + 2 ) * SMALLCHAR_WIDTH, y, 130, UI_LEFT | style, color );
 
 	// clamp thumb
@@ -754,12 +814,18 @@ static void Slider_Draw( menuslider_s* s )
 	{
 		s->range = ( s->curvalue - s->minvalue ) / ( float )( s->maxvalue - s->minvalue );
 		if( s->range < 0 )
+		{
 			s->range = 0;
+		}
 		else if( s->range > 1 )
+		{
 			s->range = 1;
+		}
 	}
 	else
+	{
 		s->range = 0;
+	}
 
 	// draw thumb
 	if( style & UI_PULSE )
@@ -783,9 +849,13 @@ static void SpinControl_Init( menulist_s* s )
 	const char* str;
 
 	if( s->generic.name )
+	{
 		len = strlen( s->generic.name ) * SMALLCHAR_WIDTH;
+	}
 	else
+	{
 		len = 0;
+	}
 
 	s->generic.left = s->generic.x - SMALLCHAR_WIDTH - len;
 
@@ -794,7 +864,9 @@ static void SpinControl_Init( menulist_s* s )
 	{
 		l = strlen( str );
 		if( l > len )
+		{
 			len = l;
+		}
 
 		s->numitems++;
 	}
@@ -819,7 +891,9 @@ static sfxHandle_t SpinControl_Key( menulist_s* s, int key )
 		case K_MOUSE1:
 			s->curvalue++;
 			if( s->curvalue >= s->numitems )
+			{
 				s->curvalue = 0;
+			}
 			sound = menu_move_sound;
 			break;
 
@@ -831,7 +905,9 @@ static sfxHandle_t SpinControl_Key( menulist_s* s, int key )
 				sound = menu_move_sound;
 			}
 			else
+			{
 				sound = menu_buzz_sound;
+			}
 			break;
 
 		case K_KP_RIGHTARROW:
@@ -842,12 +918,16 @@ static sfxHandle_t SpinControl_Key( menulist_s* s, int key )
 				sound = menu_move_sound;
 			}
 			else
+			{
 				sound = menu_buzz_sound;
+			}
 			break;
 	}
 
 	if( sound && s->generic.callback )
+	{
 		s->generic.callback( s, QM_ACTIVATED );
+	}
 
 	return ( sound );
 }
@@ -871,7 +951,9 @@ static void SpinControl_Draw( menulist_s* s )
 	focus = ( s->generic.parent->cursor == s->generic.menuPosition );
 
 	if( s->generic.flags & QMF_GRAYED )
+	{
 		color = text_color_disabled;
+	}
 	else if( focus )
 	{
 		color = text_color_highlight;
@@ -883,7 +965,9 @@ static void SpinControl_Draw( menulist_s* s )
 		style |= UI_BLINK;
 	}
 	else
+	{
 		color = text_color_normal;
+	}
 
 	if( focus )
 	{
@@ -1015,7 +1099,9 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 				l->top = l->curvalue - ( l->height - 1 );
 			}
 			if( l->top < 0 )
+			{
 				l->top = 0;
+			}
 
 			if( l->oldvalue != l->curvalue && l->generic.callback )
 			{
@@ -1036,13 +1122,19 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 				l->oldvalue = l->curvalue;
 				l->curvalue -= l->height - 1;
 				if( l->curvalue < 0 )
+				{
 					l->curvalue = 0;
+				}
 				l->top = l->curvalue;
 				if( l->top < 0 )
+				{
 					l->top = 0;
+				}
 
 				if( l->generic.callback )
+				{
 					l->generic.callback( l, QM_GOTFOCUS );
+				}
 
 				return ( menu_move_sound );
 			}
@@ -1060,13 +1152,19 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 				l->oldvalue = l->curvalue;
 				l->curvalue += l->height - 1;
 				if( l->curvalue > l->numitems - 1 )
+				{
 					l->curvalue = l->numitems - 1;
+				}
 				l->top = l->curvalue - ( l->height - 1 );
 				if( l->top < 0 )
+				{
 					l->top = 0;
+				}
 
 				if( l->generic.callback )
+				{
 					l->generic.callback( l, QM_GOTFOCUS );
+				}
 
 				return ( menu_move_sound );
 			}
@@ -1189,7 +1287,9 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 
 	// cycle look for ascii key inside list items
 	if( !Q_isprint( key ) )
+	{
 		return ( 0 );
+	}
 
 	// force to lower for case insensitive compare
 	if( Q_isupper( key ) )
@@ -1226,7 +1326,9 @@ sfxHandle_t ScrollList_Key( menulist_s* l, int key )
 				l->oldvalue = l->curvalue;
 				l->curvalue = j;
 				if( l->generic.callback )
+				{
 					l->generic.callback( l, QM_GOTFOCUS );
+				}
 				return ( menu_move_sound );
 			}
 
@@ -1264,7 +1366,9 @@ void ScrollList_Draw( menulist_s* l )
 		for( i = base; i < base + l->height; i++ )
 		{
 			if( i >= l->numitems )
+			{
 				break;
+			}
 
 			if( i == l->curvalue )
 			{
@@ -1278,9 +1382,13 @@ void ScrollList_Draw( menulist_s* l )
 				color = text_color_highlight;
 
 				if( hasfocus )
+				{
 					style = UI_PULSE | UI_LEFT | UI_SMALLFONT;
+				}
 				else
+				{
 					style = UI_LEFT | UI_SMALLFONT;
+				}
 			}
 			else
 			{
@@ -1310,7 +1418,9 @@ void Menu_AddItem( menuframework_s* menu, void* item )
 	menucommon_s* itemptr;
 
 	if( menu->nitems >= MAX_MENUITEMS )
+	{
 		trap_Error( "Menu_AddItem: excessive items" );
+	}
 
 	menu->items[menu->nitems]									 = item;
 	( ( menucommon_s* )menu->items[menu->nitems] )->parent		 = menu;
@@ -1381,20 +1491,26 @@ void Menu_CursorMoved( menuframework_s* m )
 	void ( *callback )( void* self, int notification );
 
 	if( m->cursor_prev == m->cursor )
+	{
 		return;
+	}
 
 	if( m->cursor_prev >= 0 && m->cursor_prev < m->nitems )
 	{
 		callback = ( ( menucommon_s* )( m->items[m->cursor_prev] ) )->callback;
 		if( callback )
+		{
 			callback( m->items[m->cursor_prev], QM_LOSTFOCUS );
+		}
 	}
 
 	if( m->cursor >= 0 && m->cursor < m->nitems )
 	{
 		callback = ( ( menucommon_s* )( m->items[m->cursor] ) )->callback;
 		if( callback )
+		{
 			callback( m->items[m->cursor], QM_GOTFOCUS );
+		}
 	}
 }
 
@@ -1516,7 +1632,9 @@ void Menu_Draw( menuframework_s* menu )
 		itemptr = ( menucommon_s* )menu->items[i];
 
 		if( itemptr->flags & QMF_HIDDEN )
+		{
 			continue;
+		}
 
 		if( itemptr->ownerdraw )
 		{
@@ -1601,7 +1719,9 @@ void Menu_Draw( menuframework_s* menu )
 
 	itemptr = Menu_ItemAtCursor( menu );
 	if( itemptr && itemptr->statusbar )
+	{
 		itemptr->statusbar( ( void* )itemptr );
+	}
 }
 
 /*
@@ -1612,7 +1732,9 @@ Menu_ItemAtCursor
 void* Menu_ItemAtCursor( menuframework_s* m )
 {
 	if( m->cursor < 0 || m->cursor >= m->nitems )
+	{
 		return 0;
+	}
 
 	return m->items[m->cursor];
 }
@@ -1657,7 +1779,9 @@ sfxHandle_t Menu_DefaultKey( menuframework_s* m, int key )
 	}
 
 	if( !m || !m->nitems )
+	{
 		return 0;
+	}
 
 	// route key stimulus to widget
 	item = Menu_ItemAtCursor( m );
@@ -1736,7 +1860,9 @@ sfxHandle_t Menu_DefaultKey( menuframework_s* m, int key )
 		case K_MOUSE3:
 			if( item )
 				if( ( item->flags & QMF_HASMOUSEFOCUS ) && !( item->flags & ( QMF_GRAYED | QMF_INACTIVE ) ) )
+				{
 					return ( Menu_ActivateItem( m, item ) );
+				}
 			break;
 
 		case K_JOY1:
@@ -1763,7 +1889,9 @@ sfxHandle_t Menu_DefaultKey( menuframework_s* m, int key )
 		case K_ENTER:
 			if( item )
 				if( !( item->flags & ( QMF_MOUSEONLY | QMF_GRAYED | QMF_INACTIVE ) ) )
+				{
 					return ( Menu_ActivateItem( m, item ) );
+				}
 			break;
 	}
 

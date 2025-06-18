@@ -62,7 +62,9 @@ int					   AAS_DropToFloor( vec3_t origin, vec3_t mins, vec3_t maxs )
 	end[2] -= 100;
 	trace = AAS_Trace( origin, mins, maxs, end, 0, CONTENTS_SOLID );
 	if( trace.startsolid )
+	{
 		return qfalse;
+	}
 	VectorCopy( trace.endpos, origin );
 	return qtrue;
 } // end of the function AAS_DropToFloor
@@ -153,13 +155,19 @@ int AAS_AgainstLadder( vec3_t origin )
 	} // end if
 	// if in solid... wrrr shouldn't happen
 	if( !areanum )
+	{
 		return qfalse;
+	}
 	// if not in a ladder area
 	if( !( aasworld.areasettings[areanum].areaflags & AREA_LADDER ) )
+	{
 		return qfalse;
+	}
 	// if a crouch only area
 	if( !( aasworld.areasettings[areanum].presencetype & PRESENCE_NORMAL ) )
+	{
 		return qfalse;
+	}
 	//
 	area = &aasworld.areas[areanum];
 	for( i = 0; i < area->numfaces; i++ )
@@ -169,14 +177,18 @@ int AAS_AgainstLadder( vec3_t origin )
 		face	= &aasworld.faces[abs( facenum )];
 		// if the face isn't a ladder face
 		if( !( face->faceflags & FACE_LADDER ) )
+		{
 			continue;
+		}
 		// get the plane the face is in
 		plane = &aasworld.planes[face->planenum ^ side];
 		// if the origin is pretty close to the plane
 		if( abs( DotProduct( plane->normal, origin ) - plane->dist ) < 3 )
 		{
 			if( AAS_PointInsideFace( abs( facenum ), origin, 0.1f ) )
+			{
 				return qtrue;
+			}
 		} // end if
 	} // end for
 	return qfalse;
@@ -201,17 +213,25 @@ int AAS_OnGround( vec3_t origin, int presencetype, int passent )
 
 	// if in solid
 	if( trace.startsolid )
+	{
 		return qfalse;
+	}
 	// if nothing hit at all
 	if( trace.fraction >= 1.0 )
+	{
 		return qfalse;
+	}
 	// if too far from the hit plane
 	if( origin[2] - trace.endpos[2] > 10 )
+	{
 		return qfalse;
+	}
 	// check if the plane isn't too steep
 	plane = AAS_PlaneFromNum( trace.planenum );
 	if( DotProduct( plane->normal, up ) < aassettings.phys_maxsteepness )
+	{
 		return qfalse;
+	}
 	// the bot is on the ground
 	return qtrue;
 } // end of the function AAS_OnGround
@@ -229,7 +249,9 @@ int AAS_Swimming( vec3_t origin )
 	VectorCopy( origin, testorg );
 	testorg[2] -= 2;
 	if( AAS_PointContents( testorg ) & ( CONTENTS_LAVA | CONTENTS_SLIME | CONTENTS_WATER ) )
+	{
 		return qtrue;
+	}
 	return qfalse;
 } // end of the function AAS_Swimming
 //===========================================================================
@@ -326,7 +348,9 @@ float AAS_WeaponJumpZVelocity( vec3_t origin, float radiusdamage )
 	//
 	points = radiusdamage - 0.5 * VectorLength( v );
 	if( points < 0 )
+	{
 		points = 0;
+	}
 	// the owner of the rocket gets half the damage
 	points *= 0.5;
 	// mass of the bot (p_client.c: PutClientInServer)
@@ -423,7 +447,9 @@ void AAS_ApplyFriction( vec3_t vel, float friction, float stopspeed, float frame
 		control	 = speed < stopspeed ? stopspeed : speed;
 		newspeed = speed - frametime * control * friction;
 		if( newspeed < 0 )
+		{
 			newspeed = 0;
+		}
 		newspeed /= speed;
 		vel[0] *= newspeed;
 		vel[1] *= newspeed;
@@ -450,9 +476,13 @@ int AAS_ClipToBBox( aas_trace_t* trace, vec3_t start, vec3_t end, int presencety
 	for( i = 0; i < 3; i++ )
 	{
 		if( start[i] < absmins[i] && end[i] < absmins[i] )
+		{
 			return qfalse;
+		}
 		if( start[i] > absmaxs[i] && end[i] > absmaxs[i] )
+		{
 			return qfalse;
+		}
 	} // end for
 	// check bounding box collision
 	VectorSubtract( end, start, dir );
@@ -461,9 +491,13 @@ int AAS_ClipToBBox( aas_trace_t* trace, vec3_t start, vec3_t end, int presencety
 	{
 		// get plane to test collision with for the current axis direction
 		if( dir[i] > 0 )
+		{
 			planedist = absmins[i];
+		}
 		else
+		{
 			planedist = absmaxs[i];
+		}
 		// calculate collision fraction
 		front = start[i] - planedist;
 		back  = end[i] - planedist;
@@ -471,14 +505,18 @@ int AAS_ClipToBBox( aas_trace_t* trace, vec3_t start, vec3_t end, int presencety
 		// check if between bounding planes of next axis
 		side = i + 1;
 		if( side > 2 )
+		{
 			side = 0;
+		}
 		mid[side] = start[side] + dir[side] * frac;
 		if( mid[side] > absmins[side] && mid[side] < absmaxs[side] )
 		{
 			// check if between bounding planes of next axis
 			side++;
 			if( side > 2 )
+			{
 				side = 0;
+			}
 			mid[side] = start[side] + dir[side] * frac;
 			if( mid[side] > absmins[side] && mid[side] < absmaxs[side] )
 			{
@@ -498,7 +536,9 @@ int AAS_ClipToBBox( aas_trace_t* trace, vec3_t start, vec3_t end, int presencety
 		trace->lastarea	  = 0;
 		// trace endpos
 		for( j = 0; j < 3; j++ )
+		{
 			trace->endpos[j] = start[j] + dir[j] * frac;
+		}
 		return qtrue;
 	} // end if
 	return qfalse;
@@ -554,7 +594,9 @@ int AAS_ClientMovementPrediction( struct aas_clientmove_s* move,
 	aas_trace_t	 trace, steptrace;
 
 	if( frametime <= 0 )
+	{
 		frametime = 0.1f;
+	}
 	//
 	phys_friction		   = aassettings.phys_friction;
 	phys_stopspeed		   = aassettings.phys_stopspeed;
@@ -640,7 +682,9 @@ int AAS_ClientMovementPrediction( struct aas_clientmove_s* move,
 			//
 			wishspeed = VectorNormalize( wishdir );
 			if( wishspeed > maxvel )
+			{
 				wishspeed = maxvel;
+			}
 			VectorScale( frame_test_vel, 1 / frametime, frame_test_vel );
 			AAS_Accelerate( frame_test_vel, frametime, wishdir, wishspeed, accelerate );
 			VectorScale( frame_test_vel, frametime, frame_test_vel );
@@ -684,10 +728,12 @@ int AAS_ClientMovementPrediction( struct aas_clientmove_s* move,
 			if( visualize )
 			{
 				if( trace.startsolid )
+				{
 					botimport.Print( PRT_MESSAGE, "PredictMovement: start solid\n" );
+				}
 				AAS_DebugLine( org, trace.endpos, LINECOLOR_RED );
 			} // end if
-			  // #endif //AAS_MOVE_DEBUG
+			// #endif //AAS_MOVE_DEBUG
 			//
 			if( stopevent & ( SE_ENTERAREA | SE_TOUCHJUMPPAD | SE_TOUCHTELEPORTER | SE_TOUCHCLUSTERPORTAL ) )
 			{
@@ -836,7 +882,7 @@ int AAS_ClientMovementPrediction( struct aas_clientmove_s* move,
 									AAS_DebugLine( org, start, LINECOLOR_BLUE );
 								} // end if
 							} // end if
-							  // #endif //AAS_MOVE_DEBUG
+							// #endif //AAS_MOVE_DEBUG
 							org[2] = steptrace.endpos[2];
 							step   = qtrue;
 						} // end if
@@ -874,7 +920,9 @@ int AAS_ClientMovementPrediction( struct aas_clientmove_s* move,
 							delta = delta * 10;
 							delta = delta * delta * 0.0001;
 							if( swimming )
+							{
 								delta = 0;
+							}
 							// never take falling damage if completely underwater
 							/*
 							if (ent->waterlevel == 3) return;
@@ -900,7 +948,9 @@ int AAS_ClientMovementPrediction( struct aas_clientmove_s* move,
 			} // end if
 			// extra check to prevent endless loop
 			if( ++j > 20 )
+			{
 				return qfalse;
+			}
 			// while there is a plane hit
 		} while( trace.fraction < 1.0 );
 		// if going down
@@ -913,19 +963,31 @@ int AAS_ClientMovementPrediction( struct aas_clientmove_s* move,
 			// get event from pc
 			event = SE_NONE;
 			if( pc & CONTENTS_LAVA )
+			{
 				event |= SE_ENTERLAVA;
+			}
 			if( pc & CONTENTS_SLIME )
+			{
 				event |= SE_ENTERSLIME;
+			}
 			if( pc & CONTENTS_WATER )
+			{
 				event |= SE_ENTERWATER;
+			}
 			//
 			areanum = AAS_PointAreaNum( org );
 			if( aasworld.areasettings[areanum].contents & AREACONTENTS_LAVA )
+			{
 				event |= SE_ENTERLAVA;
+			}
 			if( aasworld.areasettings[areanum].contents & AREACONTENTS_SLIME )
+			{
 				event |= SE_ENTERSLIME;
+			}
 			if( aasworld.areasettings[areanum].contents & AREACONTENTS_WATER )
+			{
 				event |= SE_ENTERWATER;
+			}
 			// if in lava or slime
 			if( event & stopevent )
 			{
@@ -1073,7 +1135,9 @@ void AAS_TestMovementPrediction( int entnum, vec3_t origin, vec3_t dir )
 
 	VectorClear( velocity );
 	if( !AAS_Swimming( origin ) )
+	{
 		dir[2] = 0;
+	}
 	VectorNormalize( dir );
 	VectorScale( dir, 400, cmdmove );
 	cmdmove[2] = 224;

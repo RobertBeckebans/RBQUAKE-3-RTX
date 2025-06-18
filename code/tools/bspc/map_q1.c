@@ -40,20 +40,32 @@ int q1_numclipbrushes;
 int Q1_TextureContents( char* name )
 {
 	if( !Q_strcasecmp( name, "clip" ) )
+	{
 		return CONTENTS_SOLID;
+	}
 	if( name[0] == '*' )
 	{
 		if( !Q_strncasecmp( name + 1, "lava", 4 ) )
+		{
 			return CONTENTS_LAVA;
+		}
 		else if( !Q_strncasecmp( name + 1, "slime", 5 ) )
+		{
 			return CONTENTS_SLIME;
+		}
 		else
+		{
 			return CONTENTS_WATER;
+		}
 	} // end if
 	else if( !Q_strncasecmp( name, "sky", 3 ) )
+	{
 		return CONTENTS_SOLID;
+	}
 	else
+	{
 		return CONTENTS_SOLID;
+	}
 } // end of the function Q1_TextureContents
 //===========================================================================
 // Generates two new brushes, leaving the original
@@ -84,25 +96,33 @@ void Q1_SplitBrush( bspbrush_t* brush, int planenum, int nodenum, bspbrush_t** f
 	{
 		w = brush->sides[i].winding;
 		if( !w )
+		{
 			continue;
+		}
 		for( j = 0; j < w->numpoints; j++ )
 		{
 			d = DotProduct( w->p[j], plane->normal ) - plane->dist;
 			if( d > 0 && d > d_front )
+			{
 				d_front = d;
+			}
 			if( d < 0 && d < d_back )
+			{
 				d_back = d;
+			}
 		} // end for
 	} // end for
 
 	if( d_front < 0.1 ) // PLANESIDE_EPSILON)
-	{					// only on back
+	{
+		// only on back
 		*back = CopyBrush( brush );
 		Log_Print( "Q1_SplitBrush: only on back\n" );
 		return;
 	} // end if
 	if( d_back > -0.1 ) // PLANESIDE_EPSILON)
-	{					// only on front
+	{
+		// only on front
 		*front = CopyBrush( brush );
 		Log_Print( "Q1_SplitBrush: only on front\n" );
 		return;
@@ -118,15 +138,20 @@ void Q1_SplitBrush( bspbrush_t* brush, int planenum, int nodenum, bspbrush_t** f
 	} // end for
 
 	if( !w || WindingIsTiny( w ) )
-	{ // the brush isn't really split
+	{
+		// the brush isn't really split
 		int side;
 
 		Log_Print( "Q1_SplitBrush: no split winding\n" );
 		side = BrushMostlyOnSide( brush, plane );
 		if( side == PSIDE_FRONT )
+		{
 			*front = CopyBrush( brush );
+		}
 		if( side == PSIDE_BACK )
+		{
 			*back = CopyBrush( brush );
+		}
 		return;
 	}
 
@@ -152,16 +177,20 @@ void Q1_SplitBrush( bspbrush_t* brush, int planenum, int nodenum, bspbrush_t** f
 		s = &brush->sides[i];
 		w = s->winding;
 		if( !w )
+		{
 			continue;
+		}
 		ClipWindingEpsilon( w, plane->normal, plane->dist, 0 /*PLANESIDE_EPSILON*/, &cw[0], &cw[1] );
 		for( j = 0; j < 2; j++ )
 		{
 			if( !cw[j] )
-				continue;
-#if 0
-			if (WindingIsTiny (cw[j]))
 			{
-				FreeWinding (cw[j]);
+				continue;
+			}
+#if 0
+			if( WindingIsTiny( cw[j] ) )
+			{
+				FreeWinding( cw[j] );
 				continue;
 			}
 #endif
@@ -202,9 +231,13 @@ void Q1_SplitBrush( bspbrush_t* brush, int planenum, int nodenum, bspbrush_t** f
 	if( !( b[0] && b[1] ) )
 	{
 		if( !b[0] && !b[1] )
+		{
 			Log_Print( "Q1_SplitBrush: split removed brush\n" );
+		}
 		else
+		{
 			Log_Print( "Q1_SplitBrush: split not on both sides\n" );
+		}
 		if( b[0] )
 		{
 			FreeBrush( b[0] );
@@ -233,9 +266,13 @@ void Q1_SplitBrush( bspbrush_t* brush, int planenum, int nodenum, bspbrush_t** f
 		cs->flags &= ~SFL_TESTED;
 		cs->flags &= ~SFL_TEXTURED;
 		if( i == 0 )
+		{
 			cs->winding = CopyWinding( midwinding );
+		}
 		else
+		{
 			cs->winding = midwinding;
+		}
 	} // end for
 
 	{
@@ -306,9 +343,13 @@ int Q1_SolidTree_r( int nodenum )
 		return false;
 	} // end if
 	if( !Q1_SolidTree_r( q1_dnodes[nodenum].children[0] ) )
+	{
 		return false;
+	}
 	if( !Q1_SolidTree_r( q1_dnodes[nodenum].children[1] ) )
+	{
 		return false;
+	}
 	return true;
 } // end of the function Q1_SolidTree_r
 //===========================================================================
@@ -410,9 +451,13 @@ bspbrush_t* Q1_CreateBrushes_r( bspbrush_t* brush, int nodenum )
 	} // end if
 	// create brushes recursively
 	if( front )
+	{
 		front = Q1_CreateBrushes_r( front, q1_dnodes[nodenum].children[0] );
+	}
 	if( back )
+	{
 		back = Q1_CreateBrushes_r( back, q1_dnodes[nodenum].children[1] );
+	}
 	// link the brushes if possible and return them
 	if( front )
 	{
@@ -497,9 +542,13 @@ q1_dleaf_t* Q1_PointInLeaf( int startnode, vec3_t point )
 		plane = &q1_dplanes[node->planenum];
 		dist  = DotProduct( point, plane->normal ) - plane->dist;
 		if( dist > 0 )
+		{
 			nodenum = node->children[0];
+		}
 		else
+		{
 			nodenum = node->children[1];
+		}
 	} // end while
 
 	return &q1_dleafs[-nodenum - 1];
@@ -572,16 +621,22 @@ bspbrush_t* Q1_MergeBrushes( bspbrush_t* brushlist, int modelnum )
 	bspbrush_t* lastb2;
 
 	if( !brushlist )
+	{
 		return NULL;
+	}
 
 	if( !modelnum )
+	{
 		qprintf( "%5d brushes merged", nummerges = 0 );
+	}
 	do
 	{
 		for( tail = brushlist; tail; tail = tail->next )
 		{
 			if( !tail->next )
+			{
 				break;
+			}
 		} // end for
 		merged		 = 0;
 		newbrushlist = NULL;
@@ -592,9 +647,13 @@ bspbrush_t* Q1_MergeBrushes( bspbrush_t* brushlist, int modelnum )
 			{
 				// can't merge brushes with different contents
 				if( b1->side != b2->side )
+				{
 					newbrush = NULL;
+				}
 				else
+				{
 					newbrush = TryMergeBrushes( b1, b2 );
+				}
 				// if a merged brush is created
 				if( newbrush )
 				{
@@ -613,11 +672,15 @@ bspbrush_t* Q1_MergeBrushes( bspbrush_t* brushlist, int modelnum )
 					for( tail = brushlist; tail; tail = tail->next )
 					{
 						if( !tail->next )
+						{
 							break;
+						}
 					} // end for
 					merged++;
 					if( !modelnum )
+					{
 						qprintf( "\r%5d", nummerges++ );
+					}
 					break;
 				} // end if
 				lastb2 = b2;
@@ -634,7 +697,9 @@ bspbrush_t* Q1_MergeBrushes( bspbrush_t* brushlist, int modelnum )
 		brushlist = newbrushlist;
 	} while( merged );
 	if( !modelnum )
+	{
 		qprintf( "\n" );
+	}
 	return newbrushlist;
 } // end of the function Q1_MergeBrushes
 //===========================================================================
@@ -779,14 +844,20 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 	vec_t			  defaultvec[4] = { 1, 0, 0, 0 };
 
 	if( !modelnum )
+	{
 		qprintf( "texturing brushes\n" );
+	}
 	if( !modelnum )
+	{
 		qprintf( "%5d brushes", numbrushes = 0 );
+	}
 	// get a pointer to the last brush in the list
 	for( brushlistend = brushlist; brushlistend; brushlistend = brushlistend->next )
 	{
 		if( !brushlistend->next )
+		{
 			break;
+		}
 	} // end for
 	// there's no previous brush when at the start of the list
 	prevbrush = NULL;
@@ -800,7 +871,9 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 			side = &brush->sides[sn];
 			//
 			if( side->flags & SFL_TEXTURED )
+			{
 				continue;
+			}
 			// number of the node that created this brush side
 			sidenodenum = side->surf; // see midwinding in Q1_SplitBrush
 			// no face found yet
@@ -833,9 +906,13 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 								{
 									// remove the current brush from the list
 									if( prevbrush )
+									{
 										prevbrush->next = brush->next;
+									}
 									else
+									{
 										brushlist = brush->next;
+									}
 									if( brushlistend == brush )
 									{
 										brushlistend = prevbrush;
@@ -843,9 +920,13 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 									} // end if
 									// add the new brushes to the end of the list
 									if( brushlistend )
+									{
 										brushlistend->next = newbrushes;
+									}
 									else
+									{
 										brushlist = newbrushes;
+									}
 									// free the current brush
 									FreeBrush( brush );
 									// don't forget about the prevbrush pointer at the bottom of
@@ -855,7 +936,9 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 									for( brushlistend = brushlist; brushlistend; brushlistend = brushlistend->next )
 									{
 										if( !brushlistend->next )
+										{
 											break;
+										}
 									} // end for
 									break;
 								} // end if
@@ -875,7 +958,9 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 				// if the brush was split the original brush is removed
 				// and we just continue with the next one in the list
 				if( i < q1_numfaces )
+				{
 					break;
+				}
 			} // end if
 			else
 			{
@@ -911,9 +996,13 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 				// make sure the two vectors aren't of zero length otherwise use the default
 				// vector to prevent a divide by zero in the map writing
 				if( VectorLength( map_texinfo[texinfonum].vecs[0] ) < 0.01 )
+				{
 					memcpy( map_texinfo[texinfonum].vecs[0], defaultvec, sizeof( defaultvec ) );
+				}
 				if( VectorLength( map_texinfo[texinfonum].vecs[1] ) < 0.01 )
+				{
 					memcpy( map_texinfo[texinfonum].vecs[1], defaultvec, sizeof( defaultvec ) );
+				}
 				//
 				map_texinfo[texinfonum].flags = q1_texinfo[texinfonum].flags;
 				map_texinfo[texinfonum].value = 0; // Q1 and HL texinfos don't have a value
@@ -933,7 +1022,9 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 				side->texinfo = texinfonum;
 				//
 				if( texinfonum > map_numtexinfo )
+				{
 					map_numtexinfo = texinfonum;
+				}
 				// this side is textured
 				side->flags |= SFL_TEXTURED;
 			} // end if
@@ -947,12 +1038,16 @@ bspbrush_t* Q1_TextureBrushes( bspbrush_t* brushlist, int modelnum )
 		} // end for
 		//
 		if( !modelnum && prevbrush != brush )
+		{
 			qprintf( "\r%5d", ++numbrushes );
+		}
 		// previous brush in the list
 		prevbrush = brush;
 	} // end for
 	if( !modelnum )
+	{
 		qprintf( "\n" );
+	}
 	// return the new list with brushes
 	return brushlist;
 } // end of the function Q1_TextureBrushes
@@ -971,13 +1066,17 @@ void Q1_FixContentsTextures( bspbrush_t* brushlist )
 	{
 		// only fix the textures of water, slime and lava brushes
 		if( brush->side != CONTENTS_WATER && brush->side != CONTENTS_SLIME && brush->side != CONTENTS_LAVA )
+		{
 			continue;
+		}
 		//
 		for( i = 0; i < brush->numsides; i++ )
 		{
 			texinfonum = brush->sides[i].texinfo;
 			if( Q1_TextureContents( map_texinfo[texinfonum].texture ) == brush->side )
+			{
 				break;
+			}
 		} // end for
 		// if no specific contents texture was found
 		if( i >= brush->numsides )
@@ -1002,12 +1101,14 @@ void Q1_FixContentsTextures( bspbrush_t* brushlist )
 			} // end for
 		} // end if
 		else
+		{
 			Log_Print( "brush contents %d with wrong textures\n", brush->side );
+		}
 		//
 	} // end for
 	/*
-  for (brush = brushlist; brush; brush = brush->next)
-  {
+	for (brush = brushlist; brush; brush = brush->next)
+	{
 	  //give all the brush sides this contents texture
 	  for (i = 0; i < brush->numsides; i++)
 	  {
@@ -1017,7 +1118,7 @@ void Q1_FixContentsTextures( bspbrush_t* brushlist )
 						  Q1_TextureContents(map_texinfo[texinfonum].texture));
 		  } //end if
 	  } //end for
-  } //end for*/
+	} //end for*/
 } // end of the function Q1_FixContentsTextures
 //===========================================================================
 //
@@ -1034,7 +1135,9 @@ void Q1_BSPBrushToMapBrush( bspbrush_t* bspbrush, entity_t* mapent )
 	CheckBSPBrush( bspbrush );
 
 	if( nummapbrushes >= MAX_MAPFILE_BRUSHES )
+	{
 		Error( "nummapbrushes == MAX_MAPFILE_BRUSHES" );
+	}
 
 	mapbrush				 = &mapbrushes[nummapbrushes];
 	mapbrush->original_sides = &brushsides[nummapbrushsides];
@@ -1047,10 +1150,14 @@ void Q1_BSPBrushToMapBrush( bspbrush_t* bspbrush, entity_t* mapent )
 	for( i = 0; i < bspbrush->numsides; i++ )
 	{
 		if( !bspbrush->sides[i].winding )
+		{
 			continue;
+		}
 		//
 		if( nummapbrushsides >= MAX_MAPFILE_BRUSHSIDES )
+		{
 			Error( "MAX_MAPFILE_BRUSHSIDES" );
+		}
 		side = &brushsides[nummapbrushsides];
 		// the contents of the bsp brush is stored in the side variable
 		side->contents = bspbrush->side;
@@ -1124,9 +1231,13 @@ void Q1_CreateMapBrushes( entity_t* mapent, int modelnum )
 	} // end if
 	//
 	if( !modelnum )
+	{
 		qprintf( "converting brushes to map brushes\n" );
+	}
 	if( !modelnum )
+	{
 		qprintf( "%5d brushes", i = 0 );
+	}
 	for( brush = brushlist; brush; brush = nextbrush )
 	{
 		nextbrush = brush->next;
@@ -1134,10 +1245,14 @@ void Q1_CreateMapBrushes( entity_t* mapent, int modelnum )
 		brush->next = NULL;
 		FreeBrush( brush );
 		if( !modelnum )
+		{
 			qprintf( "\r%5d", ++i );
+		}
 	} // end for
 	if( !modelnum )
+	{
 		qprintf( "\n" );
+	}
 } // end of the function Q1_CreateMapBrushes
 //===========================================================================
 //
@@ -1177,9 +1292,13 @@ void Q1_LoadMapFromBSP( char* filename, int offset, int length )
 	//
 	qprintf( "creating Quake1 brushes\n" );
 	if( lessbrushes )
+	{
 		qprintf( "creating minimum number of brushes\n" );
+	}
 	else
+	{
 		qprintf( "placing textures correctly\n" );
+	}
 	//
 	for( i = 0; i < num_entities; i++ )
 	{
@@ -1196,7 +1315,9 @@ void Q1_LoadMapFromBSP( char* filename, int offset, int length )
 			//
 			model = ValueForKey( &entities[i], "model" );
 			if( !model || *model != '*' )
+			{
 				continue;
+			}
 			model++;
 			modelnum = atoi( model );
 		} // end else

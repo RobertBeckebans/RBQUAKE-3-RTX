@@ -246,7 +246,9 @@ int FastChecksum( void* buffer, int bytes )
 	int checksum = 0;
 
 	while( bytes-- )
+	{
 		checksum = ( checksum << 4 ) ^ *( ( char* )buffer )++;
+	}
 
 	return checksum;
 }
@@ -270,14 +272,20 @@ int HL_CompressVis( byte* vis, byte* dest )
 	{
 		*dest_p++ = vis[j];
 		if( vis[j] )
+		{
 			continue;
+		}
 
 		rep = 1;
 		for( j++; j < visrow; j++ )
 			if( vis[j] || rep == 255 )
+			{
 				break;
+			}
 			else
+			{
 				rep++;
+			}
 		*dest_p++ = rep;
 		j--;
 	}
@@ -338,7 +346,9 @@ void HL_SwapBSPFile( qboolean todisk )
 		d = &hl_dmodels[i];
 
 		for( j = 0; j < HL_MAX_MAP_HULLS; j++ )
+		{
 			d->headnode[j] = LittleLong( d->headnode[j] );
+		}
 
 		d->visleafs	 = LittleLong( d->visleafs );
 		d->firstface = LittleLong( d->firstface );
@@ -358,7 +368,9 @@ void HL_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < hl_numvertexes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			hl_dvertexes[i].point[j] = LittleFloat( hl_dvertexes[i].point[j] );
+		}
 	}
 
 	//
@@ -367,7 +379,9 @@ void HL_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < hl_numplanes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			hl_dplanes[i].normal[j] = LittleFloat( hl_dplanes[i].normal[j] );
+		}
 		hl_dplanes[i].dist = LittleFloat( hl_dplanes[i].dist );
 		hl_dplanes[i].type = LittleLong( hl_dplanes[i].type );
 	}
@@ -378,7 +392,9 @@ void HL_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < hl_numtexinfo; i++ )
 	{
 		for( j = 0; j < 8; j++ )
+		{
 			hl_texinfo[i].vecs[0][j] = LittleFloat( hl_texinfo[i].vecs[0][j] );
+		}
 		hl_texinfo[i].miptex = LittleLong( hl_texinfo[i].miptex );
 		hl_texinfo[i].flags	 = LittleLong( hl_texinfo[i].flags );
 	}
@@ -447,25 +463,35 @@ void HL_SwapBSPFile( qboolean todisk )
 	{
 		mtl = ( hl_dmiptexlump_t* )hl_dtexdata;
 		if( todisk )
+		{
 			c = mtl->nummiptex;
+		}
 		else
+		{
 			c = LittleLong( mtl->nummiptex );
+		}
 		mtl->nummiptex = LittleLong( mtl->nummiptex );
 		for( i = 0; i < c; i++ )
+		{
 			mtl->dataofs[i] = LittleLong( mtl->dataofs[i] );
+		}
 	}
 
 	//
 	// marksurfaces
 	//
 	for( i = 0; i < hl_nummarksurfaces; i++ )
+	{
 		hl_dmarksurfaces[i] = LittleShort( hl_dmarksurfaces[i] );
+	}
 
 	//
 	// surfedges
 	//
 	for( i = 0; i < hl_numsurfedges; i++ )
+	{
 		hl_dsurfedges[i] = LittleLong( hl_dsurfedges[i] );
+	}
 
 	//
 	// edges
@@ -528,10 +554,14 @@ void HL_LoadBSPFile( char* filename, int offset, int length )
 
 	// swap the header
 	for( i = 0; i < sizeof( hl_dheader_t ) / 4; i++ )
+	{
 		( ( int* )hl_header )[i] = LittleLong( ( ( int* )hl_header )[i] );
+	}
 
 	if( hl_header->version != HL_BSPVERSION )
+	{
 		Error( "%s is version %i, not %i", filename, hl_header->version, HL_BSPVERSION );
+	}
 
 	hl_nummodels	   = HL_CopyLump( HL_LUMP_MODELS, hl_dmodels, sizeof( hl_dmodel_t ), HL_MAX_MAP_MODELS );
 	hl_numvertexes	   = HL_CopyLump( HL_LUMP_VERTEXES, hl_dvertexes, sizeof( hl_dvertex_t ), HL_MAX_MAP_VERTS );
@@ -642,13 +672,21 @@ ArrayUsage( char* szItem, int items, int maxitems, int itemsize )
 
 	qprintf( "%-12s  %7i/%-7i  %7i/%-7i  (%4.1f%%)", szItem, items, maxitems, items * itemsize, maxitems * itemsize, percentage );
 	if( percentage > 80.0 )
+	{
 		qprintf( "VERY FULL!\n" );
+	}
 	else if( percentage > 95.0 )
+	{
 		qprintf( "SIZE DANGER!\n" );
+	}
 	else if( percentage > 99.9 )
+	{
 		qprintf( "SIZE OVERFLOW!!!\n" );
+	}
 	else
+	{
 		qprintf( "\n" );
+	}
 	return items * itemsize;
 }
 
@@ -658,13 +696,21 @@ GlobUsage( char* szItem, int itemstorage, int maxstorage )
 
 	qprintf( "%-12s     [variable]    %7i/%-7i  (%4.1f%%)", szItem, itemstorage, maxstorage, percentage );
 	if( percentage > 80.0 )
+	{
 		qprintf( "VERY FULL!\n" );
+	}
 	else if( percentage > 95.0 )
+	{
 		qprintf( "SIZE DANGER!\n" );
+	}
 	else if( percentage > 99.9 )
+	{
 		qprintf( "SIZE OVERFLOW!!!\n" );
+	}
 	else
+	{
 		qprintf( "\n" );
+	}
 	return itemstorage;
 }
 
@@ -807,7 +853,9 @@ void HL_UnparseEntities()
 	{
 		ep = entities[i].epairs;
 		if( !ep )
+		{
 			continue; // ent got removed
+		}
 
 		strcat( end, "{\n" );
 		end += 2;
@@ -822,7 +870,9 @@ void HL_UnparseEntities()
 		end += 2;
 
 		if( end > buf + HL_MAX_MAP_ENTSTRING )
+		{
 			Error( "Entity text too long" );
+		}
 	}
 	hl_entdatasize = end - buf + 1;
 } // end of the function HL_UnparseEntities

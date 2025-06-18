@@ -178,7 +178,9 @@ void R_BoxSurfaces_r( mnode_t* node, vec3_t mins, vec3_t maxs, surfaceType_t** l
 	{
 		//
 		if( *listlength >= listsize )
+		{
 			break;
+		}
 		//
 		surf = *mark;
 		// check if the surface has NOIMPACT or NOMARKS set
@@ -202,7 +204,9 @@ void R_BoxSurfaces_r( mnode_t* node, vec3_t mins, vec3_t maxs, surfaceType_t** l
 			}
 		}
 		else if( *( surfaceType_t* )( surf->data ) != SF_GRID )
+		{
 			surf->viewCount = tr.viewCount;
+		}
 		// check the viewCount because the surface may have
 		// already been added if it spans multiple leafs
 		if( surf->viewCount != tr.viewCount )
@@ -332,7 +336,9 @@ int R_MarkFragments( int numPoints, const vec3_t* points, const vec3_t projectio
 	}
 
 	if( numPoints > MAX_VERTS_ON_POLY )
+	{
 		numPoints = MAX_VERTS_ON_POLY;
+	}
 	// create the bounding planes for the to be projected polygon
 	for( i = 0; i < numPoints; i++ )
 	{

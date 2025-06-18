@@ -48,7 +48,7 @@ typedef struct
 	int		 vislines; // in scanlines
 
 	int		 times[NUM_CON_TIMES]; // cls.realtime time the line was generated
-								   // for transparent notify lines
+	// for transparent notify lines
 	vec4_t	 color;
 } console_t;
 
@@ -203,9 +203,13 @@ void Con_Dump_f()
 		line = con.text + ( l % con.totallines ) * con.linewidth;
 		for( x = 0; x < con.linewidth; x++ )
 			if( ( line[x] & 0xff ) != ' ' )
+			{
 				break;
+			}
 		if( x != con.linewidth )
+		{
 			break;
+		}
 	}
 
 	// write the remaining lines
@@ -214,13 +218,19 @@ void Con_Dump_f()
 	{
 		line = con.text + ( l % con.totallines ) * con.linewidth;
 		for( i = 0; i < con.linewidth; i++ )
+		{
 			buffer[i] = line[i] & 0xff;
+		}
 		for( x = con.linewidth - 1; x >= 0; x-- )
 		{
 			if( buffer[x] == ' ' )
+			{
 				buffer[x] = 0;
+			}
 			else
+			{
 				break;
+			}
 		}
 		strcat( buffer, "\n" );
 		FS_Write( buffer, strlen( buffer ), f );
@@ -259,7 +269,9 @@ void Con_CheckResize()
 	width = ( SCREEN_WIDTH / SMALLCHAR_WIDTH ) - 2;
 
 	if( width == con.linewidth )
+	{
 		return;
+	}
 
 	if( width < 1 ) // video hasn't been initialized yet
 	{
@@ -268,7 +280,9 @@ void Con_CheckResize()
 		con.totallines = CON_TEXTSIZE / con.linewidth;
 		for( i = 0; i < CON_TEXTSIZE; i++ )
 
+		{
 			con.text[i] = ( ColorIndex( COLOR_WHITE ) << 8 ) | ' ';
+		}
 	}
 	else
 	{
@@ -279,17 +293,23 @@ void Con_CheckResize()
 		numlines	   = oldtotallines;
 
 		if( con.totallines < numlines )
+		{
 			numlines = con.totallines;
+		}
 
 		numchars = oldwidth;
 
 		if( con.linewidth < numchars )
+		{
 			numchars = con.linewidth;
+		}
 
 		Com_Memcpy( tbuf, con.text, CON_TEXTSIZE * sizeof( short ) );
 		for( i = 0; i < CON_TEXTSIZE; i++ )
 
+		{
 			con.text[i] = ( ColorIndex( COLOR_WHITE ) << 8 ) | ' ';
+		}
 
 		for( i = 0; i < numlines; i++ )
 		{
@@ -348,17 +368,25 @@ void Con_Linefeed( qboolean skipnotify )
 	if( con.current >= 0 )
 	{
 		if( skipnotify )
+		{
 			con.times[con.current % NUM_CON_TIMES] = 0;
+		}
 		else
+		{
 			con.times[con.current % NUM_CON_TIMES] = cls.realtime;
+		}
 	}
 
 	con.x = 0;
 	if( con.display == con.current )
+	{
 		con.display++;
+	}
 	con.current++;
 	for( i = 0; i < con.linewidth; i++ )
+	{
 		con.text[( con.current % con.totallines ) * con.linewidth + i] = ( ColorIndex( COLOR_WHITE ) << 8 ) | ' ';
+	}
 }
 
 /*
@@ -457,12 +485,16 @@ void CL_ConsolePrint( char* txt )
 		{
 			prev = con.current % NUM_CON_TIMES - 1;
 			if( prev < 0 )
+			{
 				prev = NUM_CON_TIMES - 1;
+			}
 			con.times[prev] = 0;
 		}
 		else
-			// -NERVE - SMF
+		// -NERVE - SMF
+		{
 			con.times[con.current % NUM_CON_TIMES] = cls.realtime;
+		}
 	}
 }
 
@@ -522,13 +554,19 @@ void Con_DrawNotify()
 	for( i = con.current - NUM_CON_TIMES + 1; i <= con.current; i++ )
 	{
 		if( i < 0 )
+		{
 			continue;
+		}
 		time = con.times[i % NUM_CON_TIMES];
 		if( time == 0 )
+		{
 			continue;
+		}
 		time = cls.realtime - time;
 		if( time > con_notifytime->value * 1000 )
+		{
 			continue;
+		}
 		text = con.text + ( i % con.totallines ) * con.linewidth;
 
 		if( cl.snap.ps.pm_type != PM_INTERMISSION && cls.keyCatchers & ( KEYCATCH_UI | KEYCATCH_CGAME ) )
@@ -600,10 +638,14 @@ void Con_DrawSolidConsole( float frac )
 
 	lines = cls.glconfig.vidHeight * frac;
 	if( lines <= 0 )
+	{
 		return;
+	}
 
 	if( lines > cls.glconfig.vidHeight )
+	{
 		lines = cls.glconfig.vidHeight;
+	}
 
 	// on wide screens, we will center the text
 	con.xadjust = 0;
@@ -652,7 +694,9 @@ void Con_DrawSolidConsole( float frac )
 		// draw arrows to show the buffer is backscrolled
 		re.SetColor( g_color_table[ColorIndex( COLOR_RED )] );
 		for( x = 0; x < con.linewidth; x += 4 )
+		{
 			SCR_DrawSmallChar( con.xadjust + ( x + 1 ) * SMALLCHAR_WIDTH, y, '^' );
+		}
 		y -= SMALLCHAR_HEIGHT;
 		rows--;
 	}
@@ -670,7 +714,9 @@ void Con_DrawSolidConsole( float frac )
 	for( i = 0; i < rows; i++, y -= SMALLCHAR_HEIGHT, row-- )
 	{
 		if( row < 0 )
+		{
 			break;
+		}
 		if( con.current - row >= con.totallines )
 		{
 			// past scrollback wrap point
@@ -748,22 +794,30 @@ void Con_RunConsole()
 {
 	// decide on the destination height of the console
 	if( cls.keyCatchers & KEYCATCH_CONSOLE )
+	{
 		con.finalFrac = 0.5; // half screen
+	}
 	else
+	{
 		con.finalFrac = 0; // none visible
+	}
 
 	// scroll towards the destination height
 	if( con.finalFrac < con.displayFrac )
 	{
 		con.displayFrac -= con_conspeed->value * cls.realFrametime * 0.001;
 		if( con.finalFrac > con.displayFrac )
+		{
 			con.displayFrac = con.finalFrac;
+		}
 	}
 	else if( con.finalFrac > con.displayFrac )
 	{
 		con.displayFrac += con_conspeed->value * cls.realFrametime * 0.001;
 		if( con.finalFrac < con.displayFrac )
+		{
 			con.displayFrac = con.finalFrac;
+		}
 	}
 }
 

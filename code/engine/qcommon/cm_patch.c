@@ -543,7 +543,9 @@ int CM_FindPlane2( float plane[4], int* flipped )
 	for( i = 0; i < numPlanes; i++ )
 	{
 		if( CM_PlaneEqual( &planes[i], plane, flipped ) )
+		{
 			return i;
+		}
 	}
 
 	// add a new plane
@@ -910,7 +912,9 @@ void CM_AddFacetBevels( facet_t* facet )
 	for( j = 0; j < facet->numBorders && w; j++ )
 	{
 		if( facet->borderPlanes[j] == facet->surfacePlane )
+		{
 			continue;
+		}
 		Vector4Copy( planes[facet->borderPlanes[j]].plane, plane );
 
 		if( !facet->borderInward[j] )
@@ -953,13 +957,17 @@ void CM_AddFacetBevels( facet_t* facet )
 			for( i = 0; i < facet->numBorders; i++ )
 			{
 				if( CM_PlaneEqual( &planes[facet->borderPlanes[i]], plane, &flipped ) )
+				{
 					break;
+				}
 			}
 
 			if( i == facet->numBorders )
 			{
 				if( facet->numBorders > 4 + 6 + 16 )
+				{
 					Com_Printf( "ERROR: too many bevels\n" );
+				}
 				facet->borderPlanes[facet->numBorders]	 = CM_FindPlane2( plane, &flipped );
 				facet->borderNoAdjust[facet->numBorders] = 0;
 				facet->borderInward[facet->numBorders]	 = flipped;
@@ -977,13 +985,19 @@ void CM_AddFacetBevels( facet_t* facet )
 		VectorSubtract( w->p[j], w->p[k], vec );
 		// if it's a degenerate edge
 		if( VectorNormalize( vec ) < 0.5 )
+		{
 			continue;
+		}
 		CM_SnapVector( vec );
 		for( k = 0; k < 3; k++ )
 			if( vec[k] == -1 || vec[k] == 1 )
+			{
 				break; // axial
+			}
 		if( k < 3 )
+		{
 			continue; // only test non-axial edges
+		}
 
 		// try the six possible slanted axials from this edge
 		for( axis = 0; axis < 3; axis++ )
@@ -995,7 +1009,9 @@ void CM_AddFacetBevels( facet_t* facet )
 				vec2[axis] = dir;
 				CrossProduct( vec, vec2, plane );
 				if( VectorNormalize( plane ) < 0.5 )
+				{
 					continue;
+				}
 				plane[3] = DotProduct( w->p[j], plane );
 
 				// if all the points of the facet winding are
@@ -1004,10 +1020,14 @@ void CM_AddFacetBevels( facet_t* facet )
 				{
 					d = DotProduct( w->p[l], plane ) - plane[3];
 					if( d > 0.1 )
+					{
 						break; // point in front
+					}
 				}
 				if( l < w->numpoints )
+				{
 					continue;
+				}
 
 				// if it's the surface plane
 				if( CM_PlaneEqual( &planes[facet->surfacePlane], plane, &flipped ) )
@@ -1026,13 +1046,17 @@ void CM_AddFacetBevels( facet_t* facet )
 				if( i == facet->numBorders )
 				{
 					if( facet->numBorders > 4 + 6 + 16 )
+					{
 						Com_Printf( "ERROR: too many bevels\n" );
+					}
 					facet->borderPlanes[facet->numBorders] = CM_FindPlane2( plane, &flipped );
 
 					for( k = 0; k < facet->numBorders; k++ )
 					{
 						if( facet->borderPlanes[facet->numBorders] == facet->borderPlanes[k] )
+						{
 							Com_Printf( "WARNING: bevel plane already used\n" );
+						}
 					}
 
 					facet->borderNoAdjust[facet->numBorders] = 0;
@@ -1523,7 +1547,8 @@ int CM_CheckFacetPlane( float* plane, vec3_t start, vec3_t end, float* enterFrac
 
 	// crosses face
 	if( d1 > d2 )
-	{ // enter
+	{
+		// enter
 		f = ( d1 - SURFACE_CLIP_EPSILON ) / ( d1 - d2 );
 		if( f < 0 )
 		{
@@ -1537,7 +1562,8 @@ int CM_CheckFacetPlane( float* plane, vec3_t start, vec3_t end, float* enterFrac
 		}
 	}
 	else
-	{ // leave
+	{
+		// leave
 		f = ( d1 + SURFACE_CLIP_EPSILON ) / ( d1 - d2 );
 		if( f > 1 )
 		{
@@ -1670,10 +1696,14 @@ void CM_TraceThroughPatchCollide( traceWork_t* tw, const struct patchCollide_s* 
 			}
 		}
 		if( j < facet->numBorders )
+		{
 			continue;
+		}
 		// never clip against the back side
 		if( hitnum == facet->numBorders - 1 )
+		{
 			continue;
+		}
 
 		if( enterFrac < leaveFrac && enterFrac >= 0 )
 		{
@@ -1908,9 +1938,13 @@ void CM_DrawDebugSurface( void ( *drawPoly )( int color, int numPoints, float* p
 			for( n = 0; n < 3; n++ )
 			{
 				if( plane[n] > 0 )
+				{
 					v1[n] = maxs[n];
+				}
 				else
+				{
 					v1[n] = mins[n];
+				}
 			} // end for
 			VectorNegate( plane, v2 );
 			plane[3] += fabs( DotProduct( v1, v2 ) );
@@ -1933,7 +1967,9 @@ void CM_DrawDebugSurface( void ( *drawPoly )( int color, int numPoints, float* p
 				}
 				//
 				if( curplanenum == planenum )
+				{
 					continue;
+				}
 
 				Vector4Copy( pc->planes[curplanenum].plane, plane );
 				if( !curinward )
@@ -1947,9 +1983,13 @@ void CM_DrawDebugSurface( void ( *drawPoly )( int color, int numPoints, float* p
 				for( n = 0; n < 3; n++ )
 				{
 					if( plane[n] > 0 )
+					{
 						v1[n] = maxs[n];
+					}
 					else
+					{
 						v1[n] = mins[n];
+					}
 				} // end for
 				VectorNegate( plane, v2 );
 				plane[3] -= fabs( DotProduct( v1, v2 ) );
@@ -1970,7 +2010,9 @@ void CM_DrawDebugSurface( void ( *drawPoly )( int color, int numPoints, float* p
 				FreeWinding( w );
 			}
 			else
+			{
 				Com_Printf( "winding chopped away by border planes\n" );
+			}
 		}
 	}
 

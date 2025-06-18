@@ -88,18 +88,18 @@ static void			   Signup_MenuEvent( void* ptr, int event )
 			// set name
 			// trap_Cvar_Set( "name", s_signup.name_box.field.buffer );
 			/*
-		trap_Cvar_Set( "rank_name", s_signup.name_box.field.buffer );
-		trap_Cvar_Set( "rank_pwd", s_signup.password_box.field.buffer );
-		*/
+			trap_Cvar_Set( "rank_name", s_signup.name_box.field.buffer );
+			trap_Cvar_Set( "rank_pwd", s_signup.password_box.field.buffer );
+			*/
 
 			// create account
 			/*
-		sprintf( cmd, "cmd rank_create \"%s\" \"%s\" \"%s\"\n",
+			sprintf( cmd, "cmd rank_create \"%s\" \"%s\" \"%s\"\n",
 			s_signup.name_box.field.buffer,
 			s_signup.password_box.field.buffer,
 			s_signup.email_box.field.buffer );
-		trap_Cmd_ExecuteText( EXEC_APPEND, cmd );
-		*/
+			trap_Cmd_ExecuteText( EXEC_APPEND, cmd );
+			*/
 			trap_CL_UI_RankUserCreate( s_signup.name_box.field.buffer, s_signup.password_box.field.buffer, s_signup.email_box.field.buffer );
 
 			UI_ForceMenuOff();

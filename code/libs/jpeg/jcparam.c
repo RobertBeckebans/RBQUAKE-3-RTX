@@ -19,7 +19,7 @@
  */
 
 GLOBAL void
-	jpeg_add_quant_table( j_compress_ptr cinfo, int which_tbl, const unsigned int* basic_table, int scale_factor, boolean force_baseline )
+jpeg_add_quant_table( j_compress_ptr cinfo, int which_tbl, const unsigned int* basic_table, int scale_factor, boolean force_baseline )
 /* Define a quantization table equal to the basic_table times
  * a scale factor (given as a percentage).
  * If force_baseline is TRUE, the computed quantization table entries
@@ -32,21 +32,31 @@ GLOBAL void
 
 	/* Safety check to ensure start_compress not called yet. */
 	if( cinfo->global_state != CSTATE_START )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 
 	if( *qtblptr == NULL )
+	{
 		*qtblptr = jpeg_alloc_quant_table( ( j_common_ptr )cinfo );
+	}
 
 	for( i = 0; i < DCTSIZE2; i++ )
 	{
 		temp = ( ( long )basic_table[ i ] * scale_factor + 50L ) / 100L;
 		/* limit the values to the valid range */
 		if( temp <= 0L )
+		{
 			temp = 1L;
+		}
 		if( temp > 32767L )
-			temp = 32767L; /* max quantizer needed for 12 bits */
+		{
+			temp = 32767L;    /* max quantizer needed for 12 bits */
+		}
 		if( force_baseline && temp > 255L )
-			temp = 255L; /* limit to baseline range if requested */
+		{
+			temp = 255L;    /* limit to baseline range if requested */
+		}
 		( *qtblptr )->quantval[ i ] = ( UINT16 )temp;
 	}
 
@@ -55,7 +65,7 @@ GLOBAL void
 }
 
 GLOBAL void
-	jpeg_set_linear_quality( j_compress_ptr cinfo, int scale_factor, boolean force_baseline )
+jpeg_set_linear_quality( j_compress_ptr cinfo, int scale_factor, boolean force_baseline )
 /* Set or change the 'quality' (quantization) setting, using default tables
  * and a straight percentage-scaling quality scale.  In most cases it's better
  * to use jpeg_set_quality (below); this entry point is provided for
@@ -63,14 +73,16 @@ GLOBAL void
  */
 {
 	/* This is the sample quantization table given in the JPEG spec section K.1,
-   * but expressed in zigzag order (as are all of our quant. tables).
-   * The spec says that the values given produce "good" quality, and
-   * when divided by 2, "very good" quality.
-   */
-	static const unsigned int std_luminance_quant_tbl[ DCTSIZE2 ] = {
+	* but expressed in zigzag order (as are all of our quant. tables).
+	* The spec says that the values given produce "good" quality, and
+	* when divided by 2, "very good" quality.
+	*/
+	static const unsigned int std_luminance_quant_tbl[ DCTSIZE2 ] =
+	{
 		16, 11, 12, 14, 12, 10, 16, 14, 13, 14, 18, 17, 16, 19, 24, 40, 26, 24, 22, 22, 24, 49, 35, 37, 29, 40, 58, 51, 61, 60, 57, 51, 56, 55, 64, 72, 92, 78, 64, 68, 87, 69, 55, 56, 80, 109, 81, 87, 95, 98, 103, 104, 103, 62, 77, 113, 121, 112, 100, 120, 92, 101, 103, 99
 	};
-	static const unsigned int std_chrominance_quant_tbl[ DCTSIZE2 ] = {
+	static const unsigned int std_chrominance_quant_tbl[ DCTSIZE2 ] =
+	{
 		17, 18, 18, 24, 21, 24, 47, 26, 26, 47, 99, 66, 56, 66, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99
 	};
 
@@ -80,7 +92,7 @@ GLOBAL void
 }
 
 GLOBAL int
-	jpeg_quality_scaling( int quality )
+jpeg_quality_scaling( int quality )
 /* Convert a user-specified quality rating to a percentage scaling factor
  * for an underlying quantization table, using our recommended scaling curve.
  * The input 'quality' factor should be 0 (terrible) to 100 (very good).
@@ -88,26 +100,34 @@ GLOBAL int
 {
 	/* Safety limit on quality factor.  Convert 0 to 1 to avoid zero divide. */
 	if( quality <= 0 )
+	{
 		quality = 1;
+	}
 	if( quality > 100 )
+	{
 		quality = 100;
+	}
 
 	/* The basic table is used as-is (scaling 100) for a quality of 50.
-   * Qualities 50..100 are converted to scaling percentage 200 - 2*Q;
-   * note that at Q=100 the scaling is 0, which will cause j_add_quant_table
-   * to make all the table entries 1 (hence, no quantization loss).
-   * Qualities 1..50 are converted to scaling percentage 5000/Q.
-   */
+	* Qualities 50..100 are converted to scaling percentage 200 - 2*Q;
+	* note that at Q=100 the scaling is 0, which will cause j_add_quant_table
+	* to make all the table entries 1 (hence, no quantization loss).
+	* Qualities 1..50 are converted to scaling percentage 5000/Q.
+	*/
 	if( quality < 50 )
+	{
 		quality = 5000 / quality;
+	}
 	else
+	{
 		quality = 200 - quality * 2;
+	}
 
 	return quality;
 }
 
 GLOBAL void
-	jpeg_set_quality( j_compress_ptr cinfo, int quality, boolean force_baseline )
+jpeg_set_quality( j_compress_ptr cinfo, int quality, boolean force_baseline )
 /* Set or change the 'quality' (quantization) setting, using default tables.
  * This is the standard quality-adjusting entry point for typical user
  * interfaces; only those who want detailed control over quantization tables
@@ -126,14 +146,16 @@ GLOBAL void
  */
 
 LOCAL void
-	add_huff_table( j_compress_ptr cinfo,
-		JHUFF_TBL**                htblptr,
-		const UINT8*               bits,
-		const UINT8*               val )
+add_huff_table( j_compress_ptr cinfo,
+				JHUFF_TBL**                htblptr,
+				const UINT8*               bits,
+				const UINT8*               val )
 /* Define a Huffman table */
 {
 	if( *htblptr == NULL )
+	{
 		*htblptr = jpeg_alloc_huff_table( ( j_common_ptr )cinfo );
+	}
 
 	MEMCOPY( ( *htblptr )->bits, bits, SIZEOF( ( *htblptr )->bits ) );
 	MEMCOPY( ( *htblptr )->huffval, val, SIZEOF( ( *htblptr )->huffval ) );
@@ -143,7 +165,7 @@ LOCAL void
 }
 
 LOCAL void
-	std_huff_tables( j_compress_ptr cinfo )
+std_huff_tables( j_compress_ptr cinfo )
 /* Set up the standard Huffman tables (cf. JPEG standard section K.3) */
 /* IMPORTANT: these are only valid for 8-bit data precision! */
 {
@@ -176,20 +198,24 @@ LOCAL void
  */
 
 GLOBAL void
-	jpeg_set_defaults( j_compress_ptr cinfo )
+jpeg_set_defaults( j_compress_ptr cinfo )
 {
 	int i;
 
 	/* Safety check to ensure start_compress not called yet. */
 	if( cinfo->global_state != CSTATE_START )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 
 	/* Allocate comp_info array large enough for maximum component count.
-   * Array is made permanent in case application wants to compress
-   * multiple images at same param settings.
-   */
+	* Array is made permanent in case application wants to compress
+	* multiple images at same param settings.
+	*/
 	if( cinfo->comp_info == NULL )
+	{
 		cinfo->comp_info = ( jpeg_component_info* )( *cinfo->mem->alloc_small )( ( j_common_ptr )cinfo, JPOOL_PERMANENT, MAX_COMPONENTS * SIZEOF( jpeg_component_info ) );
+	}
 
 	/* Initialize everything not dependent on the color space */
 
@@ -220,12 +246,14 @@ GLOBAL void
 	/* By default, don't do extra passes to optimize entropy coding */
 	cinfo->optimize_coding = FALSE;
 	/* The standard Huffman tables are only valid for 8-bit data precision.
-   * If the precision is higher, force optimization on so that usable
-   * tables will be computed.  This test can be removed if default tables
-   * are supplied that are valid for the desired precision.
-   */
+	* If the precision is higher, force optimization on so that usable
+	* tables will be computed.  This test can be removed if default tables
+	* are supplied that are valid for the desired precision.
+	*/
 	if( cinfo->data_precision > 8 )
+	{
 		cinfo->optimize_coding = TRUE;
+	}
 
 	/* By default, use the simpler non-cosited sampling alignment */
 	cinfo->CCIR601_sampling = FALSE;
@@ -241,8 +269,8 @@ GLOBAL void
 	cinfo->restart_in_rows  = 0;
 
 	/* Fill in default JFIF marker parameters.  Note that whether the marker
-   * will actually be written is determined by jpeg_set_colorspace.
-   */
+	* will actually be written is determined by jpeg_set_colorspace.
+	*/
 	cinfo->density_unit = 0; /* Pixel size is unknown by default */
 	cinfo->X_density    = 1; /* Pixel aspect ratio is square by default */
 	cinfo->Y_density    = 1;
@@ -257,7 +285,7 @@ GLOBAL void
  */
 
 GLOBAL void
-	jpeg_default_colorspace( j_compress_ptr cinfo )
+jpeg_default_colorspace( j_compress_ptr cinfo )
 {
 	switch( cinfo->in_color_space )
 	{
@@ -289,7 +317,7 @@ GLOBAL void
  */
 
 GLOBAL void
-	jpeg_set_colorspace( j_compress_ptr cinfo, J_COLOR_SPACE colorspace )
+jpeg_set_colorspace( j_compress_ptr cinfo, J_COLOR_SPACE colorspace )
 {
 	jpeg_component_info* compptr;
 	int                  ci;
@@ -305,11 +333,13 @@ GLOBAL void
 
 	/* Safety check to ensure start_compress not called yet. */
 	if( cinfo->global_state != CSTATE_START )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 
 	/* For all colorspaces, we use Q and Huff tables 0 for luminance components,
-   * tables 1 for chrominance components.
-   */
+	* tables 1 for chrominance components.
+	*/
 
 	cinfo->jpeg_color_space = colorspace;
 
@@ -359,7 +389,9 @@ GLOBAL void
 		case JCS_UNKNOWN:
 			cinfo->num_components = cinfo->input_components;
 			if( cinfo->num_components < 1 || cinfo->num_components > MAX_COMPONENTS )
+			{
 				ERREXIT2( cinfo, JERR_COMPONENT_COUNT, cinfo->num_components, MAX_COMPONENTS );
+			}
 			for( ci = 0; ci < cinfo->num_components; ci++ )
 			{
 				SET_COMP( ci, ci, 1, 1, 0, 0, 0 );
@@ -373,7 +405,7 @@ GLOBAL void
 #ifdef C_PROGRESSIVE_SUPPORTED
 
 LOCAL jpeg_scan_info*
-	  fill_a_scan( jpeg_scan_info* scanptr, int ci, int Ss, int Se, int Ah, int Al )
+fill_a_scan( jpeg_scan_info* scanptr, int ci, int Ss, int Se, int Ah, int Al )
 /* Support routine: generate one scan for specified component */
 {
 	scanptr->comps_in_scan        = 1;
@@ -387,7 +419,7 @@ LOCAL jpeg_scan_info*
 }
 
 LOCAL jpeg_scan_info*
-	  fill_scans( jpeg_scan_info* scanptr, int ncomps, int Ss, int Se, int Ah, int Al )
+fill_scans( jpeg_scan_info* scanptr, int ncomps, int Ss, int Se, int Ah, int Al )
 /* Support routine: generate one scan for each component */
 {
 	int ci;
@@ -406,7 +438,7 @@ LOCAL jpeg_scan_info*
 }
 
 LOCAL jpeg_scan_info*
-	  fill_dc_scans( jpeg_scan_info* scanptr, int ncomps, int Ah, int Al )
+fill_dc_scans( jpeg_scan_info* scanptr, int ncomps, int Ah, int Al )
 /* Support routine: generate interleaved DC scan if possible, else N scans */
 {
 	int ci;
@@ -416,7 +448,9 @@ LOCAL jpeg_scan_info*
 		/* Single interleaved DC scan */
 		scanptr->comps_in_scan = ncomps;
 		for( ci = 0; ci < ncomps; ci++ )
+		{
 			scanptr->component_index[ ci ] = ci;
+		}
 		scanptr->Ss = scanptr->Se = 0;
 		scanptr->Ah               = Ah;
 		scanptr->Al               = Al;
@@ -436,7 +470,7 @@ LOCAL jpeg_scan_info*
  */
 
 GLOBAL void
-	jpeg_simple_progression( j_compress_ptr cinfo )
+jpeg_simple_progression( j_compress_ptr cinfo )
 {
 	int             ncomps = cinfo->num_components;
 	int             nscans;
@@ -444,7 +478,9 @@ GLOBAL void
 
 	/* Safety check to ensure start_compress not called yet. */
 	if( cinfo->global_state != CSTATE_START )
+	{
 		ERREXIT1( cinfo, JERR_BAD_STATE, cinfo->global_state );
+	}
 
 	/* Figure space needed for script.  Calculation must match code below! */
 	if( ncomps == 3 && cinfo->jpeg_color_space == JCS_YCbCr )
@@ -456,9 +492,13 @@ GLOBAL void
 	{
 		/* All-purpose script for other color spaces. */
 		if( ncomps > MAX_COMPS_IN_SCAN )
-			nscans = 6 * ncomps; /* 2 DC + 4 AC scans per component */
+		{
+			nscans = 6 * ncomps;    /* 2 DC + 4 AC scans per component */
+		}
 		else
-			nscans = 2 + 4 * ncomps; /* 2 DC scans; 4 AC scans per component */
+		{
+			nscans = 2 + 4 * ncomps;    /* 2 DC scans; 4 AC scans per component */
+		}
 	}
 
 	/* Allocate space for script. */

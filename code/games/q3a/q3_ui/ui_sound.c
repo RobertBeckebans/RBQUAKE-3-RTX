@@ -124,17 +124,17 @@ static void				  UI_SoundOptionsMenu_Event( void* ptr, int event )
 			UI_ForceMenuOff();
 			trap_Cmd_ExecuteText( EXEC_APPEND, "snd_restart\n" );
 			break;
-			/*
-	case ID_A3D:
+		/*
+		case ID_A3D:
 		if( soundOptionsInfo.a3d.curvalue ) {
-			trap_Cmd_ExecuteText( EXEC_NOW, "s_enable_a3d\n" );
+		trap_Cmd_ExecuteText( EXEC_NOW, "s_enable_a3d\n" );
 		}
 		else {
-			trap_Cmd_ExecuteText( EXEC_NOW, "s_disable_a3d\n" );
+		trap_Cmd_ExecuteText( EXEC_NOW, "s_disable_a3d\n" );
 		}
 		soundOptionsInfo.a3d.curvalue = (int)trap_Cvar_VariableValue( "s_usingA3D" );
 		break;
-*/
+		*/
 		case ID_BACK:
 			UI_PopMenu();
 			break;
@@ -260,7 +260,7 @@ static void UI_SoundOptionsMenu_Init()
 	soundOptionsInfo.a3d.generic.id				= ID_A3D;
 	soundOptionsInfo.a3d.generic.x				= 400;
 	soundOptionsInfo.a3d.generic.y				= y;
-*/
+	*/
 	soundOptionsInfo.back.generic.type	   = MTYPE_BITMAP;
 	soundOptionsInfo.back.generic.name	   = ART_BACK0;
 	soundOptionsInfo.back.generic.flags	   = QMF_LEFT_JUSTIFY | QMF_PULSEIFFOCUS;

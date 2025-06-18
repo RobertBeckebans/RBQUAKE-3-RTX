@@ -176,7 +176,9 @@ void	   S_AdpcmEncode( short indata[], char outdata[], int len, struct adpcm_sta
 		diff = val - valpred;
 		sign = ( diff < 0 ) ? 8 : 0;
 		if( sign )
+		{
 			diff = ( -diff );
+		}
 
 		/* Step 2 - Divide and clamp */
 		/* Note:
@@ -212,24 +214,36 @@ void	   S_AdpcmEncode( short indata[], char outdata[], int len, struct adpcm_sta
 
 		/* Step 3 - Update previous value */
 		if( sign )
+		{
 			valpred -= vpdiff;
+		}
 		else
+		{
 			valpred += vpdiff;
+		}
 
 		/* Step 4 - Clamp previous value to 16 bits */
 		if( valpred > 32767 )
+		{
 			valpred = 32767;
+		}
 		else if( valpred < -32768 )
+		{
 			valpred = -32768;
+		}
 
 		/* Step 5 - Assemble value, update index and step values */
 		delta |= sign;
 
 		index += indexTable[delta];
 		if( index < 0 )
+		{
 			index = 0;
+		}
 		if( index > 88 )
+		{
 			index = 88;
+		}
 		step = stepsizeTable[index];
 
 		/* Step 6 - Output value */
@@ -246,7 +260,9 @@ void	   S_AdpcmEncode( short indata[], char outdata[], int len, struct adpcm_sta
 
 	/* Output last step, if needed */
 	if( !bufferstep )
+	{
 		*outp++ = outputbuffer;
+	}
 
 	state->sample = valpred;
 	state->index  = index;
@@ -291,9 +307,13 @@ void	   S_AdpcmEncode( short indata[], char outdata[], int len, struct adpcm_sta
 		/* Step 2 - Find new index value (for later) */
 		index += indexTable[delta];
 		if( index < 0 )
+		{
 			index = 0;
+		}
 		if( index > 88 )
+		{
 			index = 88;
+		}
 
 		/* Step 3 - Separate sign and magnitude */
 		sign  = delta & 8;
@@ -306,22 +326,36 @@ void	   S_AdpcmEncode( short indata[], char outdata[], int len, struct adpcm_sta
 		*/
 		vpdiff = step >> 3;
 		if( delta & 4 )
+		{
 			vpdiff += step;
+		}
 		if( delta & 2 )
+		{
 			vpdiff += step >> 1;
+		}
 		if( delta & 1 )
+		{
 			vpdiff += step >> 2;
+		}
 
 		if( sign )
+		{
 			valpred -= vpdiff;
+		}
 		else
+		{
 			valpred += vpdiff;
+		}
 
 		/* Step 5 - clamp output value */
 		if( valpred > 32767 )
+		{
 			valpred = 32767;
+		}
 		else if( valpred < -32768 )
+		{
 			valpred = -32768;
+		}
 
 		/* Step 6 - Update step value */
 		step = stepsizeTable[index];

@@ -195,7 +195,9 @@ void GL_RegisterWorldAreaLight( vec3_t normal, vec3_t mins, vec3_t maxs, int lig
 	{
 		float dist = Distance( light.origin_radius, worldLights[i].origin_radius );
 		if( dist < 75 )
+		{
 			return;
+		}
 	}
 
 	if( numWorldLights >= MAX_WORLD_LIGHTS )
@@ -241,7 +243,9 @@ void GL_BuildLightList( float x, float y, float z )
 	int numVisLights = 0;
 
 	if( sceneLights == NULL )
+	{
 		return;
+	}
 
 	memset( sceneLights, 0, sizeof( sceneLightInfo_t ) * MAX_DRAW_LIGHTS );
 

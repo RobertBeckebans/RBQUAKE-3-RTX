@@ -46,7 +46,9 @@ int			 FindMiptex( char* name )
 		} // end if
 	} // end for
 	if( nummiptex == MAX_MAP_TEXTURES )
+	{
 		Error( "MAX_MAP_TEXTURES" );
+	}
 	strcpy( textureref[i].name, name );
 
 	// load the miptex to get the flags and values
@@ -62,7 +64,9 @@ int			 FindMiptex( char* name )
 	nummiptex++;
 
 	if( textureref[i].animname[0] )
+	{
 		FindMiptex( textureref[i].animname );
+	}
 
 	return i;
 } // end of the function FindMipTex
@@ -134,7 +138,9 @@ int TexinfoForBrushTexture( plane_t* plane, brush_texture_t* bt, vec3_t origin )
 	int				mt;
 
 	if( !bt->name[0] )
+	{
 		return 0;
+	}
 
 	memset( &tx, 0, sizeof( tx ) );
 	strcpy( tx.texture, bt->name );
@@ -145,9 +151,13 @@ int TexinfoForBrushTexture( plane_t* plane, brush_texture_t* bt, vec3_t origin )
 	shift[1] = DotProduct( origin, vecs[1] );
 
 	if( !bt->scale[0] )
+	{
 		bt->scale[0] = 1;
+	}
 	if( !bt->scale[1] )
+	{
 		bt->scale[1] = 1;
+	}
 
 	// rotate axis
 	if( bt->rotate == 0 )
@@ -178,18 +188,30 @@ int TexinfoForBrushTexture( plane_t* plane, brush_texture_t* bt, vec3_t origin )
 	}
 
 	if( vecs[0][0] )
+	{
 		sv = 0;
+	}
 	else if( vecs[0][1] )
+	{
 		sv = 1;
+	}
 	else
+	{
 		sv = 2;
+	}
 
 	if( vecs[1][0] )
+	{
 		tv = 0;
+	}
 	else if( vecs[1][1] )
+	{
 		tv = 1;
+	}
 	else
+	{
 		tv = 2;
+	}
 
 	for( i = 0; i < 2; i++ )
 	{
@@ -201,7 +223,9 @@ int TexinfoForBrushTexture( plane_t* plane, brush_texture_t* bt, vec3_t origin )
 
 	for( i = 0; i < 2; i++ )
 		for( j = 0; j < 3; j++ )
+		{
 			tx.vecs[i][j] = vecs[i][j] / bt->scale[i];
+		}
 
 	tx.vecs[0][3] = bt->shift[0] + shift[0];
 	tx.vecs[1][3] = bt->shift[1] + shift[1];
@@ -215,17 +239,25 @@ int TexinfoForBrushTexture( plane_t* plane, brush_texture_t* bt, vec3_t origin )
 	for( i = 0; i < numtexinfo; i++, tc++ )
 	{
 		if( tc->flags != tx.flags )
+		{
 			continue;
+		}
 		if( tc->value != tx.value )
+		{
 			continue;
+		}
 		for( j = 0; j < 2; j++ )
 		{
 			if( strcmp( tc->texture, tx.texture ) )
+			{
 				goto skip;
+			}
 			for( k = 0; k < 4; k++ )
 			{
 				if( tc->vecs[j][k] != tx.vecs[j][k] )
+				{
 					goto skip;
+				}
 			}
 		}
 		return i;
@@ -243,7 +275,9 @@ int TexinfoForBrushTexture( plane_t* plane, brush_texture_t* bt, vec3_t origin )
 		tc->nexttexinfo = TexinfoForBrushTexture( plane, &anim, origin );
 	}
 	else
+	{
 		tc->nexttexinfo = -1;
+	}
 
 	return i;
 } // end of the function TexinfoForBrushTexture

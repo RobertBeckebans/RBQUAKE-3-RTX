@@ -67,7 +67,9 @@ portal_t* AllocPortal()
 void FreePortal( portal_t* p )
 {
 	if( p->winding )
+	{
 		FreeWinding( p->winding );
+	}
 	if( numthreads == 1 )
 	{
 		c_active_portals--;
@@ -89,7 +91,9 @@ int VisibleContents( int contents )
 
 	for( i = 1; i <= LAST_VISIBLE_CONTENTS; i <<= 1 )
 		if( contents & i )
+		{
 			return i;
+		}
 
 	return 0;
 } // end of the function VisibleContents
@@ -104,7 +108,9 @@ int ClusterContents( node_t* node )
 	int c1, c2, c;
 
 	if( node->planenum == PLANENUM_LEAF )
+	{
 		return node->contents;
+	}
 
 	c1 = ClusterContents( node->children[0] );
 	c2 = ClusterContents( node->children[1] );
@@ -113,7 +119,9 @@ int ClusterContents( node_t* node )
 	// a cluster may include some solid detail areas, but
 	// still be seen into
 	if( !( c1 & CONTENTS_SOLID ) || !( c2 & CONTENTS_SOLID ) )
+	{
 		c &= ~CONTENTS_SOLID;
+	}
 	return c;
 } // end of the function ClusterContents
 
@@ -132,27 +140,41 @@ qboolean Portal_VisFlood( portal_t* p )
 	int c1, c2;
 
 	if( !p->onnode )
+	{
 		return false; // to global outsideleaf
+	}
 
 	c1 = ClusterContents( p->nodes[0] );
 	c2 = ClusterContents( p->nodes[1] );
 
 	if( !VisibleContents( c1 ^ c2 ) )
+	{
 		return true;
+	}
 
 	if( c1 & ( CONTENTS_Q2TRANSLUCENT | CONTENTS_DETAIL ) )
+	{
 		c1 = 0;
+	}
 	if( c2 & ( CONTENTS_Q2TRANSLUCENT | CONTENTS_DETAIL ) )
+	{
 		c2 = 0;
+	}
 
 	if( ( c1 | c2 ) & CONTENTS_SOLID )
+	{
 		return false; // can't see through solid
+	}
 
 	if( !( c1 ^ c2 ) )
+	{
 		return true; // identical on both sides
+	}
 
 	if( !VisibleContents( c1 ^ c2 ) )
+	{
 		return true;
+	}
 	return false;
 } // end of the function Portal_VisFlood
 //===========================================================================
@@ -167,11 +189,15 @@ qboolean Portal_VisFlood( portal_t* p )
 qboolean Portal_EntityFlood( portal_t* p, int s )
 {
 	if( p->nodes[0]->planenum != PLANENUM_LEAF || p->nodes[1]->planenum != PLANENUM_LEAF )
+	{
 		Error( "Portal_EntityFlood: not a leaf" );
+	}
 
 	// can never cross to a solid
 	if( ( p->nodes[0]->contents & CONTENTS_SOLID ) || ( p->nodes[1]->contents & CONTENTS_SOLID ) )
+	{
 		return false;
+	}
 
 	// can flood through everything else
 	return true;
@@ -190,7 +216,9 @@ int	 c_tinyportals;
 void AddPortalToNodes( portal_t* p, node_t* front, node_t* back )
 {
 	if( p->nodes[0] || p->nodes[1] )
+	{
 		Error( "AddPortalToNode: allready included" );
+	}
 
 	p->nodes[0]	   = front;
 	p->next[0]	   = front->portals;
@@ -220,17 +248,27 @@ void RemovePortalFromNode( portal_t* portal, node_t* l )
 	{
 		t = *pp;
 		if( !t )
+		{
 			Error( "RemovePortalFromNode: portal not in leaf" );
+		}
 
 		if( t == portal )
+		{
 			break;
+		}
 
 		if( t->nodes[0] == l )
+		{
 			pp = &t->next[0];
+		}
 		else if( t->nodes[1] == l )
+		{
 			pp = &t->next[1];
+		}
 		else
+		{
 			Error( "RemovePortalFromNode: portal not bounding leaf" );
+		}
 	}
 
 	if( portal->nodes[0] == l )
@@ -247,14 +285,16 @@ void RemovePortalFromNode( portal_t* portal, node_t* l )
 	{
 		Error( "RemovePortalFromNode: mislinked portal" );
 	} // end else
-	  // #ifdef ME
+	// #ifdef ME
 	n = 0;
 	for( p = l->portals; p; p = p->next[s] )
 	{
 		for( i = 0; i < n; i++ )
 		{
 			if( p == portals[i] )
+			{
 				Error( "RemovePortalFromNode: circular linked\n" );
+			}
 		} // end for
 		if( p->nodes[0] != l && p->nodes[1] != l )
 		{
@@ -264,7 +304,7 @@ void RemovePortalFromNode( portal_t* portal, node_t* l )
 		s		   = ( p->nodes[1] == l );
 		//		if (++n >= 4096) Error("RemovePortalFromNode: more than 4096 portals\n");
 	} // end for
-	  // #endif
+	// #endif
 } // end of the function RemovePortalFromNode
 //===========================================================================
 //
@@ -279,7 +319,9 @@ void PrintPortal( portal_t* p )
 
 	w = p->winding;
 	for( i = 0; i < w->numpoints; i++ )
+	{
 		printf( "(%5.0f,%5.0f,%5.0f)\n", w->p[i][0], w->p[i][1], w->p[i][2] );
+	}
 } // end of the function PrintPortal
 //===========================================================================
 // The created portals will face the global outside_node
@@ -347,7 +389,9 @@ void MakeHeadnodePortals( tree_t* tree )
 		for( j = 0; j < 6; j++ )
 		{
 			if( j == i )
+			{
 				continue;
+			}
 			ChopWindingInPlace( &portals[i]->winding, bplanes[j].normal, bplanes[j].dist, ON_EPSILON );
 		} // end for
 	} // end for
@@ -377,11 +421,13 @@ winding_t* BaseWindingForNode( node_t* node )
 		plane = &mapplanes[n->planenum];
 
 		if( n->children[0] == node )
-		{ // take front
+		{
+			// take front
 			ChopWindingInPlace( &w, plane->normal, plane->dist, BASE_WINDING_EPSILON );
 		}
 		else
-		{ // take back
+		{
+			// take back
 			VectorSubtract( vec3_origin, plane->normal, normal );
 			dist = -plane->dist;
 			ChopWindingInPlace( &w, normal, dist, BASE_WINDING_EPSILON );
@@ -447,14 +493,14 @@ void	 MakeNodePortal( node_t* node )
 	} // end if
 
 #ifdef DEBUG
-/* //NOTE: don't use this winding ok check
-	// all the invalid windings only have a degenerate edge
-	if (WindingError(w))
-	{
-		Log_Print("MakeNodePortal: %s\n", WindingErrorString());
-		FreeWinding(w);
-		return;
-	} //end if*/
+	/* //NOTE: don't use this winding ok check
+		// all the invalid windings only have a degenerate edge
+		if (WindingError(w))
+		{
+			Log_Print("MakeNodePortal: %s\n", WindingErrorString());
+			FreeWinding(w);
+			return;
+		} //end if*/
 #endif // DEBUG
 
 	new_portal		  = AllocPortal();
@@ -491,11 +537,17 @@ void SplitNodePortals( node_t* node )
 	for( p = node->portals; p; p = next_portal )
 	{
 		if( p->nodes[0] == node )
+		{
 			side = 0;
+		}
 		else if( p->nodes[1] == node )
+		{
 			side = 1;
+		}
 		else
+		{
 			Error( "SplitNodePortals: mislinked portal" );
+		}
 		next_portal = p->next[side];
 
 		other_node = p->nodes[!side];
@@ -522,24 +574,25 @@ void SplitNodePortals( node_t* node )
 		} // end if
 
 #ifdef DEBUG
-/* 	//NOTE: don't use this winding ok check
-		// all the invalid windings only have a degenerate edge
-		if (frontwinding && WindingError(frontwinding))
-		{
-			Log_Print("SplitNodePortals: front %s\n", WindingErrorString());
-			FreeWinding(frontwinding);
-			frontwinding = NULL;
-		} //end if
-		if (backwinding && WindingError(backwinding))
-		{
-			Log_Print("SplitNodePortals: back %s\n", WindingErrorString());
-			FreeWinding(backwinding);
-			backwinding = NULL;
-		} //end if*/
+		/* 	//NOTE: don't use this winding ok check
+				// all the invalid windings only have a degenerate edge
+				if (frontwinding && WindingError(frontwinding))
+				{
+					Log_Print("SplitNodePortals: front %s\n", WindingErrorString());
+					FreeWinding(frontwinding);
+					frontwinding = NULL;
+				} //end if
+				if (backwinding && WindingError(backwinding))
+				{
+					Log_Print("SplitNodePortals: back %s\n", WindingErrorString());
+					FreeWinding(backwinding);
+					backwinding = NULL;
+				} //end if*/
 #endif // DEBUG
 
 		if( !frontwinding && !backwinding )
-		{ // tiny windings on both sides
+		{
+			// tiny windings on both sides
 			continue;
 		}
 
@@ -547,18 +600,26 @@ void SplitNodePortals( node_t* node )
 		{
 			FreeWinding( backwinding );
 			if( side == 0 )
+			{
 				AddPortalToNodes( p, b, other_node );
+			}
 			else
+			{
 				AddPortalToNodes( p, other_node, b );
+			}
 			continue;
 		}
 		if( !backwinding )
 		{
 			FreeWinding( frontwinding );
 			if( side == 0 )
+			{
 				AddPortalToNodes( p, f, other_node );
+			}
 			else
+			{
 				AddPortalToNodes( p, other_node, f );
+			}
 			continue;
 		}
 
@@ -601,7 +662,9 @@ void CalcNodeBounds( node_t* node )
 	{
 		s = ( p->nodes[1] == node );
 		for( i = 0; i < p->winding->numpoints; i++ )
+		{
 			AddPointToBounds( p->winding->p[i], node->mins, node->maxs );
+		}
 	}
 } // end of the function CalcNodeBounds
 //===========================================================================
@@ -619,7 +682,9 @@ void MakeTreePortals_r( node_t* node )
 #ifdef ME
 	qprintf( "\r%6d", ++c_numportalizednodes );
 	if( cancelconversion )
+	{
 		return;
+	}
 #endif // ME
 
 	CalcNodeBounds( node );
@@ -637,7 +702,9 @@ void MakeTreePortals_r( node_t* node )
 		}
 	}
 	if( node->planenum == PLANENUM_LEAF )
+	{
 		return;
+	}
 
 	MakeNodePortal( node );
 	SplitNodePortals( node );
@@ -696,7 +763,9 @@ void P_AddNodeToList( node_t* node )
 	node->next	= p_firstnode;
 	p_firstnode = node;
 	if( !p_lastnode )
+	{
 		p_lastnode = node;
+	}
 } // end of the function P_AddNodeToList
 #else  // it's a node queue
 // add the node to the end of the node list
@@ -704,9 +773,13 @@ void P_AddNodeToList( node_t* node )
 {
 	node->next = NULL;
 	if( p_lastnode )
+	{
 		p_lastnode->next = node;
+	}
 	else
+	{
 		p_firstnode = node;
+	}
 	p_lastnode = node;
 } // end of the function P_AddNodeToList
 #endif // P_NODESTACK
@@ -723,9 +796,13 @@ node_t* P_NextNodeFromList()
 
 	node = p_firstnode;
 	if( p_firstnode )
+	{
 		p_firstnode = p_firstnode->next;
+	}
 	if( !p_firstnode )
+	{
 		p_lastnode = NULL;
+	}
 	return node;
 } // end of the function P_NextNodeFromList
 //===========================================================================
@@ -750,10 +827,14 @@ void FloodPortals( node_t* firstnode )
 			s = ( p->nodes[1] == node );
 			// if the node at the other side of the portal is occupied already
 			if( p->nodes[!s]->occupied )
+			{
 				continue;
+			}
 			// if it isn't possible to flood through this portal
 			if( !Portal_EntityFlood( p, s ) )
+			{
 				continue;
+			}
 			//
 			p->nodes[!s]->occupied = node->occupied + 1;
 			//
@@ -778,7 +859,9 @@ void FloodPortals_r( node_t* node, int dist )
 	Log_Print( "\r%6d", ++numrec );
 
 	if( node->occupied )
+	{
 		Error( "FloodPortals_r: node already occupied\n" );
+	}
 	if( !node )
 	{
 		Error( "FloodPortals_r: NULL node\n" );
@@ -790,10 +873,14 @@ void FloodPortals_r( node_t* node, int dist )
 		s = ( p->nodes[1] == node );
 		// if the node at the other side of the portal is occupied already
 		if( p->nodes[!s]->occupied )
+		{
 			continue;
+		}
 		// if it isn't possible to flood through this portal
 		if( !Portal_EntityFlood( p, s ) )
+		{
 			continue;
+		}
 		// flood recursively through the current portal
 		FloodPortals_r( p->nodes[!s], dist + 1 );
 	} // end for
@@ -822,9 +909,13 @@ qboolean PlaceOccupant( node_t* headnode, vec3_t origin, entity_t* occupant )
 		plane = &mapplanes[node->planenum];
 		d	  = DotProduct( origin, plane->normal ) - plane->dist;
 		if( d >= 0 )
+		{
 			node = node->children[0];
+		}
 		else
+		{
 			node = node->children[1];
+		}
 		if( !node )
 		{
 			Error( "PlaceOccupant: invalid child %d\n", d < 0 );
@@ -835,10 +926,14 @@ qboolean PlaceOccupant( node_t* headnode, vec3_t origin, entity_t* occupant )
 	// ME: replaced because in LeafNode in brushbsp.c
 	//     some nodes have contents solid with other contents
 	if( node->contents & CONTENTS_SOLID )
+	{
 		return false;
+	}
 	// if the node is already occupied
 	if( node->occupied )
+	{
 		return false;
+	}
 
 	// place the occupant in the first leaf
 	node->occupant = occupant;
@@ -877,7 +972,9 @@ qboolean FloodEntities( tree_t* tree )
 	{
 		GetVectorForKey( &entities[i], "origin", origin );
 		if( VectorCompare( origin, vec3_origin ) )
+		{
 			continue;
+		}
 
 		cl = ValueForKey( &entities[i], "classname" );
 		origin[2] += 1; // so objects on floor are ok
@@ -1021,7 +1118,9 @@ void FloodAreas_r( node_t* node )
 		// if the current area has allready touched this
 		// portal, we are done
 		if( e->portalareas[0] == c_areas || e->portalareas[1] == c_areas )
+		{
 			return;
+		}
 
 		// note the current area as bounding the portal
 		if( e->portalareas[1] )
@@ -1030,26 +1129,36 @@ void FloodAreas_r( node_t* node )
 			return;
 		}
 		if( e->portalareas[0] )
+		{
 			e->portalareas[1] = c_areas;
+		}
 		else
+		{
 			e->portalareas[0] = c_areas;
+		}
 
 		return;
 	} // end if
 
 	if( node->area )
+	{
 		return; // allready got it
+	}
 	node->area = c_areas;
 
 	for( p = node->portals; p; p = p->next[s] )
 	{
 		s = ( p->nodes[1] == node );
 #if 0
-		if (p->nodes[!s]->occupied)
+		if( p->nodes[!s]->occupied )
+		{
 			continue;
+		}
 #endif
 		if( !Portal_EntityFlood( p, s ) )
+		{
 			continue;
+		}
 
 		FloodAreas_r( p->nodes[!s] );
 	} // end for
@@ -1072,18 +1181,26 @@ void FindAreas_r( node_t* node )
 	}
 
 	if( node->area )
+	{
 		return; // allready got it
+	}
 
 	if( node->contents & CONTENTS_SOLID )
+	{
 		return;
+	}
 
 	if( !node->occupied )
+	{
 		return; // not reachable by entities
+	}
 
 	// area portals are allways only flooded into, never
 	// out of
 	if( node->contents == CONTENTS_AREAPORTAL )
+	{
 		return;
+	}
 
 	c_areas++;
 	FloodAreas_r( node );
@@ -1111,7 +1228,9 @@ void SetAreaPortalAreas_r( node_t* node )
 	if( node->contents == CONTENTS_AREAPORTAL )
 	{
 		if( node->area )
+		{
 			return; // allready set
+		}
 
 		b		   = node->brushlist;
 		e		   = &entities[b->original->entitynum];
@@ -1207,7 +1326,9 @@ void FindPortalSide( portal_t* p )
 	// solid > lava > water, etc
 	viscontents = VisibleContents( p->nodes[0]->contents ^ p->nodes[1]->contents );
 	if( !viscontents )
+	{
 		return;
+	}
 
 	planenum = p->onnode->planenum;
 	bestside = NULL;
@@ -1221,16 +1342,23 @@ void FindPortalSide( portal_t* p )
 		{
 			brush = bb->original;
 			if( !( brush->contents & viscontents ) )
+			{
 				continue;
+			}
 			for( i = 0; i < brush->numsides; i++ )
 			{
 				side = &brush->original_sides[i];
 				if( side->flags & SFL_BEVEL )
+				{
 					continue;
+				}
 				if( side->texinfo == TEXINFO_NODE )
+				{
 					continue; // non-visible
+				}
 				if( ( side->planenum & ~1 ) == planenum )
-				{ // exact match
+				{
+					// exact match
 					bestside = &brush->original_sides[i];
 					goto gotit;
 				} // end if
@@ -1248,7 +1376,9 @@ void FindPortalSide( portal_t* p )
 
 gotit:
 	if( !bestside )
+	{
 		Log_Print( "WARNING: side not found for portal\n" );
+	}
 
 	p->sidefound = true;
 	p->side		 = bestside;
@@ -1273,18 +1403,26 @@ void MarkVisibleSides_r( node_t* node )
 
 	// empty leaves are never boundary leaves
 	if( !node->contents )
+	{
 		return;
+	}
 
 	// see if there is a visible face
 	for( p = node->portals; p; p = p->next[!s] )
 	{
 		s = ( p->nodes[0] == node );
 		if( !p->onnode )
+		{
 			continue; // edge of world
+		}
 		if( !p->sidefound )
+		{
 			FindPortalSide( p );
+		}
 		if( p->side )
+		{
 			p->side->flags |= SFL_VISIBLE;
+		}
 	} // end for
 } // end of the function MarkVisibleSides_r
 //===========================================================================
@@ -1308,7 +1446,9 @@ void MarkVisibleSides( tree_t* tree, int startbrush, int endbrush )
 
 		numsides = mb->numsides;
 		for( j = 0; j < numsides; j++ )
+		{
 			mb->original_sides[j].flags &= ~SFL_VISIBLE;
+		}
 	}
 
 	// set visible flags on the sides that are used by portals

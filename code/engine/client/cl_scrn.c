@@ -62,10 +62,11 @@ void SCR_AdjustFrom640( float* x, float* y, float* w, float* h )
 	float yscale;
 
 #if 0
-		// adjust for wide screens
-		if ( cls.glconfig.vidWidth * 480 > cls.glconfig.vidHeight * 640 ) {
-			*x += 0.5 * ( cls.glconfig.vidWidth - ( cls.glconfig.vidHeight * 640 / 480 ) );
-		}
+	// adjust for wide screens
+	if( cls.glconfig.vidWidth * 480 > cls.glconfig.vidHeight * 640 )
+	{
+		*x += 0.5 * ( cls.glconfig.vidWidth - ( cls.glconfig.vidHeight * 640 / 480 ) );
+	}
 #endif
 
 	// scale for screen sizes
@@ -418,7 +419,9 @@ void SCR_DrawDebugGraph()
 		v	  = v * cl_graphscale->integer + cl_graphshift->integer;
 
 		if( v < 0 )
+		{
 			v += cl_graphheight->integer * ( 1 + ( int )( -v / cl_graphheight->integer ) );
+		}
 		h = ( int )v % cl_graphheight->integer;
 		re.DrawStretchPic( x + w - 1 - a, y - h, 1, h, 0, 0, 0, 0, cls.whiteShader );
 	}

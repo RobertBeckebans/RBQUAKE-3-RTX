@@ -103,71 +103,105 @@ extern qboolean	 forcesidesvisible;
 void			 Q3_FreeMaxBSP()
 {
 	if( q3_dmodels )
+	{
 		FreeMemory( q3_dmodels );
+	}
 	q3_dmodels	 = NULL;
 	q3_nummodels = 0;
 	if( q3_dshaders )
+	{
 		FreeMemory( q3_dshaders );
+	}
 	q3_dshaders	  = NULL;
 	q3_numShaders = 0;
 	if( q3_dentdata )
+	{
 		FreeMemory( q3_dentdata );
+	}
 	q3_dentdata	   = NULL;
 	q3_entdatasize = 0;
 	if( q3_dleafs )
+	{
 		FreeMemory( q3_dleafs );
+	}
 	q3_dleafs	= NULL;
 	q3_numleafs = 0;
 	if( q3_dplanes )
+	{
 		FreeMemory( q3_dplanes );
+	}
 	q3_dplanes	 = NULL;
 	q3_numplanes = 0;
 	if( q3_dnodes )
+	{
 		FreeMemory( q3_dnodes );
+	}
 	q3_dnodes	= NULL;
 	q3_numnodes = 0;
 	if( q3_dleafsurfaces )
+	{
 		FreeMemory( q3_dleafsurfaces );
+	}
 	q3_dleafsurfaces   = NULL;
 	q3_numleafsurfaces = 0;
 	if( q3_dleafbrushes )
+	{
 		FreeMemory( q3_dleafbrushes );
+	}
 	q3_dleafbrushes	  = NULL;
 	q3_numleafbrushes = 0;
 	if( q3_dbrushes )
+	{
 		FreeMemory( q3_dbrushes );
+	}
 	q3_dbrushes	  = NULL;
 	q3_numbrushes = 0;
 	if( q3_dbrushsides )
+	{
 		FreeMemory( q3_dbrushsides );
+	}
 	q3_dbrushsides	 = NULL;
 	q3_numbrushsides = 0;
 	if( q3_lightBytes )
+	{
 		FreeMemory( q3_lightBytes );
+	}
 	q3_lightBytes	 = NULL;
 	q3_numLightBytes = 0;
 	if( q3_gridData )
+	{
 		FreeMemory( q3_gridData );
+	}
 	q3_gridData		 = NULL;
 	q3_numGridPoints = 0;
 	if( q3_visBytes )
+	{
 		FreeMemory( q3_visBytes );
+	}
 	q3_visBytes	   = NULL;
 	q3_numVisBytes = 0;
 	if( q3_drawVerts )
+	{
 		FreeMemory( q3_drawVerts );
+	}
 	q3_drawVerts	= NULL;
 	q3_numDrawVerts = 0;
 	if( q3_drawIndexes )
+	{
 		FreeMemory( q3_drawIndexes );
+	}
 	q3_drawIndexes	  = NULL;
 	q3_numDrawIndexes = 0;
 	if( q3_drawSurfaces )
+	{
 		FreeMemory( q3_drawSurfaces );
+	}
 	q3_drawSurfaces	   = NULL;
 	q3_numDrawSurfaces = 0;
 	if( q3_dfogs )
+	{
 		FreeMemory( q3_dfogs );
+	}
 	q3_dfogs   = NULL;
 	q3_numFogs = 0;
 } // end of the function Q3_FreeMaxBSP
@@ -211,12 +245,14 @@ void Q3_SurfacePlane( q3_dsurface_t* surface, vec3_t normal, float* dist )
 		CrossProduct( t1, t2, normal );
 		VectorNormalize( normal );
 		if( VectorLength( normal ) )
+		{
 			break;
+		}
 	} // end for*/
 	/*
-  float dot;
-  for (i = 0; i < surface->numVerts; i++)
-  {
+	float dot;
+	for (i = 0; i < surface->numVerts; i++)
+	{
 	  p0 = q3_drawVerts[surface->firstVert + ((i) % surface->numVerts)].xyz;
 	  p1 = q3_drawVerts[surface->firstVert + ((i+1) % surface->numVerts)].xyz;
 	  p2 = q3_drawVerts[surface->firstVert + ((i+2) % surface->numVerts)].xyz;
@@ -227,10 +263,10 @@ void Q3_SurfacePlane( q3_dsurface_t* surface, vec3_t normal, float* dist )
 	  dot = DotProduct(t1, t2);
 	  if (dot > -0.9 && dot < 0.9 &&
 		  VectorLength(t1) > 0.1 && VectorLength(t2) > 0.1) break;
-  } //end for
-  CrossProduct(t1, t2, normal);
-  VectorNormalize(normal);
-*/
+	} //end for
+	CrossProduct(t1, t2, normal);
+	VectorNormalize(normal);
+	*/
 	if( VectorLength( normal ) < 0.9 )
 	{
 		printf( "surface %d bogus normal vector %f %f %f\n", surface - q3_drawSurfaces, normal[0], normal[1], normal[2] );
@@ -263,7 +299,9 @@ void		 Q3_CreatePlanarSurfacePlanes()
 	{
 		surface = &q3_drawSurfaces[i];
 		if( surface->surfaceType != MST_PLANAR )
+		{
 			continue;
+		}
 		Q3_SurfacePlane( surface, q3_surfaceplanes[i].normal, &q3_surfaceplanes[i].dist );
 		// Log_Print("normal = %f %f %f, dist = %f\n", q3_surfaceplanes[i].normal[0],
 		//											q3_surfaceplanes[i].normal[1],
@@ -351,11 +389,15 @@ winding_t* Q3_BrushSideWinding( q3_dbrush_t* brush, q3_dbrushside_t* baseside )
 		side = &q3_dbrushsides[brush->firstSide + i];
 		// don't chop with the base plane
 		if( side->planeNum == baseside->planeNum )
+		{
 			continue;
+		}
 		// also don't use planes that are almost equal
 		plane = &q3_dplanes[side->planeNum];
 		if( DotProduct( baseplane->normal, plane->normal ) > 0.999 && fabs( baseplane->dist - plane->dist ) < 0.01 )
+		{
 			continue;
+		}
 		//
 		plane = &q3_dplanes[side->planeNum ^ 1];
 		ChopWindingInPlace( &w, plane->normal, plane->dist, -0.1 ); // CLIP_EPSILON);
@@ -436,16 +478,22 @@ void	 Q3_FindVisibleBrushSides()
 			{
 				surface = &q3_drawSurfaces[k];
 				if( surface->surfaceType != MST_PLANAR )
+				{
 					continue;
+				}
 				//
 				// Q3_SurfacePlane(surface, plane.normal, &plane.dist);
 				plane = &q3_surfaceplanes[k];
 				// the surface plane and the brush side plane should be pretty much the same
 				if( fabs( fabs( plane->dist ) - fabs( q3_dplanes[brushside->planeNum].dist ) ) > 5 )
+				{
 					continue;
+				}
 				dot = DotProduct( plane->normal, q3_dplanes[brushside->planeNum].normal );
 				if( dot > -0.9 && dot < 0.9 )
+				{
 					continue;
+				}
 				// if the face is partly or totally on the brush side
 				if( Q3_FaceOnWinding( surface, w ) )
 				{
@@ -462,9 +510,13 @@ void	 Q3_FindVisibleBrushSides()
 	for( i = 0; i < q3_numbrushsides; i++ )
 	{
 		if( forcesidesvisible )
+		{
 			q3_dbrushsidetextured[i] = true;
+		}
 		if( q3_dbrushsidetextured[i] )
+		{
 			numtextured++;
+		}
 	} // end for
 	Log_Print( "%d brush sides textured out of %d\n", numtextured, q3_numbrushsides );
 } // end of the function Q3_FindVisibleBrushSides
@@ -816,7 +868,9 @@ void Q3_UnparseEntities()
 	{
 		ep = entities[i].epairs;
 		if( !ep )
+		{
 			continue; // ent got removed
+		}
 
 		strcat( end, "{\n" );
 		end += 2;
@@ -831,7 +885,9 @@ void Q3_UnparseEntities()
 		end += 2;
 
 		if( end > buf + Q3_MAX_MAP_ENTSTRING )
+		{
 			Error( "Entity text too long" );
+		}
 	}
 	q3_entdatasize = end - buf + 1;
 } // end of the function Q3_UnparseEntities

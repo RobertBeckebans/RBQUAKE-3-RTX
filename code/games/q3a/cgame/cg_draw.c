@@ -182,8 +182,8 @@ void CG_Text_Paint( float x, float y, float scale, vec4_t color, const char* tex
 		while( s && *s && count < len )
 		{
 			glyph = &font->glyphs[( int )*s]; // TTimo: FIXME: getting nasty warnings without the cast, hopefully this doesn't break the VM build
-											  // int yadj = Assets.textFont.glyphs[text[i]].bottom + Assets.textFont.glyphs[text[i]].top;
-											  // float yadj = scale * (Assets.textFont.glyphs[text[i]].imageHeight - Assets.textFont.glyphs[text[i]].height);
+			// int yadj = Assets.textFont.glyphs[text[i]].bottom + Assets.textFont.glyphs[text[i]].top;
+			// float yadj = scale * (Assets.textFont.glyphs[text[i]].imageHeight - Assets.textFont.glyphs[text[i]].height);
 			if( Q_IsColorString( s ) )
 			{
 				memcpy( newColor, g_color_table[ColorIndex( *( s + 1 ) )], sizeof( newColor ) );
@@ -266,16 +266,22 @@ static void CG_DrawField( int x, int y, int width, int value )
 	Com_sprintf( num, sizeof( num ), "%i", value );
 	l = strlen( num );
 	if( l > width )
+	{
 		l = width;
+	}
 	x += 2 + CHAR_WIDTH * ( width - l );
 
 	ptr = num;
 	while( *ptr && l )
 	{
 		if( *ptr == '-' )
+		{
 			frame = STAT_MINUS;
+		}
 		else
+		{
 			frame = *ptr - '0';
+		}
 
 		CG_DrawPic( x, y, CHAR_WIDTH, CHAR_HEIGHT, cgs.media.numberShaders[frame] );
 		x += CHAR_WIDTH;
@@ -593,12 +599,11 @@ static void CG_DrawStatusBar()
 	#ifdef MISSIONPACK
 	qhandle_t handle;
 	#endif
-	static float colors[4][4] = {	 //		{ 0.2, 1.0, 0.2, 1.0 } , { 1.0, 0.2, 0.2, 1.0 }, {0.5, 0.5, 0.5, 1} };
-		{ 1.0f, 0.69f, 0.0f, 1.0f }, // normal
-		{ 1.0f, 0.2f, 0.2f, 1.0f },	 // low health
-		{ 0.5f, 0.5f, 0.5f, 1.0f },	 // weapon firing
-		{ 1.0f, 1.0f, 1.0f, 1.0f }
-	}; // health > 100
+	static float colors[4][4] =			  //		{ 0.2, 1.0, 0.2, 1.0 } , { 1.0, 0.2, 0.2, 1.0 }, {0.5, 0.5, 0.5, 1} };
+		{ { 1.0f, 0.69f, 0.0f, 1.0f },	  // normal
+			{ 1.0f, 0.2f, 0.2f, 1.0f },	  // low health
+			{ 0.5f, 0.5f, 0.5f, 1.0f },	  // weapon firing
+			{ 1.0f, 1.0f, 1.0f, 1.0f } }; // health > 100
 
 	if( cg_drawStatus.integer == 0 )
 	{
@@ -978,15 +983,21 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper )
 			plyrs++;
 			len = CG_DrawStrlen( ci->name );
 			if( len > pwidth )
+			{
 				pwidth = len;
+			}
 		}
 	}
 
 	if( !plyrs )
+	{
 		return y;
+	}
 
 	if( pwidth > TEAM_OVERLAY_MAXNAME_WIDTH )
+	{
 		pwidth = TEAM_OVERLAY_MAXNAME_WIDTH;
+	}
 
 	// max location name width
 	lwidth = 0;
@@ -997,19 +1008,27 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper )
 		{
 			len = CG_DrawStrlen( p );
 			if( len > lwidth )
+			{
 				lwidth = len;
+			}
 		}
 	}
 
 	if( lwidth > TEAM_OVERLAY_MAXLOCATION_WIDTH )
+	{
 		lwidth = TEAM_OVERLAY_MAXLOCATION_WIDTH;
+	}
 
 	w = ( pwidth + lwidth + 4 + 7 ) * TINYCHAR_WIDTH;
 
 	if( right )
+	{
 		x = 640 - w;
+	}
 	else
+	{
 		x = 0;
+	}
 
 	h = plyrs * TINYCHAR_HEIGHT;
 
@@ -1031,7 +1050,8 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper )
 		hcolor[3] = 0.33f;
 	}
 	else
-	{ // if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
+	{
+		// if ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_BLUE )
 		hcolor[0] = 0.0f;
 		hcolor[1] = 0.0f;
 		hcolor[2] = 1.0f;
@@ -1056,10 +1076,14 @@ static float CG_DrawTeamOverlay( float y, qboolean right, qboolean upper )
 			{
 				p = CG_ConfigString( CS_LOCATIONS + ci->location );
 				if( !p || !*p )
+				{
 					p = "unknown";
+				}
 				len = CG_DrawStrlen( p );
 				if( len > lwidth )
+				{
 					len = lwidth;
+				}
 
 				//				xx = x + TINYCHAR_WIDTH * 2 + TINYCHAR_WIDTH * pwidth +
 				//					((lwidth/2 - len/2) * TINYCHAR_WIDTH);
@@ -1573,11 +1597,17 @@ static void CG_DrawTeamInfo()
 	#define CHATLOC_X 0
 
 	if( cg_teamChatHeight.integer < TEAMCHAT_HEIGHT )
+	{
 		chatHeight = cg_teamChatHeight.integer;
+	}
 	else
+	{
 		chatHeight = TEAMCHAT_HEIGHT;
+	}
 	if( chatHeight <= 0 )
+	{
 		return; // disabled
+	}
 
 	if( cgs.teamLastChatPos != cgs.teamChatPos )
 	{
@@ -1594,7 +1624,9 @@ static void CG_DrawTeamInfo()
 		{
 			len = CG_DrawStrlen( cgs.teamChatMsgs[i % chatHeight] );
 			if( len > w )
+			{
 				w = len;
+			}
 		}
 		w *= TINYCHAR_WIDTH;
 		w += TINYCHAR_WIDTH * 2;
@@ -1658,18 +1690,20 @@ static void CG_DrawHoldableItem()
 
 #ifdef MISSIONPACK
 	/*
-===================
-CG_DrawPersistantPowerup
-===================
-*/
+	===================
+	CG_DrawPersistantPowerup
+	===================
+	*/
 	#if 0 // sos001208 - DEAD
-static void CG_DrawPersistantPowerup() { 
+static void CG_DrawPersistantPowerup()
+{
 	int		value;
 
 	value = cg.snap->ps.stats[STAT_PERSISTANT_POWERUP];
-	if ( value ) {
+	if( value )
+	{
 		CG_RegisterItemVisuals( value );
-		CG_DrawPic( 640-ICON_SIZE, (SCREEN_HEIGHT-ICON_SIZE)/2 - ICON_SIZE, ICON_SIZE, ICON_SIZE, cg_items[ value ].icon );
+		CG_DrawPic( 640 - ICON_SIZE, ( SCREEN_HEIGHT - ICON_SIZE ) / 2 - ICON_SIZE, ICON_SIZE, ICON_SIZE, cg_items[ value ].icon );
 	}
 }
 	#endif
@@ -1837,7 +1871,8 @@ static void CG_DrawDisconnect()
 	cmdNum = trap_GetCurrentCmdNumber() - CMD_BACKUP + 1;
 	trap_GetUserCmd( cmdNum, &cmd );
 	if( cmd.serverTime <= cg.snap->ps.commandTime || cmd.serverTime > cg.time )
-	{ // special check for map_restart // bk 0102165 - FIXME
+	{
+		// special check for map_restart // bk 0102165 - FIXME
 		return;
 	}
 
@@ -2027,7 +2062,9 @@ void CG_CenterPrint( const char* str, int y, int charWidth )
 	while( *s )
 	{
 		if( *s == '\n' )
+		{
 			cg.centerPrintLines++;
+		}
 		s++;
 	}
 }
@@ -2335,11 +2372,17 @@ static void CG_DrawTeamVote()
 	int	  sec, cs_offset;
 
 	if( cgs.clientinfo->team == TEAM_RED )
+	{
 		cs_offset = 0;
+	}
 	else if( cgs.clientinfo->team == TEAM_BLUE )
+	{
 		cs_offset = 1;
+	}
 	else
+	{
 		return;
+	}
 
 	if( !cgs.teamVoteTime[cs_offset] )
 	{
@@ -2453,7 +2496,7 @@ CG_DrawIntermission
 */
 static void CG_DrawIntermission()
 {
-//	int key;
+	//	int key;
 #ifdef MISSIONPACK
 	// if (cg_singlePlayer.integer) {
 	//	CG_DrawCenterString();
@@ -2809,7 +2852,7 @@ static void CG_Draw2D()
 	if (cg.cameraMode) {
 		return;
 	}
-*/
+	*/
 	if( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR )
 	{
 		CG_DrawSpectator();

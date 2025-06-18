@@ -203,14 +203,20 @@ Multiple identical looping sounds will just increase volume without any speed co
 void Use_Target_Speaker( gentity_t* ent, gentity_t* other, gentity_t* activator )
 {
 	if( ent->spawnflags & 3 )
-	{ // looping sound toggles
+	{
+		// looping sound toggles
 		if( ent->s.loopSound )
+		{
 			ent->s.loopSound = 0; // turn it off
+		}
 		else
+		{
 			ent->s.loopSound = ent->noise_index; // start it
+		}
 	}
 	else
-	{ // normal sound
+	{
+		// normal sound
 		if( ent->spawnflags & 8 )
 		{
 			G_AddEvent( activator, EV_GENERAL_SOUND, ent->noise_index );
@@ -322,7 +328,9 @@ void target_laser_think( gentity_t* self )
 void target_laser_on( gentity_t* self )
 {
 	if( !self->activator )
+	{
 		self->activator = self;
+	}
 	target_laser_think( self );
 }
 
@@ -336,9 +344,13 @@ void target_laser_use( gentity_t* self, gentity_t* other, gentity_t* activator )
 {
 	self->activator = activator;
 	if( self->nextthink > 0 )
+	{
 		target_laser_off( self );
+	}
 	else
+	{
 		target_laser_on( self );
+	}
 }
 
 void target_laser_start( gentity_t* self )
@@ -370,9 +382,13 @@ void target_laser_start( gentity_t* self )
 	}
 
 	if( self->spawnflags & 1 )
+	{
 		target_laser_on( self );
+	}
 	else
+	{
 		target_laser_off( self );
+	}
 }
 
 void SP_target_laser( gentity_t* self )
@@ -389,7 +405,9 @@ void target_teleporter_use( gentity_t* self, gentity_t* other, gentity_t* activa
 	gentity_t* dest;
 
 	if( !activator->client )
+	{
 		return;
+	}
 	dest = G_PickTarget( self->target );
 	if( !dest )
 	{
@@ -406,7 +424,9 @@ The activator will be teleported away.
 void SP_target_teleporter( gentity_t* self )
 {
 	if( !self->targetname )
+	{
 		G_Printf( "untargeted %s at %s\n", self->classname, vtos( self->s.origin ) );
+	}
 
 	self->use = target_teleporter_use;
 }
@@ -476,7 +496,9 @@ static void target_location_linkup( gentity_t* ent )
 	int n;
 
 	if( level.locationLinked )
+	{
 		return;
+	}
 
 	level.locationLinked = qtrue;
 

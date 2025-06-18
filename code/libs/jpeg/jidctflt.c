@@ -47,22 +47,22 @@
  * This module is specialized to the case DCTSIZE = 8.
  */
 
-	#if DCTSIZE != 8
-Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
-	#endif
+#if DCTSIZE != 8
+	Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
+#endif
 
 /* Dequantize a coefficient by multiplying it by the multiplier-table
  * entry; produce a float result.
  */
 
-	#define DEQUANTIZE( coef, quantval ) ( ( ( FAST_FLOAT )( coef ) ) * ( quantval ) )
+#define DEQUANTIZE( coef, quantval ) ( ( ( FAST_FLOAT )( coef ) ) * ( quantval ) )
 
-	   /*
- * Perform dequantization and inverse DCT on one block of coefficients.
- */
+/*
+* Perform dequantization and inverse DCT on one block of coefficients.
+*/
 
-	   GLOBAL void
-	   jpeg_idct_float( j_decompress_ptr cinfo, jpeg_component_info* compptr, JCOEFPTR coef_block, JSAMPARRAY output_buf, JDIMENSION output_col )
+GLOBAL void
+jpeg_idct_float( j_decompress_ptr cinfo, jpeg_component_info* compptr, JCOEFPTR coef_block, JSAMPARRAY output_buf, JDIMENSION output_col )
 {
 	FAST_FLOAT       tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
 	FAST_FLOAT       tmp10, tmp11, tmp12, tmp13;
@@ -84,13 +84,13 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 	for( ctr = DCTSIZE; ctr > 0; ctr-- )
 	{
 		/* Due to quantization, we will usually find that many of the input
-     * coefficients are zero, especially the AC terms.  We can exploit this
-     * by short-circuiting the IDCT calculation for any column in which all
-     * the AC terms are zero.  In that case each output is equal to the
-     * DC coefficient (with scale factor as needed).
-     * With typical images and quantization tables, half or more of the
-     * column DCT calculations can be simplified this way.
-     */
+		* coefficients are zero, especially the AC terms.  We can exploit this
+		* by short-circuiting the IDCT calculation for any column in which all
+		* the AC terms are zero.  In that case each output is equal to the
+		* DC coefficient (with scale factor as needed).
+		* With typical images and quantization tables, half or more of the
+		* column DCT calculations can be simplified this way.
+		*/
 
 		if( ( inptr[ DCTSIZE * 1 ] | inptr[ DCTSIZE * 2 ] | inptr[ DCTSIZE * 3 ] |
 				inptr[ DCTSIZE * 4 ] | inptr[ DCTSIZE * 5 ] | inptr[ DCTSIZE * 6 ] |
@@ -149,7 +149,7 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 
 		z5    = ( z10 + z12 ) * ( ( FAST_FLOAT )1.847759065 ); /* 2*c2 */
 		tmp10 = ( ( FAST_FLOAT )1.082392200 ) * z12 - z5;      /* 2*(c2-c6) */
-		tmp12 = ( ( FAST_FLOAT )-2.613125930 ) * z10 + z5;     /* -2*(c2+c6) */
+		tmp12 = ( ( FAST_FLOAT ) -2.613125930 ) * z10 + z5;    /* -2*(c2+c6) */
 
 		tmp6 = tmp12 - tmp7; /* phase 2 */
 		tmp5 = tmp11 - tmp6;
@@ -177,10 +177,10 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 	{
 		outptr = output_buf[ ctr ] + output_col;
 		/* Rows of zeroes can be exploited in the same way as we did with columns.
-     * However, the column calculation has created many nonzero AC terms, so
-     * the simplification applies less often (typically 5% to 10% of the time).
-     * And testing floats for zero is relatively expensive, so we don't bother.
-     */
+		* However, the column calculation has created many nonzero AC terms, so
+		* the simplification applies less often (typically 5% to 10% of the time).
+		* And testing floats for zero is relatively expensive, so we don't bother.
+		*/
 
 		/* Even part */
 
@@ -207,7 +207,7 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 
 		z5    = ( z10 + z12 ) * ( ( FAST_FLOAT )1.847759065 ); /* 2*c2 */
 		tmp10 = ( ( FAST_FLOAT )1.082392200 ) * z12 - z5;      /* 2*(c2-c6) */
-		tmp12 = ( ( FAST_FLOAT )-2.613125930 ) * z10 + z5;     /* -2*(c2+c6) */
+		tmp12 = ( ( FAST_FLOAT ) -2.613125930 ) * z10 + z5;    /* -2*(c2+c6) */
 
 		tmp6 = tmp12 - tmp7;
 		tmp5 = tmp11 - tmp6;
@@ -215,14 +215,14 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 
 		/* Final output stage: scale down by a factor of 8 and range-limit */
 
-		outptr[ 0 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp0 + tmp7 ), 3 ) & RANGE_MASK ];
-		outptr[ 7 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp0 - tmp7 ), 3 ) & RANGE_MASK ];
-		outptr[ 1 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp1 + tmp6 ), 3 ) & RANGE_MASK ];
-		outptr[ 6 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp1 - tmp6 ), 3 ) & RANGE_MASK ];
-		outptr[ 2 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp2 + tmp5 ), 3 ) & RANGE_MASK ];
-		outptr[ 5 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp2 - tmp5 ), 3 ) & RANGE_MASK ];
-		outptr[ 4 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp3 + tmp4 ), 3 ) & RANGE_MASK ];
-		outptr[ 3 ] = range_limit[ ( int )DESCALE( ( INT32 )( tmp3 - tmp4 ), 3 ) & RANGE_MASK ];
+		outptr[ 0 ] = range_limit[( int )DESCALE( ( INT32 )( tmp0 + tmp7 ), 3 ) & RANGE_MASK ];
+		outptr[ 7 ] = range_limit[( int )DESCALE( ( INT32 )( tmp0 - tmp7 ), 3 ) & RANGE_MASK ];
+		outptr[ 1 ] = range_limit[( int )DESCALE( ( INT32 )( tmp1 + tmp6 ), 3 ) & RANGE_MASK ];
+		outptr[ 6 ] = range_limit[( int )DESCALE( ( INT32 )( tmp1 - tmp6 ), 3 ) & RANGE_MASK ];
+		outptr[ 2 ] = range_limit[( int )DESCALE( ( INT32 )( tmp2 + tmp5 ), 3 ) & RANGE_MASK ];
+		outptr[ 5 ] = range_limit[( int )DESCALE( ( INT32 )( tmp2 - tmp5 ), 3 ) & RANGE_MASK ];
+		outptr[ 4 ] = range_limit[( int )DESCALE( ( INT32 )( tmp3 + tmp4 ), 3 ) & RANGE_MASK ];
+		outptr[ 3 ] = range_limit[( int )DESCALE( ( INT32 )( tmp3 - tmp4 ), 3 ) & RANGE_MASK ];
 
 		wsptr += DCTSIZE; /* advance pointer to next row */
 	}

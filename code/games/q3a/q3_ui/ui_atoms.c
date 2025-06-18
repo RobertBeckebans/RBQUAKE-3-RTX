@@ -67,9 +67,13 @@ UI_ClampCvar
 float UI_ClampCvar( float min, float max, float value )
 {
 	if( value < min )
+	{
 		return min;
+	}
 	if( value > max )
+	{
 		return max;
+	}
 	return value;
 }
 
@@ -106,7 +110,9 @@ void UI_PushMenu( menuframework_s* menu )
 	if( i == uis.menusp )
 	{
 		if( uis.menusp >= MAX_MENUDEPTH )
+		{
 			trap_Error( "UI_PushMenu: menu stack overflow" );
+		}
 
 		uis.stack[uis.menusp++] = menu;
 	}
@@ -148,7 +154,9 @@ void UI_PopMenu()
 	uis.menusp--;
 
 	if( uis.menusp < 0 )
+	{
 		trap_Error( "UI_PopMenu: menu stack underflow" );
+	}
 
 	if( uis.menusp )
 	{
@@ -185,9 +193,13 @@ void UI_LerpColor( vec4_t a, vec4_t b, vec4_t c, float t )
 	{
 		c[i] = a[i] + t * ( b[i] - a[i] );
 		if( c[i] < 0 )
+		{
 			c[i] = 0;
+		}
 		else if( c[i] > 1.0 )
+		{
 			c[i] = 1.0;
+		}
 	}
 }
 
@@ -637,7 +649,9 @@ void UI_DrawProportionalString_AutoWrapped( int x, int y, int xmax, int ystep, c
 	float sizeScale;
 
 	if( !str || str[0] == '\0' )
+	{
 		return;
+	}
 
 	sizeScale = UI_ProportionalSizeScale( style );
 
@@ -672,7 +686,9 @@ void UI_DrawProportionalString_AutoWrapped( int x, int y, int xmax, int ystep, c
 				// so just print it now if needed
 				s2++;
 				if( *s2 != '\0' ) // if we are printing an overflowing line we have s2 == s3
+				{
 					UI_DrawProportionalString( x, y, s2, style, color );
+				}
 				break;
 			}
 			s2++;
@@ -710,8 +726,10 @@ static void UI_DrawString2( int x, int y, const char* str, vec4_t color, int cha
 	float		fcol;
 
 	if( y < -charh )
-		// offscreen
+	// offscreen
+	{
 		return;
+	}
 
 	// draw the colored text
 	trap_R_SetColor( color );
@@ -772,7 +790,9 @@ void UI_DrawString( int x, int y, const char* str, int style, vec4_t color )
 	}
 
 	if( ( style & UI_BLINK ) && ( ( uis.realtime / BLINK_DIVISOR ) & 1 ) )
+	{
 		return;
+	}
 
 	if( style & UI_SMALLFONT )
 	{
@@ -800,7 +820,9 @@ void UI_DrawString( int x, int y, const char* str, int style, vec4_t color )
 		drawcolor = newcolor;
 	}
 	else
+	{
 		drawcolor = color;
+	}
 
 	switch( style & UI_FORMATMASK )
 	{
@@ -894,10 +916,10 @@ void UI_SetActiveMenu( uiMenuCommand_t menu )
 			return;
 		case UIMENU_INGAME:
 			/*
-		//GRank
-		UI_RankingsMenu();
-		return;
-		*/
+			//GRank
+			UI_RankingsMenu();
+			return;
+			*/
 			trap_Cvar_Set( "cl_paused", "1" );
 			UI_InGameMenu();
 			return;
@@ -933,12 +955,18 @@ void UI_KeyEvent( int key, int down )
 	}
 
 	if( uis.activemenu->key )
+	{
 		s = uis.activemenu->key( key );
+	}
 	else
+	{
 		s = Menu_DefaultKey( uis.activemenu, key );
+	}
 
 	if( ( s > 0 ) && ( s != menu_null_sound ) )
+	{
 		trap_S_StartLocalSound( s, CHAN_LOCAL_SOUND );
+	}
 }
 
 /*
@@ -952,20 +980,30 @@ void UI_MouseEvent( int dx, int dy )
 	menucommon_s* m;
 
 	if( !uis.activemenu )
+	{
 		return;
+	}
 
 	// update mouse screen position
 	uis.cursorx += dx;
 	if( uis.cursorx < 0 )
+	{
 		uis.cursorx = 0;
+	}
 	else if( uis.cursorx > SCREEN_WIDTH )
+	{
 		uis.cursorx = SCREEN_WIDTH;
+	}
 
 	uis.cursory += dy;
 	if( uis.cursory < 0 )
+	{
 		uis.cursory = 0;
+	}
 	else if( uis.cursory > SCREEN_HEIGHT )
+	{
 		uis.cursory = SCREEN_HEIGHT;
+	}
 
 	// region test the active menu items
 	for( i = 0; i < uis.activemenu->nitems; i++ )
@@ -973,7 +1011,9 @@ void UI_MouseEvent( int dx, int dy )
 		m = ( menucommon_s* )uis.activemenu->items[i];
 
 		if( m->flags & ( QMF_GRAYED | QMF_INACTIVE ) )
+		{
 			continue;
+		}
 
 		if( ( uis.cursorx < m->left ) || ( uis.cursorx > m->right ) || ( uis.cursory < m->top ) || ( uis.cursory > m->bottom ) )
 		{
@@ -1203,7 +1243,8 @@ void UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader )
 	float t1;
 
 	if( w < 0 )
-	{ // flip about vertical
+	{
+		// flip about vertical
 		w  = -w;
 		s0 = 1;
 		s1 = 0;
@@ -1215,7 +1256,8 @@ void UI_DrawHandlePic( float x, float y, float w, float h, qhandle_t hShader )
 	}
 
 	if( h < 0 )
-	{ // flip about horizontal
+	{
+		// flip about horizontal
 		h  = -h;
 		t0 = 1;
 		t1 = 0;
@@ -1311,9 +1353,13 @@ void UI_Refresh( int realtime )
 		}
 
 		if( uis.activemenu->draw )
+		{
 			uis.activemenu->draw();
+		}
 		else
+		{
 			Menu_Draw( uis.activemenu );
+		}
 
 		if( uis.firstdraw )
 		{
@@ -1353,7 +1399,9 @@ void UI_DrawTextBox( int x, int y, int width, int lines )
 qboolean UI_CursorInRect( int x, int y, int width, int height )
 {
 	if( uis.cursorx < x || uis.cursory < y || uis.cursorx > x + width || uis.cursory > y + height )
+	{
 		return qfalse;
+	}
 
 	return qtrue;
 }

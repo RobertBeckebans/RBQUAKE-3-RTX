@@ -65,13 +65,17 @@ static void			   SpecifyServer_Event( void* ptr, int event )
 	{
 		case ID_SPECIFYSERVERGO:
 			if( event != QM_ACTIVATED )
+			{
 				break;
+			}
 
 			if( s_specifyserver.domain.field.buffer[0] )
 			{
 				strcpy( buff, s_specifyserver.domain.field.buffer );
 				if( s_specifyserver.port.field.buffer[0] )
+				{
 					Com_sprintf( buff + strlen( buff ), 128, ":%s", s_specifyserver.port.field.buffer );
+				}
 
 				trap_Cmd_ExecuteText( EXEC_APPEND, va( "connect %s\n", buff ) );
 			}
@@ -79,7 +83,9 @@ static void			   SpecifyServer_Event( void* ptr, int event )
 
 		case ID_SPECIFYSERVERBACK:
 			if( event != QM_ACTIVATED )
+			{
 				break;
+			}
 
 			UI_PopMenu();
 			break;
@@ -186,7 +192,9 @@ void SpecifyServer_Cache()
 	for( i = 0;; i++ )
 	{
 		if( !specifyserver_artlist[i] )
+		{
 			break;
+		}
 		trap_R_RegisterShaderNoMip( specifyserver_artlist[i] );
 	}
 }

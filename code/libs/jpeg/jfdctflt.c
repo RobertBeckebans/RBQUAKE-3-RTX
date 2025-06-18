@@ -45,16 +45,16 @@
  * This module is specialized to the case DCTSIZE = 8.
  */
 
-	#if DCTSIZE != 8
-Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
-	#endif
+#if DCTSIZE != 8
+	Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
+#endif
 
-	   /*
- * Perform the forward DCT on one block of samples.
- */
+/*
+* Perform the forward DCT on one block of samples.
+*/
 
-	   GLOBAL void
-	   jpeg_fdct_float( FAST_FLOAT* data )
+GLOBAL void
+jpeg_fdct_float( FAST_FLOAT* data )
 {
 	FAST_FLOAT  tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
 	FAST_FLOAT  tmp10, tmp11, tmp12, tmp13;

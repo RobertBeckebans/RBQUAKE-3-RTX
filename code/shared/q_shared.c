@@ -49,7 +49,9 @@ char* COM_SkipPath( char* pathname )
 	while( *pathname )
 	{
 		if( *pathname == '/' )
+		{
 			last = pathname + 1;
+		}
 		pathname++;
 	}
 	return last;
@@ -347,9 +349,13 @@ int COM_Compress( char* data_p )
 			else if( c == '/' && in[1] == '*' )
 			{
 				while( *in && ( *in != '*' || in[1] != '/' ) )
+				{
 					in++;
+				}
 				if( *in )
+				{
 					in += 2;
+				}
 				// record when we hit a newline
 			}
 			else if( c == '\n' || c == '\r' )
@@ -510,7 +516,9 @@ char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 		data++;
 		c = *data;
 		if( c == '\n' )
+		{
 			com_lines++;
+		}
 	} while( c > 32 );
 
 	if( len == MAX_TOKEN_CHARS )
@@ -531,42 +539,51 @@ char* COM_ParseExt( char** data_p, qboolean allowLineBreaks )
 COM_ParseInfos
 ===============
 */
-int COM_ParseInfos( char *buf, int max, char infos[][MAX_INFO_STRING] ) {
-	char	*token;
+int COM_ParseInfos( char* buf, int max, char infos[][MAX_INFO_STRING] )
+{
+	char*	token;
 	int		count;
 	char	key[MAX_TOKEN_CHARS];
 
 	count = 0;
 
-	while ( 1 ) {
+	while( 1 )
+	{
 		token = COM_Parse( &buf );
-		if ( !token[0] ) {
+		if( !token[0] )
+		{
 			break;
 		}
-		if ( strcmp( token, "{" ) ) {
+		if( strcmp( token, "{" ) )
+		{
 			Com_Printf( "Missing { in info file\n" );
 			break;
 		}
 
-		if ( count == max ) {
+		if( count == max )
+		{
 			Com_Printf( "Max infos exceeded\n" );
 			break;
 		}
 
 		infos[count][0] = 0;
-		while ( 1 ) {
+		while( 1 )
+		{
 			token = COM_ParseExt( &buf, qtrue );
-			if ( !token[0] ) {
+			if( !token[0] )
+			{
 				Com_Printf( "Unexpected end of info file\n" );
 				break;
 			}
-			if ( !strcmp( token, "}" ) ) {
+			if( !strcmp( token, "}" ) )
+			{
 				break;
 			}
 			Q_strncpyz( key, token, sizeof( key ) );
 
 			token = COM_ParseExt( &buf, qfalse );
-			if ( !token[0] ) {
+			if( !token[0] )
+			{
 				strcpy( token, "<NULL>" );
 			}
 			Info_SetValueForKey( infos[count], key, token );
@@ -704,28 +721,36 @@ void Parse3DMatrix( char** buf_p, int z, int y, int x, float* m )
 int Q_isprint( int c )
 {
 	if( c >= 0x20 && c <= 0x7E )
+	{
 		return ( 1 );
+	}
 	return ( 0 );
 }
 
 int Q_islower( int c )
 {
 	if( c >= 'a' && c <= 'z' )
+	{
 		return ( 1 );
+	}
 	return ( 0 );
 }
 
 int Q_isupper( int c )
 {
 	if( c >= 'A' && c <= 'Z' )
+	{
 		return ( 1 );
+	}
 	return ( 0 );
 }
 
 int Q_isalpha( int c )
 {
 	if( ( c >= 'a' && c <= 'z' ) || ( c >= 'A' && c <= 'Z' ) )
+	{
 		return ( 1 );
+	}
 	return ( 0 );
 }
 
@@ -740,11 +765,15 @@ char* Q_strrchr( const char* string, int c )
 	while( *s )
 	{
 		if( *s == cc )
+		{
 			sp = s;
+		}
 		s++;
 	}
 	if( cc == 0 )
+	{
 		sp = s;
+	}
 
 	return sp;
 }
@@ -784,12 +813,18 @@ int Q_stricmpn( const char* s1, const char* s2, int n )
 	if( s1 == NULL )
 	{
 		if( s2 == NULL )
+		{
 			return 0;
+		}
 		else
+		{
 			return -1;
+		}
 	}
 	else if( s2 == NULL )
+	{
 		return 1;
+	}
 
 	do
 	{
@@ -1009,7 +1044,7 @@ char* Info_ValueForKey( const char* s, const char* key )
 {
 	char		pkey[BIG_INFO_KEY];
 	static char value[2][BIG_INFO_VALUE]; // use two buffers so compares
-										  // work without stomping on each other
+	// work without stomping on each other
 	static int	valueindex = 0;
 	char*		o;
 
@@ -1025,14 +1060,18 @@ char* Info_ValueForKey( const char* s, const char* key )
 
 	valueindex ^= 1;
 	if( *s == '\\' )
+	{
 		s++;
+	}
 	while( 1 )
 	{
 		o = pkey;
 		while( *s != '\\' )
 		{
 			if( !*s )
+			{
 				return "";
+			}
 			*o++ = *s++;
 		}
 		*o = 0;
@@ -1047,10 +1086,14 @@ char* Info_ValueForKey( const char* s, const char* key )
 		*o = 0;
 
 		if( !Q_stricmp( key, pkey ) )
+		{
 			return value[valueindex];
+		}
 
 		if( !*s )
+		{
 			break;
+		}
 		s++;
 	}
 
@@ -1128,12 +1171,16 @@ void Info_RemoveKey( char* s, const char* key )
 	{
 		start = s;
 		if( *s == '\\' )
+		{
 			s++;
+		}
 		o = pkey;
 		while( *s != '\\' )
 		{
 			if( !*s )
+			{
 				return;
+			}
 			*o++ = *s++;
 		}
 		*o = 0;
@@ -1143,7 +1190,9 @@ void Info_RemoveKey( char* s, const char* key )
 		while( *s != '\\' && *s )
 		{
 			if( !*s )
+			{
 				return;
+			}
 			*o++ = *s++;
 		}
 		*o = 0;
@@ -1155,7 +1204,9 @@ void Info_RemoveKey( char* s, const char* key )
 		}
 
 		if( !*s )
+		{
 			return;
+		}
 	}
 }
 
@@ -1185,12 +1236,16 @@ void Info_RemoveKey_Big( char* s, const char* key )
 	{
 		start = s;
 		if( *s == '\\' )
+		{
 			s++;
+		}
 		o = pkey;
 		while( *s != '\\' )
 		{
 			if( !*s )
+			{
 				return;
+			}
 			*o++ = *s++;
 		}
 		*o = 0;
@@ -1200,7 +1255,9 @@ void Info_RemoveKey_Big( char* s, const char* key )
 		while( *s != '\\' && *s )
 		{
 			if( !*s )
+			{
 				return;
+			}
 			*o++ = *s++;
 		}
 		*o = 0;
@@ -1212,7 +1269,9 @@ void Info_RemoveKey_Big( char* s, const char* key )
 		}
 
 		if( !*s )
+		{
 			return;
+		}
 	}
 }
 
@@ -1273,7 +1332,9 @@ void Info_SetValueForKey( char* s, const char* key, const char* value )
 
 	Info_RemoveKey( s, key );
 	if( !value || !strlen( value ) )
+	{
 		return;
+	}
 
 	Com_sprintf( newi, sizeof( newi ), "\\%s\\%s", key, value );
 
@@ -1323,7 +1384,9 @@ void Info_SetValueForKey_Big( char* s, const char* key, const char* value )
 
 	Info_RemoveKey_Big( s, key );
 	if( !value || !strlen( value ) )
+	{
 		return;
+	}
 
 	Com_sprintf( newi, sizeof( newi ), "\\%s\\%s", key, value );
 

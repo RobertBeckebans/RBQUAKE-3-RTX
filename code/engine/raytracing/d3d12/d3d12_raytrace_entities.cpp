@@ -84,11 +84,15 @@ void GL_CreateTopLevelAccelerationStructs( bool forceUpdate )
 		model_t*	   qmodel		 = tr.models[currententity->e.hModel];
 
 		if( currententity->e.renderfx & RF_THIRD_PERSON )
+		{
 			continue;
+		}
 
 		dxrMesh_t* mesh = ( dxrMesh_t* )qmodel->dxrMesh[GL_GetCurrentFrame( currententity, currententity->e.frame )];
 		if( mesh == NULL )
+		{
 			continue;
+		}
 
 		switch( qmodel->type )
 		{
@@ -134,11 +138,15 @@ void GL_CreateTopLevelAccelerationStructs( bool forceUpdate )
 			model_t*	   qmodel		 = tr.models[currententity->e.hModel];
 
 			if( currententity->e.renderfx & RF_THIRD_PERSON )
+			{
 				continue;
+			}
 
 			dxrMesh_t* mesh = ( dxrMesh_t* )qmodel->dxrMesh[GL_GetCurrentFrame( currententity, currententity->e.frame )];
 			if( mesh == NULL )
+			{
 				continue;
+			}
 
 			meshInstanceData[i + 1].startVertex = mesh->startSceneVertex;
 

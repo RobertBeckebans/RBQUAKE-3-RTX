@@ -54,9 +54,13 @@ int	 Q3_BrushContents( mapbrush_t* b )
 	{
 		s = &b->original_sides[i];
 		if( s->contents != contents )
+		{
 			mixed = true;
+		}
 		if( s->surf & ( SURF_HINT | SURF_SKIP ) )
+		{
 			hint = true;
+		}
 		contents |= s->contents;
 	} // end for
 	//
@@ -91,7 +95,9 @@ int	 Q3_BrushContents( mapbrush_t* b )
 		Log_Write( "\r\n" );
 		//
 		if( contents & CONTENTS_DONOTENTER )
+		{
 			return CONTENTS_DONOTENTER; // Log_Print("mixed contents with donotenter\n");
+		}
 		/*
 		Log_Print("contents:"); PrintContents(contents);
 		Log_Print("\ncontents:"); PrintContents(s->contents);
@@ -104,7 +110,9 @@ int	 Q3_BrushContents( mapbrush_t* b )
 			return ( contents & ( CONTENTS_LAVA | CONTENTS_SLIME | CONTENTS_WATER ) );
 		} // end if
 		if( contents & CONTENTS_PLAYERCLIP )
+		{
 			return ( contents & CONTENTS_PLAYERCLIP );
+		}
 		return ( contents & CONTENTS_SOLID );
 	} // end if
 	/*
@@ -156,7 +164,9 @@ void Q3_BSPBrushToMapBrush( q3_dbrush_t* bspbrush, entity_t* mapent )
 	q3_dplane_t*	 bspplane;
 
 	if( nummapbrushes >= MAX_MAPFILE_BRUSHES )
+	{
 		Error( "nummapbrushes >= MAX_MAPFILE_BRUSHES" );
+	}
 
 	b				  = &mapbrushes[nummapbrushes];
 	b->original_sides = &brushsides[nummapbrushsides];
@@ -177,9 +187,13 @@ void Q3_BSPBrushToMapBrush( q3_dbrush_t* bspbrush, entity_t* mapent )
 		side = &brushsides[nummapbrushsides];
 		// if the BSP brush side is textured
 		if( q3_dbrushsidetextured[bspbrush->firstSide + n] )
+		{
 			side->flags |= SFL_TEXTURED | SFL_VISIBLE;
+		}
 		else
+		{
 			side->flags &= ~SFL_TEXTURED;
+		}
 		// NOTE: all Quake3 sides are assumed textured
 		// side->flags |= SFL_TEXTURED|SFL_VISIBLE;
 		//
@@ -251,7 +265,9 @@ void Q3_BSPBrushToMapBrush( q3_dbrush_t* bspbrush, entity_t* mapent )
 			}
 		}
 		if( k != b->numsides )
+		{
 			continue; // duplicated
+		}
 
 		//
 		// keep this side
@@ -322,7 +338,9 @@ void Q3_BSPBrushToMapBrush( q3_dbrush_t* bspbrush, entity_t* mapent )
 	{
 		c_clipbrushes++;
 		for( i = 0; i < b->numsides; i++ )
+		{
 			b->original_sides[i].texinfo = TEXINFO_NODE;
+		}
 	} // end for
 
 	//
@@ -470,7 +488,9 @@ void AAS_CreateCurveBrushes()
 	{
 		surface = &q3_drawSurfaces[i];
 		if( !surface->patchWidth )
+		{
 			continue;
+		}
 		// if the curve is not solid
 		if( !( q3_dshaders[surface->shaderNum].contentFlags & ( CONTENTS_SOLID | CONTENTS_PLAYERCLIP ) ) )
 		{
@@ -546,18 +566,24 @@ void AAS_CreateCurveBrushes()
 			{
 				// never use the surface plane as a border
 				if( facet->borderPlanes[n] == facet->surfacePlane )
+				{
 					continue;
+				}
 				//
 				side		   = &brush->original_sides[2 + n];
 				side->planenum = FindFloatPlane( pc->planes[facet->borderPlanes[n]].plane, pc->planes[facet->borderPlanes[n]].plane[3] );
 				if( facet->borderInward[n] )
+				{
 					side->planenum ^= 1;
+				}
 				side->contents = CONTENTS_SOLID;
 				side->flags |= SFL_TEXTURED | SFL_CURVE;
 				side->surf = 0;
 				// chop the winding in place
 				if( winding )
+				{
 					ChopWindingInPlace( &winding, mapplanes[side->planenum ^ 1].normal, mapplanes[side->planenum ^ 1].dist, 0.1 ); // CLIP_EPSILON);
+				}
 			} // end for
 			// VectorCopy(pc->bounds[0], brush->mins);
 			// VectorCopy(pc->bounds[1], brush->maxs);
@@ -631,7 +657,9 @@ void Q3_LoadMapFromBSP( struct quakefile_s* qf )
 	// DPlanes2MapPlanes();
 	// clear brush model numbers
 	for( i = 0; i < MAX_MAPFILE_BRUSHES; i++ )
+	{
 		brushmodelnumbers[i] = -1;
+	}
 
 	nummapbrushsides = 0;
 	num_entities	 = 0;
@@ -649,28 +677,30 @@ void Q3_LoadMapFromBSP( struct quakefile_s* qf )
 	for( i = 0; i < entities[0].numbrushes; i++ )
 	{
 		if( mapbrushes[i].numsides <= 0 )
+		{
 			continue;
+		}
 		AddPointToBounds( mapbrushes[i].mins, map_mins, map_maxs );
 		AddPointToBounds( mapbrushes[i].maxs, map_mins, map_maxs );
 	} // end for
 	/*/
-  for (i = 0; i < nummapbrushes; i++)
-  {
+	for (i = 0; i < nummapbrushes; i++)
+	{
 	  //if (!mapbrushes[i].original_sides) continue;
 	  //AddBrushBevels(&mapbrushes[i]);
 	  //AAS_ExpandMapBrush(&mapbrushes[i], mins, maxs);
-  } //end for*/
+	} //end for*/
 	/*
-  for (i = 0; i < nummapbrushsides; i++)
-  {
+	for (i = 0; i < nummapbrushsides; i++)
+	{
 	  Log_Write("side %d flags = %d", i, brushsides[i].flags);
-  } //end for
-  for (i = 0; i < nummapbrushes; i++)
-  {
+	} //end for
+	for (i = 0; i < nummapbrushes; i++)
+	{
 	  Log_Write("brush contents: ");
 	  PrintContents(mapbrushes[i].contents);
 	  Log_Print("\n");
-  } //end for*/
+	} //end for*/
 } // end of the function Q3_LoadMapFromBSP
 //===========================================================================
 //

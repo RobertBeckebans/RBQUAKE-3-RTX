@@ -122,9 +122,13 @@ void CG_DamageFeedback( int yawByte, int pitchByte, int damage )
 	kick = damage * scale;
 
 	if( kick < 5 )
+	{
 		kick = 5;
+	}
 	if( kick > 10 )
+	{
 		kick = 10;
+	}
 
 	// if yaw and pitch are both 255, make the damage always centered (falling, etc)
 	if( yawByte == 255 && pitchByte == 255 )

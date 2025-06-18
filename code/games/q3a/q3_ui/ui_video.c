@@ -69,7 +69,9 @@ DriverInfo_Event
 static void			DriverInfo_Event( void* ptr, int event )
 {
 	if( event != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	switch( ( ( menucommon_s* )ptr )->id )
 	{
@@ -111,7 +113,9 @@ static void DriverInfo_MenuDraw()
 	}
 
 	if( s_driverinfo.numstrings & 1 )
+	{
 		UI_DrawString( 320, y, s_driverinfo.strings[s_driverinfo.numstrings - 1], UI_CENTER | UI_SMALLFONT, text_color_normal );
+	}
 }
 
 /*
@@ -127,7 +131,9 @@ void DriverInfo_Cache()
 	for( i = 0;; i++ )
 	{
 		if( !driverinfo_artlist[i] )
+		{
 			break;
+		}
 		trap_R_RegisterShaderNoMip( driverinfo_artlist[i] );
 	}
 }
@@ -196,14 +202,20 @@ static void UI_DriverInfo_Menu()
 	while( s_driverinfo.numstrings < 40 && *eptr )
 	{
 		while( *eptr && *eptr == ' ' )
+		{
 			*eptr++ = '\0';
+		}
 
 		// track start of valid string
 		if( *eptr && *eptr != ' ' )
+		{
 			s_driverinfo.strings[s_driverinfo.numstrings++] = eptr;
+		}
 
 		while( *eptr && *eptr != ' ' )
+		{
 			eptr++;
+		}
 	}
 
 	// safety length strings for display
@@ -340,21 +352,37 @@ static void GraphicsOptions_CheckConfig()
 	for( i = 0; i < NUM_IVO_TEMPLATES; i++ )
 	{
 		if( s_ivo_templates[i].colordepth != s_graphicsoptions.colordepth.curvalue )
+		{
 			continue;
+		}
 		if( s_ivo_templates[i].driver != s_graphicsoptions.driver.curvalue )
+		{
 			continue;
+		}
 		if( s_ivo_templates[i].mode != s_graphicsoptions.mode.curvalue )
+		{
 			continue;
+		}
 		if( s_ivo_templates[i].fullscreen != s_graphicsoptions.fs.curvalue )
+		{
 			continue;
+		}
 		if( s_ivo_templates[i].tq != s_graphicsoptions.tq.curvalue )
+		{
 			continue;
+		}
 		if( s_ivo_templates[i].lighting != s_graphicsoptions.lighting.curvalue )
+		{
 			continue;
+		}
 		if( s_ivo_templates[i].geometry != s_graphicsoptions.geometry.curvalue )
+		{
 			continue;
+		}
 		if( s_ivo_templates[i].filter != s_graphicsoptions.filter.curvalue )
+		{
 			continue;
+		}
 		//		if ( s_ivo_templates[i].texturebits != s_graphicsoptions.texturebits.curvalue )
 		//			continue;
 		s_graphicsoptions.list.curvalue = i;
@@ -453,7 +481,9 @@ GraphicsOptions_ApplyChanges
 static void GraphicsOptions_ApplyChanges( void* unused, int notification )
 {
 	if( notification != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	switch( s_graphicsoptions.texturebits.curvalue )
 	{
@@ -540,9 +570,13 @@ static void GraphicsOptions_Event( void* ptr, int event )
 			if( s_graphicsoptions.driver.curvalue == 1 )
 			{
 				if( s_graphicsoptions.mode.curvalue < 2 )
+				{
 					s_graphicsoptions.mode.curvalue = 2;
+				}
 				else if( s_graphicsoptions.mode.curvalue > 6 )
+				{
 					s_graphicsoptions.mode.curvalue = 6;
+				}
 			}
 			break;
 

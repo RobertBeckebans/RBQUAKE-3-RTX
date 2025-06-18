@@ -41,9 +41,13 @@ int AAS_MeltFaceWinding( tmp_face_t* face1, tmp_face_t* face2 )
 
 #ifdef DEBUG
 	if( !face1->winding )
+	{
 		Error( "face1 %d without winding", face1->num );
+	}
 	if( !face2->winding )
+	{
 		Error( "face2 %d without winding", face2->num );
+	}
 #endif // DEBUG
 	w2	   = face2->winding;
 	plane1 = &mapplanes[face1->planenum];
@@ -79,7 +83,9 @@ int AAS_MeltFaceWindingsOfArea( tmp_area_t* tmparea )
 		{
 			side2 = face2->frontarea != tmparea;
 			if( face1 == face2 )
+			{
 				continue;
+			}
 			num_windingsplits += AAS_MeltFaceWinding( face1, face2 );
 		} // end for
 	} // end for

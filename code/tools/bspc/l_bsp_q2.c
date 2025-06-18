@@ -337,7 +337,9 @@ int InsideWinding( winding_t* w, vec3_t point, int planenum )
 		dist = DotProduct( normal, v1 );
 		//
 		if( DotProduct( normal, point ) - dist > WCONVEX_EPSILON )
+		{
 			return false;
+		}
 	} // end for
 	return true;
 } // end of the function InsideWinding
@@ -366,7 +368,9 @@ int InsideFace( dface_t* face, vec3_t point )
 		dist = DotProduct( normal, v1 );
 		//
 		if( DotProduct( normal, point ) - dist > WCONVEX_EPSILON )
+		{
 			return false;
+		}
 	} // end for
 	return true;
 } // end of the function InsideFace
@@ -442,11 +446,15 @@ winding_t* Q2_BrushSideWinding( dbrush_t* brush, dbrushside_t* baseside )
 		side = &dbrushsides[brush->firstside + i];
 		// don't chop with the base plane
 		if( side->planenum == baseside->planenum )
+		{
 			continue;
+		}
 		// also don't use planes that are almost equal
 		plane = &dplanes[side->planenum];
 		if( DotProduct( baseplane->normal, plane->normal ) > 0.999 && fabs( baseplane->dist - plane->dist ) < 0.01 )
+		{
 			continue;
+		}
 		//
 		plane = &dplanes[side->planenum ^ 1];
 		ChopWindingInPlace( &w, plane->normal, plane->dist, -0.1 ); // CLIP_EPSILON);
@@ -501,7 +509,9 @@ void	 Q2_FixTextureReferences()
 		brush = &dbrushes[i];
 		// hint brushes are not textured
 		if( Q2_HintSkipBrush( brush ) )
+		{
 			continue;
+		}
 		// go over all the sides of the brush
 		for( j = 0; j < brush->numsides; j++ )
 		{
@@ -545,7 +555,9 @@ void	 Q2_FixTextureReferences()
 				face = &dfaces[k];
 				// if the face is in the same plane as the brush side
 				if( ( face->planenum & ~1 ) != ( brushside->planenum & ~1 ) )
+				{
 					continue;
+				}
 				// if the face is partly or totally on the brush side
 				if( Q2_FaceOnWinding( face, w ) )
 				{
@@ -582,14 +594,20 @@ int Q2_CompressVis( byte* vis, byte* dest )
 	{
 		*dest_p++ = vis[j];
 		if( vis[j] )
+		{
 			continue;
+		}
 
 		rep = 1;
 		for( j++; j < visrow; j++ )
 			if( vis[j] || rep == 255 )
+			{
 				break;
+			}
 			else
+			{
 				rep++;
+			}
 		*dest_p++ = rep;
 		j--;
 	}
@@ -622,7 +640,9 @@ void Q2_DecompressVis( byte* in, byte* decompressed )
 
 		c = in[1];
 		if( !c )
+		{
 			Error( "DecompressVis: 0 repeat" );
+		}
 		in += 2;
 		while( c )
 		{
@@ -669,7 +689,9 @@ void Q2_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < numvertexes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			dvertexes[i].point[j] = LittleFloat( dvertexes[i].point[j] );
+		}
 	}
 
 	//
@@ -678,7 +700,9 @@ void Q2_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < numplanes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			dplanes[i].normal[j] = LittleFloat( dplanes[i].normal[j] );
+		}
 		dplanes[i].dist = LittleFloat( dplanes[i].dist );
 		dplanes[i].type = LittleLong( dplanes[i].type );
 	}
@@ -689,7 +713,9 @@ void Q2_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < numtexinfo; i++ )
 	{
 		for( j = 0; j < 8; j++ )
+		{
 			texinfo[i].vecs[0][j] = LittleFloat( texinfo[i].vecs[0][j] );
+		}
 		texinfo[i].flags	   = LittleLong( texinfo[i].flags );
 		texinfo[i].value	   = LittleLong( texinfo[i].value );
 		texinfo[i].nexttexinfo = LittleLong( texinfo[i].nexttexinfo );
@@ -749,19 +775,25 @@ void Q2_SwapBSPFile( qboolean todisk )
 	// leaffaces
 	//
 	for( i = 0; i < numleaffaces; i++ )
+	{
 		dleaffaces[i] = LittleShort( dleaffaces[i] );
+	}
 
 	//
 	// leafbrushes
 	//
 	for( i = 0; i < numleafbrushes; i++ )
+	{
 		dleafbrushes[i] = LittleShort( dleafbrushes[i] );
+	}
 
 	//
 	// surfedges
 	//
 	for( i = 0; i < numsurfedges; i++ )
+	{
 		dsurfedges[i] = LittleLong( dsurfedges[i] );
+	}
 
 	//
 	// edges
@@ -813,9 +845,13 @@ void Q2_SwapBSPFile( qboolean todisk )
 	// visibility
 	//
 	if( todisk )
+	{
 		j = dvis->numclusters;
+	}
 	else
+	{
 		j = LittleLong( dvis->numclusters );
+	}
 	dvis->numclusters = LittleLong( dvis->numclusters );
 	for( i = 0; i < j; i++ )
 	{
@@ -834,10 +870,14 @@ int		   Q2_CopyLump( int lump, void* dest, int size, int maxsize )
 	ofs	   = header->lumps[lump].fileofs;
 
 	if( length % size )
+	{
 		Error( "LoadBSPFile: odd lump size" );
+	}
 
 	if( ( length / size ) > maxsize )
+	{
 		Error( "Q2_LoadBSPFile: exceeded max size for lump %d size %d > maxsize %d\n", lump, ( length / size ), maxsize );
+	}
 
 	memcpy( dest, ( byte* )header + ofs, length );
 
@@ -860,12 +900,18 @@ void Q2_LoadBSPFile( char* filename, int offset, int length )
 
 	// swap the header
 	for( i = 0; i < sizeof( dheader_t ) / 4; i++ )
+	{
 		( ( int* )header )[i] = LittleLong( ( ( int* )header )[i] );
+	}
 
 	if( header->ident != IDBSPHEADER )
+	{
 		Error( "%s is not a IBSP file", filename );
+	}
 	if( header->version != BSPVERSION )
+	{
 		Error( "%s is version %i, not %i", filename, header->version, BSPVERSION );
+	}
 
 	nummodels	   = Q2_CopyLump( LUMP_MODELS, dmodels, sizeof( dmodel_t ), MAX_MAP_MODELS );
 	numvertexes	   = Q2_CopyLump( LUMP_VERTEXES, dvertexes, sizeof( dvertex_t ), MAX_MAP_VERTS );
@@ -919,12 +965,18 @@ void Q2_LoadBSPFileTexinfo( char* filename )
 
 	// swap the header
 	for( i = 0; i < sizeof( dheader_t ) / 4; i++ )
+	{
 		( ( int* )header )[i] = LittleLong( ( ( int* )header )[i] );
+	}
 
 	if( header->ident != IDBSPHEADER )
+	{
 		Error( "%s is not a IBSP file", filename );
+	}
 	if( header->version != BSPVERSION )
+	{
 		Error( "%s is version %i, not %i", filename, header->version, BSPVERSION );
+	}
 
 	length = header->lumps[LUMP_TEXINFO].filelen;
 	ofs	   = header->lumps[LUMP_TEXINFO].fileofs;
@@ -1014,7 +1066,9 @@ Dumps info about current file
 void Q2_PrintBSPFileSizes()
 {
 	if( !num_entities )
+	{
 		Q2_ParseEntities();
+	}
 
 	printf( "%6i models       %7i\n", nummodels, ( int )( nummodels * sizeof( dmodel_t ) ) );
 	printf( "%6i brushes      %7i\n", numbrushes, ( int )( numbrushes * sizeof( dbrush_t ) ) );
@@ -1086,7 +1140,9 @@ void Q2_UnparseEntities()
 	{
 		ep = entities[i].epairs;
 		if( !ep )
+		{
 			continue; // ent got removed
+		}
 
 		strcat( end, "{\n" );
 		end += 2;
@@ -1106,7 +1162,9 @@ void Q2_UnparseEntities()
 		end += 2;
 
 		if( end > buf + MAX_MAP_ENTSTRING )
+		{
 			Error( "Entity text too long" );
+		}
 	}
 	entdatasize = end - buf + 1;
 } // end of the function Q2_UnparseEntities

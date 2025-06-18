@@ -528,7 +528,9 @@ static void RB_IterateStagesGeneric( shaderCommands_t* input )
 				GL_Bind( tr.whiteImage );
 			}
 			else
+			{
 				R_BindAnimatedImage( &pStage->bundle[0] );
+			}
 
 			GL_State( pStage->stateBits );
 

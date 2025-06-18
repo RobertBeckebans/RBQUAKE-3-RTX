@@ -43,9 +43,9 @@
  * This module is specialized to the case DCTSIZE = 8.
  */
 
-	#if DCTSIZE != 8
-Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
-	#endif
+#if DCTSIZE != 8
+	Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
+#endif
 
 /* Scaling decisions are generally the same as in the LL&M algorithm;
  * see jidctint.c for more details.  However, we choose to descale
@@ -71,13 +71,13 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
  * are fewer one-bits in the constants).
  */
 
-	#if BITS_IN_JSAMPLE == 8
-		#define CONST_BITS 8
-		#define PASS1_BITS 2
-	#else
-		#define CONST_BITS 8
-		#define PASS1_BITS 1 /* lose a little precision to avoid overflow */
-	#endif
+#if BITS_IN_JSAMPLE == 8
+	#define CONST_BITS 8
+	#define PASS1_BITS 2
+#else
+	#define CONST_BITS 8
+	#define PASS1_BITS 1 /* lose a little precision to avoid overflow */
+#endif
 
 /* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
  * causing a lot of useless floating-point operations at run time.
@@ -86,33 +86,33 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
  * (With a reasonable C compiler, you can just rely on the FIX() macro...)
  */
 
-	#if CONST_BITS == 8
-		#define FIX_1_082392200 ( ( INT32 )277 ) /* FIX(1.082392200) */
-		#define FIX_1_414213562 ( ( INT32 )362 ) /* FIX(1.414213562) */
-		#define FIX_1_847759065 ( ( INT32 )473 ) /* FIX(1.847759065) */
-		#define FIX_2_613125930 ( ( INT32 )669 ) /* FIX(2.613125930) */
-	#else
-		#define FIX_1_082392200 FIX( 1.082392200 )
-		#define FIX_1_414213562 FIX( 1.414213562 )
-		#define FIX_1_847759065 FIX( 1.847759065 )
-		#define FIX_2_613125930 FIX( 2.613125930 )
-	#endif
+#if CONST_BITS == 8
+	#define FIX_1_082392200 ( ( INT32 )277 ) /* FIX(1.082392200) */
+	#define FIX_1_414213562 ( ( INT32 )362 ) /* FIX(1.414213562) */
+	#define FIX_1_847759065 ( ( INT32 )473 ) /* FIX(1.847759065) */
+	#define FIX_2_613125930 ( ( INT32 )669 ) /* FIX(2.613125930) */
+#else
+	#define FIX_1_082392200 FIX( 1.082392200 )
+	#define FIX_1_414213562 FIX( 1.414213562 )
+	#define FIX_1_847759065 FIX( 1.847759065 )
+	#define FIX_2_613125930 FIX( 2.613125930 )
+#endif
 
 /* We can gain a little more speed, with a further compromise in accuracy,
  * by omitting the addition in a descaling shift.  This yields an incorrectly
  * rounded result half the time...
  */
 
-	#ifndef USE_ACCURATE_ROUNDING
-		#undef DESCALE
-		#define DESCALE( x, n ) RIGHT_SHIFT( x, n )
-	#endif
+#ifndef USE_ACCURATE_ROUNDING
+	#undef DESCALE
+	#define DESCALE( x, n ) RIGHT_SHIFT( x, n )
+#endif
 
 /* Multiply a DCTELEM variable by an INT32 constant, and immediately
  * descale to yield a DCTELEM result.
  */
 
-	#define MULTIPLY( var, const ) ( ( DCTELEM )DESCALE( ( var ) * ( const ), CONST_BITS ) )
+#define MULTIPLY( var, const ) ( ( DCTELEM )DESCALE( ( var ) * ( const ), CONST_BITS ) )
 
 /* Dequantize a coefficient by multiplying it by the multiplier-table
  * entry; produce a DCTELEM result.  For 8-bit data a 16x16->16
@@ -120,45 +120,45 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
  * declared INT32, so a 32-bit multiply will be used.
  */
 
-	#if BITS_IN_JSAMPLE == 8
-		#define DEQUANTIZE( coef, quantval ) ( ( ( IFAST_MULT_TYPE )( coef ) ) * ( quantval ) )
-	#else
-		#define DEQUANTIZE( coef, quantval ) \
+#if BITS_IN_JSAMPLE == 8
+#define DEQUANTIZE( coef, quantval ) ( ( ( IFAST_MULT_TYPE )( coef ) ) * ( quantval ) )
+#else
+#define DEQUANTIZE( coef, quantval ) \
 			DESCALE( ( coef ) * ( quantval ), IFAST_SCALE_BITS - PASS1_BITS )
-	#endif
+#endif
 
 /* Like DESCALE, but applies to a DCTELEM and produces an int.
  * We assume that int right shift is unsigned if INT32 right shift is.
  */
 
-	#ifdef RIGHT_SHIFT_IS_UNSIGNED
-		#define ISHIFT_TEMPS DCTELEM ishift_temp;
-		#if BITS_IN_JSAMPLE == 8
-			#define DCTELEMBITS 16 /* DCTELEM may be 16 or 32 bits */
-		#else
-			#define DCTELEMBITS 32 /* DCTELEM must be 32 bits */
-		#endif
-		#define IRIGHT_SHIFT( x, shft )                                                                     \
+#ifdef RIGHT_SHIFT_IS_UNSIGNED
+#define ISHIFT_TEMPS DCTELEM ishift_temp;
+#if BITS_IN_JSAMPLE == 8
+	#define DCTELEMBITS 16 /* DCTELEM may be 16 or 32 bits */
+#else
+	#define DCTELEMBITS 32 /* DCTELEM must be 32 bits */
+#endif
+#define IRIGHT_SHIFT( x, shft )                                                                     \
 			( ( ishift_temp = ( x ) ) < 0 ?                                                                 \
                     ( ishift_temp >> ( shft ) ) | ( ( ~( ( DCTELEM )0 ) ) << ( DCTELEMBITS - ( shft ) ) ) : \
                     ( ishift_temp >> ( shft ) ) )
-	#else
-		#define ISHIFT_TEMPS
-		#define IRIGHT_SHIFT( x, shft ) ( ( x ) >> ( shft ) )
-	#endif
+#else
+#define ISHIFT_TEMPS
+#define IRIGHT_SHIFT( x, shft ) ( ( x ) >> ( shft ) )
+#endif
 
-	#ifdef USE_ACCURATE_ROUNDING
-		#define IDESCALE( x, n ) ( ( int )IRIGHT_SHIFT( ( x ) + ( 1 << ( ( n )-1 ) ), n ) )
-	#else
-		#define IDESCALE( x, n ) ( ( int )IRIGHT_SHIFT( x, n ) )
-	#endif
+#ifdef USE_ACCURATE_ROUNDING
+	#define IDESCALE( x, n ) ( ( int )IRIGHT_SHIFT( ( x ) + ( 1 << ( ( n )-1 ) ), n ) )
+#else
+	#define IDESCALE( x, n ) ( ( int )IRIGHT_SHIFT( x, n ) )
+#endif
 
-	   /*
- * Perform dequantization and inverse DCT on one block of coefficients.
- */
+/*
+* Perform dequantization and inverse DCT on one block of coefficients.
+*/
 
-	   GLOBAL void
-	   jpeg_idct_ifast( j_decompress_ptr cinfo, jpeg_component_info* compptr, JCOEFPTR coef_block, JSAMPARRAY output_buf, JDIMENSION output_col )
+GLOBAL void
+jpeg_idct_ifast( j_decompress_ptr cinfo, jpeg_component_info* compptr, JCOEFPTR coef_block, JSAMPARRAY output_buf, JDIMENSION output_col )
 {
 	DCTELEM          tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
 	DCTELEM          tmp10, tmp11, tmp12, tmp13;
@@ -171,23 +171,23 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 	int              ctr;
 	int              workspace[ DCTSIZE2 ]; /* buffers data between passes */
 	SHIFT_TEMPS                             /* for DESCALE */
-		ISHIFT_TEMPS                        /* for IDESCALE */
+	ISHIFT_TEMPS                        /* for IDESCALE */
 
-			/* Pass 1: process columns from input, store into work array. */
+	/* Pass 1: process columns from input, store into work array. */
 
-			inptr = coef_block;
+	inptr = coef_block;
 	quantptr      = ( IFAST_MULT_TYPE* )compptr->dct_table;
 	wsptr         = workspace;
 	for( ctr = DCTSIZE; ctr > 0; ctr-- )
 	{
 		/* Due to quantization, we will usually find that many of the input
-     * coefficients are zero, especially the AC terms.  We can exploit this
-     * by short-circuiting the IDCT calculation for any column in which all
-     * the AC terms are zero.  In that case each output is equal to the
-     * DC coefficient (with scale factor as needed).
-     * With typical images and quantization tables, half or more of the
-     * column DCT calculations can be simplified this way.
-     */
+		* coefficients are zero, especially the AC terms.  We can exploit this
+		* by short-circuiting the IDCT calculation for any column in which all
+		* the AC terms are zero.  In that case each output is equal to the
+		* DC coefficient (with scale factor as needed).
+		* With typical images and quantization tables, half or more of the
+		* column DCT calculations can be simplified this way.
+		*/
 
 		if( ( inptr[ DCTSIZE * 1 ] | inptr[ DCTSIZE * 2 ] | inptr[ DCTSIZE * 3 ] |
 				inptr[ DCTSIZE * 4 ] | inptr[ DCTSIZE * 5 ] | inptr[ DCTSIZE * 6 ] |
@@ -275,14 +275,14 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 	{
 		outptr = output_buf[ ctr ] + output_col;
 		/* Rows of zeroes can be exploited in the same way as we did with columns.
-     * However, the column calculation has created many nonzero AC terms, so
-     * the simplification applies less often (typically 5% to 10% of the time).
-     * On machines with very fast multiplication, it's possible that the
-     * test takes more time than it's worth.  In that case this section
-     * may be commented out.
-     */
+		* However, the column calculation has created many nonzero AC terms, so
+		* the simplification applies less often (typically 5% to 10% of the time).
+		* On machines with very fast multiplication, it's possible that the
+		* test takes more time than it's worth.  In that case this section
+		* may be commented out.
+		*/
 
-	#ifndef NO_ZERO_ROW_TEST
+#ifndef NO_ZERO_ROW_TEST
 		if( ( wsptr[ 1 ] | wsptr[ 2 ] | wsptr[ 3 ] | wsptr[ 4 ] | wsptr[ 5 ] | wsptr[ 6 ] |
 				wsptr[ 7 ] ) == 0 )
 		{
@@ -301,7 +301,7 @@ Sorry, this code only copes with 8x8 DCTs./* deliberate syntax err */
 			wsptr += DCTSIZE; /* advance pointer to next row */
 			continue;
 		}
-	#endif
+#endif
 
 		/* Even part */
 

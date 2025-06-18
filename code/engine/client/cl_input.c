@@ -199,8 +199,9 @@ float CL_KeyState( kbutton_t* key )
 	}
 
 #if 0
-	if (msec) {
-		Com_Printf ("%i ", msec);
+	if( msec )
+	{
+		Com_Printf( "%i ", msec );
 	}
 #endif
 

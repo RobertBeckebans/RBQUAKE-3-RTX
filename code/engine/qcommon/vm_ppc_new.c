@@ -445,7 +445,9 @@ static void Emit4( char* opname, int i )
 {
 #if DEBUG_VM
 	if( pass == 1 )
+	{
 		printf( "\t\t\t%p %s\t%08lx\n", &buf[compiledOfs], opname, i & 0x3ffffff );
+	}
 #endif
 	buf[compiledOfs] = i;
 	compiledOfs++;
@@ -457,7 +459,9 @@ static void Inst( char* opname, int opcode, int destReg, int aReg, int bReg )
 
 #if DEBUG_VM
 	if( pass == 1 )
+	{
 		printf( "\t\t\t%p %s\tr%d,r%d,r%d\n", &buf[compiledOfs], opname, destReg, aReg, bReg );
+	}
 #endif
 	r				 = opcode | ( destReg << 21 ) | ( aReg << 16 ) | ( bReg << 11 );
 	buf[compiledOfs] = r;
@@ -470,7 +474,9 @@ static void Inst4( char* opname, int opcode, int destReg, int aReg, int bReg, in
 
 #if DEBUG_VM
 	if( pass == 1 )
+	{
 		printf( "\t\t\t%p %s\tr%d,r%d,r%d,r%d\n", &buf[compiledOfs], opname, destReg, aReg, bReg, cReg );
+	}
 #endif
 	r				 = opcode | ( destReg << 21 ) | ( aReg << 16 ) | ( bReg << 11 ) | ( cReg << 6 );
 	buf[compiledOfs] = r;
@@ -487,7 +493,9 @@ static void InstImm( char* opname, int opcode, int destReg, int aReg, int immedi
 	}
 #if DEBUG_VM
 	if( pass == 1 )
+	{
 		printf( "\t\t\t%p %s\tr%d,r%d,0x%x\n", &buf[compiledOfs], opname, destReg, aReg, immediate );
+	}
 #endif
 	r				 = opcode | ( destReg << 21 ) | ( aReg << 16 ) | ( immediate & 0xffff );
 	buf[compiledOfs] = r;
@@ -504,7 +512,9 @@ static void InstImmU( char* opname, int opcode, int destReg, int aReg, int immed
 	}
 #if DEBUG_VM
 	if( pass == 1 )
+	{
 		printf( "\t\t\t%p %s\tr%d,r%d,0x%x\n", &buf[compiledOfs], opname, destReg, aReg, immediate );
+	}
 #endif
 	r				 = opcode | ( destReg << 21 ) | ( aReg << 16 ) | ( immediate & 0xffff );
 	buf[compiledOfs] = r;
@@ -526,26 +536,33 @@ static void	 ltop()
 static void ltopandsecond()
 {
 #if 0
-    if (pass>=0 && buf[compiledOfs-1] == (PPC_STWU |  R_TOP<<21 | R_OPSTACK<<16 | 4 ) && jused[instruction]==0 ) {
-	compiledOfs--;
-	if (!pass) {
-	    tvm->instructionPointers[instruction] = compiledOfs * 4;
+	if( pass >= 0 && buf[compiledOfs - 1] == ( PPC_STWU |  R_TOP << 21 | R_OPSTACK << 16 | 4 ) && jused[instruction] == 0 )
+	{
+		compiledOfs--;
+		if( !pass )
+		{
+			tvm->instructionPointers[instruction] = compiledOfs * 4;
+		}
+		InstImm( PPC_LWZ, R_SECOND, R_OPSTACK, 0 );	// get value from opstack
+		InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -4 );
 	}
-	InstImm( PPC_LWZ, R_SECOND, R_OPSTACK, 0 );	// get value from opstack
-	InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -4 );
-    } else if (pass>=0 && buf[compiledOfs-1] == (PPC_STW |  R_TOP<<21 | R_OPSTACK<<16 | 0 )  && jused[instruction]==0 ) {
-	compiledOfs--;
-	if (!pass) {
-	    tvm->instructionPointers[instruction] = compiledOfs * 4;
+	else if( pass >= 0 && buf[compiledOfs - 1] == ( PPC_STW |  R_TOP << 21 | R_OPSTACK << 16 | 0 )  && jused[instruction] == 0 )
+	{
+		compiledOfs--;
+		if( !pass )
+		{
+			tvm->instructionPointers[instruction] = compiledOfs * 4;
+		}
+		InstImm( PPC_LWZ, R_SECOND, R_OPSTACK, -4 );	// get value from opstack
+		InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -8 );
 	}
-	InstImm( PPC_LWZ, R_SECOND, R_OPSTACK, -4 );	// get value from opstack
-	InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -8 );
-    } else {
-	ltop();		// get value from opstack
-	InstImm( PPC_LWZ, R_SECOND, R_OPSTACK, -4 );	// get value from opstack
-	InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -8 );
-    }
-    rtopped = qfalse;
+	else
+	{
+		ltop();		// get value from opstack
+		InstImm( PPC_LWZ, R_SECOND, R_OPSTACK, -4 );	// get value from opstack
+		InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -8 );
+	}
+	rtopped = qfalse;
 #endif
 }
 
@@ -607,14 +624,14 @@ static void makeInteger( int depth )
 		opStackLoadInstructionAddr[depth]  = 0;
 		opStackRegType[depth]			   = 1;
 #if 0
-		InstImm( "stfs", PPC_STFS, opStackFloatRegisters[depth], R_OPSTACK, depth*4+4);
+		InstImm( "stfs", PPC_STFS, opStackFloatRegisters[depth], R_OPSTACK, depth * 4 + 4 );
 		// For XXX make sure we force enough NOPs to get the load into
 		// another dispatch group to avoid pipeline flush.
 		Inst( "ori", PPC_ORI,  0, 0, 0 );
 		Inst( "ori", PPC_ORI,  0, 0, 0 );
 		Inst( "ori", PPC_ORI,  0, 0, 0 );
 		Inst( "ori", PPC_ORI,  0, 0, 0 );
-		InstImm( "lwz", PPC_LWZ, opStackIntRegisters[depth], R_OPSTACK, depth*4+4);
+		InstImm( "lwz", PPC_LWZ, opStackIntRegisters[depth], R_OPSTACK, depth * 4 + 4 );
 		opStackRegType[depth] = 1;
 #endif
 	}
@@ -690,19 +707,22 @@ static void makeFloat( int depth )
 
 // TJW: Unused
 #if 0
-static void fltop() {
-    if (rtopped == qfalse) {
-	InstImm( PPC_LFS, R_TOP, R_OPSTACK, 0 );		// get value from opstack
-    }
+static void fltop()
+{
+	if( rtopped == qfalse )
+	{
+		InstImm( PPC_LFS, R_TOP, R_OPSTACK, 0 );		// get value from opstack
+	}
 }
 #endif
 
 #if 0
-static void fltopandsecond() {
+static void fltopandsecond()
+{
 	InstImm( PPC_LFS, R_TOP, R_OPSTACK, 0 );		// get value from opstack
 	InstImm( PPC_LFS, R_SECOND, R_OPSTACK, -4 );	// get value from opstack
 	InstImm( PPC_ADDI, R_OPSTACK, R_OPSTACK, -8 );
-    rtopped = qfalse;
+	rtopped = qfalse;
 	return;
 }
 #endif
@@ -777,7 +797,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_BREAK:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08lx BREAK\n", instruction );
+					}
 #endif
 					InstImmU( "addi", PPC_ADDI, R_TOP, 0, 0 );
 					InstImm( "lwz", PPC_LWZ, R_TOP, R_TOP, 0 ); // *(int *)0 to crash to debugger
@@ -787,7 +809,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					v			 = Constant4();
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x ENTER\t%04x\n", instruction, v );
+					}
 #endif
 					opStackRegType[opStackDepth] = 0;
 					mainFunction++;
@@ -798,7 +822,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 						// into doing it, and properly matches the PowerPC ABI
 						InstImm( "addi", PPC_ADDI, R_REAL_STACK, R_REAL_STACK, -OP_STACK_MAX_DEPTH * 4 ); // sub R_STACK, R_STACK, imm
 						for( i = 0; i < OP_STACK_MAX_DEPTH; i++ )
+						{
 							InstImm( "stw", PPC_STW, opStackIntRegisters[i], R_REAL_STACK, i * 4 );
+						}
 					}
 					InstImm( "addi", PPC_ADDI, R_STACK, R_STACK, -v ); // sub R_STACK, R_STACK, imm
 					break;
@@ -806,7 +832,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					v = Constant4();
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x CONST\t%08x\n", instruction, v );
+					}
 #endif
 					opStackLoadInstructionAddr[opStackDepth] = 0;
 					if( v < 32768 && v >= -32768 )
@@ -832,7 +860,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					oc1 = Constant4();
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LOCAL\t%08x\n", instruction, oc1 );
+					}
 #endif
 					if( code[pc] == OP_LOAD4 || code[pc] == OP_LOAD2 || code[pc] == OP_LOAD1 )
 					{
@@ -847,13 +877,19 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					v = Constant1();
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x ARG \t%08x\n", instruction, v );
+					}
 #endif
 					InstImm( "addi", PPC_ADDI, R_EA, R_STACK, v ); // location to put it
 					if( opStackRegType[opStackDepth - 1] == 1 )
+					{
 						Inst( "stwx", PPC_STWX, opStackIntRegisters[opStackDepth - 1], R_EA, R_MEMBASE );
+					}
 					else
+					{
 						Inst( "stfsx", PPC_STFSX, opStackFloatRegisters[opStackDepth - 1], R_EA, R_MEMBASE );
+					}
 					opStackRegType[opStackDepth - 1]			 = 0;
 					opStackLoadInstructionAddr[opStackDepth - 1] = 0;
 					opStackDepth -= 1;
@@ -862,7 +898,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_CALL:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x CALL\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assert( opStackDepth > 0 );
@@ -894,7 +932,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_PUSH:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x PUSH\n", instruction );
+					}
 #endif
 					opStackRegType[opStackDepth] = 1; // Garbage int value.
 					opStackDepth += 1;
@@ -902,7 +942,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_POP:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x POP\n", instruction );
+					}
 #endif
 					opStackDepth -= 1;
 					opStackRegType[opStackDepth]				 = 0; // ??
@@ -911,7 +953,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LEAVE:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LEAVE\n", instruction );
+					}
 #endif
 					assert( opStackDepth == 1 );
 					assert( opStackRegType[0] != 0 );
@@ -929,7 +973,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					if( mainFunction == 1 )
 					{
 						for( i = 0; i < OP_STACK_MAX_DEPTH; i++ )
+						{
 							InstImm( "lwz", PPC_LWZ, opStackIntRegisters[i], R_REAL_STACK, i * 4 );
+						}
 						InstImm( "addi", PPC_ADDI, R_REAL_STACK, R_REAL_STACK, OP_STACK_MAX_DEPTH * 4 );
 					}
 					opStackDepth--;
@@ -940,7 +986,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LOAD4:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LOAD4\n", instruction );
+					}
 #endif
 					// We should try to figure out whether to use LWZX or LFSX based
 					// on some kind of code analysis after subsequent passes.  I think what
@@ -956,7 +1004,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LOAD2:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LOAD2\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					opStackLoadInstructionAddr[opStackDepth - 1] = 0;
@@ -966,7 +1016,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LOAD1:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LOAD1\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					opStackLoadInstructionAddr[opStackDepth - 1] = 0;
@@ -976,13 +1028,19 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_STORE4:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x STORE4\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 2 );
 					if( opStackRegType[opStackDepth - 1] == 1 )
+					{
 						Inst( "stwx", PPC_STWX, opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 2], R_MEMBASE ); // store from memory base
+					}
 					else
+					{
 						Inst( "stfsx", PPC_STFSX, opStackFloatRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 2], R_MEMBASE ); // store from memory base
+					}
 					opStackRegType[opStackDepth - 1]			 = 0;
 					opStackRegType[opStackDepth - 2]			 = 0;
 					opStackLoadInstructionAddr[opStackDepth - 1] = 0;
@@ -992,7 +1050,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_STORE2:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x STORE2\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1006,7 +1066,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_STORE1:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x STORE1\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1021,7 +1083,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_EQ:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x EQ\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1047,7 +1111,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_NE:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x NE\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1075,7 +1141,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LTI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LTI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1102,7 +1170,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LEI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LEI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1129,7 +1199,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_GTI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x GTI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1156,7 +1228,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_GEI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x GEI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1183,7 +1257,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LTU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LTU\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1210,7 +1286,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LEU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LEU\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1237,7 +1315,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_GTU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x GTU\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1264,7 +1344,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_GEU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x GEU\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1292,7 +1374,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_EQF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x EQF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1319,7 +1403,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_NEF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x NEF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1346,7 +1432,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LTF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LTF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1373,7 +1461,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LEF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LEF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1400,7 +1490,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_GTF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x GTF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1427,7 +1519,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_GEF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x GEF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1455,7 +1549,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_NEGI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x NEGI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					InstImm( "subfic", PPC_SUBFIC, opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 1], 0 );
@@ -1464,7 +1560,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_ADD:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x ADD\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1476,7 +1574,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_SUB:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x SUB\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1488,7 +1588,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_DIVI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x DIVI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1500,7 +1602,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_DIVU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x DIVU\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1512,7 +1616,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_MODI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x MODI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1526,7 +1632,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_MODU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x MODU\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1541,7 +1649,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_MULU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x MULI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1553,7 +1663,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_BAND:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x BAND\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1565,7 +1677,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_BOR:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x BOR\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1577,7 +1691,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_BXOR:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x BXOR\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1589,7 +1705,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_BCOM:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x BCOM\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					Inst( "nor", PPC_NOR, opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 1] );
@@ -1598,7 +1716,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_LSH:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x LSH\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1610,7 +1730,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_RSHI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x RSHI\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1622,7 +1744,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_RSHU:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x RSHU\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
@@ -1635,7 +1759,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_NEGF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x NEGF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					Inst( "fneg", PPC_FNEG, opStackFloatRegisters[opStackDepth - 1], 0, opStackFloatRegisters[opStackDepth - 1] );
@@ -1644,7 +1770,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_ADDF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x ADDF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1656,7 +1784,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_SUBF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x SUBF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1668,7 +1798,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_DIVF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x DIVF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1680,7 +1812,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_MULF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x MULF\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 					makeFloat( opStackDepth - 2 );
@@ -1693,7 +1827,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_CVIF:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x CVIF\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					// makeInteger(opStackDepth-1);
@@ -1715,7 +1851,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_CVFI:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x CVFI\n", instruction );
+					}
 #endif
 					makeFloat( opStackDepth - 1 );
 
@@ -1737,7 +1875,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_SEX8:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x SEX8\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					Inst( "extsb", PPC_EXTSB, opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 1], 0 );
@@ -1746,7 +1886,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_SEX16:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x SEX16\n", instruction );
+					}
 #endif
 					assertInteger( opStackDepth - 1 );
 					Inst( "extsh", PPC_EXTSH, opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 1], 0 );
@@ -1757,14 +1899,16 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 					v = Constant4() >> 2;
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x BLOCK_COPY\t%08lx\n", instruction, v << 2 );
+					}
 #endif
 					assert( opStackDepth >= 2 );
 					assertInteger( opStackDepth - 1 );
 					assertInteger( opStackDepth - 2 );
 					InstImmU( "addi", PPC_ADDI, R_EA, 0, v ); // count
-															  // FIXME: range check
-					Inst( "mtctr", PPC_MTSPR, R_EA, 9, 0 );	  // move to count register
+					// FIXME: range check
+					Inst( "mtctr", PPC_MTSPR, R_EA, 9, 0 ); // move to count register
 
 					Inst( "add", PPC_ADD, opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 1], R_MEMBASE );
 					InstImm( "addi", PPC_ADDI, opStackIntRegisters[opStackDepth - 1], opStackIntRegisters[opStackDepth - 1], -4 );
@@ -1784,7 +1928,9 @@ void VM_Compile( vm_t* vm, vmHeader_t* header )
 				case OP_JUMP:
 #if DEBUG_VM
 					if( pass == 1 )
+					{
 						printf( "%08x JUMP\n", instruction );
+					}
 #endif
 					assert( opStackDepth == 1 );
 					assertInteger( opStackDepth - 1 );
@@ -1924,8 +2070,8 @@ void AsmCall()
 		"    bc		12,0, systemTrap	\n"
 
 		// calling another VM function, so lookup in instructionPointers
-		"    slwi	r12,r12,2		\n"		// RG_TOP,RG_TOP,2
-											// FIXME: range check
+		"    slwi	r12,r12,2		\n" // RG_TOP,RG_TOP,2
+		// FIXME: range check
 		"    lwzx	r12, r8, r12		\n" // RG_TOP, RG_INSTRUCTIONS(RG_TOP)
 		"    mtctr	r12			\n"			// RG_TOP
 	);

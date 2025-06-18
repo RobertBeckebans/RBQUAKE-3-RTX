@@ -61,12 +61,16 @@ epair_t* ParseEpair( script_t* script )
 	PS_ExpectAnyToken( script, &token );
 	StripDoubleQuotes( token.string );
 	if( strlen( token.string ) >= MAX_KEY - 1 )
+	{
 		Error( "ParseEpair: token %s too long", token.string );
+	}
 	e->key = copystring( token.string );
 	PS_ExpectAnyToken( script, &token );
 	StripDoubleQuotes( token.string );
 	if( strlen( token.string ) >= MAX_VALUE - 1 )
+	{
 		Error( "ParseEpair: token %s too long", token.string );
+	}
 	e->value = copystring( token.string );
 
 	// strip trailing spaces
@@ -88,13 +92,19 @@ qboolean ParseEntity( script_t* script )
 	token_t	  token;
 
 	if( !PS_ReadToken( script, &token ) )
+	{
 		return false;
+	}
 
 	if( strcmp( token.string, "{" ) )
+	{
 		Error( "ParseEntity: { not found" );
+	}
 
 	if( num_entities == MAX_MAP_ENTITIES )
+	{
 		Error( "num_entities == MAX_MAP_ENTITIES" );
+	}
 
 	mapent = &entities[num_entities];
 	num_entities++;
@@ -102,9 +112,13 @@ qboolean ParseEntity( script_t* script )
 	do
 	{
 		if( !PS_ReadToken( script, &token ) )
+		{
 			Error( "ParseEntity: EOF without closing brace" );
+		}
 		if( !strcmp( token.string, "}" ) )
+		{
 			break;
+		}
 		PS_UnreadLastToken( script );
 		e			   = ParseEpair( script );
 		e->next		   = mapent->epairs;
@@ -149,7 +163,9 @@ char* ValueForKey( entity_t* ent, char* key )
 
 	for( ep = ent->epairs; ep; ep = ep->next )
 		if( !strcmp( ep->key, key ) )
+		{
 			return ep->value;
+		}
 	return "";
 }
 

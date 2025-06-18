@@ -39,7 +39,7 @@ typedef my_destination_mgr* my_dest_ptr;
  */
 
 METHODDEF void
-	init_destination( j_compress_ptr cinfo )
+init_destination( j_compress_ptr cinfo )
 {
 	my_dest_ptr dest = ( my_dest_ptr )cinfo->dest;
 
@@ -74,13 +74,15 @@ METHODDEF void
  */
 
 METHODDEF boolean
-	empty_output_buffer( j_compress_ptr cinfo )
+empty_output_buffer( j_compress_ptr cinfo )
 {
 	my_dest_ptr dest = ( my_dest_ptr )cinfo->dest;
 
 	if( JFWRITE( dest->outfile, dest->buffer, OUTPUT_BUF_SIZE ) !=
-		( size_t )OUTPUT_BUF_SIZE )
+			( size_t )OUTPUT_BUF_SIZE )
+	{
 		ERREXIT( cinfo, JERR_FILE_WRITE );
+	}
 
 	dest->pub.next_output_byte = dest->buffer;
 	dest->pub.free_in_buffer   = OUTPUT_BUF_SIZE;
@@ -98,7 +100,7 @@ METHODDEF boolean
  */
 
 METHODDEF void
-	term_destination( j_compress_ptr cinfo )
+term_destination( j_compress_ptr cinfo )
 {
 	my_dest_ptr dest      = ( my_dest_ptr )cinfo->dest;
 	size_t      datacount = OUTPUT_BUF_SIZE - dest->pub.free_in_buffer;
@@ -107,12 +109,16 @@ METHODDEF void
 	if( datacount > 0 )
 	{
 		if( JFWRITE( dest->outfile, dest->buffer, datacount ) != datacount )
+		{
 			ERREXIT( cinfo, JERR_FILE_WRITE );
+		}
 	}
 	fflush( dest->outfile );
 	/* Make sure we wrote the output file OK */
 	if( ferror( dest->outfile ) )
+	{
 		ERREXIT( cinfo, JERR_FILE_WRITE );
+	}
 }
 
 /*
@@ -122,18 +128,19 @@ METHODDEF void
  */
 
 GLOBAL void
-	jpeg_stdio_dest( j_compress_ptr cinfo, FILE* outfile )
+jpeg_stdio_dest( j_compress_ptr cinfo, FILE* outfile )
 {
 	my_dest_ptr dest;
 
 	/* The destination object is made permanent so that multiple JPEG images
-   * can be written to the same file without re-executing jpeg_stdio_dest.
-   * This makes it dangerous to use this manager and a different destination
-   * manager serially with the same JPEG object, because their private object
-   * sizes may be different.  Caveat programmer.
-   */
+	* can be written to the same file without re-executing jpeg_stdio_dest.
+	* This makes it dangerous to use this manager and a different destination
+	* manager serially with the same JPEG object, because their private object
+	* sizes may be different.  Caveat programmer.
+	*/
 	if( cinfo->dest == NULL )
-	{ /* first time for this JPEG object? */
+	{
+		/* first time for this JPEG object? */
 		cinfo->dest = ( struct jpeg_destination_mgr* )( *cinfo->mem->alloc_small )( ( j_common_ptr )cinfo, JPOOL_PERMANENT, SIZEOF( my_destination_mgr ) );
 	}
 

@@ -159,8 +159,8 @@ void Rankings_DrawName( void* self )
 {
 	menufield_s*	f;
 	int				length;
-	
-	f = (menufield_s*)self;
+
+	f = ( menufield_s* )self;
 
 	// strip color codes
 	Q_CleanStr( f->field.buffer );
@@ -169,7 +169,7 @@ void Rankings_DrawName( void* self )
 	{
 		f->field.cursor = length;
 	}
-	
+
 	// show beginning of long names
 	/*
 	if( Menu_ItemAtCursor( f->generic.parent ) != f )
@@ -181,7 +181,7 @@ void Rankings_DrawName( void* self )
 		}
 	}
 	*/
-	
+
 	MenuField_Draw( f );
 }
 #endif

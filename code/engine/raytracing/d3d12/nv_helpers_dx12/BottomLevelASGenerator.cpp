@@ -41,19 +41,19 @@ namespace nv_helpers_dx12
 //--------------------------------------------------------------------------------------------------
 // Add a vertex buffer in GPU memory into the acceleration structure. The
 // vertices are supposed to be represented by 3 float32 value
-void BottomLevelASGenerator::AddVertexBuffer( ID3D12Resource* vertexBuffer,			  // Buffer containing the vertex coordinates,
-																					  // possibly interleaved with other vertex data
-	UINT64													  vertexOffsetInBytes,	  // Offset of the first vertex in the vertex buffer
-	uint32_t												  vertexCount,			  // Number of vertices to consider in the buffer
-	UINT													  vertexSizeInBytes,	  // Size of a vertex including all its other data,
-																					  // used to stride in the buffer
-	ID3D12Resource*											  transformBuffer,		  // Buffer containing a 4x4 transform matrix
-																					  // in GPU memory, to be applied to the
-																					  // vertices. This buffer cannot be nullptr
+void BottomLevelASGenerator::AddVertexBuffer( ID3D12Resource* vertexBuffer, // Buffer containing the vertex coordinates,
+																			// possibly interleaved with other vertex data
+	UINT64													  vertexOffsetInBytes, // Offset of the first vertex in the vertex buffer
+	uint32_t												  vertexCount,		   // Number of vertices to consider in the buffer
+	UINT													  vertexSizeInBytes,   // Size of a vertex including all its other data,
+	// used to stride in the buffer
+	ID3D12Resource*											  transformBuffer, // Buffer containing a 4x4 transform matrix
+	// in GPU memory, to be applied to the
+	// vertices. This buffer cannot be nullptr
 	UINT64													  transformOffsetInBytes, // Offset of the transform matrix in the
-																					  // transform buffer
-	bool													  isOpaque /* = true */	  // If true, the geometry is considered opaque,
-																					  // optimizing the search for a closest hit
+	// transform buffer
+	bool													  isOpaque /* = true */ // If true, the geometry is considered opaque,
+																					// optimizing the search for a closest hit
 )
 {
 	AddVertexBuffer( vertexBuffer, vertexOffsetInBytes, vertexCount, vertexSizeInBytes, nullptr, 0, 0, transformBuffer, transformOffsetInBytes, isOpaque );
@@ -67,23 +67,23 @@ void BottomLevelASGenerator::AddVertexBuffer( ID3D12Resource* vertexBuffer,			  
 //   - triangles (no custom intersector support)
 //   - 3xfloat32 format
 //   - 32-bit indices
-void BottomLevelASGenerator::AddVertexBuffer( ID3D12Resource* vertexBuffer,			  // Buffer containing the vertex coordinates,
-																					  // possibly interleaved with other vertex data
-	UINT64													  vertexOffsetInBytes,	  // Offset of the first vertex in the vertex buffer
-	uint32_t												  vertexCount,			  // Number of vertices to consider in the buffer
-	UINT													  vertexSizeInBytes,	  // Size of a vertex including all its other data,
-																					  // used to stride in the buffer
-	ID3D12Resource*											  indexBuffer,			  // Buffer containing the vertex indices
-																					  // describing the triangles
-	UINT64													  indexOffsetInBytes,	  // Offset of the first index in the index buffer
-	uint32_t												  indexCount,			  // Number of indices to consider in the buffer
-	ID3D12Resource*											  transformBuffer,		  // Buffer containing a 4x4 transform matrix
-																					  // in GPU memory, to be applied to the
-																					  // vertices. This buffer cannot be nullptr
+void BottomLevelASGenerator::AddVertexBuffer( ID3D12Resource* vertexBuffer, // Buffer containing the vertex coordinates,
+																			// possibly interleaved with other vertex data
+	UINT64													  vertexOffsetInBytes, // Offset of the first vertex in the vertex buffer
+	uint32_t												  vertexCount,		   // Number of vertices to consider in the buffer
+	UINT													  vertexSizeInBytes,   // Size of a vertex including all its other data,
+	// used to stride in the buffer
+	ID3D12Resource*											  indexBuffer, // Buffer containing the vertex indices
+	// describing the triangles
+	UINT64													  indexOffsetInBytes, // Offset of the first index in the index buffer
+	uint32_t												  indexCount,		  // Number of indices to consider in the buffer
+	ID3D12Resource*											  transformBuffer,	  // Buffer containing a 4x4 transform matrix
+	// in GPU memory, to be applied to the
+	// vertices. This buffer cannot be nullptr
 	UINT64													  transformOffsetInBytes, // Offset of the transform matrix in the
-																					  // transform buffer
-	bool													  isOpaque /* = true */	  // If true, the geometry is considered opaque,
-																					  // optimizing the search for a closest hit
+	// transform buffer
+	bool													  isOpaque /* = true */ // If true, the geometry is considered opaque,
+																					// optimizing the search for a closest hit
 )
 {
 	// Create the DX12 descriptor representing the input data, assumed to be
@@ -107,13 +107,13 @@ void BottomLevelASGenerator::AddVertexBuffer( ID3D12Resource* vertexBuffer,			  
 // Compute the size of the scratch space required to build the acceleration
 // structure, as well as the size of the resulting structure. The allocation of
 // the buffers is then left to the application
-void BottomLevelASGenerator::ComputeASBufferSizes( ID3D12Device5* device,			  // Device on which the build will be performed
-	bool														  allowUpdate,		  // If true, the resulting acceleration structure will
-																					  // allow iterative updates
+void BottomLevelASGenerator::ComputeASBufferSizes( ID3D12Device5* device,	   // Device on which the build will be performed
+	bool														  allowUpdate, // If true, the resulting acceleration structure will
+	// allow iterative updates
 	UINT64*														  scratchSizeInBytes, // Required scratch memory on the GPU to build
-																					  // the acceleration structure
-	UINT64*														  resultSizeInBytes	  // Required GPU memory to store the acceleration
-																					  // structure
+	// the acceleration structure
+	UINT64*														  resultSizeInBytes // Required GPU memory to store the acceleration
+																					// structure
 )
 {
 	// The generated AS can support iterative updates. This may change the final
@@ -157,10 +157,10 @@ void BottomLevelASGenerator::ComputeASBufferSizes( ID3D12Device5* device,			  //
 // be done in place: the result and previousResult pointers can be the same.
 void BottomLevelASGenerator::Generate( ID3D12GraphicsCommandList4* commandList,	  // Command list on which the build will be enqueued
 	ID3D12Resource*												   scratchBuffer, // Scratch buffer used by the builder to
-																				  // store temporary data
-	ID3D12Resource*												   resultBuffer,  // Result buffer storing the acceleration structure
-	bool														   updateOnly,	  // If true, simply refit the existing
-																				  // acceleration structure
+	// store temporary data
+	ID3D12Resource*												   resultBuffer, // Result buffer storing the acceleration structure
+	bool														   updateOnly,	 // If true, simply refit the existing
+	// acceleration structure
 	ID3D12Resource*												   previousResult // Optional previous acceleration
 																				  // structure, used if an iterative update
 																				  // is requested

@@ -88,7 +88,9 @@ static void UI_CinematicsMenu_Event( void* ptr, int event )
 	int n;
 
 	if( event != QM_ACTIVATED )
+	{
 		return;
+	}
 
 	n = ( ( menucommon_s* )ptr )->id - ID_CIN_IDLOGO;
 	trap_Cvar_Set( "nextmap", va( "ui_cinematics %i", n ) );

@@ -323,9 +323,13 @@ void LerpColor( vec4_t a, vec4_t b, vec4_t c, float t )
 	{
 		c[i] = a[i] + t * ( b[i] - a[i] );
 		if( c[i] < 0 )
+		{
 			c[i] = 0;
+		}
 		else if( c[i] > 1.0 )
+		{
 			c[i] = 1.0;
+		}
 	}
 }
 
@@ -360,11 +364,15 @@ qboolean PC_Float_Parse( int handle, float* f )
 	int		   negative = qfalse;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( token.string[0] == '-' )
 	{
 		if( !trap_PC_ReadToken( handle, &token ) )
+		{
 			return qfalse;
+		}
 		negative = qtrue;
 	}
 	if( token.type != TT_NUMBER )
@@ -373,9 +381,13 @@ qboolean PC_Float_Parse( int handle, float* f )
 		return qfalse;
 	}
 	if( negative )
+	{
 		*f = -token.floatvalue;
+	}
 	else
+	{
 		*f = token.floatvalue;
+	}
 	return qtrue;
 }
 
@@ -453,11 +465,15 @@ qboolean PC_Int_Parse( int handle, int* i )
 	int		   negative = qfalse;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( token.string[0] == '-' )
 	{
 		if( !trap_PC_ReadToken( handle, &token ) )
+		{
 			return qfalse;
+		}
 		negative = qtrue;
 	}
 	if( token.type != TT_NUMBER )
@@ -467,7 +483,9 @@ qboolean PC_Int_Parse( int handle, int* i )
 	}
 	*i = token.intvalue;
 	if( negative )
+	{
 		*i = -*i;
+	}
 	return qtrue;
 }
 
@@ -545,7 +563,9 @@ qboolean PC_String_Parse( int handle, const char** out )
 	pc_token_t token;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 
 	*( out ) = String_Alloc( token.string );
 	return qtrue;
@@ -566,7 +586,9 @@ qboolean PC_Script_Parse( int handle, const char** out )
 	// basically we want everything between the { } as it will be interpreted at run time
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( Q_stricmp( token.string, "{" ) != 0 )
 	{
 		return qfalse;
@@ -575,7 +597,9 @@ qboolean PC_Script_Parse( int handle, const char** out )
 	while( 1 )
 	{
 		if( !trap_PC_ReadToken( handle, &token ) )
+		{
 			return qfalse;
+		}
 
 		if( Q_stricmp( token.string, "}" ) == 0 )
 		{
@@ -2076,7 +2100,9 @@ qboolean Item_ListBox_HandleKey( itemDef_t* item, int key, qboolean down, qboole
 				{
 					listPtr->startPos--;
 					if( listPtr->startPos < 0 )
+					{
 						listPtr->startPos = 0;
+					}
 				}
 				return qtrue;
 			}
@@ -2104,7 +2130,9 @@ qboolean Item_ListBox_HandleKey( itemDef_t* item, int key, qboolean down, qboole
 				{
 					listPtr->startPos++;
 					if( listPtr->startPos >= count )
+					{
 						listPtr->startPos = count - 1;
+					}
 				}
 				return qtrue;
 			}
@@ -2136,7 +2164,9 @@ qboolean Item_ListBox_HandleKey( itemDef_t* item, int key, qboolean down, qboole
 				{
 					listPtr->startPos--;
 					if( listPtr->startPos < 0 )
+					{
 						listPtr->startPos = 0;
+					}
 				}
 				return qtrue;
 			}
@@ -2164,7 +2194,9 @@ qboolean Item_ListBox_HandleKey( itemDef_t* item, int key, qboolean down, qboole
 				{
 					listPtr->startPos++;
 					if( listPtr->startPos > max )
+					{
 						listPtr->startPos = max;
+					}
 				}
 				return qtrue;
 			}
@@ -2462,7 +2494,8 @@ qboolean Item_TextField_HandleKey( itemDef_t* item, int key )
 			key &= ~K_CHAR_FLAG;
 
 			if( key == 'h' - 'a' + 1 )
-			{ // ctrl-h is backspace
+			{
+				// ctrl-h is backspace
 				if( item->cursorPos > 0 )
 				{
 					memmove( &buff[item->cursorPos - 1], &buff[item->cursorPos], len + 1 - item->cursorPos );
@@ -2562,14 +2595,16 @@ qboolean Item_TextField_HandleKey( itemDef_t* item, int key )
 			}
 
 			if( key == K_HOME || key == K_KP_HOME )
-			{ // || ( tolower(key) == 'a' && trap_Key_IsDown( K_CTRL ) ) ) {
+			{
+				// || ( tolower(key) == 'a' && trap_Key_IsDown( K_CTRL ) ) ) {
 				item->cursorPos		 = 0;
 				editPtr->paintOffset = 0;
 				return qtrue;
 			}
 
 			if( key == K_END || key == K_KP_END )
-			{ // ( tolower(key) == 'e' && trap_Key_IsDown( K_CTRL ) ) ) {
+			{
+				// ( tolower(key) == 'e' && trap_Key_IsDown( K_CTRL ) ) ) {
 				item->cursorPos = len;
 				if( item->cursorPos > editPtr->maxPaintChars )
 				{
@@ -3594,7 +3629,7 @@ void Item_Text_Paint( itemDef_t* item )
 		Fade(&item->window.flags, &DC->Assets.shadowColor[3], DC->Assets.fadeClamp, &item->window.nextTime, DC->Assets.fadeCycle, qfalse);
 		DC->drawText(item->textRect.x + DC->Assets.shadowX, item->textRect.y + DC->Assets.shadowY, item->textscale, DC->Assets.shadowColor, textPtr, adjust);
 	}
-*/
+	*/
 
 	//	if (item->textStyle == ITEM_TEXTSTYLE_OUTLINED || item->textStyle == ITEM_TEXTSTYLE_OUTLINESHADOWED) {
 	//		Fade(&item->window.flags, &item->window.outlineColor[3], DC->Assets.fadeClamp, &item->window.nextTime, DC->Assets.fadeCycle, qfalse);
@@ -3905,7 +3940,9 @@ void Controls_SetConfig( qboolean restart )
 			DC->setBinding( g_bindings[i].bind1, g_bindings[i].command );
 
 			if( g_bindings[i].bind2 != -1 )
+			{
 				DC->setBinding( g_bindings[i].bind2, g_bindings[i].command );
+			}
 		}
 	}
 
@@ -5178,9 +5215,13 @@ int KeywordHash_Key( char* keyword )
 	for( i = 0; keyword[i] != '\0'; i++ )
 	{
 		if( keyword[i] >= 'A' && keyword[i] <= 'Z' )
+		{
 			hash += ( keyword[i] + ( 'a' - 'A' ) ) * ( 119 + i );
+		}
 		else
+		{
 			hash += keyword[i] * ( 119 + i );
+		}
 	}
 	hash = ( hash ^ ( hash >> 10 ) ^ ( hash >> 20 ) ) & ( KEYWORDHASH_SIZE - 1 );
 	return hash;
@@ -5195,7 +5236,7 @@ void KeywordHash_Add( keywordHash_t* table[], keywordHash_t* key )
 	if (table[hash]) {
 		int collision = qtrue;
 	}
-*/
+	*/
 	key->next	= table[hash];
 	table[hash] = key;
 }
@@ -5209,7 +5250,9 @@ keywordHash_t* KeywordHash_Find( keywordHash_t* table[], char* keyword )
 	for( key = table[hash]; key; key = key->next )
 	{
 		if( !Q_stricmp( key->keyword, keyword ) )
+		{
 			return key;
+		}
 	}
 	return NULL;
 }
@@ -5488,7 +5531,9 @@ qboolean ItemParse_elementtype( itemDef_t* item, int handle )
 
 	Item_ValidateTypeData( item );
 	if( !item->typeData )
+	{
 		return qfalse;
+	}
 	listPtr = ( listBoxDef_t* )item->typeData;
 	if( !PC_Int_Parse( handle, &listPtr->elementStyle ) )
 	{
@@ -5505,7 +5550,9 @@ qboolean ItemParse_columns( itemDef_t* item, int handle )
 
 	Item_ValidateTypeData( item );
 	if( !item->typeData )
+	{
 		return qfalse;
+	}
 	listPtr = ( listBoxDef_t* )item->typeData;
 	if( PC_Int_Parse( handle, &num ) )
 	{
@@ -5839,7 +5886,9 @@ qboolean ItemParse_maxChars( itemDef_t* item, int handle )
 
 	Item_ValidateTypeData( item );
 	if( !item->typeData )
+	{
 		return qfalse;
+	}
 
 	if( !PC_Int_Parse( handle, &maxChars ) )
 	{
@@ -5857,7 +5906,9 @@ qboolean ItemParse_maxPaintChars( itemDef_t* item, int handle )
 
 	Item_ValidateTypeData( item );
 	if( !item->typeData )
+	{
 		return qfalse;
+	}
 
 	if( !PC_Int_Parse( handle, &maxChars ) )
 	{
@@ -5874,7 +5925,9 @@ qboolean ItemParse_cvarFloat( itemDef_t* item, int handle )
 
 	Item_ValidateTypeData( item );
 	if( !item->typeData )
+	{
 		return qfalse;
+	}
 	editPtr = ( editFieldDef_t* )item->typeData;
 	if( PC_String_Parse( handle, &item->cvar ) && PC_Float_Parse( handle, &editPtr->defVal ) && PC_Float_Parse( handle, &editPtr->minVal ) && PC_Float_Parse( handle, &editPtr->maxVal ) )
 	{
@@ -5891,13 +5944,17 @@ qboolean ItemParse_cvarStrList( itemDef_t* item, int handle )
 
 	Item_ValidateTypeData( item );
 	if( !item->typeData )
+	{
 		return qfalse;
+	}
 	multiPtr		 = ( multiDef_t* )item->typeData;
 	multiPtr->count	 = 0;
 	multiPtr->strDef = qtrue;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( *token.string != '{' )
 	{
 		return qfalse;
@@ -5948,13 +6005,17 @@ qboolean ItemParse_cvarFloatList( itemDef_t* item, int handle )
 
 	Item_ValidateTypeData( item );
 	if( !item->typeData )
+	{
 		return qfalse;
+	}
 	multiPtr		 = ( multiDef_t* )item->typeData;
 	multiPtr->count	 = 0;
 	multiPtr->strDef = qfalse;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( *token.string != '{' )
 	{
 		return qfalse;
@@ -6153,7 +6214,9 @@ qboolean Item_Parse( int handle, itemDef_t* item )
 	keywordHash_t* key;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( *token.string != '{' )
 	{
 		return qfalse;
@@ -6248,7 +6311,8 @@ qboolean MenuParse_fullscreen( itemDef_t* item, int handle )
 {
 	menuDef_t* menu = ( menuDef_t* )item;
 	if( !PC_Int_Parse( handle, ( int* )&menu->fullScreen ) )
-	{ // bk001206 - cast qboolean
+	{
+		// bk001206 - cast qboolean
 		return qfalse;
 	}
 	return qtrue;
@@ -6619,7 +6683,9 @@ qboolean Menu_Parse( int handle, menuDef_t* menu )
 	keywordHash_t* key;
 
 	if( !trap_PC_ReadToken( handle, &token ) )
+	{
 		return qfalse;
+	}
 	if( *token.string != '{' )
 	{
 		return qfalse;

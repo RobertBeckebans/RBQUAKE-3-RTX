@@ -274,7 +274,9 @@ int SNDDMA_InitDS()
 
 	SNDDMA_BeginPainting();
 	if( dma.buffer )
+	{
 		memset( dma.buffer, 0, dma.samples * dma.samplebits / 8 );
+	}
 	SNDDMA_Submit();
 	return 1;
 }
@@ -337,10 +339,14 @@ void SNDDMA_BeginPainting()
 	}
 
 	if( dwStatus & DSBSTATUS_BUFFERLOST )
+	{
 		pDSBuf->lpVtbl->Restore( pDSBuf );
+	}
 
 	if( !( dwStatus & DSBSTATUS_PLAYING ) )
+	{
 		pDSBuf->lpVtbl->Play( pDSBuf, 0, 0, DSBPLAY_LOOPING );
+	}
 
 	// lock the dsound buffer
 
@@ -361,7 +367,9 @@ void SNDDMA_BeginPainting()
 		}
 
 		if( ++reps > 2 )
+		{
 			return;
+		}
 	}
 	dma.buffer = ( unsigned char* )pbuf;
 }

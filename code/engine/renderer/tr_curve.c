@@ -595,7 +595,9 @@ srfGridMesh_t* R_GridInsertColumn( srfGridMesh_t* grid, int column, int row, vec
 	oldwidth = 0;
 	width	 = grid->width + 1;
 	if( width > MAX_GRID_SIZE )
+	{
 		return NULL;
+	}
 	height = grid->height;
 	for( i = 0; i < width; i++ )
 	{
@@ -606,7 +608,9 @@ srfGridMesh_t* R_GridInsertColumn( srfGridMesh_t* grid, int column, int row, vec
 			{
 				LerpDrawVert( &grid->verts[j * grid->width + i - 1], &grid->verts[j * grid->width + i], &ctrl[j][i] );
 				if( j == row )
+				{
 					VectorCopy( point, ctrl[j][i].xyz );
+				}
 			}
 			errorTable[0][i] = loderror;
 			continue;
@@ -656,7 +660,9 @@ srfGridMesh_t* R_GridInsertRow( srfGridMesh_t* grid, int row, int column, vec3_t
 	width	  = grid->width;
 	height	  = grid->height + 1;
 	if( height > MAX_GRID_SIZE )
+	{
 		return NULL;
+	}
 	for( i = 0; i < height; i++ )
 	{
 		if( i == row )
@@ -666,7 +672,9 @@ srfGridMesh_t* R_GridInsertRow( srfGridMesh_t* grid, int row, int column, vec3_t
 			{
 				LerpDrawVert( &grid->verts[( i - 1 ) * grid->width + j], &grid->verts[i * grid->width + j], &ctrl[i][j] );
 				if( j == column )
+				{
 					VectorCopy( point, ctrl[i][j].xyz );
+				}
 			}
 			errorTable[1][i] = loderror;
 			continue;

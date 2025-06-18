@@ -173,7 +173,9 @@ static void StartServer_Update()
 	for( i = 0; i < MAX_MAPSPERPAGE; i++ )
 	{
 		if( top + i >= s_startserver.nummaps )
+		{
 			break;
+		}
 
 		Com_sprintf( picname[i], sizeof( picname[i] ), "levelshots/%s", s_startserver.maplist[top + i] );
 
@@ -1241,7 +1243,9 @@ static void PlayerName_Draw( void* item )
 	focus = ( s->generic.parent->cursor == s->generic.menuPosition );
 
 	if( s->generic.flags & QMF_GRAYED )
+	{
 		color = text_color_disabled;
+	}
 	else if( focus )
 	{
 		color = text_color_highlight;
@@ -1253,7 +1257,9 @@ static void PlayerName_Draw( void* item )
 		style |= UI_BLINK;
 	}
 	else
+	{
 		color = text_color_normal;
+	}
 
 	if( focus )
 	{

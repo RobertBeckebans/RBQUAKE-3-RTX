@@ -10,6 +10,10 @@ if not exist "%GIT_BASH%" (
     exit /b 1
 )
 
+astyle.exe -v --formatted --options=astyle-header.ini --recursive *.h
+astyle.exe -v --formatted --options=astyle-cpp.ini --recursive *.c
+astyle.exe -v --formatted --options=astyle-cpp.ini --recursive *.cpp
+
 :: Run the shell script using Git Bash
 echo Running clang-format via format_code.sh...
 "%GIT_BASH%" -c "./format_code.sh"

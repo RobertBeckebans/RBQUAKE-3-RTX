@@ -587,7 +587,9 @@ void CG_GrappleTrail( centity_t* ent, const weaponInfo_t* wi )
 	VectorCopy( origin, beam.oldorigin );
 
 	if( Distance( beam.origin, beam.oldorigin ) < 64 )
+	{
 		return; // Don't draw if close
+	}
 
 	beam.reType		  = RT_LIGHTNING;
 	beam.customShader = cgs.media.lightningShader;
@@ -979,10 +981,13 @@ static void CG_CalculateWeaponPosition( vec3_t origin, vec3_t angles )
 #if 0
 	// drop the weapon when stair climbing
 	delta = cg.time - cg.stepTime;
-	if ( delta < STEP_TIME/2 ) {
-		origin[2] -= cg.stepChange*0.25 * delta / (STEP_TIME/2);
-	} else if ( delta < STEP_TIME ) {
-		origin[2] -= cg.stepChange*0.25 * (STEP_TIME - delta) / (STEP_TIME/2);
+	if( delta < STEP_TIME / 2 )
+	{
+		origin[2] -= cg.stepChange * 0.25 * delta / ( STEP_TIME / 2 );
+	}
+	else if( delta < STEP_TIME )
+	{
+		origin[2] -= cg.stepChange * 0.25 * ( STEP_TIME - delta ) / ( STEP_TIME / 2 );
 	}
 #endif
 

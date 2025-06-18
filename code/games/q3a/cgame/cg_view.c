@@ -386,9 +386,11 @@ static void CG_OffsetFirstPersonView()
 
 	// add pitch based on fall kick
 #if 0
-	ratio = ( cg.time - cg.landTime) / FALL_TIME;
-	if (ratio < 0)
+	ratio = ( cg.time - cg.landTime ) / FALL_TIME;
+	if( ratio < 0 )
+	{
 		ratio = 0;
+	}
 	angles[PITCH] += ratio * cg.fall_value;
 #endif
 
@@ -408,13 +410,19 @@ static void CG_OffsetFirstPersonView()
 
 	delta = cg.bobfracsin * cg_bobpitch.value * speed;
 	if( cg.predictedPlayerState.pm_flags & PMF_DUCKED )
+	{
 		delta *= 3; // crouching
+	}
 	angles[PITCH] += delta;
 	delta = cg.bobfracsin * cg_bobroll.value * speed;
 	if( cg.predictedPlayerState.pm_flags & PMF_DUCKED )
+	{
 		delta *= 3; // crouching accentuates roll
+	}
 	if( cg.bobcycle & 1 )
+	{
 		delta = -delta;
+	}
 	angles[ROLL] += delta;
 
 	//===================================
@@ -463,12 +471,12 @@ static void CG_OffsetFirstPersonView()
 #if 0
 	{
 	#define NECK_LENGTH 8
-	vec3_t			forward, up;
- 
-	cg.refdef.vieworg[2] -= NECK_LENGTH;
-	AngleVectors( cg.refdefViewAngles, forward, NULL, up );
-	VectorMA( cg.refdef.vieworg, 3, forward, cg.refdef.vieworg );
-	VectorMA( cg.refdef.vieworg, NECK_LENGTH, up, cg.refdef.vieworg );
+		vec3_t			forward, up;
+
+		cg.refdef.vieworg[2] -= NECK_LENGTH;
+		AngleVectors( cg.refdefViewAngles, forward, NULL, up );
+		VectorMA( cg.refdef.vieworg, 3, forward, cg.refdef.vieworg );
+		VectorMA( cg.refdef.vieworg, NECK_LENGTH, up, cg.refdef.vieworg );
 	}
 #endif
 }
@@ -699,7 +707,7 @@ static int CG_CalcViewValues()
 			cg.cameraMode = qfalse;
 		}
 	}
-*/
+	*/
 	// intermission view
 	if( ps->pm_type == PM_INTERMISSION )
 	{
@@ -802,7 +810,9 @@ CG_AddBufferedSound
 void CG_AddBufferedSound( sfxHandle_t sfx )
 {
 	if( !sfx )
+	{
 		return;
+	}
 	cg.soundBuffer[cg.soundBufferIn] = sfx;
 	cg.soundBufferIn				 = ( cg.soundBufferIn + 1 ) % MAX_SOUNDBUFFER;
 	if( cg.soundBufferIn == cg.soundBufferOut )
@@ -943,13 +953,17 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		{
 			cg_timescale.value += cg_timescaleFadeSpeed.value * ( ( float )cg.frametime ) / 1000;
 			if( cg_timescale.value > cg_timescaleFadeEnd.value )
+			{
 				cg_timescale.value = cg_timescaleFadeEnd.value;
+			}
 		}
 		else
 		{
 			cg_timescale.value -= cg_timescaleFadeSpeed.value * ( ( float )cg.frametime ) / 1000;
 			if( cg_timescale.value < cg_timescaleFadeEnd.value )
+			{
 				cg_timescale.value = cg_timescaleFadeEnd.value;
+			}
 		}
 		if( cg_timescaleFadeSpeed.value )
 		{

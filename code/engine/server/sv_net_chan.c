@@ -66,7 +66,9 @@ static void SV_Netchan_Encode( client_t* client, msg_t* msg )
 	{
 		// modify the key with the last received and with this message acknowledged client command
 		if( !string[index] )
+		{
 			index = 0;
+		}
 		if( string[index] > 127 || string[index] == '%' )
 		{
 			key ^= '.' << ( i & 1 );
@@ -120,7 +122,9 @@ static void SV_Netchan_Decode( client_t* client, msg_t* msg )
 	{
 		// modify the key with the last sent and acknowledged server command
 		if( !string[index] )
+		{
 			index = 0;
+		}
 		if( string[index] > 127 || string[index] == '%' )
 		{
 			key ^= '.' << ( i & 1 );
@@ -166,7 +170,9 @@ void SV_Netchan_TransmitNextFragment( client_t* client )
 				client->netchan_end_queue = &client->netchan_start_queue;
 			}
 			else
+			{
 				Com_DPrintf( "#462 Netchan_TransmitNextFragment: remaining queued message\n" );
+			}
 			Z_Free( netbuf );
 		}
 	}
@@ -184,7 +190,8 @@ then buffer them and make sure they get sent in correct order
 */
 
 void SV_Netchan_Transmit( client_t* client, msg_t* msg )
-{ // int length, const byte *data ) {
+{
+	// int length, const byte *data ) {
 	MSG_WriteByte( msg, svc_EOF );
 	if( client->netchan.unsentFragments )
 	{
@@ -217,7 +224,9 @@ qboolean SV_Netchan_Process( client_t* client, msg_t* msg )
 	int ret;
 	ret = Netchan_Process( &client->netchan, msg );
 	if( !ret )
+	{
 		return qfalse;
+	}
 	SV_Netchan_Decode( client, msg );
 	return qtrue;
 }

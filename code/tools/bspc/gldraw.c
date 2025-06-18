@@ -49,7 +49,9 @@ void Draw_ClearWindow()
 	vec_t	   mx, my;
 
 	if( !drawflag )
+	{
 		return;
+	}
 
 	if( !init )
 	{
@@ -80,15 +82,15 @@ void Draw_ClearWindow()
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
 #if 0
-	glColor4f (1,0,0,0.5);
-	glBegin (GL_POLYGON);
+	glColor4f( 1, 0, 0, 0.5 );
+	glBegin( GL_POLYGON );
 
-	glVertex3f (0, 500, 0);
-	glVertex3f (0, 900, 0);
-	glVertex3f (0, 900, 100);
-	glVertex3f (0, 500, 100);
+	glVertex3f( 0, 500, 0 );
+	glVertex3f( 0, 900, 0 );
+	glVertex3f( 0, 900, 100 );
+	glVertex3f( 0, 500, 100 );
 
-	glEnd ();
+	glEnd();
 #endif
 
 	glFlush();
@@ -97,7 +99,9 @@ void Draw_ClearWindow()
 void Draw_SetRed()
 {
 	if( !drawflag )
+	{
 		return;
+	}
 
 	glColor3f( 1, 0, 0 );
 }
@@ -105,7 +109,9 @@ void Draw_SetRed()
 void Draw_SetGrey()
 {
 	if( !drawflag )
+	{
 		return;
+	}
 
 	glColor3f( 0.5, 0.5, 0.5 );
 }
@@ -113,7 +119,9 @@ void Draw_SetGrey()
 void Draw_SetBlack()
 {
 	if( !drawflag )
+	{
 		return;
+	}
 
 	glColor3f( 0, 0, 0 );
 }
@@ -123,18 +131,24 @@ void DrawWinding( winding_t* w )
 	int i;
 
 	if( !drawflag )
+	{
 		return;
+	}
 
 	glColor4f( 0, 0, 0, 0.5 );
 	glBegin( GL_LINE_LOOP );
 	for( i = 0; i < w->numpoints; i++ )
+	{
 		glVertex3f( w->p[i][0], w->p[i][1], w->p[i][2] );
+	}
 	glEnd();
 
 	glColor4f( 0, 1, 0, 0.3 );
 	glBegin( GL_POLYGON );
 	for( i = 0; i < w->numpoints; i++ )
+	{
 		glVertex3f( w->p[i][0], w->p[i][1], w->p[i][2] );
+	}
 	glEnd();
 
 	glFlush();
@@ -145,18 +159,24 @@ void DrawAuxWinding( winding_t* w )
 	int i;
 
 	if( !drawflag )
+	{
 		return;
+	}
 
 	glColor4f( 0, 0, 0, 0.5 );
 	glBegin( GL_LINE_LOOP );
 	for( i = 0; i < w->numpoints; i++ )
+	{
 		glVertex3f( w->p[i][0], w->p[i][1], w->p[i][2] );
+	}
 	glEnd();
 
 	glColor4f( 1, 0, 0, 0.3 );
 	glBegin( GL_POLYGON );
 	for( i = 0; i < w->numpoints; i++ )
+	{
 		glVertex3f( w->p[i][0], w->p[i][1], w->p[i][2] );
+	}
 	glEnd();
 
 	glFlush();
@@ -185,14 +205,18 @@ void	 GLS_BeginScene()
 		r = WSAStartup( MAKEWORD( 1, 1 ), &winsockdata );
 
 		if( r )
+		{
 			Error( "Winsock initialization failed." );
+		}
 	}
 
 	// connect a socket to the server
 
 	draw_socket = socket( PF_INET, SOCK_STREAM, IPPROTO_TCP );
 	if( draw_socket == -1 )
+	{
 		Error( "draw_socket failed" );
+	}
 
 	address.sin_family		= AF_INET;
 	address.sin_addr.s_addr = htonl( INADDR_LOOPBACK );
@@ -211,13 +235,17 @@ void GLS_Winding( winding_t* w, int code )
 	int	 i, j;
 
 	if( !draw_socket )
+	{
 		return;
+	}
 
 	( ( int* )buf )[0] = w->numpoints;
 	( ( int* )buf )[1] = code;
 	for( i = 0; i < w->numpoints; i++ )
 		for( j = 0; j < 3; j++ )
+		{
 			( ( float* )buf )[2 + i * 3 + j] = w->p[i][j];
+		}
 
 	send( draw_socket, buf, w->numpoints * 12 + 8, 0 );
 }

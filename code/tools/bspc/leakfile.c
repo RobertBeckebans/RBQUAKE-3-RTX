@@ -49,7 +49,9 @@ void LeakFile( tree_t* tree )
 	int		count;
 
 	if( !tree->outside_node.occupied )
+	{
 		return;
+	}
 
 	qprintf( "--- LeakFile ---\n" );
 
@@ -60,7 +62,9 @@ void LeakFile( tree_t* tree )
 	qprintf( "%s\n", filename );
 	linefile = fopen( filename, "w" );
 	if( !linefile )
+	{
 		Error( "Couldn't open %s\n", filename );
+	}
 
 	count = 0;
 	node  = &tree->outside_node;

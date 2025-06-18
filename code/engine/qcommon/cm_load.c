@@ -128,11 +128,15 @@ void CMod_LoadSubmodels( lump_t* l )
 
 	in = ( void* )( cmod_base + l->fileofs );
 	if( l->filelen % sizeof( *in ) )
+	{
 		Com_Error( ERR_DROP, "CMod_LoadSubmodels: funny lump size" );
+	}
 	count = l->filelen / sizeof( *in );
 
 	if( count < 1 )
+	{
 		Com_Error( ERR_DROP, "Map with no models" );
+	}
 	cm.cmodels		= Hunk_Alloc( count * sizeof( *cm.cmodels ), h_high );
 	cm.numSubModels = count;
 
@@ -146,7 +150,8 @@ void CMod_LoadSubmodels( lump_t* l )
 		out = &cm.cmodels[i];
 
 		for( j = 0; j < 3; j++ )
-		{ // spread the mins / maxs by a pixel
+		{
+			// spread the mins / maxs by a pixel
 			out->mins[j] = LittleFloat( in->mins[j] ) - 1;
 			out->maxs[j] = LittleFloat( in->maxs[j] ) + 1;
 		}
@@ -190,11 +195,15 @@ void CMod_LoadNodes( lump_t* l )
 
 	in = ( void* )( cmod_base + l->fileofs );
 	if( l->filelen % sizeof( *in ) )
+	{
 		Com_Error( ERR_DROP, "MOD_LoadBmodel: funny lump size" );
+	}
 	count = l->filelen / sizeof( *in );
 
 	if( count < 1 )
+	{
 		Com_Error( ERR_DROP, "Map has no nodes" );
+	}
 	cm.nodes	= Hunk_Alloc( count * sizeof( *cm.nodes ), h_high );
 	cm.numNodes = count;
 
@@ -283,11 +292,15 @@ void CMod_LoadLeafs( lump_t* l )
 
 	in = ( void* )( cmod_base + l->fileofs );
 	if( l->filelen % sizeof( *in ) )
+	{
 		Com_Error( ERR_DROP, "MOD_LoadBmodel: funny lump size" );
+	}
 	count = l->filelen / sizeof( *in );
 
 	if( count < 1 )
+	{
 		Com_Error( ERR_DROP, "Map with no leafs" );
+	}
 
 	cm.leafs	= Hunk_Alloc( ( BOX_LEAFS + count ) * sizeof( *cm.leafs ), h_high );
 	cm.numLeafs = count;
@@ -303,9 +316,13 @@ void CMod_LoadLeafs( lump_t* l )
 		out->numLeafSurfaces  = LittleLong( in->numLeafSurfaces );
 
 		if( out->cluster >= cm.numClusters )
+		{
 			cm.numClusters = out->cluster + 1;
+		}
 		if( out->area >= cm.numAreas )
+		{
 			cm.numAreas = out->area + 1;
+		}
 	}
 
 	cm.areas	   = Hunk_Alloc( cm.numAreas * sizeof( *cm.areas ), h_high );
@@ -327,11 +344,15 @@ void CMod_LoadPlanes( lump_t* l )
 
 	in = ( void* )( cmod_base + l->fileofs );
 	if( l->filelen % sizeof( *in ) )
+	{
 		Com_Error( ERR_DROP, "MOD_LoadBmodel: funny lump size" );
+	}
 	count = l->filelen / sizeof( *in );
 
 	if( count < 1 )
+	{
 		Com_Error( ERR_DROP, "Map with no planes" );
+	}
 	cm.planes	 = Hunk_Alloc( ( BOX_PLANES + count ) * sizeof( *cm.planes ), h_high );
 	cm.numPlanes = count;
 
@@ -344,7 +365,9 @@ void CMod_LoadPlanes( lump_t* l )
 		{
 			out->normal[j] = LittleFloat( in->normal[j] );
 			if( out->normal[j] < 0 )
+			{
 				bits |= 1 << j;
+			}
 		}
 
 		out->dist	  = LittleFloat( in->dist );
@@ -367,7 +390,9 @@ void CMod_LoadLeafBrushes( lump_t* l )
 
 	in = ( void* )( cmod_base + l->fileofs );
 	if( l->filelen % sizeof( *in ) )
+	{
 		Com_Error( ERR_DROP, "MOD_LoadBmodel: funny lump size" );
+	}
 	count = l->filelen / sizeof( *in );
 
 	cm.leafbrushes	  = Hunk_Alloc( ( count + BOX_BRUSHES ) * sizeof( *cm.leafbrushes ), h_high );
@@ -395,7 +420,9 @@ void CMod_LoadLeafSurfaces( lump_t* l )
 
 	in = ( void* )( cmod_base + l->fileofs );
 	if( l->filelen % sizeof( *in ) )
+	{
 		Com_Error( ERR_DROP, "MOD_LoadBmodel: funny lump size" );
+	}
 	count = l->filelen / sizeof( *in );
 
 	cm.leafsurfaces	   = Hunk_Alloc( count * sizeof( *cm.leafsurfaces ), h_high );
@@ -509,13 +536,17 @@ void CMod_LoadPatches( lump_t* surfs, lump_t* verts )
 
 	in = ( void* )( cmod_base + surfs->fileofs );
 	if( surfs->filelen % sizeof( *in ) )
+	{
 		Com_Error( ERR_DROP, "MOD_LoadBmodel: funny lump size" );
+	}
 	cm.numSurfaces = count = surfs->filelen / sizeof( *in );
 	cm.surfaces			   = Hunk_Alloc( cm.numSurfaces * sizeof( cm.surfaces[0] ), h_high );
 
 	dv = ( void* )( cmod_base + verts->fileofs );
 	if( verts->filelen % sizeof( *dv ) )
+	{
 		Com_Error( ERR_DROP, "MOD_LoadBmodel: funny lump size" );
+	}
 
 	// scan through all the surfaces, but only load patches,
 	// not planar faces

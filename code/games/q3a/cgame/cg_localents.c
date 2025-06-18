@@ -818,9 +818,13 @@ void CG_AddScorePlum( localEntity_t* le )
 		}
 	}
 	if( c < 0.25 )
+	{
 		re->shaderRGBA[3] = 0xff * 4 * c;
+	}
 	else
+	{
 		re->shaderRGBA[3] = 0xff;
+	}
 
 	re->radius = NUMBER_SIZE / 2;
 

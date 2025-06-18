@@ -807,7 +807,9 @@ int Sin_PopNodeStack()
 {
 	// if the stack is empty
 	if( nodestackptr <= nodestack )
+	{
 		return -1;
+	}
 	// decrease stack pointer
 	nodestackptr--;
 	nodestacksize--;
@@ -845,7 +847,9 @@ void Sin_SetBrushModelNumbers( entity_t* mapent )
 			{
 				// if we took the first child at the parent node
 				if( sin_dnodes[pn].children[0] == n )
+				{
 					break;
+				}
 			} // end for
 			// if the stack wasn't empty (if not processed whole tree)
 			if( pn >= 0 )
@@ -881,7 +885,9 @@ void Sin_BSPBrushToMapBrush( sin_dbrush_t* bspbrush, entity_t* mapent )
 	sin_dplane_t*	  bspplane;
 
 	if( nummapbrushes >= MAX_MAPFILE_BRUSHES )
+	{
 		Error( "nummapbrushes >= MAX_MAPFILE_BRUSHES" );
+	}
 
 	b				  = &mapbrushes[nummapbrushes];
 	b->original_sides = &brushsides[nummapbrushsides];
@@ -902,26 +908,42 @@ void Sin_BSPBrushToMapBrush( sin_dbrush_t* bspbrush, entity_t* mapent )
 		side = &brushsides[nummapbrushsides];
 		// if the BSP brush side is textured
 		if( sin_dbrushsidetextured[bspbrush->firstside + n] )
+		{
 			side->flags |= SFL_TEXTURED;
+		}
 		else
+		{
 			side->flags &= ~SFL_TEXTURED;
+		}
 		// ME: can get side contents and surf directly from BSP file
 		side->contents = bspbrush->contents;
 		// if the texinfo is TEXINFO_NODE
 		if( bspbrushside->texinfo < 0 )
+		{
 			side->surf = 0;
+		}
 		else
+		{
 			side->surf = sin_texinfo[bspbrushside->texinfo].flags;
+		}
 
 		// translucent objects are automatically classified as detail
 		if( side->surf & ( SURF_TRANS33 | SURF_TRANS66 ) )
+		{
 			side->contents |= CONTENTS_DETAIL;
+		}
 		if( side->contents & ( CONTENTS_PLAYERCLIP | CONTENTS_MONSTERCLIP ) )
+		{
 			side->contents |= CONTENTS_DETAIL;
+		}
 		if( fulldetail )
+		{
 			side->contents &= ~CONTENTS_DETAIL;
+		}
 		if( !( side->contents & ( ( LAST_VISIBLE_CONTENTS - 1 ) | CONTENTS_PLAYERCLIP | CONTENTS_MONSTERCLIP | CONTENTS_MIST ) ) )
+		{
 			side->contents |= CONTENTS_SOLID;
+		}
 
 		// hints and skips are never detail, and have no content
 		if( side->surf & ( SURF_HINT | SURF_SKIP ) )
@@ -955,7 +977,9 @@ void Sin_BSPBrushToMapBrush( sin_dbrush_t* bspbrush, entity_t* mapent )
 			}
 		}
 		if( k != b->numsides )
+		{
 			continue; // duplicated
+		}
 
 		//
 		// keep this side
@@ -967,9 +991,13 @@ void Sin_BSPBrushToMapBrush( sin_dbrush_t* bspbrush, entity_t* mapent )
 		// ME: texinfo is already stored when bsp is loaded
 		// NOTE: check for TEXINFO_NODE, otherwise crash in Sin_BrushContents
 		if( bspbrushside->texinfo < 0 )
+		{
 			side->texinfo = 0;
+		}
 		else
+		{
 			side->texinfo = bspbrushside->texinfo;
+		}
 
 		// save the td off in case there is an origin brush and we
 		// have to recalculate the texinfo
@@ -1026,7 +1054,9 @@ void Sin_BSPBrushToMapBrush( sin_dbrush_t* bspbrush, entity_t* mapent )
 	{
 		c_clipbrushes++;
 		for( i = 0; i < b->numsides; i++ )
+		{
 			b->original_sides[i].texinfo = TEXINFO_NODE;
+		}
 	} // end for
 
 	//
@@ -1166,7 +1196,9 @@ void Sin_LoadMapFromBSP( char* filename, int offset, int length )
 	// DPlanes2MapPlanes();
 	// clear brush model numbers
 	for( i = 0; i < MAX_MAPFILE_BRUSHES; i++ )
+	{
 		brushmodelnumbers[i] = -1;
+	}
 
 	nummapbrushsides = 0;
 	num_entities	 = 0;
@@ -1183,7 +1215,9 @@ void Sin_LoadMapFromBSP( char* filename, int offset, int length )
 	for( i = 0; i < entities[0].numbrushes; i++ )
 	{
 		if( mapbrushes[i].mins[0] > 4096 )
+		{
 			continue; // no valid points
+		}
 		AddPointToBounds( mapbrushes[i].mins, map_mins, map_maxs );
 		AddPointToBounds( mapbrushes[i].maxs, map_mins, map_maxs );
 	} // end for

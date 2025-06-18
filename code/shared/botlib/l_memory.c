@@ -72,7 +72,9 @@ void		   LinkMemoryBlock( memoryblock_t* block )
 	block->prev = NULL;
 	block->next = memory;
 	if( memory )
+	{
 		memory->prev = block;
+	}
 	memory = block;
 } // end of the function LinkMemoryBlock
 //===========================================================================
@@ -84,11 +86,17 @@ void		   LinkMemoryBlock( memoryblock_t* block )
 void UnlinkMemoryBlock( memoryblock_t* block )
 {
 	if( block->prev )
+	{
 		block->prev->next = block->next;
+	}
 	else
+	{
 		memory = block->next;
+	}
 	if( block->next )
+	{
 		block->next->prev = block->prev;
+	}
 } // end of the function UnlinkMemoryBlock
 	//===========================================================================
 	//
@@ -238,7 +246,9 @@ void FreeMemory( void* ptr )
 
 	block = BlockFromPointer( ptr, "FreeMemory" );
 	if( !block )
+	{
 		return;
+	}
 	UnlinkMemoryBlock( block );
 	allocatedmemory -= block->size;
 	totalmemorysize -= block->size + sizeof( memoryblock_t );
@@ -271,7 +281,9 @@ int MemoryByteSize( void* ptr )
 
 	block = BlockFromPointer( ptr, "MemoryByteSize" );
 	if( !block )
+	{
 		return 0;
+	}
 	return block->size;
 } // end of the function MemoryByteSize
 //===========================================================================
@@ -353,7 +365,9 @@ void* GetMemory( unsigned long size )
 
 	ptr = botimport.GetMemory( size + sizeof( unsigned long int ) );
 	if( !ptr )
+	{
 		return NULL;
+	}
 	memid  = ( unsigned long int* )ptr;
 	*memid = MEM_ID;
 	return ( unsigned long int* )( ( char* )ptr + sizeof( unsigned long int ) );
@@ -396,7 +410,9 @@ void* GetHunkMemory( unsigned long size )
 
 	ptr = botimport.HunkAlloc( size + sizeof( unsigned long int ) );
 	if( !ptr )
+	{
 		return NULL;
+	}
 	memid  = ( unsigned long int* )ptr;
 	*memid = HUNK_ID;
 	return ( unsigned long int* )( ( char* )ptr + sizeof( unsigned long int ) );

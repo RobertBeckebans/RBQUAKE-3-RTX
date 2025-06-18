@@ -620,7 +620,9 @@ GRAPPLING HOOK
 void Weapon_GrapplingHook_Fire( gentity_t* ent )
 {
 	if( !ent->client->fireHeld && !ent->client->hook )
+	{
 		fire_grapple( ent, muzzle, forward );
+	}
 
 	ent->client->fireHeld = qtrue;
 }
@@ -1069,7 +1071,9 @@ static void KamikazeShockWave( vec3_t origin, gentity_t* attacker, float damage,
 	int		   i, e;
 
 	if( radius < 1 )
+	{
 		radius = 1;
+	}
 
 	for( i = 0; i < 3; i++ )
 	{
@@ -1174,9 +1178,13 @@ static void KamikazeDamage( gentity_t* self )
 	{
 		ent = &g_entities[i];
 		if( !ent->inuse )
+		{
 			continue;
+		}
 		if( !ent->client )
+		{
 			continue;
+		}
 
 		if( ent->client->ps.groundEntityNum != ENTITYNUM_NONE )
 		{

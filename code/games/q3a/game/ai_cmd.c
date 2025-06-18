@@ -165,7 +165,9 @@ int BotGetItemTeamGoal( char* goalname, bot_goal_t* goal )
 	int i;
 
 	if( !strlen( goalname ) )
+	{
 		return qfalse;
+	}
 	i = -1;
 	do
 	{
@@ -174,7 +176,9 @@ int BotGetItemTeamGoal( char* goalname, bot_goal_t* goal )
 		{
 			// do NOT defend dropped items
 			if( goal->flags & GFL_DROPPED )
+			{
 				continue;
+			}
 			return qtrue;
 		}
 	} while( i > 0 );
@@ -191,7 +195,9 @@ int BotGetMessageTeamGoal( bot_state_t* bs, char* goalname, bot_goal_t* goal )
 	bot_waypoint_t* cp;
 
 	if( BotGetItemTeamGoal( goalname, goal ) )
+	{
 		return qtrue;
+	}
 
 	cp = BotFindWayPoint( bs->checkpoints, goalname );
 	if( cp )
@@ -237,15 +243,23 @@ float BotGetTime( bot_match_t* match )
 			{
 				trap_BotMatchVariable( &timematch, TIME, timestring, MAX_MESSAGE_SIZE );
 				if( timematch.type == MSG_MINUTES )
+				{
 					t = atof( timestring ) * 60;
+				}
 				else if( timematch.type == MSG_SECONDS )
+				{
 					t = atof( timestring );
+				}
 				else
+				{
 					t = 0;
+				}
 			}
 			// if there's a valid time
 			if( t > 0 )
+			{
 				return FloatTime() + t;
+			}
 		}
 	}
 	return 0;
@@ -263,18 +277,24 @@ int FindClientByName( char* name )
 	static int maxclients;
 
 	if( !maxclients )
+	{
 		maxclients = trap_Cvar_VariableIntegerValue( "sv_maxclients" );
+	}
 	for( i = 0; i < maxclients && i < MAX_CLIENTS; i++ )
 	{
 		ClientName( i, buf, sizeof( buf ) );
 		if( !Q_stricmp( buf, name ) )
+		{
 			return i;
+		}
 	}
 	for( i = 0; i < maxclients && i < MAX_CLIENTS; i++ )
 	{
 		ClientName( i, buf, sizeof( buf ) );
 		if( stristr( buf, name ) )
+		{
 			return i;
+		}
 	}
 	return -1;
 }
@@ -291,22 +311,32 @@ int FindEnemyByName( bot_state_t* bs, char* name )
 	static int maxclients;
 
 	if( !maxclients )
-		maxclients = trap_Cvar_VariableIntegerValue( "sv_maxclients" );
-	for( i = 0; i < maxclients && i < MAX_CLIENTS; i++ )
 	{
-		if( BotSameTeam( bs, i ) )
-			continue;
-		ClientName( i, buf, sizeof( buf ) );
-		if( !Q_stricmp( buf, name ) )
-			return i;
+		maxclients = trap_Cvar_VariableIntegerValue( "sv_maxclients" );
 	}
 	for( i = 0; i < maxclients && i < MAX_CLIENTS; i++ )
 	{
 		if( BotSameTeam( bs, i ) )
+		{
 			continue;
+		}
+		ClientName( i, buf, sizeof( buf ) );
+		if( !Q_stricmp( buf, name ) )
+		{
+			return i;
+		}
+	}
+	for( i = 0; i < maxclients && i < MAX_CLIENTS; i++ )
+	{
+		if( BotSameTeam( bs, i ) )
+		{
+			continue;
+		}
 		ClientName( i, buf, sizeof( buf ) );
 		if( stristr( buf, name ) )
+		{
 			return i;
+		}
 	}
 	return -1;
 }
@@ -323,7 +353,9 @@ int NumPlayersOnSameTeam( bot_state_t* bs )
 	static int maxclients;
 
 	if( !maxclients )
+	{
 		maxclients = trap_Cvar_VariableIntegerValue( "sv_maxclients" );
+	}
 
 	num = 0;
 	for( i = 0; i < maxclients && i < MAX_CLIENTS; i++ )
@@ -332,7 +364,9 @@ int NumPlayersOnSameTeam( bot_state_t* bs )
 		if( strlen( buf ) )
 		{
 			if( BotSameTeam( bs, i + 1 ) )
+			{
 				num++;
+			}
 		}
 	}
 	return num;
@@ -377,7 +411,9 @@ int BotGetPatrolWaypoints( bot_state_t* bs, bot_match_t* match )
 		// create a new waypoint
 		newwp = BotCreateWayPoint( keyarea, goal.origin, goal.areanum );
 		if( !newwp )
+		{
 			break;
+		}
 		// add the waypoint to the patrol points
 		newwp->next = NULL;
 		for( wp = newpatrolpoints; wp && wp->next; wp = wp->next )
@@ -447,7 +483,9 @@ int BotAddressedToBot( bot_state_t* bs, bot_match_t* match )
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	client = ClientOnSameTeamFromName( bs, netname );
 	if( client < 0 )
+	{
 		return qfalse;
+	}
 	// if the message is addressed to someone
 	if( match->subtype & ST_ADDRESSED )
 	{
@@ -467,9 +505,13 @@ int BotAddressedToBot( bot_state_t* bs, bot_match_t* match )
 				if( strlen( name ) )
 				{
 					if( stristr( botname, name ) )
+					{
 						return qtrue;
+					}
 					if( stristr( bs->subteam, name ) )
+					{
 						return qtrue;
+					}
 				}
 				trap_BotMatchVariable( &addresseematch, MORE, addressedto, MAX_MESSAGE_SIZE );
 			}
@@ -479,9 +521,13 @@ int BotAddressedToBot( bot_state_t* bs, bot_match_t* match )
 				if( strlen( name ) )
 				{
 					if( stristr( botname, name ) )
+					{
 						return qtrue;
+					}
 					if( stristr( bs->subteam, name ) )
+					{
 						return qtrue;
+					}
 				}
 				break;
 			}
@@ -500,7 +546,9 @@ int BotAddressedToBot( bot_state_t* bs, bot_match_t* match )
 		{
 			// make sure not everyone reacts to this message
 			if( random() > ( float )1.0 / ( NumPlayersOnSameTeam( bs ) - 1 ) )
+			{
 				return qfalse;
+			}
 		}
 	}
 	return qtrue;
@@ -520,7 +568,9 @@ int BotGPSToPosition( char* buf, vec3_t position )
 	{
 		num = 0;
 		while( buf[j] == ' ' )
+		{
 			j++;
+		}
 		if( buf[j] == '-' )
 		{
 			j++;
@@ -564,10 +614,14 @@ void BotMatch_HelpAccompany( bot_state_t* bs, bot_match_t* match )
 	aas_entityinfo_t entinfo;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	// get the team mate name
 	trap_BotMatchVariable( match, TEAMMATE, teammate, sizeof( teammate ) );
 	// get the client to help
@@ -603,9 +657,13 @@ void BotMatch_HelpAccompany( bot_state_t* bs, bot_match_t* match )
 	if( client < 0 )
 	{
 		if( other )
+		{
 			BotAI_BotInitialChat( bs, "whois", teammate, NULL );
+		}
 		else
+		{
 			BotAI_BotInitialChat( bs, "whois", netname, NULL );
+		}
 		client = ClientFromName( netname );
 		trap_BotEnterChat( bs->cs, client, CHAT_TELL );
 		return;
@@ -623,7 +681,8 @@ void BotMatch_HelpAccompany( bot_state_t* bs, bot_match_t* match )
 	{
 		areanum = BotPointAreaNum( entinfo.origin );
 		if( areanum )
-		{ // && trap_AAS_AreaReachability(areanum)) {
+		{
+			// && trap_AAS_AreaReachability(areanum)) {
 			bs->teamgoal.entitynum = client;
 			bs->teamgoal.areanum   = areanum;
 			VectorCopy( entinfo.origin, bs->teamgoal.origin );
@@ -652,9 +711,13 @@ void BotMatch_HelpAccompany( bot_state_t* bs, bot_match_t* match )
 	if( bs->teamgoal.entitynum < 0 )
 	{
 		if( other )
+		{
 			BotAI_BotInitialChat( bs, "whereis", teammate, NULL );
+		}
 		else
+		{
 			BotAI_BotInitialChat( bs, "whereareyou", netname, NULL );
+		}
 		client = ClientFromName( netname );
 		trap_BotEnterChat( bs->cs, client, CHAT_TEAM );
 		return;
@@ -680,13 +743,17 @@ void BotMatch_HelpAccompany( bot_state_t* bs, bot_match_t* match )
 	{
 		bs->ltgtype = LTG_TEAMHELP;
 		if( !bs->teamgoal_time )
+		{
 			bs->teamgoal_time = FloatTime() + TEAM_HELP_TIME;
+		}
 	}
 	else
 	{
 		bs->ltgtype = LTG_TEAMACCOMPANY;
 		if( !bs->teamgoal_time )
+		{
 			bs->teamgoal_time = FloatTime() + TEAM_ACCOMPANY_TIME;
+		}
 		bs->formation_dist = 3.5 * 32; // 3.5 meter
 		bs->arrive_time	   = 0;
 		//
@@ -711,10 +778,14 @@ void BotMatch_DefendKeyArea( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	// get the match variable
 	trap_BotMatchVariable( match, KEYAREA, itemname, sizeof( itemname ) );
 	//
@@ -740,7 +811,9 @@ void BotMatch_DefendKeyArea( bot_state_t* bs, bot_match_t* match )
 	bs->teamgoal_time = BotGetTime( match );
 	// set the team goal time
 	if( !bs->teamgoal_time )
+	{
 		bs->teamgoal_time = FloatTime() + TEAM_DEFENDKEYAREA_TIME;
+	}
 	// away from defending
 	bs->defendaway_time = 0;
 	//
@@ -764,10 +837,14 @@ void BotMatch_GetItem( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	// get the match variable
 	trap_BotMatchVariable( match, ITEM, itemname, sizeof( itemname ) );
 	//
@@ -809,10 +886,14 @@ void BotMatch_Camp( bot_state_t* bs, bot_match_t* match )
 	aas_entityinfo_t entinfo;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	// asked for someone else
@@ -840,7 +921,9 @@ void BotMatch_Camp( bot_state_t* bs, bot_match_t* match )
 	{
 		// if this is the bot self
 		if( client == bs->client )
+		{
 			return;
+		}
 		//
 		bs->teamgoal.entitynum = -1;
 		BotEntityInfo( client, &entinfo );
@@ -849,7 +932,8 @@ void BotMatch_Camp( bot_state_t* bs, bot_match_t* match )
 		{
 			areanum = BotPointAreaNum( entinfo.origin );
 			if( areanum )
-			{ // && trap_AAS_AreaReachability(areanum)) {
+			{
+				// && trap_AAS_AreaReachability(areanum)) {
 				// NOTE: just assume the bot knows where the person is
 				// if (BotEntityVisible(bs->entitynum, bs->eye, bs->viewangles, 360, client)) {
 				bs->teamgoal.entitynum = client;
@@ -888,7 +972,9 @@ void BotMatch_Camp( bot_state_t* bs, bot_match_t* match )
 	bs->teamgoal_time = BotGetTime( match );
 	// set the team goal time
 	if( !bs->teamgoal_time )
+	{
 		bs->teamgoal_time = FloatTime() + TEAM_CAMP_TIME;
+	}
 	// not arrived yet
 	bs->arrive_time = 0;
 	//
@@ -911,13 +997,19 @@ void BotMatch_Patrol( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	// get the patrol waypoints
 	if( !BotGetPatrolWaypoints( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	//
@@ -934,7 +1026,9 @@ void BotMatch_Patrol( bot_state_t* bs, bot_match_t* match )
 	bs->teamgoal_time = BotGetTime( match );
 	// set the team goal time if not set already
 	if( !bs->teamgoal_time )
+	{
 		bs->teamgoal_time = FloatTime() + TEAM_PATROL_TIME;
+	}
 	//
 	BotSetTeamStatus( bs );
 	// remember last ordered task
@@ -957,13 +1051,17 @@ void BotMatch_GetFlag( bot_state_t* bs, bot_match_t* match )
 	if( gametype == GT_CTF )
 	{
 		if( !ctf_redflag.areanum || !ctf_blueflag.areanum )
+		{
 			return;
+		}
 	}
 #ifdef MISSIONPACK
 	else if( gametype == GT_1FCTF )
 	{
 		if( !ctf_neutralflag.areanum || !ctf_redflag.areanum || !ctf_blueflag.areanum )
+		{
 			return;
+		}
 	}
 #endif
 	else
@@ -972,7 +1070,9 @@ void BotMatch_GetFlag( bot_state_t* bs, bot_match_t* match )
 	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	//
@@ -1020,7 +1120,9 @@ void BotMatch_AttackEnemyBase( bot_state_t* bs, bot_match_t* match )
 	else if( gametype == GT_1FCTF || gametype == GT_OBELISK || gametype == GT_HARVESTER )
 	{
 		if( !redobelisk.areanum || !blueobelisk.areanum )
+		{
 			return;
+		}
 	}
 #endif
 	else
@@ -1029,7 +1131,9 @@ void BotMatch_AttackEnemyBase( bot_state_t* bs, bot_match_t* match )
 	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	//
@@ -1068,7 +1172,9 @@ void BotMatch_Harvest( bot_state_t* bs, bot_match_t* match )
 	if( gametype == GT_HARVESTER )
 	{
 		if( !neutralobelisk.areanum || !redobelisk.areanum || !blueobelisk.areanum )
+		{
 			return;
+		}
 	}
 	else
 	{
@@ -1076,7 +1182,9 @@ void BotMatch_Harvest( bot_state_t* bs, bot_match_t* match )
 	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	//
@@ -1115,13 +1223,17 @@ void BotMatch_RushBase( bot_state_t* bs, bot_match_t* match )
 	if( gametype == GT_CTF )
 	{
 		if( !ctf_redflag.areanum || !ctf_blueflag.areanum )
+		{
 			return;
+		}
 	}
 #ifdef MISSIONPACK
 	else if( gametype == GT_1FCTF || gametype == GT_HARVESTER )
 	{
 		if( !redobelisk.areanum || !blueobelisk.areanum )
+		{
 			return;
+		}
 	}
 #endif
 	else
@@ -1130,7 +1242,9 @@ void BotMatch_RushBase( bot_state_t* bs, bot_match_t* match )
 	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	//
@@ -1166,12 +1280,16 @@ void BotMatch_TaskPreference( bot_state_t* bs, bot_match_t* match )
 
 	ClientName( bs->client, netname, sizeof( netname ) );
 	if( Q_stricmp( netname, bs->teamleader ) != 0 )
+	{
 		return;
+	}
 
 	trap_BotMatchVariable( match, NETNAME, teammatename, sizeof( teammatename ) );
 	teammate = ClientFromName( teammatename );
 	if( teammate < 0 )
+	{
 		return;
+	}
 
 	preference = BotGetTeamMateTaskPreference( bs, teammate );
 	switch( match->subtype )
@@ -1219,10 +1337,14 @@ void BotMatch_ReturnFlag( bot_state_t* bs, bot_match_t* match )
 		&& gametype != GT_1FCTF
 #endif
 	)
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	//
@@ -1257,10 +1379,14 @@ void BotMatch_JoinSubteam( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	// get the sub team name
 	trap_BotMatchVariable( match, TEAMNAME, teammate, sizeof( teammate ) );
 	// set the sub team name
@@ -1284,10 +1410,14 @@ void BotMatch_LeaveSubteam( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	if( strlen( bs->subteam ) )
 	{
@@ -1307,10 +1437,14 @@ BotMatch_LeaveSubteam
 void BotMatch_WhichTeam( bot_state_t* bs, bot_match_t* match )
 {
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	if( strlen( bs->subteam ) )
 	{
@@ -1337,7 +1471,9 @@ void BotMatch_CheckPoint( bot_state_t* bs, bot_match_t* match )
 	bot_waypoint_t* cp;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, POSITION, buf, MAX_MESSAGE_SIZE );
 	VectorClear( position );
@@ -1364,11 +1500,17 @@ void BotMatch_CheckPoint( bot_state_t* bs, bot_match_t* match )
 	if( cp )
 	{
 		if( cp->next )
+		{
 			cp->next->prev = cp->prev;
+		}
 		if( cp->prev )
+		{
 			cp->prev->next = cp->next;
+		}
 		else
+		{
 			bs->checkpoints = cp->next;
+		}
 		cp->inuse = qfalse;
 	}
 	// create a new check point
@@ -1376,7 +1518,9 @@ void BotMatch_CheckPoint( bot_state_t* bs, bot_match_t* match )
 	// add the check point to the bot's known chech points
 	cp->next = bs->checkpoints;
 	if( bs->checkpoints )
+	{
 		bs->checkpoints->prev = cp;
+	}
 	bs->checkpoints = cp;
 	//
 	if( BotAddressedToBot( bs, match ) )
@@ -1399,21 +1543,31 @@ void BotMatch_FormationSpace( bot_state_t* bs, bot_match_t* match )
 	float space;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_BotMatchVariable( match, NUMBER, buf, MAX_MESSAGE_SIZE );
 	// if it's the distance in feet
 	if( match->subtype & ST_FEET )
+	{
 		space = 0.3048 * 32 * atof( buf );
+	}
 	// else it's in meters
 	else
+	{
 		space = 32 * atof( buf );
+	}
 	// check if the formation intervening space is valid
 	if( space < 48 || space > 500 )
+	{
 		space = 100;
+	}
 	bs->formation_dist = space;
 }
 
@@ -1428,10 +1582,14 @@ void BotMatch_Dismiss( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	client = ClientFromName( netname );
 	//
@@ -1456,10 +1614,14 @@ void BotMatch_Suicide( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	trap_EA_Command( bs->client, "kill" );
 	//
@@ -1481,7 +1643,9 @@ void BotMatch_StartTeamLeaderShip( bot_state_t* bs, bot_match_t* match )
 	char teammate[MAX_MESSAGE_SIZE];
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if chats for him or herself
 	if( match->subtype & ST_I )
 	{
@@ -1497,7 +1661,9 @@ void BotMatch_StartTeamLeaderShip( bot_state_t* bs, bot_match_t* match )
 		trap_BotMatchVariable( match, TEAMMATE, teammate, sizeof( teammate ) );
 		client = FindClientByName( teammate );
 		if( client >= 0 )
+		{
 			ClientName( client, bs->teamleader, sizeof( bs->teamleader ) );
+		}
 	}
 }
 
@@ -1513,7 +1679,9 @@ void BotMatch_StopTeamLeaderShip( bot_state_t* bs, bot_match_t* match )
 	char netname[MAX_MESSAGE_SIZE];
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// get the team mate that stops being the team leader
 	trap_BotMatchVariable( match, TEAMMATE, teammate, sizeof( teammate ) );
 	// if chats for him or herself
@@ -1547,7 +1715,9 @@ void BotMatch_WhoIsTeamLeader( bot_state_t* bs, bot_match_t* match )
 	char netname[MAX_MESSAGE_SIZE];
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 
 	ClientName( bs->client, netname, sizeof( netname ) );
 	// if this bot IS the team leader
@@ -1570,7 +1740,9 @@ void BotMatch_WhatAreYouDoing( bot_state_t* bs, bot_match_t* match )
 
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	//
 	switch( bs->ltgtype )
 	{
@@ -1665,7 +1837,9 @@ void BotMatch_WhatIsMyCommand( bot_state_t* bs, bot_match_t* match )
 
 	ClientName( bs->client, netname, sizeof( netname ) );
 	if( Q_stricmp( netname, bs->teamleader ) != 0 )
+	{
 		return;
+	}
 	bs->forceorders = qtrue;
 }
 
@@ -1690,7 +1864,9 @@ float BotNearestVisibleItem( bot_state_t* bs, char* itemname, bot_goal_t* goal )
 		i = trap_BotGetLevelItemGoal( i, itemname, &tmpgoal );
 		trap_BotGoalName( tmpgoal.number, name, sizeof( name ) );
 		if( Q_stricmp( itemname, name ) != 0 )
+		{
 			continue;
+		}
 		VectorSubtract( tmpgoal.origin, bs->origin, dir );
 		dist = VectorLength( dir );
 		if( dist < bestdist )
@@ -1751,10 +1927,14 @@ void BotMatch_WhereAreYou( bot_state_t* bs, bot_match_t* match )
 		NULL };
 	//
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 
 	bestitem = -1;
 	bestdist = 999999;
@@ -1831,10 +2011,14 @@ void BotMatch_LeadTheWay( bot_state_t* bs, bot_match_t* match )
 	int				 client, areanum, other;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 	// if someone asks for someone else
 	if( match->subtype & ST_SOMEONE )
 	{
@@ -1878,7 +2062,8 @@ void BotMatch_LeadTheWay( bot_state_t* bs, bot_match_t* match )
 	{
 		areanum = BotPointAreaNum( entinfo.origin );
 		if( areanum )
-		{ // && trap_AAS_AreaReachability(areanum)) {
+		{
+			// && trap_AAS_AreaReachability(areanum)) {
 			bs->lead_teamgoal.entitynum = client;
 			bs->lead_teamgoal.areanum	= areanum;
 			VectorCopy( entinfo.origin, bs->lead_teamgoal.origin );
@@ -1890,9 +2075,13 @@ void BotMatch_LeadTheWay( bot_state_t* bs, bot_match_t* match )
 	if( bs->teamgoal.entitynum < 0 )
 	{
 		if( other )
+		{
 			BotAI_BotInitialChat( bs, "whereis", teammate, NULL );
+		}
 		else
+		{
 			BotAI_BotInitialChat( bs, "whereareyou", netname, NULL );
+		}
 		trap_BotEnterChat( bs->cs, bs->client, CHAT_TEAM );
 		return;
 	}
@@ -1914,10 +2103,14 @@ void BotMatch_Kill( bot_state_t* bs, bot_match_t* match )
 	int	 client;
 
 	if( !TeamPlayIsOn() )
+	{
 		return;
+	}
 	// if not addressed to this bot
 	if( !BotAddressedToBot( bs, match ) )
+	{
 		return;
+	}
 
 	trap_BotMatchVariable( match, ENEMY, enemy, sizeof( enemy ) );
 	//
@@ -1989,9 +2182,13 @@ void BotMatch_CTF( bot_state_t* bs, bot_match_t* match )
 		else if( match->subtype & ST_RETURNEDFLAG )
 		{
 			if( !Q_stricmp( flag, "red" ) )
+			{
 				bs->redflagstatus = 0;
+			}
 			else
+			{
 				bs->blueflagstatus = 0;
+			}
 			bs->flagstatuschanged = 1;
 		}
 	}
@@ -2031,7 +2228,9 @@ void BotMatch_NewLeader( bot_state_t* bs, bot_match_t* match )
 	trap_BotMatchVariable( match, NETNAME, netname, sizeof( netname ) );
 	client = FindClientByName( netname );
 	if( !BotSameTeam( bs, client ) )
+	{
 		return;
+	}
 	Q_strncpyz( bs->teamleader, netname, sizeof( bs->teamleader ) );
 }
 

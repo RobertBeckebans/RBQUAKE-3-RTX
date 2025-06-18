@@ -401,16 +401,24 @@ static qboolean GLW_CreateWindow( const char* drivername, int width, int height,
 			// adjust window coordinates if necessary
 			// so that the window is completely on screen
 			if( x < 0 )
+			{
 				x = 0;
+			}
 			if( y < 0 )
+			{
 				y = 0;
+			}
 
 			if( w < glw_state.desktopWidth && h < glw_state.desktopHeight )
 			{
 				if( x + w > glw_state.desktopWidth )
+				{
 					x = ( glw_state.desktopWidth - w );
+				}
 				if( y + h > glw_state.desktopHeight )
+				{
 					y = ( glw_state.desktopHeight - h );
+				}
 			}
 		}
 

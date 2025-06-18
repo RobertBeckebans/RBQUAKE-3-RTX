@@ -513,11 +513,17 @@ void SVC_RemoteCommand( netadr_t from, msg_t* msg )
 		cmd_aux = Cmd_Cmd();
 		cmd_aux += 4;
 		while( cmd_aux[0] == ' ' )
+		{
 			cmd_aux++;
+		}
 		while( cmd_aux[0] && cmd_aux[0] != ' ' ) // password
+		{
 			cmd_aux++;
+		}
 		while( cmd_aux[0] == ' ' )
+		{
 			cmd_aux++;
+		}
 
 		Q_strcat( remaining, sizeof( remaining ), cmd_aux );
 
@@ -815,12 +821,16 @@ qboolean SV_CheckPaused()
 	{
 		// don't pause
 		if( sv_paused->integer )
+		{
 			Cvar_Set( "sv_paused", "0" );
+		}
 		return qfalse;
 	}
 
 	if( !sv_paused->integer )
+	{
 		Cvar_Set( "sv_paused", "1" );
+	}
 	return qtrue;
 }
 
@@ -866,7 +876,9 @@ void SV_Frame( int msec )
 	sv.timeResidual += msec;
 
 	if( !com_dedicated->integer )
+	{
 		SV_BotFrame( svs.time + sv.timeResidual );
+	}
 
 	if( com_dedicated->integer && sv.timeResidual < frameMsec )
 	{
@@ -926,7 +938,9 @@ void SV_Frame( int msec )
 	SV_CalcPings();
 
 	if( com_dedicated->integer )
+	{
 		SV_BotFrame( svs.time );
+	}
 
 	// run the game simulation in chunks
 	while( sv.timeResidual >= frameMsec )

@@ -71,7 +71,9 @@ gentity_t* G_TestEntityPosition( gentity_t* ent )
 	}
 
 	if( tr.startsolid )
+	{
 		return &g_entities[tr.entityNum];
+	}
 
 	return NULL;
 }
@@ -238,7 +240,9 @@ qboolean G_CheckProxMinePosition( gentity_t* check )
 	trap_Trace( &tr, start, NULL, NULL, end, check->s.number, MASK_SOLID );
 
 	if( tr.startsolid || tr.fraction < 1 )
+	{
 		return qfalse;
+	}
 
 	return qtrue;
 }
@@ -940,7 +944,9 @@ static void Touch_DoorTriggerSpectator( gentity_t* ent, gentity_t* other, trace_
 	for( i = 0; i < 3; i++ )
 	{
 		if( i == axis )
+		{
 			continue;
+		}
 		origin[i] = ( ent->r.absmin[i] + ent->r.absmax[i] ) * 0.5;
 	}
 	vectoangles( dir, angles );
@@ -1060,11 +1066,15 @@ void SP_func_door( gentity_t* ent )
 
 	// default speed of 400
 	if( !ent->speed )
+	{
 		ent->speed = 400;
+	}
 
 	// default wait of 2 seconds
 	if( !ent->wait )
+	{
 		ent->wait = 2;
+	}
 	ent->wait *= 1000;
 
 	// default lip of 8 units

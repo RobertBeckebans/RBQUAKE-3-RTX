@@ -102,7 +102,9 @@ libvar_t* LibVarAlloc( char* var_name )
 void LibVarDeAlloc( libvar_t* v )
 {
 	if( v->string )
+	{
 		FreeMemory( v->string );
+	}
 	FreeMemory( v );
 } // end of the function LibVarDeAlloc
 //===========================================================================
@@ -192,7 +194,9 @@ libvar_t* LibVar( char* var_name, char* value )
 	libvar_t* v;
 	v = LibVarGet( var_name );
 	if( v )
+	{
 		return v;
+	}
 	// create new variable
 	v = LibVarAlloc( var_name );
 	// variable string

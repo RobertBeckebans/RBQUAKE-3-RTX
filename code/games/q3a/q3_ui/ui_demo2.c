@@ -236,7 +236,9 @@ static void Demos_MenuInit()
 		s_demos.go.generic.flags |= ( QMF_INACTIVE | QMF_HIDDEN );
 	}
 	else if( s_demos.list.numitems > MAX_DEMOS )
+	{
 		s_demos.list.numitems = MAX_DEMOS;
+	}
 
 	demoname = s_demos.names;
 	for( i = 0; i < s_demos.list.numitems; i++ )
@@ -246,7 +248,9 @@ static void Demos_MenuInit()
 		// strip extension
 		len = strlen( demoname );
 		if( !Q_stricmp( demoname + len - 4, ".dm3" ) )
+		{
 			demoname[len - 4] = '\0';
+		}
 
 		Q_strupr( demoname );
 

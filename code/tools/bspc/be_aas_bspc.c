@@ -159,7 +159,9 @@ void BotImport_Print( int type, char* fmt, ... )
 	vsprintf( buf, fmt, argptr );
 	printf( buf );
 	if( buf[0] != '\r' )
+	{
 		Log_Write( buf );
+	}
 	va_end( argptr );
 } // end of the function BotImport_Print
 //===========================================================================
@@ -179,7 +181,8 @@ void BotImport_BSPModelMinsMaxsOrigin( int modelnum, vec3_t angles, vec3_t outmi
 	CM_ModelBounds( h, mins, maxs );
 	// if the model is rotated
 	if( ( angles[0] || angles[1] || angles[2] ) )
-	{ // expand for rotation
+	{
+		// expand for rotation
 
 		max = RadiusFromBounds( mins, maxs );
 		for( i = 0; i < 3; i++ )
@@ -189,11 +192,17 @@ void BotImport_BSPModelMinsMaxsOrigin( int modelnum, vec3_t angles, vec3_t outmi
 		} // end for
 	} // end if
 	if( outmins )
+	{
 		VectorCopy( mins, outmins );
+	}
 	if( outmaxs )
+	{
 		VectorCopy( maxs, outmaxs );
+	}
 	if( origin )
+	{
 		VectorClear( origin );
+	}
 } // end of the function BotImport_BSPModelMinsMaxsOrigin
 //===========================================================================
 //
@@ -210,7 +219,9 @@ void Com_DPrintf( char* fmt, ... )
 	vsprintf( buf, fmt, argptr );
 	printf( buf );
 	if( buf[0] != '\r' )
+	{
 		Log_Write( buf );
+	}
 	va_end( argptr );
 } // end of the function Com_DPrintf
 //===========================================================================
@@ -272,7 +283,9 @@ void AAS_CalcReachAndClusters( struct quakefile_s* qf )
 	Log_Print( "loading collision map...\n" );
 	//
 	if( !qf->pakfile[0] )
+	{
 		strcpy( qf->pakfile, qf->filename );
+	}
 	// load the map
 	CM_LoadMap( ( char* )qf, qfalse, &aasworld.bspchecksum );
 	// get a handle to the world model
@@ -296,7 +309,9 @@ void AAS_CalcReachAndClusters( struct quakefile_s* qf )
 	AAS_InitReachability();
 	time = 0;
 	while( AAS_ContinueInitReachability( time ) )
+	{
 		time++;
+	}
 	// calculate clusters
 	AAS_InitClustering();
 } // end of the function AAS_CalcReachAndClusters

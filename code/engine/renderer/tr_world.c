@@ -241,25 +241,29 @@ static int R_DlightTrisurf( srfTriangles_t* surf, int dlightBits )
 	return dlightBits;
 #if 0
 	int			i;
-	dlight_t	*dl;
+	dlight_t*	dl;
 
-	for ( i = 0 ; i < tr.refdef.num_dlights ; i++ ) {
-		if ( ! ( dlightBits & ( 1 << i ) ) ) {
+	for( i = 0 ; i < tr.refdef.num_dlights ; i++ )
+	{
+		if( !( dlightBits & ( 1 << i ) ) )
+		{
 			continue;
 		}
 		dl = &tr.refdef.dlights[i];
-		if ( dl->origin[0] - dl->radius > grid->meshBounds[1][0]
-			|| dl->origin[0] + dl->radius < grid->meshBounds[0][0]
-			|| dl->origin[1] - dl->radius > grid->meshBounds[1][1]
-			|| dl->origin[1] + dl->radius < grid->meshBounds[0][1]
-			|| dl->origin[2] - dl->radius > grid->meshBounds[1][2]
-			|| dl->origin[2] + dl->radius < grid->meshBounds[0][2] ) {
+		if( dl->origin[0] - dl->radius > grid->meshBounds[1][0]
+				|| dl->origin[0] + dl->radius < grid->meshBounds[0][0]
+				|| dl->origin[1] - dl->radius > grid->meshBounds[1][1]
+				|| dl->origin[1] + dl->radius < grid->meshBounds[0][1]
+				|| dl->origin[2] - dl->radius > grid->meshBounds[1][2]
+				|| dl->origin[2] + dl->radius < grid->meshBounds[0][2] )
+		{
 			// dlight doesn't reach the bounds
 			dlightBits &= ~( 1 << i );
 		}
 	}
 
-	if ( !dlightBits ) {
+	if( !dlightBits )
+	{
 		tr.pc.c_dlightSurfacesCulled++;
 	}
 
@@ -386,7 +390,9 @@ static void R_AddRaytacedWorldSurface( msurface_t* surface )
 	vec3_t mins, maxs;
 
 	if( surface->shader == NULL )
+	{
 		return;
+	}
 
 	int	   lightRange = 0;
 	vec3_t lightColor = { 1, 1, 1 };
@@ -442,7 +448,9 @@ static void R_AddRaytacedWorldSurface( msurface_t* surface )
 	}
 
 	if( lightRange == 0 )
+	{
 		return;
+	}
 
 	srfTriangles_t* tri = ( srfTriangles_t* )surface->data;
 	if( tri == NULL )
@@ -795,7 +803,9 @@ static void R_MarkLeaves()
 		do
 		{
 			if( parent->visframe == tr.visCount )
+			{
 				break;
+			}
 			parent->visframe = tr.visCount;
 			parent			 = parent->parent;
 		} while( parent );

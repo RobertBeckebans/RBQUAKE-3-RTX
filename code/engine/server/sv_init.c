@@ -281,7 +281,9 @@ void SV_ChangeMaxClients()
 		if( svs.clients[i].state >= CS_CONNECTED )
 		{
 			if( i > count )
+			{
 				count = i;
+			}
 		}
 	}
 	count++;

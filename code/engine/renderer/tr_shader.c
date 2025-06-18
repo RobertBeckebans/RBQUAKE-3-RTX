@@ -55,11 +55,17 @@ static long	  generateHashValue( const char* fname, const int size )
 	{
 		letter = tolower( fname[i] );
 		if( letter == '.' )
+		{
 			break; // don't include extension
+		}
 		if( letter == '\\' )
+		{
 			letter = '/'; // damn path names
+		}
 		if( letter == PATH_SEP )
+		{
 			letter = '/'; // damn path names
+		}
 		hash += ( long )( letter ) * ( i + 119 );
 		i++;
 	}
@@ -1016,7 +1022,9 @@ static qboolean ParseStage( shaderStage_t* stage, char** text )
 			{
 				token = COM_ParseExt( text, qfalse );
 				if( token[0] == 0 )
+				{
 					break;
+				}
 				strcat( buffer, token );
 				strcat( buffer, " " );
 			}
@@ -1452,7 +1460,8 @@ static void ParseSurfaceParm( char** text )
 			shader.surfaceFlags |= infoParms[i].surfaceFlags;
 			shader.contentFlags |= infoParms[i].contents;
 #if 0
-			if ( infoParms[i].clearSolid ) {
+			if ( infoParms[i].clearSolid )
+			{
 				si->contents &= ~CONTENTS_SOLID;
 			}
 #endif
@@ -1825,7 +1834,9 @@ static qboolean	  CollapseMultitexture()
 			{
 				int scaled_width, scaled_height;
 				if( stages[i].bundle[0].image[0] == NULL || stages[i].bundle[0].image[0]->cpu_image_buffer == NULL )
+				{
 					continue;
+				}
 
 				byte* scaled_buffer =
 					R_ScalePowerOfTwo( stages[i].bundle[0].image[0]->cpu_image_buffer, stages[i].bundle[0].image[0]->width, stages[i].bundle[0].image[0]->height, &scaled_width, &scaled_height );
@@ -2504,7 +2515,8 @@ shader_t* R_FindShaderByName( const char* name )
 	shader_t* sh;
 
 	if( ( name == NULL ) || ( name[0] == 0 ) )
-	{ // bk001205
+	{
+		// bk001205
 		return tr.defaultShader;
 	}
 
@@ -2541,7 +2553,9 @@ R_GetCurrentShaderName
 const char* R_GetCurrentShaderName()
 {
 	if( r_processingShader == qfalse )
+	{
 		return NULL;
+	}
 
 	return shader.name;
 }
@@ -2798,7 +2812,7 @@ qhandle_t RE_RegisterShaderFromImage( const char* name, int lightmapIndex, image
 		stages[0].bundle[0].isLightmap = qtrue;
 		stages[0].active			   = qtrue;
 		stages[0].rgbGen			   = CGEN_IDENTITY; // lightmaps are scaled on creation
-														// for identitylight
+		// for identitylight
 		stages[0].stateBits = GLS_DEFAULT;
 
 		stages[1].bundle[0].image[0] = image;

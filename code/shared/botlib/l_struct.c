@@ -64,7 +64,9 @@ fielddef_t* FindField( fielddef_t* defs, char* name )
 	for( i = 0; defs[i].name; i++ )
 	{
 		if( !strcmp( defs[i].name, name ) )
+		{
 			return &defs[i];
+		}
 	} // end for
 	return NULL;
 } // end of the function FindField
@@ -82,7 +84,9 @@ qboolean ReadNumber( source_t* source, fielddef_t* fd, void* p )
 	double	 floatval;
 
 	if( !PC_ExpectAnyToken( source, &token ) )
+	{
 		return 0;
+	}
 
 	// check for minus sign
 	if( token.type == TT_PUNCTUATION )
@@ -101,7 +105,9 @@ qboolean ReadNumber( source_t* source, fielddef_t* fd, void* p )
 		negative = qtrue;
 		// read the number
 		if( !PC_ExpectAnyToken( source, &token ) )
+		{
 			return 0;
+		}
 	} // end if
 	// check if it is a number
 	if( token.type != TT_NUMBER )
@@ -119,7 +125,9 @@ qboolean ReadNumber( source_t* source, fielddef_t* fd, void* p )
 		} // end if
 		floatval = token.floatvalue;
 		if( negative )
+		{
 			floatval = -floatval;
+		}
 		if( fd->type & FT_BOUNDED )
 		{
 			if( floatval < fd->floatmin || floatval > fd->floatmax )
@@ -134,7 +142,9 @@ qboolean ReadNumber( source_t* source, fielddef_t* fd, void* p )
 	//
 	intval = token.intvalue;
 	if( negative )
+	{
 		intval = -intval;
+	}
 	// check bounds
 	if( ( fd->type & FT_TYPE ) == FT_CHAR )
 	{
@@ -190,16 +200,24 @@ qboolean ReadNumber( source_t* source, fielddef_t* fd, void* p )
 	if( ( fd->type & FT_TYPE ) == FT_CHAR )
 	{
 		if( fd->type & FT_UNSIGNED )
+		{
 			*( unsigned char* )p = ( unsigned char )intval;
+		}
 		else
+		{
 			*( char* )p = ( char )intval;
+		}
 	} // end if
 	else if( ( fd->type & FT_TYPE ) == FT_INT )
 	{
 		if( fd->type & FT_UNSIGNED )
+		{
 			*( unsigned int* )p = ( unsigned int )intval;
+		}
 		else
+		{
 			*( int* )p = ( int )intval;
+		}
 	} // end else
 	else if( ( fd->type & FT_TYPE ) == FT_FLOAT )
 	{
@@ -218,7 +236,9 @@ qboolean ReadChar( source_t* source, fielddef_t* fd, void* p )
 	token_t token;
 
 	if( !PC_ExpectAnyToken( source, &token ) )
+	{
 		return 0;
+	}
 
 	// take literals into account
 	if( token.type == TT_LITERAL )
@@ -230,7 +250,9 @@ qboolean ReadChar( source_t* source, fielddef_t* fd, void* p )
 	{
 		PC_UnreadLastToken( source );
 		if( !ReadNumber( source, fd, p ) )
+		{
 			return 0;
+		}
 	} // end if
 	return 1;
 } // end of the function ReadChar
@@ -245,7 +267,9 @@ int ReadString( source_t* source, fielddef_t* fd, void* p )
 	token_t token;
 
 	if( !PC_ExpectTokenType( source, TT_STRING, 0, &token ) )
+	{
 		return 0;
+	}
 	// remove the double quotes
 	StripDoubleQuotes( token.string );
 	// copy the string
@@ -269,14 +293,20 @@ int ReadStructure( source_t* source, structdef_t* def, char* structure )
 	int			num;
 
 	if( !PC_ExpectTokenString( source, "{" ) )
+	{
 		return 0;
+	}
 	while( 1 )
 	{
 		if( !PC_ExpectAnyToken( source, &token ) )
+		{
 			return qfalse;
+		}
 		// if end of structure
 		if( !strcmp( token.string, "}" ) )
+		{
 			break;
+		}
 		// find the field with the name
 		fd = FindField( def->fields, token.string );
 		if( !fd )
@@ -288,7 +318,9 @@ int ReadStructure( source_t* source, structdef_t* def, char* structure )
 		{
 			num = fd->maxarray;
 			if( !PC_ExpectTokenString( source, "{" ) )
+			{
 				return qfalse;
+			}
 		} // end if
 		else
 		{
@@ -300,35 +332,45 @@ int ReadStructure( source_t* source, structdef_t* def, char* structure )
 			if( fd->type & FT_ARRAY )
 			{
 				if( PC_CheckTokenString( source, "}" ) )
+				{
 					break;
+				}
 			} // end if
 			switch( fd->type & FT_TYPE )
 			{
 				case FT_CHAR:
 				{
 					if( !ReadChar( source, fd, p ) )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + sizeof( char );
 					break;
 				} // end case
 				case FT_INT:
 				{
 					if( !ReadNumber( source, fd, p ) )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + sizeof( int );
 					break;
 				} // end case
 				case FT_FLOAT:
 				{
 					if( !ReadNumber( source, fd, p ) )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + sizeof( float );
 					break;
 				} // end case
 				case FT_STRING:
 				{
 					if( !ReadString( source, fd, p ) )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + MAX_STRINGFIELD;
 					break;
 				} // end case
@@ -347,9 +389,13 @@ int ReadStructure( source_t* source, structdef_t* def, char* structure )
 			if( fd->type & FT_ARRAY )
 			{
 				if( !PC_ExpectAnyToken( source, &token ) )
+				{
 					return qfalse;
+				}
 				if( !strcmp( token.string, "}" ) )
+				{
 					break;
+				}
 				if( strcmp( token.string, "," ) )
 				{
 					SourceError( source, "expected a comma, found %s", token.string );
@@ -371,7 +417,9 @@ int WriteIndent( FILE* fp, int indent )
 	while( indent-- > 0 )
 	{
 		if( fprintf( fp, "\t" ) < 0 )
+		{
 			return qfalse;
+		}
 	} // end while
 	return qtrue;
 } // end of the function WriteIndent
@@ -392,7 +440,9 @@ int WriteFloat( FILE* fp, float value )
 	while( l-- > 1 )
 	{
 		if( buf[l] != '0' && buf[l] != '.' )
+		{
 			break;
+		}
 		if( buf[l] == '.' )
 		{
 			buf[l] = 0;
@@ -402,7 +452,9 @@ int WriteFloat( FILE* fp, float value )
 	} // end while
 	// write the float to file
 	if( fprintf( fp, "%s", buf ) < 0 )
+	{
 		return 0;
+	}
 	return 1;
 } // end of the function WriteFloat
 //===========================================================================
@@ -418,24 +470,34 @@ int WriteStructWithIndent( FILE* fp, structdef_t* def, char* structure, int inde
 	fielddef_t* fd;
 
 	if( !WriteIndent( fp, indent ) )
+	{
 		return qfalse;
+	}
 	if( fprintf( fp, "{\r\n" ) < 0 )
+	{
 		return qfalse;
+	}
 
 	indent++;
 	for( i = 0; def->fields[i].name; i++ )
 	{
 		fd = &def->fields[i];
 		if( !WriteIndent( fp, indent ) )
+		{
 			return qfalse;
+		}
 		if( fprintf( fp, "%s\t", fd->name ) < 0 )
+		{
 			return qfalse;
+		}
 		p = ( void* )( structure + fd->offset );
 		if( fd->type & FT_ARRAY )
 		{
 			num = fd->maxarray;
 			if( fprintf( fp, "{" ) < 0 )
+			{
 				return qfalse;
+			}
 		} // end if
 		else
 		{
@@ -448,35 +510,45 @@ int WriteStructWithIndent( FILE* fp, structdef_t* def, char* structure, int inde
 				case FT_CHAR:
 				{
 					if( fprintf( fp, "%d", *( char* )p ) < 0 )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + sizeof( char );
 					break;
 				} // end case
 				case FT_INT:
 				{
 					if( fprintf( fp, "%d", *( int* )p ) < 0 )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + sizeof( int );
 					break;
 				} // end case
 				case FT_FLOAT:
 				{
 					if( !WriteFloat( fp, *( float* )p ) )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + sizeof( float );
 					break;
 				} // end case
 				case FT_STRING:
 				{
 					if( fprintf( fp, "\"%s\"", ( char* )p ) < 0 )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + MAX_STRINGFIELD;
 					break;
 				} // end case
 				case FT_STRUCT:
 				{
 					if( !WriteStructWithIndent( fp, fd->substruct, structure, indent ) )
+					{
 						return qfalse;
+					}
 					p = ( char* )p + fd->substruct->size;
 					break;
 				} // end case
@@ -486,24 +558,34 @@ int WriteStructWithIndent( FILE* fp, structdef_t* def, char* structure, int inde
 				if( num > 0 )
 				{
 					if( fprintf( fp, "," ) < 0 )
+					{
 						return qfalse;
+					}
 				} // end if
 				else
 				{
 					if( fprintf( fp, "}" ) < 0 )
+					{
 						return qfalse;
+					}
 				} // end else
 			} // end if
 		} // end while
 		if( fprintf( fp, "\r\n" ) < 0 )
+		{
 			return qfalse;
+		}
 	} // end for
 	indent--;
 
 	if( !WriteIndent( fp, indent ) )
+	{
 		return qfalse;
+	}
 	if( fprintf( fp, "}\r\n" ) < 0 )
+	{
 		return qfalse;
+	}
 	return qtrue;
 } // end of the function WriteStructWithIndent
 //===========================================================================

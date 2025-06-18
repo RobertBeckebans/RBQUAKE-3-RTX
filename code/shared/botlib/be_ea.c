@@ -390,9 +390,13 @@ void EA_Move( int client, vec3_t dir, float speed )
 	VectorCopy( dir, bi->dir );
 	// cap speed
 	if( speed > MAX_USERMOVE )
+	{
 		speed = MAX_USERMOVE;
+	}
 	else if( speed < -MAX_USERMOVE )
+	{
 		speed = -MAX_USERMOVE;
+	}
 	bi->speed = speed;
 } // end of the function EA_Move
 //===========================================================================
@@ -434,7 +438,7 @@ void EA_EndRegular( int client, float thinktime )
 	jumped = bi->actionflags & ACTION_JUMP;
 	bi->actionflags = 0;
 	if (jumped) bi->actionflags |= ACTION_JUMPEDLASTFRAME;
-*/
+	*/
 } // end of the function EA_EndRegular
 //===========================================================================
 //
@@ -483,7 +487,9 @@ void EA_ResetInput( int client )
 	jumped			= bi->actionflags & ACTION_JUMP;
 	bi->actionflags = 0;
 	if( jumped )
+	{
 		bi->actionflags |= ACTION_JUMPEDLASTFRAME;
+	}
 } // end of the function EA_ResetInput
 //===========================================================================
 //

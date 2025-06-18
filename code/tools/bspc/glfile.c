@@ -29,20 +29,28 @@ int PortalVisibleSides( portal_t* p )
 	int fcon, bcon;
 
 	if( !p->onnode )
+	{
 		return 0; // outside
+	}
 
 	fcon = p->nodes[0]->contents;
 	bcon = p->nodes[1]->contents;
 
 	// same contents never create a face
 	if( fcon == bcon )
+	{
 		return 0;
+	}
 
 	// FIXME: is this correct now?
 	if( !fcon )
+	{
 		return 1;
+	}
 	if( !bcon )
+	{
 		return 2;
+	}
 	return 0;
 }
 
@@ -74,19 +82,25 @@ void OutputPortal( portal_t* p, FILE* glview )
 
 	sides = PortalVisibleSides( p );
 	if( !sides )
+	{
 		return;
+	}
 
 	c_glfaces++;
 
 	w = p->winding;
 
 	if( sides == 2 ) // back side
+	{
 		w = ReverseWinding( w );
+	}
 
 	OutputWinding( w, glview );
 
 	if( sides == 2 )
+	{
 		FreeWinding( w );
+	}
 }
 
 /*
@@ -114,7 +128,9 @@ void WriteGLView_r( node_t* node, FILE* glview )
 			nextp = p->next[0];
 		}
 		else
+		{
 			nextp = p->next[1];
+		}
 	}
 }
 
@@ -134,7 +150,9 @@ void WriteGLView( tree_t* tree, char* source )
 
 	glview = fopen( name, "w" );
 	if( !glview )
+	{
 		Error( "Couldn't open %s", name );
+	}
 	WriteGLView_r( tree->headnode, glview );
 	fclose( glview );
 

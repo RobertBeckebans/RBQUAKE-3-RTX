@@ -123,9 +123,13 @@ static void Preferences_Event( void* ptr, int notification )
 
 		case ID_EJECTINGBRASS:
 			if( s_preferences.brass.curvalue )
+			{
 				trap_Cvar_Reset( "cg_brassTime" );
+			}
 			else
+			{
 				trap_Cvar_SetValue( "cg_brassTime", 0 );
+			}
 			break;
 
 		case ID_WALLMARKS:
@@ -184,7 +188,9 @@ static void Crosshair_Draw( void* self )
 	focus = ( s->generic.parent->cursor == s->generic.menuPosition );
 
 	if( s->generic.flags & QMF_GRAYED )
+	{
 		color = text_color_disabled;
+	}
 	else if( focus )
 	{
 		color = text_color_highlight;
@@ -196,7 +202,9 @@ static void Crosshair_Draw( void* self )
 		style |= UI_BLINK;
 	}
 	else
+	{
 		color = text_color_normal;
+	}
 
 	if( focus )
 	{

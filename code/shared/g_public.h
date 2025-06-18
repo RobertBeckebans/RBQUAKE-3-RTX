@@ -40,16 +40,16 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define SVF_PORTAL		 0x00000040 // merge a second pvs at origin2 into snapshots
 #define SVF_USE_CURRENT_ORIGIN \
 	0x00000080						// entity->r.currentOrigin instead of entity->s.origin \
-										  // for link position (missiles and movers)
+// for link position (missiles and movers)
 #define SVF_SINGLECLIENT 0x00000100 // only send to a single client (entityShared_t->singleClient)
 #define SVF_NOSERVERINFO \
 	0x00000200				   // don't send CS_SERVERINFO updates to this client  \
-										  // so that it can be updated for ping tools without \
-										  // lagging clients
+// so that it can be updated for ping tools without \
+// lagging clients
 #define SVF_CAPSULE 0x00000400 // use capsule for collision detection instead of bbox
 #define SVF_NOTSINGLECLIENT \
 	0x00000800 // send entity to everyone but one client \
-										  // (entityShared_t->singleClient)
+// (entityShared_t->singleClient)
 
 //===============================================================
 
@@ -67,10 +67,10 @@ typedef struct
 	int			  singleClient;
 
 	qboolean	  bmodel; // if false, assume an explicit mins / maxs bounding box
-						  // only set by trap_SetBrushModel
+	// only set by trap_SetBrushModel
 	vec3_t		  mins, maxs;
 	int			  contents; // CONTENTS_TRIGGER, CONTENTS_SOLID, CONTENTS_BODY, etc
-							// a non-solid entity should set to 0
+	// a non-solid entity should set to 0
 
 	vec3_t		  absmin, absmax; // derived from mins/maxs and origin + rotation
 

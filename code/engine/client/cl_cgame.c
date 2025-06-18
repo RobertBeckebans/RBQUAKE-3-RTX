@@ -297,7 +297,9 @@ qboolean CL_GetServerCommand( int serverCommandNumber )
 		// when a demo record was started after the client got a whole bunch of
 		// reliable commands then the client never got those first reliable commands
 		if( clc.demoplaying )
+		{
 			return qfalse;
+		}
 		Com_Error( ERR_DROP, "CL_GetServerCommand: a reliable command was cycled out" );
 		return qfalse;
 	}
@@ -323,9 +325,13 @@ rescan:
 		// https://zerowing.idsoftware.com/bugzilla/show_bug.cgi?id=552
 		// allow server to indicate why they were disconnected
 		if( argc >= 2 )
+		{
 			Com_Error( ERR_SERVERDISCONNECT, va( "Server Disconnected - %s", Cmd_Argv( 1 ) ) );
+		}
 		else
+		{
 			Com_Error( ERR_SERVERDISCONNECT, "Server disconnected\n" );
+		}
 	}
 
 	if( !strcmp( cmd, "bcs0" ) )
@@ -733,17 +739,17 @@ int CL_CgameSystemCalls( intptr_t* args )
 			re.ShutdownRaytracingMap();
 			return 0;
 
-			/*
-	case CG_LOADCAMERA:
+		/*
+		case CG_LOADCAMERA:
 		return loadCamera(VMA(1));
 
-	case CG_STARTCAMERA:
+		case CG_STARTCAMERA:
 		startCamera(args[1]);
 		return 0;
 
-	case CG_GETCAMERAINFO:
+		case CG_GETCAMERAINFO:
 		return getCameraInfo(args[1], VMA(2), VMA(3));
-*/
+		*/
 		case CG_GET_ENTITY_TOKEN:
 			return re.GetEntityToken( VMA( 1 ), args[2] );
 		case CG_R_INPVS:

@@ -90,7 +90,9 @@ void DeathmatchScoreboardMessage( gentity_t* ent )
 			cl->ps.persistant[PERS_CAPTURES] );
 		j = strlen( entry );
 		if( stringlength + j > 1024 )
+		{
 			break;
+		}
 		strcpy( string + stringlength, entry );
 		stringlength += j;
 	}
@@ -270,22 +272,30 @@ void Cmd_Give_f( gentity_t* ent )
 	name = ConcatArgs( 1 );
 
 	if( Q_stricmp( name, "all" ) == 0 )
+	{
 		give_all = qtrue;
+	}
 	else
+	{
 		give_all = qfalse;
+	}
 
 	if( give_all || Q_stricmp( name, "health" ) == 0 )
 	{
 		ent->health = ent->client->ps.stats[STAT_MAX_HEALTH];
 		if( !give_all )
+		{
 			return;
+		}
 	}
 
 	if( give_all || Q_stricmp( name, "weapons" ) == 0 )
 	{
 		ent->client->ps.stats[STAT_WEAPONS] = ( 1 << WP_NUM_WEAPONS ) - 1 - ( 1 << WP_GRAPPLING_HOOK ) - ( 1 << WP_NONE );
 		if( !give_all )
+		{
 			return;
+		}
 	}
 
 	if( give_all || Q_stricmp( name, "ammo" ) == 0 )
@@ -295,7 +305,9 @@ void Cmd_Give_f( gentity_t* ent )
 			ent->client->ps.ammo[i] = 999;
 		}
 		if( !give_all )
+		{
 			return;
+		}
 	}
 
 	if( give_all || Q_stricmp( name, "armor" ) == 0 )
@@ -303,7 +315,9 @@ void Cmd_Give_f( gentity_t* ent )
 		ent->client->ps.stats[STAT_ARMOR] = 200;
 
 		if( !give_all )
+		{
 			return;
+		}
 	}
 
 	if( Q_stricmp( name, "excellent" ) == 0 )
@@ -375,9 +389,13 @@ void Cmd_God_f( gentity_t* ent )
 
 	ent->flags ^= FL_GODMODE;
 	if( !( ent->flags & FL_GODMODE ) )
+	{
 		msg = "godmode OFF\n";
+	}
 	else
+	{
 		msg = "godmode ON\n";
+	}
 
 	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
 }
@@ -402,9 +420,13 @@ void Cmd_Notarget_f( gentity_t* ent )
 
 	ent->flags ^= FL_NOTARGET;
 	if( !( ent->flags & FL_NOTARGET ) )
+	{
 		msg = "notarget OFF\n";
+	}
 	else
+	{
 		msg = "notarget ON\n";
+	}
 
 	trap_SendServerCommand( ent - g_entities, va( "print \"%s\"", msg ) );
 }
@@ -953,16 +975,24 @@ void G_Say( gentity_t* ent, gentity_t* target, int mode, const char* chatText )
 		case SAY_TEAM:
 			G_LogPrintf( "sayteam: %s: %s\n", ent->client->pers.netname, chatText );
 			if( Team_GetLocationMsg( ent, location, sizeof( location ) ) )
+			{
 				Com_sprintf( name, sizeof( name ), EC "(%s%c%c" EC ") (%s)" EC ": ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, location );
+			}
 			else
+			{
 				Com_sprintf( name, sizeof( name ), EC "(%s%c%c" EC ")" EC ": ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE );
+			}
 			color = COLOR_CYAN;
 			break;
 		case SAY_TELL:
 			if( target && g_gametype.integer >= GT_TEAM && target->client->sess.sessionTeam == ent->client->sess.sessionTeam && Team_GetLocationMsg( ent, location, sizeof( location ) ) )
+			{
 				Com_sprintf( name, sizeof( name ), EC "[%s%c%c" EC "] (%s)" EC ": ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE, location );
+			}
 			else
+			{
 				Com_sprintf( name, sizeof( name ), EC "[%s%c%c" EC "]" EC ": ", ent->client->pers.netname, Q_COLOR_ESCAPE, COLOR_WHITE );
+			}
 			color = COLOR_MAGENTA;
 			break;
 	}
@@ -1542,11 +1572,17 @@ void Cmd_CallTeamVote_f( gentity_t* ent )
 
 	team = ent->client->sess.sessionTeam;
 	if( team == TEAM_RED )
+	{
 		cs_offset = 0;
+	}
 	else if( team == TEAM_BLUE )
+	{
 		cs_offset = 1;
+	}
 	else
+	{
 		return;
+	}
 
 	if( !g_allowVote.integer )
 	{
@@ -1576,7 +1612,9 @@ void Cmd_CallTeamVote_f( gentity_t* ent )
 	for( i = 2; i < trap_Argc(); i++ )
 	{
 		if( i > 2 )
+		{
 			strcat( arg2, " " );
+		}
 		trap_Argv( i, &arg2[strlen( arg2 )], sizeof( arg2 ) - strlen( arg2 ) );
 	}
 
@@ -1600,7 +1638,9 @@ void Cmd_CallTeamVote_f( gentity_t* ent )
 			for( i = 0; i < 3; i++ )
 			{
 				if( !arg2[i] || arg2[i] < '0' || arg2[i] > '9' )
+				{
 					break;
+				}
 			}
 			if( i >= 3 || !arg2[i] )
 			{
@@ -1624,9 +1664,13 @@ void Cmd_CallTeamVote_f( gentity_t* ent )
 				for( i = 0; i < level.maxclients; i++ )
 				{
 					if( level.clients[i].pers.connected == CON_DISCONNECTED )
+					{
 						continue;
+					}
 					if( level.clients[i].sess.sessionTeam != team )
+					{
 						continue;
+					}
 					Q_strncpyz( netname, level.clients[i].pers.netname, sizeof( netname ) );
 					Q_CleanStr( netname );
 					if( !Q_stricmp( netname, leader ) )
@@ -1655,9 +1699,13 @@ void Cmd_CallTeamVote_f( gentity_t* ent )
 	for( i = 0; i < level.maxclients; i++ )
 	{
 		if( level.clients[i].pers.connected == CON_DISCONNECTED )
+		{
 			continue;
+		}
 		if( level.clients[i].sess.sessionTeam == team )
+		{
 			trap_SendServerCommand( i, va( "print \"%s called a team vote.\n\"", ent->client->pers.netname ) );
+		}
 	}
 
 	// start the voting, the caller autoamtically votes yes
@@ -1668,7 +1716,9 @@ void Cmd_CallTeamVote_f( gentity_t* ent )
 	for( i = 0; i < level.maxclients; i++ )
 	{
 		if( level.clients[i].sess.sessionTeam == team )
+		{
 			level.clients[i].ps.eFlags &= ~EF_TEAMVOTED;
+		}
 	}
 	ent->client->ps.eFlags |= EF_TEAMVOTED;
 
@@ -1690,11 +1740,17 @@ void Cmd_TeamVote_f( gentity_t* ent )
 
 	team = ent->client->sess.sessionTeam;
 	if( team == TEAM_RED )
+	{
 		cs_offset = 0;
+	}
 	else if( team == TEAM_BLUE )
+	{
 		cs_offset = 1;
+	}
 	else
+	{
 		return;
+	}
 
 	if( !level.teamVoteTime[cs_offset] )
 	{
@@ -1788,7 +1844,7 @@ void Cmd_Stats_f( gentity_t* ent )
 
 	//trap_SendServerCommand( ent-g_entities, va("print \"visited %d of %d areas\n\"", n, max));
 	trap_SendServerCommand( ent-g_entities, va("print \"%d%% level coverage\n\"", n * 100 / max));
-*/
+	*/
 }
 
 /*
@@ -1873,43 +1929,83 @@ void ClientCommand( int clientNum )
 	}
 
 	if( Q_stricmp( cmd, "give" ) == 0 )
+	{
 		Cmd_Give_f( ent );
+	}
 	else if( Q_stricmp( cmd, "god" ) == 0 )
+	{
 		Cmd_God_f( ent );
+	}
 	else if( Q_stricmp( cmd, "notarget" ) == 0 )
+	{
 		Cmd_Notarget_f( ent );
+	}
 	else if( Q_stricmp( cmd, "noclip" ) == 0 )
+	{
 		Cmd_Noclip_f( ent );
+	}
 	else if( Q_stricmp( cmd, "kill" ) == 0 )
+	{
 		Cmd_Kill_f( ent );
+	}
 	else if( Q_stricmp( cmd, "teamtask" ) == 0 )
+	{
 		Cmd_TeamTask_f( ent );
+	}
 	else if( Q_stricmp( cmd, "levelshot" ) == 0 )
+	{
 		Cmd_LevelShot_f( ent );
+	}
 	else if( Q_stricmp( cmd, "follow" ) == 0 )
+	{
 		Cmd_Follow_f( ent );
+	}
 	else if( Q_stricmp( cmd, "follownext" ) == 0 )
+	{
 		Cmd_FollowCycle_f( ent, 1 );
+	}
 	else if( Q_stricmp( cmd, "followprev" ) == 0 )
+	{
 		Cmd_FollowCycle_f( ent, -1 );
+	}
 	else if( Q_stricmp( cmd, "team" ) == 0 )
+	{
 		Cmd_Team_f( ent );
+	}
 	else if( Q_stricmp( cmd, "where" ) == 0 )
+	{
 		Cmd_Where_f( ent );
+	}
 	else if( Q_stricmp( cmd, "callvote" ) == 0 )
+	{
 		Cmd_CallVote_f( ent );
+	}
 	else if( Q_stricmp( cmd, "vote" ) == 0 )
+	{
 		Cmd_Vote_f( ent );
+	}
 	else if( Q_stricmp( cmd, "callteamvote" ) == 0 )
+	{
 		Cmd_CallTeamVote_f( ent );
+	}
 	else if( Q_stricmp( cmd, "teamvote" ) == 0 )
+	{
 		Cmd_TeamVote_f( ent );
+	}
 	else if( Q_stricmp( cmd, "gc" ) == 0 )
+	{
 		Cmd_GameCommand_f( ent );
+	}
 	else if( Q_stricmp( cmd, "setviewpos" ) == 0 )
+	{
 		Cmd_SetViewpos_f( ent );
+	}
 	else if( Q_stricmp( cmd, "stats" ) == 0 )
+	{
 		Cmd_Stats_f( ent );
+	}
 	else
+	{
 		trap_SendServerCommand( clientNum, va( "print \"unknown cmd %s\n\"", cmd ) );
+	}
 }

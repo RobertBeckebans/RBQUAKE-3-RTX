@@ -113,7 +113,7 @@ NET
 
 #define PACKET_BACKUP \
 	32 // number of old messages that must be kept on client and \
-						 // server for delta comrpession and ping estimation
+// server for delta comrpession and ping estimation
 #define PACKET_MASK			  ( PACKET_BACKUP - 1 )
 
 #define MAX_PACKET_USERCMDS	  32 // max number of usercmd_t in a packet
@@ -168,7 +168,7 @@ void		NET_Sleep( int msec );
 
 #define MAX_MSGLEN \
 	16384 // max length of a message, which may \
-						 // be fragmented into multiple packets
+// be fragmented into multiple packets
 
 #define MAX_DOWNLOAD_WINDOW	 8	  // max of eight download frames
 #define MAX_DOWNLOAD_BLKSIZE 2048 // 2048 byte block chunks
@@ -243,8 +243,8 @@ extern int demo_protocols[];
 #define PORT_SERVER 27960
 #define NUM_SERVER_PORTS \
 	4 // broadcast scan this many ports after \
-						   // PORT_SERVER so a single machine can  \
-						   // run multiple servers
+// PORT_SERVER so a single machine can  \
+// run multiple servers
 
 // the svc_strings[] array in cl_parse.c should mirror this
 //

@@ -146,9 +146,13 @@ static void		CG_DrawClientScore( int y, score_t* score, float* color, float fade
 		{
 			Com_sprintf( string, sizeof( string ), "%i", ci->handicap );
 			if( cgs.gametype == GT_TOURNAMENT )
+			{
 				CG_DrawSmallStringColor( iconx, y - SMALLCHAR_HEIGHT / 2, string, color );
+			}
 			else
+			{
 				CG_DrawSmallStringColor( iconx, y, string, color );
+			}
 		}
 
 		// draw the wins / losses

@@ -237,7 +237,9 @@ void Q1_SwapBSPFile( qboolean todisk )
 		d = &q1_dmodels[i];
 
 		for( j = 0; j < Q1_MAX_MAP_HULLS; j++ )
+		{
 			d->headnode[j] = LittleLong( d->headnode[j] );
+		}
 
 		d->visleafs	 = LittleLong( d->visleafs );
 		d->firstface = LittleLong( d->firstface );
@@ -257,7 +259,9 @@ void Q1_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < q1_numvertexes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			q1_dvertexes[i].point[j] = LittleFloat( q1_dvertexes[i].point[j] );
+		}
 	}
 
 	//
@@ -266,7 +270,9 @@ void Q1_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < q1_numplanes; i++ )
 	{
 		for( j = 0; j < 3; j++ )
+		{
 			q1_dplanes[i].normal[j] = LittleFloat( q1_dplanes[i].normal[j] );
+		}
 		q1_dplanes[i].dist = LittleFloat( q1_dplanes[i].dist );
 		q1_dplanes[i].type = LittleLong( q1_dplanes[i].type );
 	}
@@ -277,7 +283,9 @@ void Q1_SwapBSPFile( qboolean todisk )
 	for( i = 0; i < q1_numtexinfo; i++ )
 	{
 		for( j = 0; j < 8; j++ )
+		{
 			q1_texinfo[i].vecs[0][j] = LittleFloat( q1_texinfo[i].vecs[0][j] );
+		}
 		q1_texinfo[i].miptex = LittleLong( q1_texinfo[i].miptex );
 		q1_texinfo[i].flags	 = LittleLong( q1_texinfo[i].flags );
 	}
@@ -346,25 +354,35 @@ void Q1_SwapBSPFile( qboolean todisk )
 	{
 		mtl = ( q1_dmiptexlump_t* )q1_dtexdata;
 		if( todisk )
+		{
 			c = mtl->nummiptex;
+		}
 		else
+		{
 			c = LittleLong( mtl->nummiptex );
+		}
 		mtl->nummiptex = LittleLong( mtl->nummiptex );
 		for( i = 0; i < c; i++ )
+		{
 			mtl->dataofs[i] = LittleLong( mtl->dataofs[i] );
+		}
 	}
 
 	//
 	// marksurfaces
 	//
 	for( i = 0; i < q1_nummarksurfaces; i++ )
+	{
 		q1_dmarksurfaces[i] = LittleShort( q1_dmarksurfaces[i] );
+	}
 
 	//
 	// surfedges
 	//
 	for( i = 0; i < q1_numsurfedges; i++ )
+	{
 		q1_dsurfedges[i] = LittleLong( q1_dsurfedges[i] );
+	}
 
 	//
 	// edges
@@ -427,10 +445,14 @@ void Q1_LoadBSPFile( char* filename, int offset, int length )
 
 	// swap the header
 	for( i = 0; i < sizeof( q1_dheader_t ) / 4; i++ )
+	{
 		( ( int* )q1_header )[i] = LittleLong( ( ( int* )q1_header )[i] );
+	}
 
 	if( q1_header->version != Q1_BSPVERSION )
+	{
 		Error( "%s is version %i, not %i", filename, i, Q1_BSPVERSION );
+	}
 
 	q1_nummodels	   = Q1_CopyLump( Q1_LUMP_MODELS, q1_dmodels, sizeof( q1_dmodel_t ), Q1_MAX_MAP_MODELS );
 	q1_numvertexes	   = Q1_CopyLump( Q1_LUMP_VERTEXES, q1_dvertexes, sizeof( q1_dvertex_t ), Q1_MAX_MAP_VERTS );
@@ -536,9 +558,13 @@ void Q1_PrintBSPFileSizes()
 	printf( "%5i surfedges    %6i\n", q1_numsurfedges, ( int )( q1_numsurfedges * sizeof( q1_dmarksurfaces[0] ) ) );
 	printf( "%5i edges        %6i\n", q1_numedges, ( int )( q1_numedges * sizeof( q1_dedge_t ) ) );
 	if( !q1_texdatasize )
+	{
 		printf( "    0 textures          0\n" );
+	}
 	else
+	{
 		printf( "%5i textures     %6i\n", ( ( q1_dmiptexlump_t* )q1_dtexdata )->nummiptex, q1_texdatasize );
+	}
 	printf( "      lightdata    %6i\n", q1_lightdatasize );
 	printf( "      visdata      %6i\n", q1_visdatasize );
 	printf( "      entdata      %6i\n", q1_entdatasize );
@@ -588,7 +614,9 @@ void Q1_UnparseEntities()
 	{
 		ep = entities[i].epairs;
 		if( !ep )
+		{
 			continue; // ent got removed
+		}
 
 		strcat( end, "{\n" );
 		end += 2;
@@ -603,7 +631,9 @@ void Q1_UnparseEntities()
 		end += 2;
 
 		if( end > buf + Q1_MAX_MAP_ENTSTRING )
+		{
 			Error( "Entity text too long" );
+		}
 	}
 	q1_entdatasize = end - buf + 1;
 } // end of the function Q1_UnparseEntities

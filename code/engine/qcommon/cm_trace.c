@@ -42,7 +42,8 @@ RotatePoint
 ================
 */
 void RotatePoint( vec3_t point, /*const*/ vec3_t matrix[3] )
-{ // bk: FIXME
+{
+	// bk: FIXME
 	vec3_t tvec;
 
 	VectorCopy( point, tvec );
@@ -57,7 +58,8 @@ TransposeMatrix
 ================
 */
 void TransposeMatrix( /*const*/ vec3_t matrix[3], vec3_t transpose[3] )
-{ // bk: FIXME
+{
+	// bk: FIXME
 	int i, j;
 	for( i = 0; i < 3; i++ )
 	{
@@ -106,13 +108,19 @@ float CM_DistanceFromLineSquared( vec3_t p, vec3_t lp1, vec3_t lp2, vec3_t dir )
 	CM_ProjectPointOntoVector( p, lp1, dir, proj );
 	for( j = 0; j < 3; j++ )
 		if( ( proj[j] > lp1[j] && proj[j] > lp2[j] ) || ( proj[j] < lp1[j] && proj[j] < lp2[j] ) )
+		{
 			break;
+		}
 	if( j < 3 )
 	{
 		if( fabs( proj[j] - lp1[j] ) < fabs( proj[j] - lp2[j] ) )
+		{
 			VectorSubtract( p, lp1, t );
+		}
 		else
+		{
 			VectorSubtract( p, lp2, t );
+		}
 		return VectorLengthSquared( t );
 	}
 	VectorSubtract( p, proj, t );
@@ -599,7 +607,8 @@ void CM_TraceThroughBrush( traceWork_t* tw, cbrush_t* brush )
 
 			// crosses face
 			if( d1 > d2 )
-			{ // enter
+			{
+				// enter
 				f = ( d1 - SURFACE_CLIP_EPSILON ) / ( d1 - d2 );
 				if( f < 0 )
 				{
@@ -613,7 +622,8 @@ void CM_TraceThroughBrush( traceWork_t* tw, cbrush_t* brush )
 				}
 			}
 			else
-			{ // leave
+			{
+				// leave
 				f = ( d1 + SURFACE_CLIP_EPSILON ) / ( d1 - d2 );
 				if( f > 1 )
 				{
@@ -667,7 +677,8 @@ void CM_TraceThroughBrush( traceWork_t* tw, cbrush_t* brush )
 
 			// crosses face
 			if( d1 > d2 )
-			{ // enter
+			{
+				// enter
 				f = ( d1 - SURFACE_CLIP_EPSILON ) / ( d1 - d2 );
 				if( f < 0 )
 				{
@@ -681,7 +692,8 @@ void CM_TraceThroughBrush( traceWork_t* tw, cbrush_t* brush )
 				}
 			}
 			else
-			{ // leave
+			{
+				// leave
 				f = ( d1 + SURFACE_CLIP_EPSILON ) / ( d1 - d2 );
 				if( f > 1 )
 				{
@@ -700,7 +712,8 @@ void CM_TraceThroughBrush( traceWork_t* tw, cbrush_t* brush )
 	// completely outside the brush
 	//
 	if( !startout )
-	{ // original point was inside brush
+	{
+		// original point was inside brush
 		tw->trace.startsolid = qtrue;
 		if( !getout )
 		{
@@ -1173,12 +1186,12 @@ void CM_TraceThroughTree( traceWork_t* tw, int num, float p1f, float p2f, vec3_t
 		else
 		{
 #if 0 // bk010201 - DEAD                                 \
-	  // an axial brush right behind a slanted bsp plane \
-	  // will poke through when expanded, so adjust      \
-	  // by sqrt(3)
-			offset = fabs(tw->extents[0]*plane->normal[0]) +
-				fabs(tw->extents[1]*plane->normal[1]) +
-				fabs(tw->extents[2]*plane->normal[2]);
+// an axial brush right behind a slanted bsp plane \
+// will poke through when expanded, so adjust      \
+// by sqrt(3)
+			offset = fabs( tw->extents[0] * plane->normal[0] ) +
+					 fabs( tw->extents[1] * plane->normal[1] ) +
+					 fabs( tw->extents[2] * plane->normal[2] );
 
 			offset *= 2;
 			offset = tw->maxOffset;

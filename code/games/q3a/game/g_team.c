@@ -67,42 +67,64 @@ void	   Team_InitGame()
 int OtherTeam( int team )
 {
 	if( team == TEAM_RED )
+	{
 		return TEAM_BLUE;
+	}
 	else if( team == TEAM_BLUE )
+	{
 		return TEAM_RED;
+	}
 	return team;
 }
 
 const char* TeamName( int team )
 {
 	if( team == TEAM_RED )
+	{
 		return "RED";
+	}
 	else if( team == TEAM_BLUE )
+	{
 		return "BLUE";
+	}
 	else if( team == TEAM_SPECTATOR )
+	{
 		return "SPECTATOR";
+	}
 	return "FREE";
 }
 
 const char* OtherTeamName( int team )
 {
 	if( team == TEAM_RED )
+	{
 		return "BLUE";
+	}
 	else if( team == TEAM_BLUE )
+	{
 		return "RED";
+	}
 	else if( team == TEAM_SPECTATOR )
+	{
 		return "SPECTATOR";
+	}
 	return "FREE";
 }
 
 const char* TeamColorString( int team )
 {
 	if( team == TEAM_RED )
+	{
 		return S_COLOR_RED;
+	}
 	else if( team == TEAM_BLUE )
+	{
 		return S_COLOR_BLUE;
+	}
 	else if( team == TEAM_SPECTATOR )
+	{
 		return S_COLOR_YELLOW;
+	}
 	return S_COLOR_WHITE;
 }
 
@@ -122,7 +144,9 @@ void QDECL PrintMsg( gentity_t* ent, const char* fmt, ... )
 
 	// double quotes are bad
 	while( ( p = strchr( msg, '"' ) ) != NULL )
+	{
 		*p = '\'';
+	}
 
 	trap_SendServerCommand( ( ( ent == NULL ) ? -1 : ent - g_entities ), va( "print \"%s\"", msg ) );
 }
@@ -251,7 +275,8 @@ void		Team_SetFlagStatus( int team, flagStatus_t status )
 			st[2] = 0;
 		}
 		else
-		{ // GT_1FCTF
+		{
+			// GT_1FCTF
 			st[0] = oneFlagStatusRemap[teamgame.flagStatus];
 			st[1] = 0;
 		}
@@ -290,11 +315,17 @@ void Team_ForceGesture( int team )
 	{
 		ent = &g_entities[i];
 		if( !ent->inuse )
+		{
 			continue;
+		}
 		if( !ent->client )
+		{
 			continue;
+		}
 		if( ent->client->sess.sessionTeam != team )
+		{
 			continue;
+		}
 		//
 		ent->flags |= FL_FORCE_GESTURE;
 	}
@@ -323,12 +354,16 @@ void Team_FragBonuses( gentity_t* targ, gentity_t* inflictor, gentity_t* attacke
 
 	// no bonus for fragging yourself or team mates
 	if( !targ->client || !attacker->client || targ == attacker || OnSameTeam( targ, attacker ) )
+	{
 		return;
+	}
 
 	team	  = targ->client->sess.sessionTeam;
 	otherteam = OtherTeam( targ->client->sess.sessionTeam );
 	if( otherteam < 0 )
+	{
 		return; // whoever died isn't on a team
+	}
 
 	// same team, if the flag at base, check to he has the enemy flag
 	if( team == TEAM_RED )
@@ -368,7 +403,9 @@ void Team_FragBonuses( gentity_t* targ, gentity_t* inflictor, gentity_t* attacke
 		{
 			ent = g_entities + i;
 			if( ent->inuse && ent->client->sess.sessionTeam == otherteam )
+			{
 				ent->client->pers.teamState.lasthurtcarrier = 0;
+			}
 		}
 		return;
 	}
@@ -387,7 +424,9 @@ void Team_FragBonuses( gentity_t* targ, gentity_t* inflictor, gentity_t* attacke
 		{
 			ent = g_entities + i;
 			if( ent->inuse && ent->client->sess.sessionTeam == otherteam )
+			{
 				ent->client->pers.teamState.lasthurtcarrier = 0;
+			}
 		}
 		return;
 	}
@@ -474,7 +513,9 @@ void Team_FragBonuses( gentity_t* targ, gentity_t* inflictor, gentity_t* attacke
 		{
 			carrier = g_entities + i;
 			if( carrier->inuse && carrier->client->ps.powerups[flag_pw] )
+			{
 				break;
+			}
 			carrier = NULL;
 		}
 #ifdef MISSIONPACK
@@ -484,11 +525,15 @@ void Team_FragBonuses( gentity_t* targ, gentity_t* inflictor, gentity_t* attacke
 	while( ( flag = G_Find( flag, FOFS( classname ), c ) ) != NULL )
 	{
 		if( !( flag->flags & FL_DROPPED_ITEM ) )
+		{
 			break;
+		}
 	}
 
 	if( !flag )
+	{
 		return; // can't find attacker's flag
+	}
 
 	// ok we have the attackers flag and a pointer to the carrier
 
@@ -549,20 +594,30 @@ void Team_CheckHurtCarrier( gentity_t* targ, gentity_t* attacker )
 	int flag_pw;
 
 	if( !targ->client || !attacker->client )
+	{
 		return;
+	}
 
 	if( targ->client->sess.sessionTeam == TEAM_RED )
+	{
 		flag_pw = PW_BLUEFLAG;
+	}
 	else
+	{
 		flag_pw = PW_REDFLAG;
+	}
 
 	// flags
 	if( targ->client->ps.powerups[flag_pw] && targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam )
+	{
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
+	}
 
 	// skulls
 	if( targ->client->ps.generic1 && targ->client->sess.sessionTeam != attacker->client->sess.sessionTeam )
+	{
 		attacker->client->pers.teamState.lasthurtcarrier = level.time;
+	}
 }
 
 gentity_t* Team_ResetFlag( int team )
@@ -589,7 +644,9 @@ gentity_t* Team_ResetFlag( int team )
 	while( ( ent = G_Find( ent, FOFS( classname ), c ) ) != NULL )
 	{
 		if( ent->flags & FL_DROPPED_ITEM )
+		{
 			G_FreeEntity( ent );
+		}
 		else
 		{
 			rent = ent;
@@ -657,7 +714,9 @@ void Team_TakeFlagSound( gentity_t* ent, int team )
 			if( teamgame.blueStatus != FLAG_ATBASE )
 			{
 				if( teamgame.blueTakenTime > level.time - 10000 )
+				{
 					return;
+				}
 			}
 			teamgame.blueTakenTime = level.time;
 			break;
@@ -666,7 +725,9 @@ void Team_TakeFlagSound( gentity_t* ent, int team )
 			if( teamgame.redStatus != FLAG_ATBASE )
 			{
 				if( teamgame.redTakenTime > level.time - 10000 )
+				{
 					return;
+				}
 			}
 			teamgame.redTakenTime = level.time;
 			break;
@@ -812,7 +873,9 @@ int Team_TouchOurFlag( gentity_t* ent, gentity_t* other, int team )
 	// the flag is at home base.  if the player has the enemy
 	// flag, he's just won!
 	if( !cl->ps.powerups[enemy_flag] )
+	{
 		return 0; // We don't have the flag
+	}
 #ifdef MISSIONPACK
 	if( g_gametype.integer == GT_1FCTF )
 	{
@@ -852,7 +915,9 @@ int Team_TouchOurFlag( gentity_t* ent, gentity_t* other, int team )
 	{
 		player = &g_entities[i];
 		if( !player->inuse )
+		{
 			continue;
+		}
 
 		if( player->client->sess.sessionTeam != cl->sess.sessionTeam )
 		{
@@ -861,7 +926,9 @@ int Team_TouchOurFlag( gentity_t* ent, gentity_t* other, int team )
 		else if( player->client->sess.sessionTeam == cl->sess.sessionTeam )
 		{
 			if( player != other )
+			{
 				AddScore( player, ent->r.currentOrigin, CTF_TEAM_BONUS );
+			}
 			// award extra points for capture assists
 			if( player->client->pers.teamState.lastreturnedflag + CTF_RETURN_FLAG_ASSIST_TIMEOUT > level.time )
 			{
@@ -919,9 +986,13 @@ int Team_TouchEnemyFlag( gentity_t* ent, gentity_t* other, int team )
 		PrintMsg( NULL, "%s" S_COLOR_WHITE " got the %s flag!\n", other->client->pers.netname, TeamName( team ) );
 
 		if( team == TEAM_RED )
+		{
 			cl->ps.powerups[PW_REDFLAG] = INT_MAX; // flags never expire
+		}
 		else
+		{
 			cl->ps.powerups[PW_BLUEFLAG] = INT_MAX; // flags never expire
+		}
 
 		Team_SetFlagStatus( team, FLAG_TAKEN );
 #ifdef MISSIONPACK
@@ -1055,18 +1126,26 @@ qboolean Team_GetLocationMsg( gentity_t* ent, char* loc, int loclen )
 	best = Team_GetLocation( ent );
 
 	if( !best )
+	{
 		return qfalse;
+	}
 
 	if( best->count )
 	{
 		if( best->count < 0 )
+		{
 			best->count = 0;
+		}
 		if( best->count > 7 )
+		{
 			best->count = 7;
+		}
 		Com_sprintf( loc, loclen, "%c%c%s" S_COLOR_WHITE, Q_COLOR_ESCAPE, best->count + '0', best->message );
 	}
 	else
+	{
 		Com_sprintf( loc, loclen, "%s", best->message );
+	}
 
 	return qtrue;
 }
@@ -1092,20 +1171,32 @@ gentity_t* SelectRandomTeamSpawnPoint( int teamstate, team_t team )
 	if( teamstate == TEAM_BEGIN )
 	{
 		if( team == TEAM_RED )
+		{
 			classname = "team_CTF_redplayer";
+		}
 		else if( team == TEAM_BLUE )
+		{
 			classname = "team_CTF_blueplayer";
+		}
 		else
+		{
 			return NULL;
+		}
 	}
 	else
 	{
 		if( team == TEAM_RED )
+		{
 			classname = "team_CTF_redspawn";
+		}
 		else if( team == TEAM_BLUE )
+		{
 			classname = "team_CTF_bluespawn";
+		}
 		else
+		{
 			return NULL;
+		}
 	}
 	count = 0;
 
@@ -1119,11 +1210,14 @@ gentity_t* SelectRandomTeamSpawnPoint( int teamstate, team_t team )
 		}
 		spots[count] = spot;
 		if( ++count == MAX_TEAM_SPAWN_POINTS )
+		{
 			break;
+		}
 	}
 
 	if( !count )
-	{ // no spots that won't telefrag
+	{
+		// no spots that won't telefrag
 		return G_Find( NULL, FOFS( classname ), classname );
 	}
 
@@ -1183,7 +1277,9 @@ void TeamplayInfoMessage( gentity_t* ent )
 	int		   clients[TEAM_MAXOVERLAY];
 
 	if( !ent->client->pers.teamInfo )
+	{
 		return;
+	}
 
 	// figure out what client should be on the display
 	// we are limited to 8, but we want to use the top eight players
@@ -1212,9 +1308,13 @@ void TeamplayInfoMessage( gentity_t* ent )
 			h = player->client->ps.stats[STAT_HEALTH];
 			a = player->client->ps.stats[STAT_ARMOR];
 			if( h < 0 )
+			{
 				h = 0;
+			}
 			if( a < 0 )
+			{
 				a = 0;
+			}
 
 			Com_sprintf( entry,
 				sizeof( entry ),
@@ -1228,7 +1328,9 @@ void TeamplayInfoMessage( gentity_t* ent )
 				player->s.powerups );
 			j = strlen( entry );
 			if( stringlength + j > sizeof( string ) )
+			{
 				break;
+			}
 			strcpy( string + stringlength, entry );
 			stringlength += j;
 			cnt++;
@@ -1260,9 +1362,13 @@ void CheckTeamStatus()
 			{
 				loc = Team_GetLocation( ent );
 				if( loc )
+				{
 					ent->client->pers.teamState.location = loc->health;
+				}
 				else
+				{
 					ent->client->pers.teamState.location = 0;
+				}
 			}
 		}
 
